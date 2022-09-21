@@ -53,6 +53,7 @@
         <div class="d-inline-block" id="sidepic">
             <img
                 src="img/loginPic.jpg">
+                <!--adbxasd-->
         </div>
     </body>
 </html>
