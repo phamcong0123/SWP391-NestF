@@ -1,7 +1,6 @@
 body{
     background-color: #E5E5E5;
     font-family: Arial, Helvetica, sans-serif;
-    text-align: center;
 }
 div{
     padding: 0!important;
@@ -10,13 +9,10 @@ div{
     margin:0;
     height: 8vh;
 }
-.navbar .nav-link{
-    text-align: center;
-}
-.navbar .nav-link i{
+.nav-link i{
     margin-right: 10px;
 }
-.navbar .nav-link:hover{
+.nav-link:hover{
     text-decoration: underline;
 }
 #search-form button, #link-button button{
@@ -33,7 +29,6 @@ input[type=text],input[type=password]{
 }
 #link-button{
     color:#52565F; 
-    display: inline-block;
     width: 120px;
     height: 50px;
     margin-left: 13vw;
@@ -91,17 +86,16 @@ form div{
     width: 30vw;
 }
 #gender{
-    display:inline-block;
-    width: 30vw !important;;
+    width: 30vw !important;
 }
 #register-form form div:last-of-type{
     margin:1rem;
-    margin-bottom: 5vh;
+    margin-bottom: 5vh!important;
 }
 #white-board{
     width: 95%;
-    background-color: white;
     margin:2% 2.5%;
+    border-radius: 5px;
 }
 #white-board h2{
     text-align: left;
@@ -128,3 +122,68 @@ form div{
     color:white;
     border-radius: 5px;
 }
+#whiteboard2{
+    margin: 1% auto;  
+    border-radius: 5px;  
+}
+#whiteboard2 h6{
+    font-weight: bold;
+    text-align: left;
+    margin-bottom: 3vh;
+    margin-top:3vh;
+    font-size: 1.5rem;
+}
+#options{
+    margin-top: 1rem;
+    padding:0;
+}
+#options li{
+    margin:auto;
+}
+#options button{
+    border: none;
+    background-color: transparent;
+}#options .nav-link{
+    color:black;
+}
+
+#options .nav-link.active{
+    color:rgb(113, 113, 113);
+}
+.accordion{
+    padding-bottom: 2vh!important;
+}
+.dropdown-setting{
+    margin-left:auto;
+    margin-right: auto;
+    background-color: #E5E5E5;
+    margin-bottom:1%;
+    border-radius: 0!important; 
+}
+#dropDownBtn{
+    background-color: transparent;
+}
+.accordion-button:not(.collapsed) {
+    color: black;
+}
+#dropDownBtn:focus{
+    box-shadow: none;
+}
+#dropDownBtn img{
+    margin-right: 2%;
+}
+#changeForm{
+    text-align: left;
+}
+#changeForm div{
+    width: 22%;
+    margin-left:5%!important;
+}
+#changeForm input[type=submit]{
+    margin-left:80%;
+    margin-bottom:2%;
+    margin-top:3%;
+}
+#changeAddress form div{
+    width:15%;
+} 

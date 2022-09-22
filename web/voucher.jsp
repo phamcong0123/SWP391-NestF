@@ -19,7 +19,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
         <link href="css/nestf.css" rel="stylesheet">
     </head>
-    <body>
+    <body class="text-center">
         <div id="navbar">
             <nav class="navbar-expand bg-light navbar-light">
                 <ul class="navbar">
@@ -35,46 +35,46 @@
                     <li class="nav-item col-1 d-inline-block">
                         <a href="about" class="nav-link">Về chúng tôi</a>
                     </li>
-                    <li class="nav-item col-3 d-inline-block text-center">
+                    <li class="nav-item col-3 d-inline-block">
                         <form action="searchAction" method="get" id="search-form" >
                             <button type="submit"><i class="fas fa-search    "></i></button>
                             <input type="text" class="text-center" placeholder="Tìm kiếm" name="txtSearch" value="">
                         </form>
                     </li>
-                    <li class="nav-item col-2 d-inline-block text-center">
+                    <li class="nav-item col-2 d-inline-block ">
                         <div ><a href="account" class="nav-link"><i class="fas fa-user    "></i>Tên customer</a></div>
                     </li>
-                    <li class="nav-item col-1 d-inline-block text-center">
+                    <li class="nav-item col-1 d-inline-block ">
                         <div><a href="cart" class="nav-link"><i class="fa-solid fa-cart-shopping"></i></a></div>
                     </li>
-                    <li class="nav-item col-1 d-inline-block text-center">
+                    <li class="nav-item col-1 d-inline-block">
                         <div><a href="voucher" class="nav-link">Điểm tích luỹ</a></div>
                     </li>
                 </ul>
             </nav>
         </div>
-        <div id="white-board">
+        <div id="white-board" class="bg-light">
             <h2 class="d-block col-8">Danh sách voucher</h2>
             <div id="voucher" class="d-inline-block col-2">
-                <img src="img/voucher.jpg">
+                <img src="img/voucher.png">
                 <h6>TÊN VOUCHER</h6>
                 <span>Điểm yêu cầu</span><br>
                 <a href="buyVoucher"><button id="buy-button" class="col-9">Mua ngay</button></a>
             </div>
             <div id="voucher" class="d-inline-block col-2">
-                <img src="img/voucher.jpg">
+                <img src="img/voucher.png">
                 <h6>TÊN VOUCHER</h6>
                 <span>Điểm yêu cầu</span><br>
                 <a href="buyVoucher"><button id="buy-button" class="col-9">Mua ngay</button></a>
             </div>
             <div id="voucher" class="d-inline-block col-2">
-                <img src="img/voucher.jpg">
+                <img src="img/voucher.png">
                 <h6>TÊN VOUCHER</h6>
                 <span>Điểm yêu cầu</span><br>
                 <a href="buyVoucher"><button id="buy-button" class="col-9">Mua ngay</button></a>
             </div>
             <div id="voucher" class="d-inline-block col-2">
-                <img src="img/voucher.jpg">
+                <img src="img/voucher.png">
                 <h6>TÊN VOUCHER</h6>
                 <span>Điểm yêu cầu</span><br>
                 <a href="buyVoucher"><button id="buy-button" class="col-9">Mua ngay</button></a>

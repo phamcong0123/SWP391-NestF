@@ -18,7 +18,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
         <link href="css/nestf.css" rel="stylesheet">
     </head>
-    <body>
+    <body class="text-center">
         <div id="navbar">
             <nav class="navbar-expand bg-light navbar-light">
                 <ul class="navbar">
@@ -34,25 +34,25 @@
                     <li class="nav-item col-1 d-inline-block">
                         <a href="about" class="nav-link">Về chúng tôi</a>
                     </li>
-                    <li class="nav-item col-3 d-inline-block text-center">                      
+                    <li class="nav-item col-3 d-inline-block">                      
                     </li>
-                    <li class="nav-item col-2 d-inline-block text-center">
+                    <li class="nav-item col-2 d-inline-block">
                         <div ><a href="login" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a></div>
                     </li>
-                    <li class="nav-item col-1 d-inline-block text-center">                      
+                    <li class="nav-item col-1 d-inline-block">                      
                     </li>
-                    <li class="nav-item col-1 d-inline-block text-center">
+                    <li class="nav-item col-1 d-inline-block">
                     </li>
                 </ul>
             </nav>
         </div>
-        <div class="d-inline-block container-fluid text-center" id="register-form">
+        <div class="d-inline-block container-fluid" id="register-form">
             <img src="img/account.svg" alt="">
             <h1>Đăng ký</h1>
             <form action="registerAction" method="post">
                 <div class="m-3 d-inline-block col-2">Họ và tên</div><input type="text" name="customerName"><br>
                 <div class="m-3 d-inline-block col-2">Giới tính</div>          
-                <div id="gender">
+                <div id="gender" class="d-inline-block">
                     <input type="radio" id="male" name="gender" value="1">
                     <label for="male">Nam&emsp;</label>
                     <input type="radio" id="female" name="gender" value="0">

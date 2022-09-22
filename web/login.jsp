@@ -18,7 +18,7 @@
         <link rel="stylesheet" href=" https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
         <link href="css/nestf.css" rel="stylesheet">
     </head>
-    <body>
+    <body class="text-center">
         <div id="navbar">
             <nav class="navbar-expand bg-light navbar-light">
                 <ul class="navbar">
@@ -34,13 +34,13 @@
                     <li class="nav-item col-1 d-inline-block">
                         <a href="about" class="nav-link">Về chúng tôi</a>
                     </li>
-                    <li class="nav-item col-7 d-inline-block text-center">
+                    <li class="nav-item col-7 d-inline-block">
                     </li>         
                 </ul>
             </nav>
         </div>
         <div class="d-inline-block col-8" id="login-form">
-            <h1 class="text-center">Đăng nhập</h1><br>
+            <h1>Đăng nhập</h1><br>
             <form action="loginAction" method="post">
                 <div class="m-3 d-inline-block col-2">Số điện thoại</div><input type="text" name="customerPhone" class="col-3"><br>
                 <div class="m-3 d-inline-block col-2">Mật khẩu</div><input type="text"name="password" class="col-3"><br>   
@@ -53,7 +53,6 @@
         <div class="d-inline-block" id="sidepic">
             <img
                 src="img/loginPic.jpg">
-                <!--adbxasd-->
         </div>
     </body>
 </html>
