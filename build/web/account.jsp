@@ -76,13 +76,29 @@
                 <div id="whiteboard2" class="col-8 bg-light">
                     <h6 class="d-inline-block col-11">Cài đặt tài khoản</h6>
                     <div class="accordion">
+                        <div class="accordion-item col-11 dropdown-setting" id="changeName">
+                            <div class="accordion-header">
+                              <button class="accordion-button collapsed" id="dropDownBtn" type="button" data-toggle="collapse" data-target="#collapse1" aria-controls="collapse1">
+                                  <img src="img/name.svg">Thay đổi tên hiển thị</i>
+                              </button>
+                          </div>
+                            <div id="collapse1" class="accordion-collapse collapse hiding">
+                              <div class="accordion-body">
+                                  <form action="changeNameAction" method="post" id="changeForm">                                     
+                                      <div class="m-3 d-inline-block">Tên hiển thị mới</div><input type="text"
+                                          name="name" class="col-6"><br>
+                                      <input type="submit" value="LƯU" id="color-button">
+                                  </form>
+                              </div>
+                            </div>
+                          </div>
                         <div class="accordion-item col-11 dropdown-setting" id="changePass">
                           <div class="accordion-header">
-                            <button class="accordion-button collapsed" id="dropDownBtn" type="button" data-toggle="collapse" data-target="#collapse1" aria-controls="collapse1">
-                                <img src="img/lock.svg">Đổi mật khẩu</i>
+                            <button class="accordion-button collapsed" id="dropDownBtn" type="button" data-toggle="collapse" data-target="#collapse2" aria-controls="collapse2">
+                                <img src="img/lock.svg">Thay đổi mật khẩu</i>
                             </button>
                         </div>
-                          <div id="collapse1" class="accordion-collapse collapse hiding">
+                          <div id="collapse2" class="accordion-collapse collapse hiding">
                             <div class="accordion-body">
                                 <form action="changePassAction" method="post" id="changeForm">
                                     <div class="m-3 d-inline-block">Mật khẩu cũ</div><input type="password" name="password"
@@ -98,13 +114,13 @@
                         </div>
                         <div class="accordion-item col-11 dropdown-setting" id="changeAddress" role="tabpanel">
                             <div class="accordion-header">
-                              <button class="accordion-button collapsed" id="dropDownBtn" type="button" data-toggle="collapse" data-target="#collapse2" aria-controls="collapse2">
-                                  <img src="img/address.svg">Đổi địa chỉ giao hàng mặc định</i>
+                              <button class="accordion-button collapsed" id="dropDownBtn" type="button" data-toggle="collapse" data-target="#collapse3" aria-controls="collapse3">
+                                  <img src="img/address.svg">Thay đổi địa chỉ giao hàng mặc định</i>
                               </button>
                           </div>
-                            <div id="collapse2" class="accordion-collapse collapse hiding">
+                            <div id="collapse3" class="accordion-collapse collapse hiding">
                               <div class="accordion-body">
-                                  <form action="changePassAction" method="post" id="changeForm">
+                                  <form action="changeAddressAction" method="post" id="changeForm">
                                       <div class="m-3 d-inline-block">Địa chỉ cũ</div><br>
                                       <div class="m-3 d-inline-block">Địa chỉ mới</div><input type="text" name="newAddress"
                                           class="col-8"><br>
@@ -112,7 +128,7 @@
                                   </form>
                               </div>
                             </div>
-                          </div>                                             
+                          </div>                                                              
                     </div>
                 </div>
                 <div class="col-10 d-flex justify-content-end mb-5"><a href="logout" class="nav-link"><i class="fa-solid fa-arrow-right-from-bracket"></i>Đăng xuất</a></div>

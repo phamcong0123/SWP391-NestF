@@ -5,6 +5,10 @@ body{
 div{
     padding: 0!important;
 }
+button img{
+    width: 20px;
+    height:20px;
+}
 #navbar nav ul{
     margin:0;
     height: 8vh;
