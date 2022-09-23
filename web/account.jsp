@@ -7,7 +7,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,7 +26,6 @@
         integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
         crossorigin="anonymous"></script>
 </head>
-
 <body class="text-center">
     <div id="navbar">
         <nav class="navbar-expand bg-light navbar-light">
@@ -51,7 +49,7 @@
                     </form>
                 </li>
                 <li class="nav-item col-2 d-inline-block text-center">
-                    <div><a href="account" class="nav-link"><i class="fas fa-user    "></i>Tên customer</a></div>
+                    <div><a href="account" class="nav-link current-tab disabled"><i class="fas fa-user    "></i>Tên customer</a></div>
                 </li>
                 <li class="nav-item col-1 d-inline-block text-center">
                     <div><a href="cart" class="nav-link"><i class="fa-solid fa-cart-shopping"></i></a></div>
@@ -128,29 +126,40 @@
                                   </form>
                               </div>
                             </div>
-                          </div>                                                              
+                          </div>                                             
                     </div>
                 </div>
                 <div class="col-10 d-flex justify-content-end mb-5"><a href="logout" class="nav-link"><i class="fa-solid fa-arrow-right-from-bracket"></i>Đăng xuất</a></div>
             </div>
             <div id="all-voucher" class="tab-pane fade" role="tabpanel" aria-labelledby="voucher-tab">
                 <div id="whiteboard2" class="col-8 bg-light">
-                    <h6 class="d-inline-block col-9">Voucher của bạn</h6><a href="voucher" class="nav-link d-inline-block"><i class="fa-solid fa-basket-shopping"></i>Đi mua voucher</a>                 
-                    <div id="voucher" class="d-inline-block col-2">
-                        <img src="img/voucher.png">
-                        <span>TÊN VOUCHER</span>
-                    </div>
-                    <div id="voucher" class="d-inline-block col-2">
-                        <img src="img/voucher.png">
-                        <span>TÊN VOUCHER</span>
-                    </div>
-                    <div id="voucher" class="d-inline-block col-2">
-                        <img src="img/voucher.png">
-                        <span>TÊN VOUCHER</span>
-                    </div>
-                    <div id="voucher" class="d-inline-block col-2">
-                        <img src="img/voucher.png">
-                        <span>TÊN VOUCHER</span>
+                    <h6 class="d-inline-block col-9">Voucher của bạn</h6><a href="voucher" class="nav-link d-inline-block"><i class="fa-solid fa-basket-shopping"></i>Đi mua voucher</a> 
+                    <div class="row row-cols-4">
+                        <div id="voucher" class="d-inline-block col mb-2">
+                            <img src="img/voucher.png"><br>
+                            <span>TÊN VOUCHER</span>
+                            <p>Hết hạn trong 30 ngày nữa</p>
+                        </div>
+                        <div id="voucher" class="d-inline-block col mb-2">
+                            <img src="img/voucher.png"><br>
+                            <span>TÊN VOUCHER</span>
+                            <p>Hết hạn trong 30 ngày nữa</p>
+                        </div>
+                        <div id="voucher" class="d-inline-block col mb-2">
+                            <img src="img/voucher.png"><br>
+                            <span>TÊN VOUCHER</span>
+                            <p>Hết hạn trong 30 ngày nữa</p>
+                        </div>
+                        <div id="voucher" class="d-inline-block col mb-2">
+                            <img src="img/voucher.png"><br>
+                            <span>TÊN VOUCHER</span>
+                            <p>Hết hạn trong 30 ngày nữa</p>
+                        </div>
+                        <div id="voucher" class="d-inline-block col mb-2">
+                            <img src="img/voucher.png"><br>
+                            <span>TÊN VOUCHER</span>
+                            <p>Hết hạn trong 30 ngày nữa</p>
+                        </div>                     
                     </div>
                 </div>
             </div>            

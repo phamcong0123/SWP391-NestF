@@ -9,6 +9,9 @@ button img{
     width: 20px;
     height:20px;
 }
+.current-tab{
+    color:rgb(113, 113, 113)!important;
+}
 #navbar nav ul{
     margin:0;
     height: 8vh;
@@ -106,12 +109,8 @@ form div{
     line-height: 10vh;
     margin-left: 3%;
 }
-#voucher{
-    margin:2.5%;
-    margin-top: 0;
-}
 #voucher img{
-    width: 100%;
+    width: 80%;
 }
 #voucher h6{
     margin-top: 2vh;
@@ -143,6 +142,10 @@ form div{
 }
 #options li{
     margin:auto;
+}
+#options .active:hover{
+    text-decoration: none;
+    
 }
 #options button{
     border: none;
