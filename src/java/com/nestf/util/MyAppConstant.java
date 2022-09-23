@@ -13,6 +13,10 @@ import java.io.Serializable;
  */
 public class MyAppConstant implements Serializable {
 
+    public static class RemoveItemsFeatures {
+        public static final String CART_PAGE = "cartPage";
+    }
+
     public class LoginFeatures {
         public static final String INVALID_PAGE = "invalid";
         public static final String SEARCH_ACTION = "searchAction";
@@ -21,5 +25,10 @@ public class MyAppConstant implements Serializable {
     public class SearchAccountFeatures {
         public static final String SEARCH_PAGE = "searchPage";
     }
-
+    
+    public class ShoppingFeatures{
+        public static final String SHOPPING_PAGE = "shopPage";
+        public static final String SHOPPING_ACTION = "shopAction";
+    }
+    
 }
