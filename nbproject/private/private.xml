@@ -3,17 +3,26 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/CN5/SWP/demo/DemoNestF/web/register.jsp</file>
             <file>file:/D:/CN5/SWP/demo/DemoNestF/web/cart.jsp</file>
+            <file>file:/D:/CN5/SWP/demo/DemoNestF/web/html/post2.html</file>
+            <file>file:/D:/CN5/SWP/demo/DemoNestF/web/html/post5.html</file>
+            <file>file:/D:/CN5/SWP/demo/DemoNestF/web/home.jsp</file>
+            <file>file:/D:/CN5/SWP/demo/DemoNestF/web/handbook.jsp</file>
+            <file>file:/D:/CN5/SWP/demo/DemoNestF/web/voucher.jsp</file>
+            <file>file:/D:/CN5/SWP/demo/DemoNestF/web/WEB-INF/authentication.properties</file>
+            <file>file:/D:/CN5/SWP/demo/DemoNestF/web/html/post1.html</file>
+            <file>file:/D:/CN5/SWP/demo/DemoNestF/web/register.jsp</file>
             <file>file:/D:/CN5/SWP/demo/DemoNestF/web/css/nestf.css</file>
-            <file>file:/D:/CN5/SWP/demo/DemoNestF/src/java/com/nestf/controller/AddToCartServlet.java</file>
             <file>file:/D:/CN5/SWP/demo/DemoNestF/web/index.html</file>
             <file>file:/D:/CN5/SWP/demo/DemoNestF/src/java/com/nestf/cart/CartDAO.java</file>
             <file>file:/D:/CN5/SWP/demo/DemoNestF/web/account.jsp</file>
-            <file>file:/D:/CN5/SWP/demo/DemoNestF/web/handbook.jsp</file>
-            <file>file:/D:/CN5/SWP/demo/DemoNestF/web/voucher.jsp</file>
+            <file>file:/D:/CN5/SWP/demo/DemoNestF/web/html/post4.html</file>
             <file>file:/D:/CN5/SWP/demo/DemoNestF/web/article.jsp</file>
-            <file>file:/D:/CN5/SWP/demo/DemoNestF/web/html/post1.html</file>
+            <file>file:/D:/CN5/SWP/demo/DemoNestF/web/WEB-INF/siteMap.properties</file>
+            <file>file:/D:/CN5/SWP/demo/DemoNestF/web/product.jsp</file>
+            <file>file:/D:/CN5/SWP/demo/DemoNestF/src/java/com/nestf/util/MyAppConstant.java</file>
+            <file>file:/D:/CN5/SWP/demo/DemoNestF/web/login.jsp</file>
+            <file>file:/D:/CN5/SWP/demo/DemoNestF/web/productHTML/product1.html</file>
         </group>
     </open-files>
 </project-private>
