@@ -62,11 +62,11 @@
             <div id="author">           
             </div>
             <div id="content" class="pb-2 pe-4">            
-                <c:import charEncoding="UTF-8" url="html/post2.html"></c:import>
+                <c:import charEncoding="UTF-8" url="html/post5.html"></c:import>
             </div>
         </div>
         <div id="other-article" class="bg-light d-inline-block mt-4 h-100 sticky-top">
-            <h2>Bài viết khác</h2>
+            <h2 class="text-center">Bài viết khác</h2>
             <a href="article" class="nav-link" id="article-link">
                 <div class="m-3 d-flex justify-content-start">
                     <img src="img/post1.jpg" class="d-inline-block col-6">
