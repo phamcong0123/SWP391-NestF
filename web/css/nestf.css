@@ -101,7 +101,7 @@ form div{
 }
 #white-board{
     width: 95%;
-    margin:2% 2.5%;
+    margin:2% auto;
     border-radius: 5px;
 }
 #white-board h2{
@@ -194,3 +194,9 @@ form div{
 #changeAddress form div{
     width:15%;
 } 
+#other-article{
+    width:30.5%;
+}
+#article-link:hover{
+    text-decoration: none;    
+}

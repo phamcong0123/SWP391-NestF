@@ -1,19 +1,19 @@
 <%-- 
-    Document   : newjsp1
-    Created on : Sep 20, 2022, 4:05:54 PM
+    Document   : article
+    Created on : Sep 23, 2022, 3:43:02 PM
     Author     : Admin
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Mua voucher</title>
     <link rel="icon" href="img/logo.png" type="image/x-icon" />
+    <title>Title bài viết</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -51,56 +51,82 @@
                     <div><a href="cart" class="nav-link text-center"><i class="fa-solid fa-cart-shopping"></i></a></div>
                 </li>
                 <li class="nav-item col-1 d-inline-block text-center">
-                    <div><a href="voucher" class="nav-link text-center disabled">Điểm tích luỹ</a></div>
+                    <div><a href="voucher" class="nav-link text-center">Điểm tích luỹ</a></div>
                 </li>
             </ul>
         </nav>
     </div>
+    <div id="white-board" class="d-flex justify-content-between">
+        <div class="bg-light col-8 mt-4 d-inline-block" id="article">  
+            <h2 class="pt-4">Title bài viết</h2>
+            <div id="author">           
+            </div>
+            <div id="content" class="pb-2 pe-4">            
+                <c:import charEncoding="UTF-8" url="html/post2.html"></c:import>
+            </div>
+        </div>
+        <div id="other-article" class="bg-light d-inline-block mt-4 h-100 sticky-top">
+            <h2>Bài viết khác</h2>
+            <a href="article" class="nav-link" id="article-link">
+                <div class="m-3 d-flex justify-content-start">
+                    <img src="img/post1.jpg" class="d-inline-block col-6">
+                    <div class="d-inline-block text-start ms-2">
+                        <h5>Title</h5>
+                        <span>Nội dung...</span>
+                    </div>            
+                </div>
+            </a>
+            <a href="article" class="nav-link" id="article-link">
+                <div class="m-3 d-flex justify-content-start">
+                    <img src="img/post1.jpg" class="d-inline-block col-6">
+                    <div class="d-inline-block text-start ms-2">
+                        <h5>Title</h5>
+                        <span>Nội dung...</span>
+                    </div>            
+                </div>
+            </a>
+            <a href="article" class="nav-link" id="article-link">
+                <div class="m-3 d-flex justify-content-start">
+                    <img src="img/post1.jpg" class="d-inline-block col-6">
+                    <div class="d-inline-block text-start ms-2">
+                        <h5>Title</h5>
+                        <span>Nội dung...</span>
+                    </div>            
+                </div>
+            </a>
+        </div>
+    </div>
     <div id="white-board" class="bg-light">
-        <h2 class="d-block col-8">Danh sách voucher</h2>
+        <h4 class="text-start p-4">Các gợi ý khác</h4>
         <div class="row row-cols-4">
             <div id="voucher" class="d-inline-block col mb-4">
                 <img src="img/voucher.png">
                 <h6>TÊN VOUCHER</h6>
-                <span>Số lượng còn : </span><br>
-                <span>Điểm yêu cầu</span><br>
+                <span>Tên sản phẩm : </span><br>
+                <span>Giá sản phẩm</span><br>
                 <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
             </div>
             <div id="voucher" class="d-inline-block col mb-4">
                 <img src="img/voucher.png">
                 <h6>TÊN VOUCHER</h6>
-                <span>Số lượng còn : </span><br>
-                <span>Điểm yêu cầu</span><br>
+                <span>Tên sản phẩm : </span><br>
+                <span>Giá sản phẩm</span><br>
                 <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
             </div>
             <div id="voucher" class="d-inline-block col mb-4">
                 <img src="img/voucher.png">
                 <h6>TÊN VOUCHER</h6>
-                <span>Số lượng còn : </span><br>
-                <span>Điểm yêu cầu</span><br>
+                <span>Tên sản phẩm : </span><br>
+                <span>Giá sản phẩm</span><br>
                 <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
             </div>
             <div id="voucher" class="d-inline-block col mb-4">
                 <img src="img/voucher.png">
                 <h6>TÊN VOUCHER</h6>
-                <span>Số lượng còn : </span><br>
-                <span>Điểm yêu cầu</span><br>
+                <span>Tên sản phẩm : </span><br>
+                <span>Giá sản phẩm</span><br>
                 <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
-            </div>
-            <div id="voucher" class="d-inline-block col mb-4">
-                <img src="img/voucher.png">
-                <h6>TÊN VOUCHER</h6>
-                <span>Số lượng còn : </span><br>
-                <span>Điểm yêu cầu</span><br>
-                <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
-            </div>
-            <div id="voucher" class="d-inline-block col mb-4">
-                <img src="img/voucher.png">
-                <h6>TÊN VOUCHER</h6>
-                <span>Số lượng còn : </span><br>
-                <span>Điểm yêu cầu</span><br>
-                <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
-            </div>
+            </div>           
         </div>
     </div>
 </body>
