@@ -17,16 +17,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
-        <link href="css/nestf.css" rel="stylesheet">
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-                integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
-                integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
-                integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-        crossorigin="anonymous"></script>
+        <link href="css/nestf.css" rel="stylesheet">       
     </head>
 
     <body class="text-center">
@@ -64,21 +55,69 @@
             </nav>
         </div>
         <div id="white-board" class="bg-light">
-            <div class="d-flex justify-content-between">
-                <div class="d-inline-block col-4 m-4">
-                    <img src="img/product1.png" class="rounded col-12">
+            <div class="row container-fluid m-0">
+                <div class="d-inline-block col-5 mt-3">
+                    <img src="img/product1.png" class="rounded col-11">
                 </div>     
                 <div class="d-inline-block col-7">
-                    <h2 class="m-4 text-center">Tổ yến thô cao cấp tiêu chuẩn 100g</h2>
+                    <h2 class="text-center">Tổ yến thô cao cấp tiêu chuẩn 100g</h2>
                     <span>2,850,000 ₫</span>
                     <c:import charEncoding="UTF-8" url="productHTML/product1.html"></c:import>
+                </div>             
+            </div>
+            <div id="number-toggle" class="text-center col-7">
+                <div class="input-group d-inline-block">
+                    <form>
+                        <img src="img/plus.svg" data-field="quantity" class="button-plus d-inline-block">
+                        <input required id="number-input" type="number" step="1" value="1" min="1" max="100" onblur="minCheck(this), maxCheck(this)" name="quantity" class="quantity-field text-center p-0">
+                        <img src="img/minus.svg" data-field="quantity" class="button-minus d-inline-block"><br>
+                        <button type="submit" id="buy-button" class="col-3 me-2" value="buynow">Mua ngay</button>
+                        <button type="submit" id="buy-button" class="col-3 ms-2 bg-light text-black border border-dark rounded"><img src="img/cart.svg" class="me-2">Thêm vào giỏ</button>
+                    </form>
+
                 </div>
             </div>
-                <br>
+            <br>
             <div class="container-fluid">
                 Mô tả chi tiết sp
             </div>
         </div>
+        <div id="white-board" class="bg-light">
+            <h4 class="text-start p-4">Các gợi ý khác</h4>
+            <div class="row row-cols-4">
+                <div id="voucher" class="d-inline-block col mb-4">
+                    <img src="img/voucher.png">
+                    <h6>TÊN VOUCHER</h6>
+                    <span>Tên sản phẩm : </span><br>
+                    <span>Giá sản phẩm</span><br>
+                    <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
+                </div>
+                <div id="voucher" class="d-inline-block col mb-4">
+                    <img src="img/voucher.png">
+                    <h6>TÊN VOUCHER</h6>
+                    <span>Tên sản phẩm : </span><br>
+                    <span>Giá sản phẩm</span><br>
+                    <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
+                </div>
+                <div id="voucher" class="d-inline-block col mb-4">
+                    <img src="img/voucher.png">
+                    <h6>TÊN VOUCHER</h6>
+                    <span>Tên sản phẩm : </span><br>
+                    <span>Giá sản phẩm</span><br>
+                    <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
+                </div>
+                <div id="voucher" class="d-inline-block col mb-4">
+                    <img src="img/voucher.png">
+                    <h6>TÊN VOUCHER</h6>
+                    <span>Tên sản phẩm : </span><br>
+                    <span>Giá sản phẩm</span><br>
+                    <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
+                </div>           
+            </div>
+            <a href="" class="nav-link pb-3">Tất cả sản phẩm</a>
+        </div>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="js/productDetail.js"></script>   
 </body>
 </html>

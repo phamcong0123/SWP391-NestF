@@ -75,7 +75,7 @@
                 <h5 class="mt-2">Title</h5>
             </a>
             <a href="article" class="nav-link col mb-4" id="post">
-                <img src="img/post1.jpg" class="col-10">
+                <img src="img/post5.jpg" class="col-10">
                 <h5 class="mt-2">Title</h5>
             </a>                
         </div>
