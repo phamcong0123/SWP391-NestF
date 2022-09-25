@@ -18,5 +18,68 @@ public class CustomerDTO implements Serializable{
     private String customerAddress;
     private boolean gender;
     private int point;
+
+    public CustomerDTO() {
+    }
+
+    public CustomerDTO(int customerPhone, String password, String customerName, String customerAddress, boolean gender, int point) {
+        this.customerPhone = customerPhone;
+        this.password = password;
+        this.customerName = customerName;
+        this.customerAddress = customerAddress;
+        this.gender = gender;
+        this.point = point;
+    }
+
+    public int getCustomerPhone() {
+        return customerPhone;
+    }
+
+    public void setCustomerPhone(int customerPhone) {
+        this.customerPhone = customerPhone;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCustomerAddress() {
+        return customerAddress;
+    }
+
+    public void setCustomerAddress(String customerAddress) {
+        this.customerAddress = customerAddress;
+    }
+
+    public boolean isGender() {
+        return gender;
+    }
+
+    public void setGender(boolean gender) {
+        this.gender = gender;
+    }
+
+    public int getPoint() {
+        return point;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
+    }
+
+
+    
     
 }

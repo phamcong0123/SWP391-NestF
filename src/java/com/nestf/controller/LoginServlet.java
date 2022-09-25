@@ -5,17 +5,14 @@
  */
 package com.nestf.controller;
 
-import com.nestf.util.MyAppConstant;
+import com.nestf.customer.CustomerDAO;
+import com.nestf.customer.CustomerDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.Properties;
-import javax.naming.NamingException;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,17 +35,32 @@ public class LoginServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-
-        ServletContext context = request.getServletContext();
-        Properties siteMap = (Properties) context.getAttribute("SITE_MAP");
-
-        String url = (String) siteMap.get(MyAppConstant.LoginFeatures.INVALID_PAGE);
-        String username = request.getParameter("txtUsername");
-        String password = request.getParameter("txtPassword");
-       
+//        ServletContext context = request.getServletContext();
+//        PrintWriter out = response.getWriter();
+//        Properties siteMap = (Properties) context.getAttribute("SITE_MAP");
+//        String url = (String) siteMap.get(MyAppConstant.LoginFeatures.LOGIN_ACTION);
+        String url = "login.jsp";
+        try {
+            int customerPhone = Integer.parseInt(request.getParameter("customerPhone"));
+            String password = request.getParameter("password");
+            String action = request.getParameter("loginAction");
+            if (action.equals("Login")) {
+                CustomerDAO dao = new CustomerDAO();
+                CustomerDTO loginCustomer = dao.checkLogin(customerPhone, password);
+                if (loginCustomer != null) {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("LOGIN_CUSTOMER", loginCustomer);
+                    url="search.jsp";
+                } else {
+                    request.setAttribute("ERROR", "Phone or password is incorrect!");
+                }
+            }
+        } catch (Exception e) {
+        } finally {
+            request.getRequestDispatcher(url).forward(request, response);
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -63,7 +75,11 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -77,7 +93,11 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
