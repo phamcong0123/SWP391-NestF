@@ -6,7 +6,8 @@
 package com.nestf.income;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
+
 
 /**
  *
@@ -17,5 +18,52 @@ public class IncomeDTO implements Serializable{
     private int sellerID;
     private Date date;
     private double total;
+
+    public IncomeDTO() {
+    }
+
+    public IncomeDTO(int incomeID, int sellerID, Date date, double total) {
+        this.incomeID = incomeID;
+        this.sellerID = sellerID;
+        this.date = date;
+        this.total = total;
+    }
+
+    public int getIncomeID() {
+        return incomeID;
+    }
+
+    public void setIncomeID(int incomeID) {
+        this.incomeID = incomeID;
+    }
+
+    public int getSellerID() {
+        return sellerID;
+    }
+
+    public void setSellerID(int sellerID) {
+        this.sellerID = sellerID;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    @Override
+    public String toString() {
+        return "IncomeDTO{" + "incomeID=" + incomeID + ", sellerID=" + sellerID + ", date=" + date + ", total=" + total + '}';
+    }
     
 }
