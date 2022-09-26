@@ -6,6 +6,7 @@
 package com.nestf.voucher;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -16,5 +17,6 @@ public class VoucherDTO implements Serializable{
     private int typeID;
     private int customerPhone;
     private boolean status; // bit in sql
+    private Date expriredDate;
     
 }

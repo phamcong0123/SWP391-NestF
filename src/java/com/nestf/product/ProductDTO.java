@@ -13,14 +13,15 @@ import java.io.Serializable;
  */
 public class ProductDTO implements Serializable{
     private int productID;
-    private String sellerID;
+    private int sellerID;
     private String name;
     private float price;
     private int quantity;
-    private int categoryID;
+    private String category;
     private float discountPrice;
     private String productDes;
     private String image;
     private String detailDes;
+    private boolean status;
     
 }
