@@ -34,36 +34,43 @@ public class LoginServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    //        String url = (String) siteMap.get(MyAppConstant.LoginFeatures.LOGIN_ACTION);
+    private static final String ERROR = "login.jsp";
+    private static final String SUCCESS = "search.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-//        ServletContext context = request.getServletContext();
-//        PrintWriter out = response.getWriter();
-//        Properties siteMap = (Properties) context.getAttribute("SITE_MAP");
-//        String url = (String) siteMap.get(MyAppConstant.LoginFeatures.LOGIN_ACTION);
-        String url = "login.jsp";
+        //        ServletContext context = request.getServletContext();
+        //        PrintWriter out = response.getWriter();
+        //        Properties siteMap = (Properties) context.getAttribute("SITE_MAP");
+        String url = ERROR;
+//        String url = "login.jsp";
         try {
             int customerPhone = Integer.parseInt(request.getParameter("customerPhone"));
             String password = request.getParameter("password");
-            String action = request.getParameter("loginAction");
-            if (action.equals("Login")) {
-                CustomerDAO dao = new CustomerDAO();
-                CustomerDTO loginCustomer = dao.checkLogin(customerPhone, password);
-                if (loginCustomer != null) {
-                    HttpSession session = request.getSession();
-                    session.setAttribute("LOGIN_CUSTOMER", loginCustomer);
-                    url="search.jsp";
-                } else {
-                    request.setAttribute("ERROR", "Phone or password is incorrect!");
-                }
+//            String action = request.getParameter("login Action");
+//            if (action.equals("Login")) {
+//            }
+            CustomerDAO dao = new CustomerDAO();
+            CustomerDTO loginCustomer = dao.checkLogin(customerPhone, password);
+            if (loginCustomer != null) {
+                HttpSession session = request.getSession();
+                session.setAttribute("LOGIN_CUSTOMER", loginCustomer);
+                url = SUCCESS;
+//                url="search.jsp"
+            } else {
+                request.setAttribute("ERROR", "Phone or password is incorrect!");
+                url = ERROR;
             }
         } catch (Exception e) {
+            log("Error at LoginController: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -77,8 +84,10 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
+
         } catch (SQLException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginServlet.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -95,8 +104,10 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             processRequest(request, response);
+
         } catch (SQLException ex) {
-            Logger.getLogger(LoginServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginServlet.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 

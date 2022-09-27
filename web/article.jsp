@@ -62,7 +62,7 @@
             <div id="author">           
             </div>
             <div id="content" class="pb-2 pe-4">            
-                <c:import charEncoding="UTF-8" url="html/post5.html"></c:import>
+                <c:import charEncoding="UTF-8" url="postHTML/post5.html"></c:import>
             </div>
         </div>
         <div id="other-article" class="bg-light d-inline-block mt-4 h-100 sticky-top">

@@ -42,14 +42,15 @@
         </div>
         <div class="d-inline-block col-8" id="login-form">
             <h1>Đăng nhập</h1><br>
-            <form action="loginAction" method="post">
-                <div class="m-3 d-inline-block col-2">Số điện thoại</div><input type="text" name="customerPhone" class="col-3"><br>
-                <div class="m-3 d-inline-block col-2">Mật khẩu</div><input type="text"name="password" class="col-3"><br>   
+            <form action="LoginServlet" method="POST">
+                <div class="m-3 d-inline-block col-2">Số điện thoại</div><input type="text" name="customerPhone" required="" class="col-3"><br>
+                <div class="m-3 d-inline-block col-2">Mật khẩu</div><input type="password" name="password"  required="" class="col-3"><br>   
                 <c:if test=""></c:if>
-                <a href="forgotPassword" class="nav-link col-5 d-inline-block " id="forgetPass">Quên mật khẩu</a><br>
-                <a href="register"><input type="button" value="ĐĂNG KÝ" id="link-button"></a>
-                <input type="submit" value="ĐĂNG NHẬP" id="color-button">
-            </form>
+                    <a href="forgotPassword" class="nav-link col-5 d-inline-block " id="forgetPass">Quên mật khẩu</a><br>
+                    <a href="register"><input type="button" value="ĐĂNG KÝ" id="link-button"></a>
+                    <input type="submit" value="ĐĂNG NHẬP"  id="color-button">
+                </form>
+                <br>${requestScope.ERROR}</br>
         </div>
         <div class="d-inline-block" id="sidepic">
             <img

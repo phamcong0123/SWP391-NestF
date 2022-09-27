@@ -79,10 +79,7 @@ public class CustomerDTO implements Serializable{
         this.point = point;
     }
 
-    @Override
-    public String toString() {
-        return "CustomerDTO{" + "customerPhone=" + customerPhone + ", password=" + password + ", customerName=" + customerName + ", customerAddress=" + customerAddress + ", gender=" + gender + ", point=" + point + '}';
-    }
 
+    
     
 }
