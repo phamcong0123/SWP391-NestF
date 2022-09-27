@@ -27,13 +27,13 @@
                         <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="shop" class="nav-link">Shop</a>
+                        <a href="shopPage" class="nav-link">Shop</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="handbook" class="nav-link">Cẩm nang</a>
+                        <a href="handbookPage" class="nav-link">Cẩm nang</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="about" class="nav-link">Về chúng tôi</a>
+                        <a href="aboutPage" class="nav-link">Về chúng tôi</a>
                     </li>
                     <li class="nav-item col-7 d-inline-block">
                     </li>         
@@ -45,12 +45,11 @@
             <form action="loginAction" method="POST">
                 <div class="mb-3 d-inline-block col-2">Số điện thoại</div><input type="text" name="customerPhone" required class="col-3"><br>
                 <div class="d-inline-block col-2">Mật khẩu</div><input type="password" name="password"  required class="col-3"><br>   
-                <c:if test=""></c:if>
-                    <a href="forgotPassword" class="nav-link col-5 d-inline-block " id="forgetPass">Quên mật khẩu</a><br>
+                <c:if test="${ not empty requestScope.ERROR}"><div class="text-end text-danger mt-2 col-5 d-inline-block">${requestScope.ERROR}</div><br></c:if>
+                    <a href="forgotPassword" class="nav-link col-5 d-inline-block mt-3" id="forgetPass">Quên mật khẩu</a><br>
                     <a href="register"><input type="button" value="ĐĂNG KÝ" id="link-button"></a>
                     <input type="submit" value="ĐĂNG NHẬP"  id="color-button">
                 </form>
-                <br>${requestScope.ERROR}</br>
         </div>
         <div class="d-inline-block" id="sidepic">
             <img

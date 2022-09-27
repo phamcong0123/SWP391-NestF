@@ -36,7 +36,7 @@ public class LoginServlet extends HttpServlet {
      */
     //        String url = (String) siteMap.get(MyAppConstant.LoginFeatures.LOGIN_ACTION);
     private static final String ERROR = "login.jsp";
-    private static final String SUCCESS = "search.jsp";
+    private static final String SUCCESS = "home.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
@@ -60,7 +60,7 @@ public class LoginServlet extends HttpServlet {
                 url = SUCCESS;
 //                url="search.jsp"
             } else {
-                request.setAttribute("ERROR", "Phone or password is incorrect!");
+                request.setAttribute("ERROR", "Sai mật khẩu hoặc số điện thoại!");
                 url = ERROR;
             }
         } catch (Exception e) {
