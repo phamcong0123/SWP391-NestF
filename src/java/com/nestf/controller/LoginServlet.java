@@ -56,7 +56,7 @@ public class LoginServlet extends HttpServlet {
             CustomerDTO loginCustomer = dao.checkLogin(customerPhone, password);
             if (loginCustomer != null) {
                 HttpSession session = request.getSession();
-                session.setAttribute("LOGIN_CUSTOMER", loginCustomer);
+                session.setAttribute("USER", loginCustomer);
                 url = SUCCESS;
 //                url="search.jsp"
             } else {
