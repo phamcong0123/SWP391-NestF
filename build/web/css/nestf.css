@@ -100,7 +100,7 @@ form div{
 #register-form h1{
     margin-top: 2vh;
 }
-#register-form input[type=text],input[type=password]{
+#register-form input[type=text],#register-form input[type=password]{
     width: 30vw;
 }
 #gender{
