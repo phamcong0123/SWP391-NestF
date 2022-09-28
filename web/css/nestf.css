@@ -141,13 +141,6 @@ form div{
     margin: 1% auto;  
     border-radius: 5px;  
 }
-#whiteboard2 h6{
-    font-weight: bold;
-    text-align: left;
-    margin-bottom: 3vh;
-    margin-top:3vh;
-    font-size: 1.5rem;
-}
 #options{
     margin-top: 1rem;
     padding:0;
@@ -223,4 +216,10 @@ input[type=number]{
     background-color: transparent;
     outline:none;
     width:3rem;
+}
+#cart-item{
+     background-color: rgba(229, 229, 229, 0.4);
+}
+#order-history #options .nav-link.active{
+    border-bottom: green solid;
 }

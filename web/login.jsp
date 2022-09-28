@@ -24,7 +24,7 @@
             <nav class="navbar-expand bg-light navbar-light">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
-                        <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
+                        <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
                         <a href="shopPage" class="nav-link">Shop</a>
