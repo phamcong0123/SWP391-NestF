@@ -4,6 +4,7 @@
     Author     : Admin
 --%>
 
+<%@page import="com.nestf.customer.CustomerError"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,13 +13,18 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>Đăng ký</title>
         <meta name="description" content="">
-        <link rel="icon" href="img/logo.png" type="image/x-icon" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
         <link href="css/nestf.css" rel="stylesheet">
     </head>
+    <%
+        CustomerError cusError = (CustomerError) request.getAttribute("CUS_ERROR");
+        if (cusError == null) {
+            cusError = new CustomerError();
+        }
+    %>
     <body class="text-center">
         <div id="navbar">
             <nav class="navbar-expand bg-light navbar-light">
@@ -50,8 +56,8 @@
         <div class="d-inline-block container-fluid" id="register-form">
             <img src="img/account.svg" alt="">
             <h1>Đăng ký</h1>
-            <form action="registerAction" method="post">
-                <div class="m-3 d-inline-block col-2">Họ và tên</div><input type="text" name="customerName"><br>
+            <form action="RegisterServlet" method="POST">
+                <div class="m-3 d-inline-block col-2">Họ và tên</div><input type="text" name="customerName" required=""><%= cusError.getCustomerNameError()%><br>
                 <div class="m-3 d-inline-block col-2">Giới tính</div>          
                 <div id="gender" class="d-inline-block">
                     <input type="radio" id="male" name="gender" value="1">
@@ -59,12 +65,13 @@
                     <input type="radio" id="female" name="gender" value="0">
                     <label for="female">Nữ</label>
                 </div><br>
-                <div class="m-3 d-inline-block col-2">Số điện thoại</div><input type="text" name="customerPhone"><br>
-                <div class="m-3 d-inline-block col-2">Mật khẩu</div><input type="text" name="password"><br>
-                <div class="m-3 d-inline-block col-2">Xác nhận mật khẩu</div><input type="text" name="confirm"><br>
-                <div class="d-inline-block col-2">Địa chỉ</div><input type="text" name="customerAddress"><br>
+                <div class="m-3 d-inline-block col-2">Số điện thoại</div><input type="text" name="customerPhone" required="" pattern="[0-9]{5-8}"><%= cusError.getCustomerPhoneError()%><br>
+                <div class="m-3 d-inline-block col-2">Mật khẩu</div><input type="text" name="password" required=""><%= cusError.getConfirm()%><br>
+                <div class="m-3 d-inline-block col-2">Xác nhận mật khẩu</div><input type="text" name="confirm" required=""><%= cusError.getConfirm()%><br>
+                <div class="d-inline-block col-2">Địa chỉ</div><input type="text" name="customerAddress" required=""><%= cusError.getCustomerAddressError()%><br>
+                <input type="hidden" name="point" value="0"/>
                 <a href="home"><input type="button" value="HUỶ" id="link-button"></a>
-                <input type="submit" value="ĐĂNG KÝ" id="color-button">
+                <input type="submit" value="ĐĂNG KÝ" name="action" id="color-button">
             </form>
         </div>
     </body>

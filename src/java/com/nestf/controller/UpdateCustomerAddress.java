@@ -8,9 +8,7 @@ package com.nestf.controller;
 import com.nestf.customer.CustomerDAO;
 import com.nestf.customer.CustomerDTO;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,57 +18,43 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author DELL
+ * @author Admin
  */
-@WebServlet(name = "LoginServlet", urlPatterns = {"/LoginServlet"})
-public class LoginServlet extends HttpServlet {
+@WebServlet(name = "UpdateCustomerAddress", urlPatterns = {"/UpdateCustomerAddress"})
+public class UpdateCustomerAddress extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    //        String url = (String) siteMap.get(MyAppConstant.LoginFeatures.LOGIN_ACTION);
-    private static final String ERROR = "login.jsp";
-    private static final String SUCCESS = "home.jsp";
+    private static final String ERROR = "account.jsp";
+    private static final String SUCCESS = "account.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        //        ServletContext context = request.getServletContext();
-        //        PrintWriter out = response.getWriter();
-        //        Properties siteMap = (Properties) context.getAttribute("SITE_MAP");
         String url = ERROR;
-//        String url = "login.jsp";
+        HttpSession session = request.getSession();
+        CustomerDTO customerLog = (CustomerDTO) session.getAttribute("CUSTOMER");
         try {
             int customerPhone = Integer.parseInt(request.getParameter("customerPhone"));
+            String customerName = request.getParameter("customerName");
+            String newAddress = request.getParameter("newAddress");
             String password = request.getParameter("password");
-//            String action = request.getParameter("login Action");
-//            if (action.equals("Login")) {
-//            }
+            boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
+            int point = Integer.parseInt(request.getParameter("point"));
+            CustomerDTO customer = new CustomerDTO(customerPhone, password, customerName, newAddress, gender, point);
+            boolean check = false;
             CustomerDAO dao = new CustomerDAO();
-            CustomerDTO loginCustomer = dao.checkLogin(customerPhone, password);
-            if (loginCustomer != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("CUSTOMER", loginCustomer);
+            check = dao.updateCusAddress(customer);
+            if (check) {
                 url = SUCCESS;
-//                url="search.jsp"
-            } else {
-                request.setAttribute("ERROR", "Sai mật khẩu hoặc số điện thoại!");
-                url = ERROR;
+                customerLog.setCustomerAddress(newAddress);
             }
         } catch (Exception e) {
-            log("Error at LoginController: " + e.toString());
+            log("Error at UpdateCustomerAddress: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
 
-// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -82,13 +66,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-
-        } catch (SQLException ex) {
-            Logger.getLogger(LoginServlet.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -102,13 +80,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-
-        } catch (SQLException ex) {
-            Logger.getLogger(LoginServlet.class
-                    .getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
