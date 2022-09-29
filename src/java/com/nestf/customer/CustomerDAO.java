@@ -82,7 +82,7 @@ public class CustomerDAO {
         return check;
     }
 
-    public boolean insert(CustomerDTO customer) throws SQLException {
+    public boolean insert(CustomerDTO customer) throws SQLException, NamingException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -97,9 +97,7 @@ public class CustomerDAO {
                 ptm.setBoolean(5, customer.isGender());
                 ptm.setInt(6, customer.getPoint());
                 check = ptm.executeUpdate() > 0;
-            }
-
-        } catch (Exception e) {
+            }      
         } finally {
             if (ptm != null) {
                 ptm.close();

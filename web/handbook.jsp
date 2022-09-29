@@ -5,8 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html>
+<html lang="vi">
 
 <head>
     <meta charset="utf-8">
@@ -25,16 +26,16 @@
         <nav class="navbar-expand bg-light navbar-light">
             <ul class="navbar">
                 <li class="nav-item col-2 d-inline-block">
-                    <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
+                    <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
                 </li>
                 <li class="nav-item col-1 d-inline-block">
-                    <a href="shop" class="nav-link text-center">Shop</a>
+                    <a href="shopPage" class="nav-link text-center">Shop</a>
                 </li>
                 <li class="nav-item col-1 d-inline-block">
-                    <a href="handbook" class="nav-link text-center current-tab disabled">Cẩm nang</a>
+                    <a href="handbookPage" class="nav-link text-center current-tab disabled">Cẩm nang</a>
                 </li>
                 <li class="nav-item col-1 d-inline-block">
-                    <a href="about" class="nav-link text-center">Về chúng tôi</a>
+                    <a href="aboutPage" class="nav-link text-center">Về chúng tôi</a>
                 </li>
                 <li class="nav-item col-3 d-inline-block text-center">
                     <form action="searchAction" method="get" id="search-form">
@@ -43,15 +44,27 @@
                     </form>
                 </li>
                 <li class="nav-item col-2 d-inline-block text-center">
-                    <div><a href="account" class="nav-link text-center"><i class="fas fa-user    "></i>Tên customer</a>
-                    </div>
-                </li>
-                <li class="nav-item col-1 d-inline-block text-center">
-                    <div><a href="cart" class="nav-link text-center"><i class="fa-solid fa-cart-shopping"></i></a></div>
-                </li>
-                <li class="nav-item col-1 d-inline-block text-center">
-                    <div><a href="voucher" class="nav-link text-center">Điểm tích luỹ</a></div>
-                </li>
+                        <div>
+                            <c:if test="${not empty sessionScope.CUSTOMER}">
+                                <a href="accountPage" class="nav-link text-center"><i class="fas fa-user    "></i>${sessionScope.CUSTOMER.customerName}</a>
+                            </c:if>
+                            <c:if test="${empty sessionScope.CUSTOMER}"><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a>
+                            </c:if>
+                        </div>
+                    </li>
+                    <li class="nav-item col-1 d-inline-block text-center">
+                        <div> 
+                            <c:if test="${not empty sessionScope.CUSTOMER}">
+                                <a href="cartPage" class="nav-link text-center"><i class="fa-solid fa-cart-shopping"></i></a></div>
+                                </c:if>                              
+                    </li>
+                    <li class="nav-item col-1 d-inline-block text-center">
+                        <div>
+                            <c:if test="${not empty sessionScope.CUSTOMER}">
+                                <a href="voucherPage" class="nav-link text-center">${sessionScope.CUSTOMER.point} CP</a>
+                                </c:if>
+                        </div>
+                    </li>
             </ul>
         </nav>
     </div>

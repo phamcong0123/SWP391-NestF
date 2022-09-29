@@ -7,7 +7,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html>
+<html lang="vi">
+    <c:if test="${not empty sessionScope.CUSTOMER}">
+        <c:redirect url="homePage"></c:redirect>
+    </c:if>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -43,11 +46,11 @@
         <div class="d-inline-block col-8" id="login-form">
             <h1>Đăng nhập</h1><br>
             <form action="loginAction" method="POST">
-                <div class="mb-3 d-inline-block col-2">Số điện thoại</div><input type="text" name="customerPhone" required class="col-3"><br>
-                <div class="d-inline-block col-2">Mật khẩu</div><input type="password" name="password"  required class="col-3"><br>   
+                <div class="mb-3 d-inline-block col-2">Số điện thoại</div><input type="text" name="customerPhone" value="${param.customerPhone}" required class="col-3"><br>
+                <div class="d-inline-block col-2">Mật khẩu</div><input type="password" name="password" required class="col-3"><br>   
                 <c:if test="${ not empty requestScope.ERROR}"><div class="text-end text-danger mt-2 col-5 d-inline-block">${requestScope.ERROR}</div><br></c:if>
                     <a href="forgotPassword" class="nav-link col-5 d-inline-block mt-3" id="forgetPass">Quên mật khẩu</a><br>
-                    <a href="register"><input type="button" value="ĐĂNG KÝ" id="link-button"></a>
+                    <a href="registerPage"><input type="button" value="ĐĂNG KÝ" id="link-button"></a>
                     <input type="submit" value="ĐĂNG NHẬP"  id="color-button">
                 </form>
         </div>

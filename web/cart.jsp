@@ -7,8 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="vi">
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -46,14 +45,14 @@
                         </form>
                     </li>
                     <li class="nav-item col-2 d-inline-block text-center">
-                        <div><a href="accountPage" class="nav-link text-center"><i class="fas fa-user    "></i>${sessionScope.USER.customerName}</a>
+                        <div><a href="accountPage" class="nav-link text-center"><i class="fas fa-user    "></i>${sessionScope.CUSTOMER.customerName}</a>
                         </div>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div><a href="cartPage" class="nav-link text-center current-tab disabled"><i class="fa-solid fa-cart-shopping"></i></a></div>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
-                        <div><a href="voucherPage" class="nav-link text-center disabled">${sessionScope.USER.point} CP</a></div>
+                        <div><a href="voucherPage" class="nav-link text-center">${sessionScope.CUSTOMER.point} CP</a></div>
                     </li>
                 </ul>
             </nav>
@@ -118,6 +117,38 @@
                                 </div>
                             </div>
                         </div>
+                        <c:forEach items="${sessionScope.CART}" var="product">
+                            <div id="cart-item" class="rounded col-11 m-auto mb-3">
+                                <div class="row container-fluid m-0">
+                                    <div class="d-inline-block col-2 text-start">
+                                        <img src="${product.img}" class="rounded w-100">
+                                    </div>     
+                                    <div class="d-inline-block col-8 text-start ms-5 mt-4">
+                                        <h4 class="fw-bold">${product.productName}</h4>
+                                        <span>
+                                            <c:if test="${not empty product.discountPrice}">
+                                                ${product.discountPrice}&nsbp;<span class="text-danger text-decoration-line-through">${product.price}</span>
+                                            </c:if>
+                                            <c:if test="${empty product.discountPrice}">${product.price}</c:if>
+                                        </span>                                       
+                                        <div id="number-toggle" class="text-end">
+                                            <div class="input-group d-inline-block">
+                                                <form>
+                                                    <img src="img/plus.svg" data-field="quantity" class="button-plus d-inline-block">
+                                                    <input required id="number-input" type="number" step="1" value="1" min="1" max="100" onblur="minCheck(this), maxCheck(this)" name="quantity" class="quantity-field text-center p-0">
+                                                    <img src="img/minus.svg" data-field="quantity" class="button-minus d-inline-block"><br>                                    
+                                                    <h5 class="fw-bold text-end mt-1">2,850,000</h5>
+                                                </form>                                          
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <div class="d-inline-block col-1 ms-auto">
+                                        <a href="" class="mt-3 nav-link"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a>
+                                    </div>
+                                </div>  
+                            </div>
+                        </c:forEach>
+
                         <div id="cart-item" class="rounded col-11 m-auto mb-3">
                             <div class="row container-fluid m-0">
                                 <div class="d-inline-block col-2 text-start">
@@ -141,57 +172,9 @@
                                     <a href="" class="mt-3 nav-link"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a>
                                 </div>
                             </div>  
-                        </div>
-                        <div id="cart-item" class="rounded col-11 m-auto mb-3">
-                            <div class="row container-fluid m-0">
-                                <div class="d-inline-block col-2 text-start">
-                                    <img src="img/product1.png" class="rounded w-100">
-                                </div>     
-                                <div class="d-inline-block col-8 text-start ms-5 mt-4">
-                                    <h4 class="fw-bold">Tổ yến thô cao cấp tiêu chuẩn 100g</h4>
-                                    <span>2,850,000 ₫</span>
-                                    <div id="number-toggle" class="text-end">
-                                        <div class="input-group d-inline-block">
-                                            <form>
-                                                <img src="img/plus.svg" data-field="quantity" class="button-plus d-inline-block">
-                                                <input required id="number-input" type="number" step="1" value="1" min="1" max="100" onblur="minCheck(this), maxCheck(this)" name="quantity" class="quantity-field text-center p-0">
-                                                <img src="img/minus.svg" data-field="quantity" class="button-minus d-inline-block"><br>                                    
-                                                <h5 class="fw-bold text-end mt-1">2,850,000</h5>
-                                            </form>                                          
-                                        </div>
-                                    </div>
-                                </div> 
-                                <div class="d-inline-block col-1 ms-auto">
-                                    <a href="" class="mt-3 nav-link"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a>
-                                </div>
-                            </div>  
-                        </div>
-                        <div id="cart-item" class="rounded col-11 m-auto mb-3">
-                            <div class="row container-fluid m-0">
-                                <div class="d-inline-block col-2 text-start">
-                                    <img src="img/product1.png" class="rounded w-100">
-                                </div>     
-                                <div class="d-inline-block col-8 text-start ms-5 mt-4">
-                                    <h4 class="fw-bold">Tổ yến thô cao cấp tiêu chuẩn 100g</h4>
-                                    <span>2,850,000 ₫</span>
-                                    <div id="number-toggle" class="text-end">
-                                        <div class="input-group d-inline-block">
-                                            <form>
-                                                <img src="img/plus.svg" data-field="quantity" class="button-plus d-inline-block">
-                                                <input required id="number-input" type="number" step="1" value="1" min="1" max="100" onblur="minCheck(this), maxCheck(this)" name="quantity" class="quantity-field text-center p-0">
-                                                <img src="img/minus.svg" data-field="quantity" class="button-minus d-inline-block"><br>                                    
-                                                <h5 class="fw-bold text-end mt-1">2,850,000</h5>
-                                            </form>                                          
-                                        </div>
-                                    </div>
-                                </div> 
-                                <div class="d-inline-block col-1 ms-auto">
-                                    <a href="" class="mt-3 nav-link"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a>
-                                </div>
-                            </div>  
-                        </div>
+                        </div>                      
                         <div class="fs-4 d-flex justify-content-between pb-3">
-                            <span class="ms-5 d-inline-block align-self-center">Thành tiền :<span> 100$</span></span> 
+                            <span class="ms-5 d-inline-block align-self-center">Thành tiền :<span class="fw-bold"> 100$</span></span> 
                             <form action="checkOutAction" method="POST">
                                 <input type="hidden" value="" id="voucher-use">
                                 <button id="buy-button" class="btn ms-auto mt-0 me-5">Thanh toán</button>

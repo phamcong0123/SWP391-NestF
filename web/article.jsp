@@ -7,8 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html>
-
+<html lang="vi">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -45,27 +44,35 @@
                     </li>
                     <li class="nav-item col-2 d-inline-block text-center">
                         <div>
-                            <c:if test="${not empty sessionScope.USER}">
-                                <a href="accountPage" class="nav-link text-center"><i class="fas fa-user    "></i>${sessionScope.USER.customerName}                        </a>
+                            <c:if test="${not empty sessionScope.CUSTOMER}">
+                                <a href="accountPage" class="nav-link text-center"><i class="fas fa-user    "></i>${sessionScope.CUSTOMER.customerName}</a>
+                                </c:if>
+                                <c:if test="${empty sessionScope.CUSTOMER}"><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a>
                             </c:if>
-                            <c:if test="${empty sessionScope.USER}"><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a></c:if>
-                            </div>
-                        </li>
-                        <li class="nav-item col-1 d-inline-block text-center">
-                            <div><a href="cartPage" class="nav-link text-center"><i class="fa-solid fa-cart-shopping"></i></a></div>
-                        </li>
-                        <li class="nav-item col-1 d-inline-block text-center">
-                            <div><a href="voucherPage" class="nav-link text-center">Điểm tích luỹ</a></div>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
-            <div id="white-board" class="d-flex justify-content-between">
-                <div class="bg-light col-8 mt-4 d-inline-block" id="article">  
-                    <h2 class="pt-4">Title bài viết</h2>
-                    <div id="author">           
-                    </div>
-                    <div id="content" class="pb-2 pe-4">            
+                        </div>
+                    </li>
+                    <li class="nav-item col-1 d-inline-block text-center">
+                        <div> 
+                            <c:if test="${not empty sessionScope.CUSTOMER}">
+                                <a href="cartPage" class="nav-link text-center"><i class="fa-solid fa-cart-shopping"></i></a></div>
+                                </c:if>                              
+                    </li>
+                    <li class="nav-item col-1 d-inline-block text-center">
+                        <div>
+                            <c:if test="${not empty sessionScope.CUSTOMER}">
+                                <a href="voucherPage" class="nav-link text-center">${sessionScope.CUSTOMER.point} CP</a>
+                            </c:if>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div id="white-board" class="d-flex justify-content-between">
+            <div class="bg-light col-8 mt-4 d-inline-block" id="article">  
+                <h2 class="pt-4">Title bài viết</h2>
+                <div id="author">           
+                </div>
+                <div id="content" class="pb-2 pe-4">            
                     <c:import charEncoding="UTF-8" url="postHTML/post5.html"></c:import>
                 </div>
             </div>
