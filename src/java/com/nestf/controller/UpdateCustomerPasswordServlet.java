@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Admin
  */
-@WebServlet(name = "UpdateCustomerPassword", urlPatterns = {"/UpdateCustomerPassword"})
+@WebServlet(name = "UpdateCustomerPasswordServlet", urlPatterns = {"/UpdateCustomerPasswordServlet"})
 public class UpdateCustomerPasswordServlet extends HttpServlet {
 
     private static final String ERROR = "account.jsp";

@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author Admin
  */
-@WebServlet(name = "UpdateCustomerAddress", urlPatterns = {"/UpdateCustomerAddress"})
+@WebServlet(name = "UpdateCustomerAddressServlet", urlPatterns = {"/UpdateCustomerAddressServlet"})
 public class UpdateCustomerAddressServlet extends HttpServlet {
 
     private static final String ERROR = "account.jsp";

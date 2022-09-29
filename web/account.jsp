@@ -4,6 +4,8 @@
     Author     : Admin
 --%>
 
+<%@page import="com.nestf.customer.CustomerError"%>
+<%@page import="com.nestf.customer.CustomerDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -21,6 +23,17 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.1/js/bootstrap.min.js" integrity="sha512-vyRAVI0IEm6LI/fVSv/Wq/d0KUfrg3hJq2Qz5FlfER69sf3ZHlOrsLriNm49FxnpUGmhx+TaJKwJ+ByTLKT+Yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </head>
+    <%
+        CustomerDTO customer = (CustomerDTO) session.getAttribute("CUSTOMER");
+        if (customer == null) {
+            customer = new CustomerDTO();
+        }
+
+        CustomerError cusError = (CustomerError) request.getAttribute("CUS_ERROR");
+        if (cusError == null) {
+            cusError = new CustomerError();
+        }
+    %>
     <body class="text-center">
         <div id="navbar">
             <nav class="navbar-expand bg-light navbar-light">
@@ -79,7 +92,12 @@
                                     <div class="accordion-body">
                                         <form action="changeNameAction" method="post" id="changeForm">                                     
                                             <div class="m-3 d-inline-block">Tên hiển thị mới</div><input type="text"
-                                                                                                         name="name" class="col-6"><br>
+                                                                                                         name="newCustomerName" class="col-6" required=""><br>
+                                            <input type="hidden" name="customerPhone" value="<%= customer.getCustomerPhone()%>">
+                                            <input type="hidden" name="customerAddress" value="<%= customer.getCustomerAddress()%>">
+                                            <input type="hidden" name="password" value="<%= customer.getPassword()%>">
+                                            <input type="hidden" name="gender" value="<%= customer.isGender()%>">
+                                            <input type="hidden" name="point" value="<%= customer.getPoint()%>">
                                             <input type="submit" value="LƯU" id="color-button">
                                         </form>
                                     </div>
@@ -93,13 +111,19 @@
                                 </div>
                                 <div id="collapse2" class="accordion-collapse collapse hiding">
                                     <div class="accordion-body">
-                                        <form action="changePassAction" method="post" id="changeForm">
+                                        <form action="changePasswordAction" method="post" id="changeForm">
                                             <div class="m-3 d-inline-block">Mật khẩu cũ</div><input type="password" name="password"
-                                                                                                    class="col-6"><br>
+                                                                                                    class="col-6" required=""><%= cusError.getPasswordError()%><br>
+                                            <input type="hidden" name="password" value="<%= customer.getPassword()%>">
                                             <div class="m-3 d-inline-block">Mật khẩu mới</div><input type="password" name="newPass"
-                                                                                                     class="col-6"><br>
+                                                                                                     class="col-6" required=""><br>
                                             <div class="m-3 d-inline-block">Xác nhận mật khẩu mới</div><input type="password"
-                                                                                                              name="confirm" class="col-6"><br>
+                                                                                                              name="confirm" class="col-6" required=""><br>
+                                            <input type="hidden" name="customerPhone" value="<%= customer.getCustomerPhone()%>">
+                                            <input type="hidden" name="customerAddress" value="<%= customer.getCustomerAddress()%>">
+                                            <input type="hidden" name="customerName" value="<%= customer.getCustomerName()%>">
+                                            <input type="hidden" name="gender" value="<%= customer.isGender()%>">
+                                            <input type="hidden" name="point" value="<%= customer.getPoint()%>">
                                             <input type="submit" value="LƯU" id="color-button">
                                         </form>
                                     </div>
@@ -116,7 +140,11 @@
                                         <form action="changeAddressAction" method="post" id="changeForm">
                                             <div class="m-3 d-inline-block">Địa chỉ cũ :</div><span> ${CUSTOMER.customerAddress}</span><br>
                                             <div class="m-3 d-inline-block">Địa chỉ mới</div><input type="text" name="newAddress"
-                                                                                                    class="col-8"><br>
+                                                                                                    class="col-8" required=""><br>
+                                            <input type="hidden" name="customerPhone" value="<%= customer.getCustomerPhone()%>">
+                                            <input type="hidden" name="password" value="<%= customer.getPassword()%>">
+                                            <input type="hidden" name="gender" value="<%= customer.isGender()%>">
+                                            <input type="hidden" name="point" value="<%= customer.getPoint()%>">
                                             <input type="submit" value="LƯU" id="color-button">
                                         </form>
                                     </div>
