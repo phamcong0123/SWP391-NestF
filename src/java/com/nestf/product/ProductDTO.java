@@ -6,6 +6,9 @@
 package com.nestf.product;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.util.Currency;
+import java.util.Locale;
 
 /**
  *
@@ -15,10 +18,10 @@ public class ProductDTO implements Serializable{
     private int productID;
     private int sellerID;
     private String name;
-    private double price;
+    private float price;
     private int quantity;
-    private int categoryID;
-    private double discountPrice;
+    private String category;
+    private float discountPrice;
     private String productDes;
     private String image;
     private String detailDes;
@@ -27,18 +30,17 @@ public class ProductDTO implements Serializable{
     public ProductDTO() {
     }
 
-    public ProductDTO(int productID, int sellerID, String name, double price, int quantity, int categoryID, double discountPrice, String productDes, String image, String detailDes, boolean status) {
+    public ProductDTO(int productID, int sellerID, String name, float price, int quantity, String category, float discountPrice, String productDes, String image, String detailDes) {
         this.productID = productID;
         this.sellerID = sellerID;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
-        this.categoryID = categoryID;
+        this.category = category;
         this.discountPrice = discountPrice;
         this.productDes = productDes;
         this.image = image;
         this.detailDes = detailDes;
-        this.status = status;
     }
 
     public int getProductID() {
@@ -65,11 +67,11 @@ public class ProductDTO implements Serializable{
         this.name = name;
     }
 
-    public double getPrice() {
+    public float getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(float price) {
         this.price = price;
     }
 
@@ -81,19 +83,19 @@ public class ProductDTO implements Serializable{
         this.quantity = quantity;
     }
 
-    public int getCategoryID() {
-        return categoryID;
+    public String getCategory() {
+        return category;
     }
 
-    public void setCategoryID(int categoryID) {
-        this.categoryID = categoryID;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public double getDiscountPrice() {
+    public float getDiscountPrice() {
         return discountPrice;
     }
 
-    public void setDiscountPrice(double discountPrice) {
+    public void setDiscountPrice(float discountPrice) {
         this.discountPrice = discountPrice;
     }
 
@@ -128,10 +130,11 @@ public class ProductDTO implements Serializable{
     public void setStatus(boolean status) {
         this.status = status;
     }
-
-    @Override
-    public String toString() {
-        return "ProductDTO{" + "productID=" + productID + ", sellerID=" + sellerID + ", name=" + name + ", price=" + price + ", quantity=" + quantity + ", categoryID=" + categoryID + ", discountPrice=" + discountPrice + ", productDes=" + productDes + ", image=" + image + ", detailDes=" + detailDes + ", status=" + status + '}';
-    }
     
+    public String printPrice(float price) {
+        Locale vie = new Locale("vi", "VN");
+        Currency vnd = Currency.getInstance(vie);
+        NumberFormat vndFormat = NumberFormat.getCurrencyInstance(vie);
+        return vndFormat.format(price);
+    }
 }
