@@ -4,51 +4,53 @@
     Author     : Admin
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="com.nestf.post.PostDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="vi">
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Cẩm nang</title>
-    <meta name="description" content="">
-    <link rel="icon" href="img/logo.png" type="image/x-icon" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
-    <link href="css/nestf.css" rel="stylesheet">
-</head>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Cẩm nang</title>
+        <meta name="description" content="">
+        <link rel="icon" href="img/logo.png" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+        <link href="css/nestf.css" rel="stylesheet">
+    </head>
 
-<body class="text-center">
-    <div id="navbar">
-        <nav class="navbar-expand bg-light navbar-light">
-            <ul class="navbar">
-                <li class="nav-item col-2 d-inline-block">
-                    <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
-                </li>
-                <li class="nav-item col-1 d-inline-block">
-                    <a href="shopPage" class="nav-link text-center">Shop</a>
-                </li>
-                <li class="nav-item col-1 d-inline-block">
-                    <a href="handbookPage" class="nav-link text-center current-tab disabled">Cẩm nang</a>
-                </li>
-                <li class="nav-item col-1 d-inline-block">
-                    <a href="aboutPage" class="nav-link text-center">Về chúng tôi</a>
-                </li>
-                <li class="nav-item col-3 d-inline-block text-center">
-                    <form action="searchAction" method="get" id="search-form">
-                        <button type="submit"><i class="fas fa-search    "></i></button>
-                        <input type="text" class="text-center" placeholder="Tìm kiếm" name="txtSearch" value="">
-                    </form>
-                </li>
-                <li class="nav-item col-2 d-inline-block text-center">
+    <body class="text-center">
+        <div id="navbar">
+            <nav class="navbar-expand bg-light navbar-light">
+                <ul class="navbar">
+                    <li class="nav-item col-2 d-inline-block">
+                        <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
+                    </li>
+                    <li class="nav-item col-1 d-inline-block">
+                        <a href="shopPage" class="nav-link text-center">Shop</a>
+                    </li>
+                    <li class="nav-item col-1 d-inline-block">
+                        <a href="handbookPage" class="nav-link text-center current-tab disabled">Cẩm nang</a>
+                    </li>
+                    <li class="nav-item col-1 d-inline-block">
+                        <a href="aboutPage" class="nav-link text-center">Về chúng tôi</a>
+                    </li>
+                    <li class="nav-item col-3 d-inline-block text-center">
+                        <form action="searchAction" method="get" id="search-form">
+                            <button type="submit"><i class="fas fa-search    "></i></button>
+                            <input type="text" class="text-center" placeholder="Tìm kiếm" name="txtSearch" value="">
+                        </form>
+                    </li>
+                    <li class="nav-item col-2 d-inline-block text-center">
                         <div>
                             <c:if test="${not empty sessionScope.CUSTOMER}">
                                 <a href="accountPage" class="nav-link text-center"><i class="fas fa-user    "></i>${sessionScope.CUSTOMER.customerName}</a>
-                            </c:if>
-                            <c:if test="${empty sessionScope.CUSTOMER}"><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a>
+                                </c:if>
+                                <c:if test="${empty sessionScope.CUSTOMER}"><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a>
                             </c:if>
                         </div>
                     </li>
@@ -62,37 +64,34 @@
                         <div>
                             <c:if test="${not empty sessionScope.CUSTOMER}">
                                 <a href="voucherPage" class="nav-link text-center">${sessionScope.CUSTOMER.point} CP</a>
-                                </c:if>
+                            </c:if>
                         </div>
                     </li>
-            </ul>
-        </nav>
-    </div>
-    <div id="white-board" class="bg-light">  
-        <h2 class="d-block col-8">Cẩm nang</h2>  
-        <div class="row row-cols-3">
-            <a href="article" class="nav-link col mb-4" id="post">
-                <img src="img/post1.jpg" class="col-10">
-                <h5 class="mt-2">Title</h5>
-            </a>         
-            <a href="article" class="nav-link col mb-4" id="post">
-                <img src="img/post2.jpg" class="col-10">
-                <h5 class="mt-2">Title</h5>
-            </a>
-            <a href="article" class="nav-link col mb-4" id="post">
-                <img src="img/post3.jpg" class="col-10">
-                <h5 class="mt-2">Title</h5>
-            </a>
-            <a href="article" class="nav-link col mb-4" id="post">
-                <img src="img/post4.jpg" class="col-10">
-                <h5 class="mt-2">Title</h5>
-            </a>
-            <a href="article" class="nav-link col mb-4" id="post">
-                <img src="img/post5.jpg" class="col-10">
-                <h5 class="mt-2">Title</h5>
-            </a>                
+                </ul>
+            </nav>
         </div>
-    </div>
-</body>
+        <%
+            List<PostDTO> post = (List<PostDTO>) request.getAttribute("POST_LIST");
+            if (post != null && post.size() > 0) {
+        %>
+        <div id="white-board" class="bg-light">  
+            <h2 class="d-block col-8">Cẩm nang</h2>
+            <%
+                for (PostDTO p : post) {
+            %>
+            <div class="row row-cols-3">
+                <a href="article" class="nav-link col mb-4" id="post">
+                    <img src="<%= p.getImage()%>" class="col-10">
+                    <h5 class="mt-2"><%= p.getTitle()%></h5>
+                </a>         
+            </div>
+            <%
+                }
+            %>
+        </div>
+        <%
+            }
+        %>
+    </body>
 
 </html>
