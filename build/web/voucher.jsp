@@ -51,7 +51,7 @@
                     <div><a href="cartPage" class="nav-link text-center"><i class="fa-solid fa-cart-shopping"></i></a></div>
                 </li>
                 <li class="nav-item col-1 d-inline-block text-center">
-                    <div><a href="voucherPage" class="nav-link text-center disabled">${sessionScope.CUSTOMER.point}</a></div>
+                    <div><a href="voucherPage" class="nav-link text-center current-tab disabled">${sessionScope.CUSTOMER.point} CP</a></div>
                 </li>
             </ul>
         </nav>

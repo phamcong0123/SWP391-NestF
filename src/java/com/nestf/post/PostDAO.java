@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.naming.NamingException;
 
 /**
  *
@@ -22,7 +23,7 @@ public class PostDAO {
 
     private static String POST_LIST = "SELECT [postID],[sellerID],[title],[dateTime],[status],[filePath],[image] FROM [NestF].[dbo].[tblPost]";
 
-    public List<PostDTO> postList() throws SQLException {
+    public List<PostDTO> postList() throws SQLException, NamingException {
         List<PostDTO> postList = new ArrayList();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -43,7 +44,6 @@ public class PostDAO {
                     postList.add(new PostDTO(postID, sellerID, title, dateTime, status, filePath, image));
                 }
             }
-        } catch (Exception e) {
         } finally {
             if (rs != null) {
                 rs.close();
@@ -54,7 +54,45 @@ public class PostDAO {
             if (conn != null) {
                 conn.close();
             }
-            return postList;
+
         }
+        return postList;
+    }
+
+    private static String POST = "SELECT [postID],[sellerID],[title],[dateTime],[status],[filePath],[image] FROM [NestF].[dbo].[tblPost] WHERE [postID] = ?";
+
+    public PostDTO getPost(int postID) throws NamingException, SQLException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        PostDTO post = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(POST);
+                ptm.setInt(1,postID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    int sellerID = rs.getInt("sellerID");
+                    String title = rs.getString("title");
+                    Date date = new Date(rs.getDate("dateTime").getTime());
+                    boolean status = rs.getBoolean("status");
+                    String filePath = rs.getString("filePath");
+                    String image = rs.getString("image");
+                    post = new PostDTO(postID, sellerID, title, date, status, filePath, image);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return post;
     }
 }

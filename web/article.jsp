@@ -8,11 +8,14 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="vi">
+    <c:if test="${empty requestScope.POST}" >
+        <c:redirect url="handbookPage"></c:redirect>
+    </c:if>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <link rel="icon" href="img/logo.png" type="image/x-icon" />
-        <title>Title bài viết</title>
+        <title>${requestScope.POST.title}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -45,17 +48,21 @@
                     <li class="nav-item col-2 d-inline-block text-center">
                         <div>
                             <c:if test="${not empty sessionScope.CUSTOMER}">
-                                <a href="accountPage" class="nav-link text-center"><i class="fas fa-user    "></i>${sessionScope.CUSTOMER.customerName}</a>
-                                </c:if>
-                                <c:if test="${empty sessionScope.CUSTOMER}"><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a>
+                                <a href="accountPage" class="nav-link text-center">
+                                    <i class="fas fa-user    "></i>${sessionScope.CUSTOMER.customerName}
+                                </a>
+                            </c:if>
+                            <c:if test="${empty sessionScope.CUSTOMER}"><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a>
                             </c:if>
                         </div>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div> 
                             <c:if test="${not empty sessionScope.CUSTOMER}">
-                                <a href="cartPage" class="nav-link text-center"><i class="fa-solid fa-cart-shopping"></i></a></div>
-                                </c:if>                              
+                                <a href="cartPage" class="nav-link text-center"><i class="fa-solid fa-cart-shopping"></i>
+                                </a>
+                            </c:if>
+                        </div>                                                    
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div>
@@ -69,11 +76,11 @@
         </div>
         <div id="white-board" class="d-flex justify-content-between">
             <div class="bg-light col-8 mt-4 d-inline-block" id="article">  
-                <h2 class="pt-4">Title bài viết</h2>
+                <h2 class="pt-4 fw-bold ms-2">${requestScope.POST.title}</h2>
                 <div id="author">           
                 </div>
                 <div id="content" class="pb-2 pe-4">            
-                    <c:import charEncoding="UTF-8" url="postHTML/post5.html"></c:import>
+                    <c:import charEncoding="UTF-8" url="${requestScope.POST.filePath}"></c:import>
                 </div>
             </div>
             <div id="other-article" class="bg-light d-inline-block mt-4 h-100 sticky-top">

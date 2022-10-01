@@ -10,7 +10,9 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="vi">
-
+    <c:if test="${empty requestScope.POST_LIST}" >
+        <c:redirect url="handbookLoad"></c:redirect>
+    </c:if>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -70,28 +72,28 @@
                 </ul>
             </nav>
         </div>
-        <%
-            List<PostDTO> post = (List<PostDTO>) request.getAttribute("POST_LIST");
-            if (post != null && post.size() > 0) {
-        %>
         <div id="white-board" class="bg-light">  
             <h2 class="d-block col-8">Cẩm nang</h2>
-            <%
-                for (PostDTO p : post) {
-            %>
-            <div class="row row-cols-3">
-                <a href="article" class="nav-link col mb-4" id="post">
-                    <img src="<%= p.getImage()%>" class="col-10">
-                    <h5 class="mt-2"><%= p.getTitle()%></h5>
-                </a>         
-            </div>
-            <%
-                }
-            %>
+            <c:if test="${ not empty requestScope.POST_LIST}" >
+                <div class="row row-cols-3 container-fluid m-0">
+                    <c:forEach items="${requestScope.POST_LIST}" var="post">
+                        <c:url var="postLink" value="loadArticle">
+                            <c:param name="postID" value="${post.postID}"/>     
+                        </c:url>
+                        <a href="${postLink}" class="nav-link col mb-4" id="post">
+                            <img src="${post.image}" class="col-10"><br>
+                            <span class="mt-2 col-10 text-start d-inline-flex">${post.title}</span>
+                        </a> 
+                    </c:forEach>                    
+                </div>
+            </c:if>
+            <c:if test="${empty requestScope.POST_LIST}">
+                <div style="height:50vh;" class="d-flex align-items-center justify-content-center">
+                    <h2 class="text-muted text-center pb-5">Chưa có bài viết nào</h2>
+                </div>
+            </c:if>
+
         </div>
-        <%
-            }
-        %>
     </body>
 
 </html>

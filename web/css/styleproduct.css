@@ -1,5 +1,16 @@
+
+section{
+    background-color: #E5E5E5!important;    
+}
+.btn{
+    background-color: #4B5548!important;
+}
+
 ul li:first-child {
     text-align: center;
+}
+.container{
+    margin:2%;
 }
 
 button img {
@@ -53,11 +64,6 @@ li {
 .bestsell-container-spacing {
     background: #fff;
     margin-top: 2rem;
-}
-
-.bestsell-header-section {  
-    padding-top: 1.2rem;
-    padding-left: 1.1rem;
 }
 
 .image-contain-section {
@@ -127,7 +133,6 @@ li {
 
 .suggestion-content-section {
     background: #fff;
-    padding: 2rem 0 0.8rem 0;
 }
 
 .image-collapse {

@@ -27,31 +27,48 @@
             <nav class="navbar-expand bg-light navbar-light">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
-                        <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
+                        <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="ShopPageController" class="nav-link">Shop</a>
+                        <a href="shopPage" class="nav-link text-center">Shop</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="handbook" class="nav-link">Cẩm nang</a>
+                        <a href="handbookPage" class="nav-link text-center">Cẩm nang</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="about" class="nav-link">Về chúng tôi</a>
+                        <a href="aboutPage" class="nav-link text-center">Về chúng tôi</a>
                     </li>
                     <li class="nav-item col-3 d-inline-block text-center">
-                        <form action="searchProduct" method="get" id="search-form">
-                            <button type="submit"><i class="fas fa-search"></i></button>
+                        <form action="searchAction" method="get" id="search-form">
+                            <button type="submit"><i class="fas fa-search    "></i></button>
                             <input type="text" class="text-center" placeholder="Tìm kiếm" name="txtSearch" value="">
                         </form>
                     </li>
                     <li class="nav-item col-2 d-inline-block text-center">
-                        <div><a href="account" class="nav-link"><i class="fas fa-user"></i>Tên customer</a></div>
+                        <div>
+                            <c:if test="${not empty sessionScope.CUSTOMER}">
+                                <a href="accountPage" class="nav-link text-center">
+                                    <i class="fas fa-user    "></i>${sessionScope.CUSTOMER.customerName}
+                                </a>
+                            </c:if>
+                            <c:if test="${empty sessionScope.CUSTOMER}"><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a>
+                            </c:if>
+                        </div>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
-                        <div><a href="cart" class="nav-link"><i class="fa-solid fa-cart-shopping"></i></a></div>
+                        <div> 
+                            <c:if test="${not empty sessionScope.CUSTOMER}">
+                                <a href="cartPage" class="nav-link text-center"><i class="fa-solid fa-cart-shopping"></i>
+                                </a>
+                            </c:if>
+                        </div>                                                    
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
-                        <div><a href="voucher" class="nav-link">Điểm tích luỹ</a></div>
+                        <div>
+                            <c:if test="${not empty sessionScope.CUSTOMER}">
+                                <a href="voucherPage" class="nav-link text-center">${sessionScope.CUSTOMER.point} CP</a>
+                            </c:if>
+                        </div>
                     </li>
                 </ul>
             </nav>

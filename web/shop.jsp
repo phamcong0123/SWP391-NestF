@@ -9,6 +9,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
+    <c:if test="${empty requestScope.LIST_PRODUCT}" >
+        <c:redirect url="shopAction"></c:redirect>
+    </c:if>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -27,36 +30,47 @@
               href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     </head>
     <body>
-        <section class="bg-light">
+        <section>
             <div id="navbar navbar-expand-lg bg-white">
-                <nav class="navbar-expand bg-white navbar-light">
+                <nav class="navbar-expand bg-white navbar-light text-center">
                     <ul class="navbar">
                         <li class="nav-item col-2 d-inline-block">
-                            <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
+                            <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
                         </li>
                         <li class="nav-item col-1 d-inline-block">
-                            <a href="ShopPageController" class="nav-link">Shop</a>
+                            <a href="shopPage" class="nav-link current-tab disabled">Shop</a>
                         </li>
                         <li class="nav-item col-1 d-inline-block">
-                            <a href="handbook" class="nav-link">Cẩm nang</a>
+                            <a href="handbookPage" class="nav-link">Cẩm nang</a>
                         </li>
                         <li class="nav-item col-1 d-inline-block">
-                            <a href="about" class="nav-link">Về chúng tôi</a>
+                            <a href="aboutPage" class="nav-link">Về chúng tôi</a>
                         </li>
                         <li class="nav-item col-3 d-inline-block text-center">
-                            <form action="searchProduct" method="GET" id="search-form">
+                            <form action="searchAction" method="GET" id="search-form">
                                 <button type="submit"><i class="fas fa-search"></i></button>
                                 <input type="text" class="text-center" placeholder="Tìm kiếm" name="txtSearch" value="">
                             </form>
                         </li>
                         <li class="nav-item col-2 d-inline-block text-center">
-                            <div><a href="account" class="nav-link"><i class="fas fa-user"></i>Tên customer</a></div>
+                            <div>
+                                <c:if test="${not empty sessionScope.CUSTOMER}">
+                                    <a href="accountPage" class="nav-link text-center"><i class="fas fa-user    "></i>${sessionScope.CUSTOMER.customerName}
+                                    </a>
+                                </c:if>
+                                <c:if test="${empty sessionScope.CUSTOMER}"><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a>
+                                </c:if>
+                            </div>
                         </li>
                         <li class="nav-item col-1 d-inline-block text-center">
-                            <div><a href="cart" class="nav-link"><i class="fa-solid fa-cart-shopping"></i></a></div>
+                            <div><a href="cartPage" class="nav-link"><i class="fa-solid fa-cart-shopping"></i></a></div>
                         </li>
                         <li class="nav-item col-1 d-inline-block text-center">
-                            <div><a href="voucher" class="nav-link">Điểm tích luỹ</a></div>
+                            <div>
+                                <c:if test="${not empty sessionScope.CUSTOMER}">
+                                    <a href="voucherPage" class="nav-link text-center">${sessionScope.CUSTOMER.point} CP</a>
+                                </c:if>
+                            </div>
                         </li>
                     </ul>
                 </nav>
