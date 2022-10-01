@@ -5,6 +5,18 @@ section{
 .btn{
     background-color: #4B5548!important;
 }
+#dropDownContent{
+    width:165px;
+    z-index: 1;
+}
+#dropDownMenu:hover #dropDownContent{
+    display: block!important;
+}
+#item:hover{
+    background-color: #F5f4f4;
+}
+
+
 
 ul li:first-child {
     text-align: center;
@@ -181,8 +193,10 @@ li {
 }
 
 .filter-category {
-    position: relative;
-    display: none;
+    position: relative;   
+}
+#category-show-up{
+    display:none;
 }
 
 .category-option {
@@ -221,7 +235,7 @@ li {
     position: absolute;
     width: 0;
     height: 0;
-    
+
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
@@ -305,7 +319,7 @@ li {
     background-color: #fff;
     cursor: pointer;
 }
-  
+
 #load-more:hover{
     background-color: #bbb;
     border-color: #fff;

@@ -28,7 +28,7 @@
     <body>
         <section>
             <div id="navbar">
-                <nav class="navbar-expand bg-light navbar-light text-center">
+                <nav class="navbar-expand bg-white navbar-light text-center">
                     <ul class="navbar">
                         <li class="nav-item col-2 d-inline-block">
                             <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
@@ -48,16 +48,18 @@
                                 <input type="text" class="text-center" placeholder="Tìm kiếm" name="txtSearch" value="">
                             </form>
                         </li>
-                        <li class="nav-item col-2 d-inline-block text-center">
-                            <div>
-                                <c:if test="${not empty sessionScope.CUSTOMER}">
-                                    <a href="accountPage" class="nav-link text-center">
-                                        <i class="fas fa-user    "></i>${sessionScope.CUSTOMER.customerName}
-                                    </a>
-                                </c:if>
-                                <c:if test="${empty sessionScope.CUSTOMER}"><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a>
-                                </c:if>
-                            </div>
+                        <li class="nav-item col-2 d-inline-block text-center">                      
+                            <c:if test="${not empty sessionScope.CUSTOMER}">
+                                <div id="dropDownMenu" class="d-inline-block position-relative">
+                                    <i class="fas fa-user me-2"></i>${sessionScope.CUSTOMER.customerName}
+                                    <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
+                                        <a href="accountPage" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
+                                        <a href="logOut" class="nav-link text-decoration-none p-2" id="item">Đăng xuất</a>
+                                    </div>
+                                </div>
+                            </c:if>
+                            <c:if test="${empty sessionScope.CUSTOMER}"><div><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a></div>
+                            </c:if>
                         </li>
                         <li class="nav-item col-1 d-inline-block text-center">
                             <div> 
@@ -85,7 +87,7 @@
                             <div class="search-header">
                                 <h4 class="search-result-title">Kết quả tìm kiếm cho: <span class="search-result">${param.txtSearch}</span></h4>
                                 <div class="search-content">
-                                    <div class="row">
+                                    <div class="row col-11 m-auto">
                                         <c:forEach var="product" items="${requestScope.SEARCH_LIST}">
                                             <div class="col-lg-3 col-md-4 product-contain-detail">
                                                 <div class="product-image-contain-detail">

@@ -28,36 +28,50 @@
     </head>
 </head>
 <body>
-    <section class="bg-light">
+    <section>
         <div id="navbar navbar-expand-lg bg-white">
-            <nav class="navbar-expand bg-white navbar-light">
+            <nav class="navbar-expand bg-white navbar-light text-center">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
-                        <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
+                        <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="ShopPageController" class="nav-link">Shop</a>
+                        <a href="shopPage" class="nav-link current-tab disabled">Shop</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="handbook" class="nav-link">Cẩm nang</a>
+                        <a href="handbookPage" class="nav-link">Cẩm nang</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="about" class="nav-link">Về chúng tôi</a>
+                        <a href="aboutPage" class="nav-link">Về chúng tôi</a>
                     </li>
                     <li class="nav-item col-3 d-inline-block text-center">
-                        <form action="searchProduct" method="get" id="search-form">
+                        <form action="searchAction" method="GET" id="search-form">
                             <button type="submit"><i class="fas fa-search"></i></button>
                             <input type="text" class="text-center" placeholder="Tìm kiếm" name="txtSearch" value="">
                         </form>
                     </li>
-                    <li class="nav-item col-2 d-inline-block text-center">
-                        <div><a href="account" class="nav-link"><i class="fas fa-user"></i>Tên customer</a></div>
+                    <li class="nav-item col-2 d-inline-block text-center">                      
+                        <c:if test="${not empty sessionScope.CUSTOMER}">
+                            <div id="dropDownMenu" class="d-inline-block position-relative">
+                                <i class="fas fa-user me-2"></i>${sessionScope.CUSTOMER.customerName}
+                                <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
+                                    <a href="accountPage" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
+                                    <a href="logOut" class="nav-link text-decoration-none p-2" id="item">Đăng xuất</a>
+                                </div>
+                            </div>
+                        </c:if>
+                        <c:if test="${empty sessionScope.CUSTOMER}"><div><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a></div>
+                        </c:if>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
-                        <div><a href="cart" class="nav-link"><i class="fa-solid fa-cart-shopping"></i></a></div>
+                        <div><a href="cartPage" class="nav-link"><i class="fa-solid fa-cart-shopping"></i></a></div>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
-                        <div><a href="voucher" class="nav-link">Điểm tích luỹ</a></div>
+                        <div>
+                            <c:if test="${not empty sessionScope.CUSTOMER}">
+                                <a href="voucherPage" class="nav-link text-center">${sessionScope.CUSTOMER.point} CP</a>
+                            </c:if>
+                        </div>
                     </li>
                 </ul>
             </nav>
@@ -76,18 +90,18 @@
                             <h4 class="category-title d-inline-block">Phân loại</h4>
                             <select class="form-controls category-option" name="categoryFilter">
                                 <option value="empty"></option>
-                                <option value="yenTho">Tổ yến thô</option>
-                                <option value="yenTinhChe">Tổ yến tinh chế</option>
-                                <option value="yenChungTuoi">Yến chưng tươi</option>
-                                <option value="yenChungSan">Yến chưng sẵn</option>
+                                <option value="yenTho" ${param.categoryFilter eq 'yenTho' ? 'selected' : ''}>Tổ yến thô</option>
+                                <option value="yenTinhChe" ${param.categoryFilter eq 'yenTinhChe' ? 'selected' : ''}>Tổ yến tinh chế</option>
+                                <option value="yenChungTuoi" ${param.categoryFilter eq 'yenChungTuoi' ? 'selected' : ''}>Yến chưng tươi</option>
+                                <option value="yenChungSan" ${param.categoryFilter eq 'yenChungSan' ? 'selected' : ''}>Yến chưng sẵn</option>
                             </select>
                             <select class="form-controls category-option" name="priceFilter">
                                 <option value="empty"></option>
-                                <option value="below1">Dưới 1.000.000 đ</option>
-                                <option value="1to2">Từ 1.000.000 đ ~ 2.000.000 đ</option>
-                                <option value="2to3">Từ 2.000.000 đ ~ 3.000.000 đ</option>
-                                <option value="3to4">Từ 3.000.000 đ ~ 4.000.000 đ</option>
-                                <option value="over4">Trên 4.000.000 đ</option>
+                                <option value="below1" ${param.priceFilter eq 'below1' ? 'selected' : ''}>Dưới 1.000.000 đ</option>
+                                <option value="1to2" ${param.priceFilter eq '1to2' ? 'selected' : ''}>Từ 1.000.000 đ ~ 2.000.000 đ</option>
+                                <option value="2to3" ${param.priceFilter eq '2to3' ? 'selected' : ''}>Từ 2.000.000 đ ~ 3.000.000 đ</option>
+                                <option value="3to4" ${param.priceFilter eq '3to4' ? 'selected' : ''}>Từ 3.000.000 đ ~ 4.000.000 đ</option>
+                                <option value="over4" ${param.priceFilter eq 'over4' ? 'selected' : ''}>Trên 4.000.000 đ</option>
                             </select>
                             <button class="submit-btn" type="submit" name="Filter" value="Filter">Lọc</button>
                         </form>
@@ -100,7 +114,7 @@
                 <c:if test="${not empty requestScope.LIST_PRODUCT_FILTER}">
                     <div class="product-content">
                         <jsp:useBean id="productFunc" class="com.nestf.product.ProductDTO"/>
-                        <div class="row">
+                        <div class="row col-11 m-auto">
                             <c:forEach var="product" items="${requestScope.LIST_PRODUCT_FILTER}">
                                 <div class="col-lg-3 col-md-4 product-contain-detail">
                                     <div class="product-image-contain-detail">

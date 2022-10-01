@@ -25,7 +25,7 @@
     </head>
     <body class="text-center">
         <div id="navbar">
-            <nav class="navbar-expand bg-light navbar-light">
+            <nav class="navbar-expand bg-white navbar-light">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
                         <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
@@ -41,7 +41,7 @@
                     </li>
                     <li class="nav-item col-3 d-inline-block text-center">
                         <form action="searchAction" method="get" id="search-form">
-                            <button type="submit"><i class="fas fa-search    "></i></button>
+                            <button type="submit" class="border-0 bg-transparent"><i class="fas fa-search    "></i></button>
                             <input type="text" class="text-center" placeholder="Tìm kiếm" name="txtSearch" value="">
                         </form>
                     </li>
@@ -58,22 +58,22 @@
             </nav>
         </div>
         <div id="overall">
-            <ul id="options" class="nav nav-tabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button id="setting-tab" data-bs-target="#account-settings" data-bs-toggle="tab" aria-selected="true" role="tab"  aria-controls="account-settings" aria-current="page" class="nav-link active">Cài đặt tài khoản</button>
+            <ul id="options" class="nav nav-tabs mt-3" role="tablist">
+                <li class="nav-item m-auto" role="presentation">
+                    <button id="setting-tab" data-bs-target="#account-settings" data-bs-toggle="tab" aria-selected="true" role="tab"  aria-controls="account-settings" aria-current="page" class="nav-link active text-black bg-transparent border-0">Cài đặt tài khoản</button>
                 </li>
-                <li class="nav-item" role="presentation">
-                    <button id="voucher-tab" data-bs-target="#all-voucher" data-bs-toggle="tab" aria-selected="false" role="tab" aria-controls="all-voucher" aria-current="page" class="nav-link">Voucher của bạn</button>
+                <li class="nav-item m-auto" role="presentation">
+                    <button id="voucher-tab" data-bs-target="#all-voucher" data-bs-toggle="tab" aria-selected="false" role="tab" aria-controls="all-voucher" aria-current="page" class="nav-link text-black bg-transparent border-0">Voucher của bạn</button>
                 </li>
             </ul>
             <div class="tab-content">
                 <div id="account-settings" class="tab-pane fade show active" role="tabpanel" aria-labelledby="setting-tab">
-                    <div id="whiteboard2" class="col-8 bg-light">
+                    <div id="whiteboard2" class="col-8 bg-white">
                         <span class="d-inline-block col-11 text-start m-3">Cài đặt tài khoản</span>
-                        <div class="accordion">
+                        <div class="accordion pb-3">
                             <div class="accordion-item col-11 dropdown-setting" id="changeName">
                                 <div class="accordion-header">
-                                    <button class="accordion-button collapsed" id="dropDownBtn" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-controls="collapse1">
+                                    <button class="accordion-button collapsed bg-transparent" id="dropDownBtn" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1" aria-controls="collapse1">
                                         <img src="img/name.svg">Thay đổi tên hiển thị</i>
                                     </button>
                                 </div>
@@ -81,9 +81,9 @@
                                     <div class="accordion-body">
                                         
                                         
-                                        <form action="changeNameAction" method="post" id="changeForm">                                     
-                                            <div class="m-3 d-inline-block">Tên hiển thị mới</div><input type="text" name="newCustomerName" class="col-6" required><br>     
-                                             <input type="submit" value="LƯU" id="color-button">
+                                        <form action="changeNameAction" method="post" id="changeForm" class="text-start">                                     
+                                            <div class="m-3 d-inline-block">Tên hiển thị mới</div><input type="text" name="newCustomerName" class="col-6" required minlength="2" maxlength="30"><br>     
+                                             <input type="submit" value="LƯU" id="color-button" class="mt-3 mb-3">
                                         </form>
                                         
                                         
@@ -92,7 +92,7 @@
                             </div>
                             <div class="accordion-item col-11 dropdown-setting" id="changePass">
                                 <div class="accordion-header">
-                                    <button class="accordion-button collapsed" id="dropDownBtn" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-controls="collapse2">
+                                    <button class="accordion-button collapsed bg-transparent" id="dropDownBtn" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2" aria-controls="collapse2">
                                         <img src="img/lock.svg">Thay đổi mật khẩu</i>
                                     </button>
                                 </div>
@@ -100,14 +100,14 @@
                                     <div class="accordion-body">
                                         
                                         
-                                        <form action="changePasswordAction" method="post" id="changeForm">
+                                        <form action="changePasswordAction" method="post" id="changeForm" class="text-start">
                                             <div class="m-3 d-inline-block">Mật khẩu cũ</div><input type="password" name="password"
-                                                                                                    class="col-6" required=""><br>
+                                                                                                    class="col-6" required minlength="6" maxlength="20"><br>
                                             <input type="hidden" name="password" value="">
                                             <div class="m-3 d-inline-block">Mật khẩu mới</div><input type="password" name="newPass"
-                                                                                                     class="col-6" required=""><br>
-                                            <div class="m-3 d-inline-block">Xác nhận mật khẩu mới</div><input type="password" name="confirm" class="col-6" required><br>                                          
-                                            <input type="submit" value="LƯU" id="color-button">
+                                                                                                     class="col-6" required minlength="6" maxlength="20" id="password"><br>
+                                            <div class="m-3 d-inline-block">Xác nhận mật khẩu mới</div><input type="password" name="confirm" class="col-6" required minlength="6" maxlength="20" id="confirm"><br>                                          
+                                            <input type="submit" value="LƯU" id="color-button" class="mt-3 mb-3">
                                         </form>
                                         
                                         
@@ -116,7 +116,7 @@
                             </div>
                             <div class="accordion-item col-11 dropdown-setting" id="changeAddress" role="tabpanel">
                                 <div class="accordion-header">
-                                    <button class="accordion-button collapsed" id="dropDownBtn" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-controls="collapse3">
+                                    <button class="accordion-button collapsed bg-transparent" id="dropDownBtn" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3" aria-controls="collapse3">
                                         <img src="img/address.svg">Thay đổi địa chỉ giao hàng mặc định</i>
                                     </button>
                                 </div>
@@ -124,11 +124,11 @@
                                     <div class="accordion-body">
                                         
                                         
-                                        <form action="changeAddressAction" method="post" id="changeForm">
+                                        <form action="changeAddressAction" method="post" id="changeForm" class="text-start">
                                             <div class="m-3 d-inline-block">Địa chỉ cũ :</div><span> ${CUSTOMER.customerAddress}</span><br>
                                             <div class="m-3 d-inline-block">Địa chỉ mới</div><input type="text" name="newAddress"
-                                                                                                    class="col-8" required=""><br>                                         
-                                            <input type="submit" value="LƯU" id="color-button">
+                                                                                                    class="col-8" required minlength="20" maxlength="70"><br>                                         
+                                            <input type="submit" value="LƯU" id="color-button" class="mt-3 mb-3">
                                         </form>
                                             
                                             
@@ -140,30 +140,30 @@
                     <div class="col-10 d-flex justify-content-end mb-5"><a href="logOut" class="nav-link"><i class="fa-solid fa-arrow-right-from-bracket"></i>Đăng xuất</a></div>
                 </div>
                 <div id="all-voucher" class="tab-pane fade" role="tabpanel" aria-labelledby="voucher-tab">
-                    <div id="whiteboard2" class="col-8 bg-light">
+                    <div id="whiteboard2" class="col-8 bg-white">
                         <span class="d-inline-block col-9 m-3 text-start">Voucher của bạn</span><a href="voucherPage" class="nav-link d-inline-block"><i class="fa-solid fa-basket-shopping"></i>Đi mua voucher</a> 
-                        <div class="row row-cols-4">
-                            <div id="voucher" class="d-inline-block col mb-2">
+                        <div class="row row-cols-4 col-11 m-auto">
+                            <div id="item" class="d-inline-block col mb-2">
                                 <img src="img/voucher.png"><br>
                                 <span>TÊN VOUCHER</span>
                                 <p>Hết hạn trong 30 ngày nữa</p>
                             </div>
-                            <div id="voucher" class="d-inline-block col mb-2">
+                            <div id="item" class="d-inline-block col mb-2">
                                 <img src="img/voucher.png"><br>
                                 <span>TÊN VOUCHER</span>
                                 <p>Hết hạn trong 30 ngày nữa</p>
                             </div>
-                            <div id="voucher" class="d-inline-block col mb-2">
+                            <div id="item" class="d-inline-block col mb-2">
                                 <img src="img/voucher.png"><br>
                                 <span>TÊN VOUCHER</span>
                                 <p>Hết hạn trong 30 ngày nữa</p>
                             </div>
-                            <div id="voucher" class="d-inline-block col mb-2">
+                            <div id="item" class="d-inline-block col mb-2">
                                 <img src="img/voucher.png"><br>
                                 <span>TÊN VOUCHER</span>
                                 <p>Hết hạn trong 30 ngày nữa</p>
                             </div>
-                            <div id="voucher" class="d-inline-block col mb-2">
+                            <div id="item" class="d-inline-block col mb-2">
                                 <img src="img/voucher.png"><br>
                                 <span>TÊN VOUCHER</span>
                                 <p>Hết hạn trong 30 ngày nữa</p>

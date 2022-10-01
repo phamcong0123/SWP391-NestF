@@ -22,7 +22,7 @@
     </head>
     <body class="text-center">
         <div id="navbar">
-            <nav class="navbar-expand bg-light navbar-light">
+            <nav class="navbar-expand bg-white navbar-light">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
                         <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
@@ -38,18 +38,22 @@
                     </li>
                     <li class="nav-item col-3 d-inline-block text-center">
                         <form action="searchAction" method="get" id="search-form">
-                            <button type="submit"><i class="fas fa-search    "></i></button>
+                            <button type="submit" class="border-0 bg-transparent"><i class="fas fa-search    "></i></button>
                             <input type="text" class="text-center" placeholder="Tìm kiếm" name="txtSearch" value="">
                         </form>
                     </li>
-                    <li class="nav-item col-2 d-inline-block text-center">
-                        <div>
-                            <c:if test="${not empty sessionScope.CUSTOMER}">
-                                <a href="accountPage" class="nav-link text-center"><i class="fas fa-user    "></i>${sessionScope.CUSTOMER.customerName}</a>
-                                </c:if>
-                                <c:if test="${empty sessionScope.CUSTOMER}"><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a>
-                            </c:if>
-                        </div>
+                    <li class="nav-item col-2 d-inline-block text-center">                      
+                        <c:if test="${not empty sessionScope.CUSTOMER}">
+                            <div id="dropDownMenu" class="d-inline-block position-relative">
+                                <i class="fas fa-user me-2"></i>${sessionScope.CUSTOMER.customerName}
+                                <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
+                                    <a href="accountPage" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
+                                    <a href="logOut" class="nav-link text-decoration-none p-2" id="item">Đăng xuất</a>
+                                </div>
+                            </div>
+                        </c:if>
+                        <c:if test="${empty sessionScope.CUSTOMER}"><div><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a></div>
+                        </c:if>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div> 
@@ -67,7 +71,7 @@
                 </ul>
             </nav>
         </div>
-        <div id="white-board" class="bg-light">         
+        <div id="white-board" class="bg-white">         
             <div class="d-flex justify-content-between col-11 m-auto">
                 <img src="img/about2.png" class="rounded col-5 me-5 mt-4">
                 <div class="d-inline-block">

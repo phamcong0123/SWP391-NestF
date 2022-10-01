@@ -24,7 +24,7 @@
 
     <body class="text-center">
         <div id="navbar">
-            <nav class="navbar-expand bg-light navbar-light">
+            <nav class="navbar-expand bg-white navbar-light">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
                         <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
@@ -40,20 +40,22 @@
                     </li>
                     <li class="nav-item col-3 d-inline-block text-center">
                         <form action="searchAction" method="get" id="search-form">
-                            <button type="submit"><i class="fas fa-search    "></i></button>
+                            <button type="submit" class="border-0 bg-transparent"><i class="fas fa-search    "></i></button>
                             <input type="text" class="text-center" placeholder="Tìm kiếm" name="txtSearch" value="">
                         </form>
                     </li>
-                    <li class="nav-item col-2 d-inline-block text-center">
-                        <div>
-                            <c:if test="${not empty sessionScope.CUSTOMER}">
-                                <a href="accountPage" class="nav-link text-center">
-                                    <i class="fas fa-user    "></i>${sessionScope.CUSTOMER.customerName}
-                                </a>
-                            </c:if>
-                            <c:if test="${empty sessionScope.CUSTOMER}"><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a>
-                            </c:if>
-                        </div>
+                    <li class="nav-item col-2 d-inline-block text-center">                      
+                        <c:if test="${not empty sessionScope.CUSTOMER}">
+                            <div id="dropDownMenu" class="d-inline-block position-relative">
+                                <i class="fas fa-user me-2"></i>${sessionScope.CUSTOMER.customerName}
+                                <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
+                                    <a href="accountPage" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
+                                    <a href="logOut" class="nav-link text-decoration-none p-2" id="item">Đăng xuất</a>
+                                </div>
+                            </div>
+                        </c:if>
+                        <c:if test="${empty sessionScope.CUSTOMER}"><div><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a></div>
+                        </c:if>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div> 
@@ -73,7 +75,7 @@
                 </ul>
             </nav>
         </div>
-        <div id="white-board" class="bg-light">
+        <div id="white-board" class="bg-white">
             <div class="row container-fluid m-0">
                 <c:if test="${requestScope.PRODUCT_DETAIL != null}">
                     <c:set var="productDetail" value="${requestScope['PRODUCT_DETAIL']}" scope="page"/>
@@ -96,7 +98,7 @@
                         <input required id="number-input" type="number" step="1" value="1" min="1" max="100" onblur="minCheck(this), maxCheck(this)" name="quantity" class="quantity-field text-center p-0">
                         <img src="img/minus.svg" data-field="quantity" class="button-minus d-inline-block"><br>
                         <button type="submit" id="buy-button" class="col-3 me-2" value="buynow">Mua ngay</button>
-                        <button type="submit" id="buy-button" class="col-3 ms-2 bg-light text-black border border-dark rounded"><img src="img/cart.svg" class="me-2">Thêm vào giỏ</button>
+                        <button type="submit" id="buy-button" class="col-3 ms-2 bg-white text-black border border-dark rounded"><img src="img/cart.svg" class="me-2">Thêm vào giỏ</button>
                     </form>
                 </div>
             </div>
@@ -105,13 +107,13 @@
                 Mô tả chi tiết sp
             </div>
         </div>
-        <div id="white-board" class="bg-light">
+        <div id="white-board" class="bg-white">
             <h4 class="text-start p-4">Các gợi ý khác</h4>
             <c:if test="${requestScope.LIST_RELATE_PRODUCT != null}">
-                <div class="row">
+                <div class="row col-11 m-auto">
                     <c:forEach var="otherProduct" varStatus="counter" items="${requestScope.LIST_RELATE_PRODUCT}">
                         <c:if test="${counter.count <= 4}">
-                            <div id="voucher" class="col-lg-3 col-md-4 d-inline-block">
+                            <div id="item" class="col-lg-3 col-md-4 d-inline-block">
                                 <a href="productDetail?productID=${otherProduct.productID}" 
                                    style="color: #000;
                                    text-decoration: none">

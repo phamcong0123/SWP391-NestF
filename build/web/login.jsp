@@ -24,7 +24,7 @@
     </head>
     <body class="text-center">
         <div id="navbar">
-            <nav class="navbar-expand bg-light navbar-light">
+            <nav class="navbar-expand bg-white navbar-light">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
                         <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
@@ -46,13 +46,13 @@
         <div class="d-inline-block col-8" id="login-form">
             <h1>Đăng nhập</h1><br>
             <form action="loginAction" method="POST">
-                <div class="mb-3 d-inline-block col-2">Số điện thoại</div><input type="text" name="customerPhone" value="${param.customerPhone}" required class="col-3"><br>
-                <div class="d-inline-block col-2">Mật khẩu</div><input type="password" name="password" required class="col-3"><br>   
+                <input type="text" name="customerPhone" value="${param.customerPhone}" required class="col-3" placeholder="Số điện thoại"><br>
+                <input type="password" name="password" required class="col-3 mt-3" placeholder="Mật khẩu"><br>   
                 <c:if test="${ not empty requestScope.ERROR}"><div class="text-end text-danger mt-2 col-5 d-inline-block">${requestScope.ERROR}</div><br></c:if>
-                    <a href="forgotPassword" class="nav-link col-5 d-inline-block mt-3" id="forgetPass">Quên mật khẩu</a><br>
-                    <a href="registerPage"><input type="button" value="ĐĂNG KÝ" id="link-button"></a>
-                    <input type="submit" value="ĐĂNG NHẬP"  id="color-button">
-                </form>
+                <a href="forgotPassword" class="nav-link col-3 d-inline-block mt-3 mb-3 text-end text-primary" id="forgetPass">Quên mật khẩu</a><br>
+                <a href="registerPage"><input type="button" value="ĐĂNG KÝ" id="link-button"></a>
+                <input type="submit" value="ĐĂNG NHẬP"  id="color-button">
+            </form>
         </div>
         <div class="d-inline-block" id="sidepic">
             <img

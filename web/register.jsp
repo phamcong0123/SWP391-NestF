@@ -24,15 +24,9 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins">
         <link href="css/nestf.css" rel="stylesheet">
     </head>
-    <%
-        CustomerError cusError = (CustomerError) request.getAttribute("CUS_ERROR");
-        if (cusError == null) {
-            cusError = new CustomerError();
-        }
-    %>
     <body class="text-center">
         <div id="navbar">
-            <nav class="navbar-expand bg-light navbar-light">
+            <nav class="navbar-expand bg-white navbar-light">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
                         <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
@@ -62,7 +56,7 @@
             <img src="img/account.svg" alt="">
             <h1>Đăng ký</h1>
             <form action="registerAction" method="POST">
-                <div class="m-3 d-inline-block col-2">Họ và tên</div><input type="text" name="customerName" required=""><%= cusError.getCustomerNameError()%><br>
+                <div class="m-3 d-inline-block col-2">Họ và tên</div><input type="text" name="customerName" required minlength="2" maxlength="30"><br>
                 <div class="m-3 d-inline-block col-2">Giới tính</div>          
                 <div id="gender" class="d-inline-block">
                     <input type="radio" id="male" checked="" name="gender" value="1">
@@ -70,14 +64,15 @@
                     <input type="radio" id="female" name="gender" value="0">
                     <label for="female">Nữ</label>
                 </div><br>
-                <div class="m-3 d-inline-block col-2">Số điện thoại</div><input type="text" name="customerPhone" required=""><%= cusError.getCustomerPhoneError()%><br>
-                <div class="m-3 d-inline-block col-2">Mật khẩu</div><input type="password" name="password" required=""><br>
-                <div class="m-3 d-inline-block col-2">Xác nhận mật khẩu</div><input type="password" name="confirm" required=""><%= cusError.getConfirm()%><br>
-                <div class="d-inline-block col-2">Địa chỉ</div><input type="text" name="customerAddress" required=""><%= cusError.getCustomerAddressError()%><br>
+                <div class="m-3 d-inline-block col-2">Số điện thoại</div><input type="number" name="customerPhone" required minlength="10" maxlength="11"><br>
+                <div class="m-3 d-inline-block col-2">Mật khẩu</div><input type="password" name="password" required minlength="6" maxlength="20" id="password" onkeypress="validate();"><br>
+                <div class="m-3 d-inline-block col-2">Xác nhận mật khẩu</div><input type="password" name="confirm" required minlength="6" maxlength="20" id="confirm" onkeypress="validate();"><br>
+                <div class="d-inline-block col-2 m-3">Địa chỉ</div><input type="text" name="customerAddress" required="" minlength="20" maxlength="70"><br>
                 <input type="hidden" name="point" value="0"/>
-                <a href="home"><input type="button" value="HUỶ" id="link-button"></a>
-                <input type="submit" value="ĐĂNG KÝ" name="action" id="color-button">
+                <a href="homePage"><input type="button" value="HUỶ" id="link-button"></a>
+                <input type="submit" value="ĐĂNG KÝ" id="color-button">
             </form>
         </div>
+        <script src="js/nestf.js"></script>
     </body>
 </html>

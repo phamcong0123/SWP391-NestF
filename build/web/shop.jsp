@@ -52,15 +52,18 @@
                                 <input type="text" class="text-center" placeholder="Tìm kiếm" name="txtSearch" value="">
                             </form>
                         </li>
-                        <li class="nav-item col-2 d-inline-block text-center">
-                            <div>
-                                <c:if test="${not empty sessionScope.CUSTOMER}">
-                                    <a href="accountPage" class="nav-link text-center"><i class="fas fa-user    "></i>${sessionScope.CUSTOMER.customerName}
-                                    </a>
-                                </c:if>
-                                <c:if test="${empty sessionScope.CUSTOMER}"><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a>
-                                </c:if>
-                            </div>
+                        <li class="nav-item col-2 d-inline-block text-center">                      
+                            <c:if test="${not empty sessionScope.CUSTOMER}">
+                                <div id="dropDownMenu" class="d-inline-block position-relative">
+                                    <i class="fas fa-user me-2"></i>${sessionScope.CUSTOMER.customerName}
+                                    <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
+                                        <a href="accountPage" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
+                                        <a href="logOut" class="nav-link text-decoration-none p-2" id="item">Đăng xuất</a>
+                                    </div>
+                                </div>
+                            </c:if>
+                            <c:if test="${empty sessionScope.CUSTOMER}"><div><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a></div>
+                            </c:if>
                         </li>
                         <li class="nav-item col-1 d-inline-block text-center">
                             <div><a href="cartPage" class="nav-link"><i class="fa-solid fa-cart-shopping"></i></a></div>
@@ -78,7 +81,7 @@
             <div class="container bg-white shop-container">
                 <div class="filter-header">
                     <div class="row">
-                        <div class="filter-symbols col-lg-3" onclick="Show()">
+                        <div class="filter-symbols col-lg-2" onclick="Show();">
                             <i class="material-symbols-outlined">
                                 filter_list
                             </i>
@@ -113,7 +116,7 @@
                     <c:if test="${not empty requestScope.LIST_PRODUCT}">
                         <div class="product-content">
                             <jsp:useBean id="productFunc" class="com.nestf.product.ProductDTO"/>
-                            <div class="row">
+                            <div class="row col-11 m-auto">
                                 <c:forEach var="product" items="${requestScope.LIST_PRODUCT}">
                                     <div class="col-lg-3 col-md-4 product-contain-detail">
                                         <div class="product-image-contain-detail">
@@ -178,7 +181,7 @@
 
             function Show() {
                 var x = document.getElementById('category-show-up');
-                if (x.style.display === 'none') {
+                if (x.style.display == 'none' || x.style.display == '') {
                     x.style.display = 'block';
                 } else {
                     x.style.display = 'none';

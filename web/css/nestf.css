@@ -26,17 +26,20 @@ button img{
     margin:0;
     height: 8vh;
 }
+#dropDownContent{
+    width:165px;
+    z-index: 1;
+}
+#dropDownMenu:hover #dropDownContent{
+    display: block!important;
+}
 .nav-link i{
     margin-right: 10px;
 }
 .nav-link:hover{
     text-decoration: underline;
 }
-#search-form button, #link-button button{
-    border:none; 
-    background-color:transparent;
-}
-input[type=text],input[type=password]{
+input[type=text],input[type=password],#register-form input[type=number]{
     border-top-style: hidden;
     border-right-style: hidden;
     border-left-style: hidden; 
@@ -48,18 +51,10 @@ input[type=text],input[type=password]{
     color:#52565F; 
     width: 120px;
     height: 50px;
-    margin-left: 13vw;
     font-weight: 500;
     background-color: transparent;
     border:none;
     border-radius: 5px;
-}
-#forgetPass{
-    text-decoration: none;
-    color:#4285F4;
-    margin-top: 0.2rem;
-    margin-bottom: 0.7rem;
-    text-align: right;
 }
 #forgetPass:hover{
     text-decoration: underline;
@@ -99,14 +94,13 @@ form div{
 #register-form h1{
     margin-top: 2vh;
 }
-#register-form input[type=text],#register-form input[type=password]{
+#register-form input[type=text],#register-form input[type=password], #register-form input[type=number]{
     width: 30vw;
 }
 #gender{
     width: 30vw !important;
 }
 #register-form form div:last-of-type{
-    margin:1rem;
     margin-bottom: 5vh!important;
 }
 #white-board{
@@ -119,14 +113,11 @@ form div{
     line-height: 10vh;
     margin-left: 3%;
 }
-#voucher img{
+#item img{
     width: 80%;
 }
-#voucher h6{
-    margin-top: 2vh;
-}
-#voucher span{
-    font-weight: bold;
+#item:hover{
+    background-color: #F5f4f4;
 }
 #buy-button{
     height: 45px;
@@ -140,29 +131,12 @@ form div{
     margin: 1% auto;  
     border-radius: 5px;  
 }
-#options{
-    margin-top: 1rem;
-    padding:0;
-}
-#options li{
-    margin:auto;
-}
 #options .active:hover{
     text-decoration: none;
 
 }
-#options button{
-    border: none;
-    background-color: transparent;
-}#options .nav-link{
-    color:black;
-}
-
 #options .nav-link.active{
-    color:rgb(113, 113, 113);
-}
-.accordion{
-    padding-bottom: 2vh!important;
+    color:rgb(113, 113, 113)!important;
 }
 .dropdown-setting{
     margin-left:auto;
@@ -170,9 +144,6 @@ form div{
     background-color: #E5E5E5;
     margin-bottom:1%;
     border-radius: 0!important; 
-}
-#dropDownBtn{
-    background-color: transparent;
 }
 .accordion-button:not(.collapsed) {
     color: black;
@@ -183,17 +154,12 @@ form div{
 #dropDownBtn img{
     margin-right: 2%;
 }
-#changeForm{
-    text-align: left;
-}
 #changeForm div{
     width: 22%;
     margin-left:5%!important;
 }
 #changeForm input[type=submit]{
     margin-left:80%;
-    margin-bottom:2%;
-    margin-top:3%;
 }
 #changeAddress form div{
     width:15%;
@@ -217,8 +183,8 @@ input[type=number]{
     width:3rem;
 }
 #cart-item{
-     background-color: rgba(229, 229, 229, 0.4);
+    background-color: rgba(229, 229, 229, 0.4);
 }
 #order-history #options .nav-link.active{
-    border-bottom: green solid;
+    border-bottom: green solid!important;
 }
