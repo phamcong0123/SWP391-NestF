@@ -6,10 +6,14 @@
 package com.nestf.controller;
 
 import com.nestf.cart.CartDAO;
+import com.nestf.cart.CartDTO;
 import com.nestf.util.MyAppConstant;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -51,19 +55,25 @@ public class RemoveFromCartServlet extends HttpServlet {
                      CartDAO cart = (CartDAO) session.getAttribute("CART");
                      
                      if(cart != null){
-//                         3. Customer take items
-                           Map<Integer, Integer> items = cart.getItems();
-                           if(items != null){
-//                               4. Get all selected items
-                                int removedItem = Integer.parseInt(request.getParameter("productID"));
-                                if(removedItem > 0){
+//                         3. Customer take carts
+                           List<CartDTO> carts = cart.getCarts();
+                           if(carts != null){
+//                               4. Get all selected carts
+                                String[] removedItem = request.getParameterValues("chkItem");
+                                if(removedItem != null){
 //                                    5. remove each item from cart
-                                    cart.removeBookFromCart(removedItem);
+                                    for(String productID: removedItem){
+                                        cart.removeItemFromCart(Integer.parseInt(productID));
+                                    }
                                     session.setAttribute("CART", cart);
                                 }
                            }
                      }
                 }
+        } catch (SQLException ex) {
+            log("Error at RemovedFromCartServlet_SQL: " + ex.getMessage());
+        } catch (NamingException ex) {
+            log("Error at RemovedFromCartServlet_Naming: " + ex.getMessage());
         } finally{
 //           6. refresh - call view cart again
             String urlRewriting = (String) siteMap.get(MyAppConstant.RemoveItemsFeatures.CART_PAGE);

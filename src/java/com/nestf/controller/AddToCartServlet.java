@@ -6,9 +6,14 @@
 package com.nestf.controller;
 
 import com.nestf.cart.CartDAO;
+import com.nestf.customer.CustomerDTO;
+import com.nestf.product.ProductDAO;
+import com.nestf.product.ProductDTO;
 import com.nestf.util.MyAppConstant;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Properties;
+import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -45,21 +50,37 @@ public class AddToCartServlet extends HttpServlet {
         
         try {
 //            1.Cust go to cart place 
-                HttpSession session = request.getSession();
-                
+            HttpSession session = request.getSession();
+
 //            2. Customer take his cart
-                CartDAO cart = (CartDAO) session.getAttribute("CART");
-                if(cart == null) 
-                    cart = new CartDAO();
-                
+            CustomerDTO customer = (CustomerDTO) session.getAttribute("CUSTOMER");
+            CartDAO cart = (CartDAO) session.getAttribute("CART");
+            if (cart == null) {
+                cart = new CartDAO();
+            }
+            cart.setPhone(customer.getCustomerPhone());
+            cart.loadCart();
 //            3. Customer take item to his cart
-                int productID = Integer.parseInt(request.getParameter("edit_cboBook"));
-                
+            if (request.getParameter("productID") != null) {
+                int productID = Integer.parseInt(request.getParameter("productID"));
+                ProductDAO pDao = new ProductDAO();
+                ProductDTO product = pDao.getProductDetail(productID);
+
 //                4. Customer drops item to cart
-                   if(productID > 0)
-                       cart.addItemToCart(productID);
-//                5. Update scope
-                session.setAttribute("CART", cart);
+//                Nếu có quantity thì set theo quantity else +1
+                if(request.getParameter("quantity") != null){
+                    int amount = Integer.parseInt(request.getParameter("quantity"));
+                    cart.addItemToCart(product, amount);
+                } else {
+                    cart.addItemToCartFromShopPage(product); 
+                } 
+            }
+//          5. Update scope
+            session.setAttribute("CART", cart);
+        } catch (SQLException ex) {
+            log("Error at AddtoCartServlet_SQL: " + ex.getMessage());
+        } catch (NamingException ex) {
+            log("Error at AddtoCartServlet_Naming: " + ex.getMessage());
         } finally {
 //            6. forward to shopping page
             RequestDispatcher rd = request.getRequestDispatcher(url);
