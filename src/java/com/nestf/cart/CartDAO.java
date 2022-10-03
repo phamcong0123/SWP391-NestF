@@ -136,6 +136,34 @@ public class CartDAO implements Serializable{
         }
     }
     
+//    TH3: Cust bấm Thêm vào giỏ kèm số lượng từ trang product Detail
+    public void addItemToCartFromPDetail(ProductDTO product, int amount) throws NamingException, SQLException{
+        if (this.carts == null) {
+            this.carts = new ArrayList<>();
+        } 
+        if (product == null) {
+            return;
+        }
+        boolean result = false;
+
+        for (CartDTO dto : carts) {
+//            Nếu có sẵn trong giỏ thì update số lượng
+            if (dto.getProductID() == product.getProductID()) {
+                dto.setAmount(dto.getAmount() + amount);
+                result = updateProductQuantityInCart(dto);
+                break;
+            }
+        }
+//        Chưa có sẵn trong giỏ => thêm mới
+        if (!result) {
+            result = insertProductToCart(product, amount);
+        }
+        
+        if(result){
+            loadCart();
+        }
+    }
+    
 //  TH1: Xóa từng sản phẩm
     public boolean removeItemFromCart(int productID) throws SQLException, NamingException {
         loadCart();
