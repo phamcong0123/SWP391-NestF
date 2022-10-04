@@ -55,8 +55,8 @@
         <div class="d-inline-block container-fluid" id="register-form">
             <img src="img/account.svg" alt="">
             <h1>Đăng ký</h1>
-            <form action="registerAction" method="POST">
-                <div class="m-3 d-inline-block col-2">Họ và tên</div><input type="text" name="customerName" required minlength="2" maxlength="30"><br>
+            <form action="registerAction" method="POST" id="reg-form">
+                <div class="m-3 d-inline-block col-2">Họ và tên</div><input type="text" name="customerName" required minlength="6" maxlength="30" placeholder="6 - 30 ký tự"><br>
                 <div class="m-3 d-inline-block col-2">Giới tính</div>          
                 <div id="gender" class="d-inline-block">
                     <input type="radio" id="male" checked="" name="gender" value="1">
@@ -64,10 +64,10 @@
                     <input type="radio" id="female" name="gender" value="0">
                     <label for="female">Nữ</label>
                 </div><br>
-                <div class="m-3 d-inline-block col-2">Số điện thoại</div><input type="number" name="customerPhone" required minlength="10" maxlength="11"><br>
-                <div class="m-3 d-inline-block col-2">Mật khẩu</div><input type="password" name="password" required minlength="6" maxlength="20" id="password" onkeypress="validate();"><br>
-                <div class="m-3 d-inline-block col-2">Xác nhận mật khẩu</div><input type="password" name="confirm" required minlength="6" maxlength="20" id="confirm" onkeypress="validate();"><br>
-                <div class="d-inline-block col-2 m-3">Địa chỉ</div><input type="text" name="customerAddress" required="" minlength="20" maxlength="70"><br>
+                <div class="m-3 d-inline-block col-2">Số điện thoại</div><input type="number" name="customerPhone" required minlength="10" maxlength="11" placeholder="10 - 11 chữ số"><br>
+                <div class="m-3 d-inline-block col-2">Mật khẩu</div><input type="password" name="password" required minlength="6" maxlength="20" id="password" placeholder="6 - 20 ký tự"><br>
+                <div class="m-3 d-inline-block col-2">Xác nhận mật khẩu</div><input type="password" name="confirm" required minlength="6" maxlength="20" id="confirm" onblur="validate();"><br>
+                <div class="d-inline-block col-2 m-3">Địa chỉ</div><input type="text" name="customerAddress" required="" minlength="20" maxlength="70" placeholder="20 - 70 ký tự"><br>
                 <input type="hidden" name="point" value="0"/>
                 <a href="homePage"><input type="button" value="HUỶ" id="link-button"></a>
                 <input type="submit" value="ĐĂNG KÝ" id="color-button">

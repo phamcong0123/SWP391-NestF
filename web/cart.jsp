@@ -88,31 +88,23 @@
                                         </div>
                                         <div class="modal-body">
                                             <div class="row row-cols-4 container-fluid m-0">
-                                                <div id="item" class="d-inline-block col mb-4 text-center">
-                                                    <img src="img/voucher.png">
-                                                    <h6 class="text-center">TÊN VOUCHER</h6>
-                                                    <a><button type="button" id="buy-button" class="col-6" data-bs-dismiss="modal">Sử dụng</button></a>
-                                                </div>
-                                                <div id="item" class="d-inline-block col mb-4 text-center">
-                                                    <img src="img/voucher.png">
-                                                    <h6 class="text-center">TÊN VOUCHER</h6>
-                                                    <a><button type="button" id="buy-button" class="col-6" data-bs-dismiss="modal">Sử dụng</button></a>
-                                                </div>
-                                                <div id="item" class="d-inline-block col mb-4 text-center">
-                                                    <img src="img/voucher.png">
-                                                    <h6 class="text-center">TÊN VOUCHER</h6>
-                                                    <a><button type="button" id="buy-button" class="col-6" data-bs-dismiss="modal">Sử dụng</button></a>
-                                                </div>
-                                                <div id="item" class="d-inline-block col mb-4 text-center">
-                                                    <img src="img/voucher.png">
-                                                    <h6 class="text-center">TÊN VOUCHER</h6>
-                                                    <a><button type="button" id="buy-button" class="col-6" data-bs-dismiss="modal">Sử dụng</button></a>
-                                                </div>
-                                                <div id="item" class="d-inline-block col mb-4 text-center">
-                                                    <img src="img/voucher.png">
-                                                    <h6 class="text-center">TÊN VOUCHER</h6>
-                                                    <a><button type="button" id="buy-button" class="col-6" data-bs-dismiss="modal">Sử dụng</button></a>
-                                                </div>                                                   
+                                                <c:if test = "${not empty sessionScope.VOUCHER_WALLET}">
+                                                    <c:forEach items="${sessionScope.VOUCHER_WALLET}" var = "voucher">                                                       
+                                                        <div id="item" class="d-inline-block col mb-4 text-center">
+                                                            <img src="img/voucher.png">
+                                                            <h6 class="text-center">${voucher.voucherType.voucherName}</h6>
+                                                            <p>Hết hạn vào ${voucher.expiredDate}</p>
+                                                            <a><button type="button" id="buy-button" class="col-6" data-bs-dismiss="modal">Sử dụng</button></a>
+                                                        </div>
+                                                    </c:forEach>
+                                                </c:if>
+                                                <c:if test="${ empty sessionScope.VOUCHER_WALLET}">
+                                                    <div class="text-center w-100">
+                                                        <img src="img/search-no-result.png" class="d-block col-4 m-auto">
+                                                        <h3 class="mb-2">Bạn chưa có voucher nào 😥</h3>
+                                                        <a href="voucherPage" class="nav-link d-inline-block mb-3"><i class="fa-solid fa-basket-shopping"></i>Đi mua voucher</a>
+                                                    </div>
+                                                </c:if>                                                   
                                             </div>
                                         </div>
                                         <div class="modal-footer">
@@ -293,36 +285,7 @@
             </div>            
         </div>
 
-    </div> 
-    <div id="whiteboard2" class="bg-white col-8 accordion">
-        <h4 class="text-start p-4">Các gợi ý khác</h4>
-        <div class="row row-cols-4 col-11 m-auto">
-            <div id="item" class="d-inline-block col mb-4">
-                <img src="img/voucher.png">
-                <h6>TÊN VOUCHER</h6>
-                <span>Giá sản phẩm</span><br>
-                <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
-            </div>
-            <div id="item" class="d-inline-block col mb-4">
-                <img src="img/voucher.png">
-                <h6>TÊN VOUCHER</h6>
-                <span>Giá sản phẩm</span><br>
-                <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
-            </div>
-            <div id="item" class="d-inline-block col mb-4">
-                <img src="img/voucher.png">
-                <h6>TÊN VOUCHER</h6>
-                <span>Giá sản phẩm</span><br>
-                <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
-            </div>
-            <div id="item" class="d-inline-block col mb-4">
-                <img src="img/voucher.png">
-                <h6>TÊN VOUCHER</h6>
-                <span>Giá sản phẩm</span><br>
-                <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
-            </div>           
-        </div>
-    </div>
+    </div>     
     <script src="js/nestf.js"></script>   
 </body>
 

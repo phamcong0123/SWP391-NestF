@@ -15,6 +15,9 @@ section{
 #item:hover{
     background-color: #F5f4f4;
 }
+#dropDownContent a:hover{
+    font-weight: bold;
+}
 
 
 

@@ -18,7 +18,7 @@ import javax.naming.NamingException;
  */
 public class CustomerDAO {
 
-    public CustomerDTO checkLogin(int customerPhone, String password) throws SQLException {
+    public CustomerDTO checkLogin(int customerPhone, String password) throws SQLException, NamingException {
         CustomerDTO customer = null;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -35,8 +35,6 @@ public class CustomerDAO {
                     return new CustomerDTO(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBoolean(5), rs.getInt(6));
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             if (rs != null) {
                 rs.close();
@@ -54,7 +52,7 @@ public class CustomerDAO {
     private static final String CHECK_DUPLICATE = "SELECT [customerPhone], [password], [customerName], [customerAddress], [gender], [point] FROM [NestF].[dbo].[tblCustomer] WHERE [customerPhone] = ?";
     private static final String INSERT = "INSERT INTO [NestF].[dbo].[tblCustomer]([customerPhone], [password], [customerName], [customerAddress], [gender], [point]) VALUES (?, ?, ?, ?, ?, ?)";
 
-    public boolean checkDuplicate(int customerPhone) throws SQLException {
+    public boolean checkDuplicate(int customerPhone) throws SQLException, NamingException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -67,7 +65,6 @@ public class CustomerDAO {
             if (rs.next()) {
                 check = true;
             }
-        } catch (Exception e) {
         } finally {
             if (ptm != null) {
                 ptm.close();
@@ -97,7 +94,7 @@ public class CustomerDAO {
                 ptm.setBoolean(5, customer.isGender());
                 ptm.setInt(6, customer.getPoint());
                 check = ptm.executeUpdate() > 0;
-            }      
+            }
         } finally {
             if (ptm != null) {
                 ptm.close();
@@ -109,10 +106,10 @@ public class CustomerDAO {
         return check;
     }
 
-    private static final String UPDATE_NAME = "UPDATE [NestF].[dbo].[tblCustomer] SET [customerName]=? "
+    private static final String UPDATE_NAME = "UPDATE [NestF].[dbo].[tblCustomer] SET [customerName]= ? "
             + " WHERE [customerPhone]=?";
 
-    public boolean updateCusName(CustomerDTO customer) throws SQLException {
+    public boolean updateCusName(int phone, String newName) throws SQLException, NamingException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -120,12 +117,10 @@ public class CustomerDAO {
             conn = DBHelper.makeConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(UPDATE_NAME);
-                ptm.setString(1, customer.getCustomerName());
-                ptm.setInt(2, customer.getCustomerPhone());
+                ptm.setNString(1, newName);
+                ptm.setInt(2, phone);
                 check = ptm.executeUpdate() > 0;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             if (conn != null) {
                 conn.close();
@@ -140,7 +135,7 @@ public class CustomerDAO {
     private static final String UPDATE_ADDRESS = "UPDATE [NestF].[dbo].[tblCustomer] SET [customerAddress]=? "
             + " WHERE [customerPhone]=?";
 
-    public boolean updateCusAddress(CustomerDTO customer) throws SQLException {
+    public boolean updateCusAddress(int phone, String newAddress) throws SQLException, NamingException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -148,12 +143,10 @@ public class CustomerDAO {
             conn = DBHelper.makeConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(UPDATE_ADDRESS);
-                ptm.setString(1, customer.getCustomerAddress());
-                ptm.setInt(2, customer.getCustomerPhone());
+                ptm.setNString(1, newAddress);
+                ptm.setInt(2, phone);
                 check = ptm.executeUpdate() > 0;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             if (conn != null) {
                 conn.close();
@@ -168,7 +161,7 @@ public class CustomerDAO {
     private static final String UPDATE_PASSWORD = "UPDATE [NestF].[dbo].[tblCustomer] SET [password]=? "
             + " WHERE [customerPhone]=?";
 
-    public boolean updateCusPassword(CustomerDTO customer) throws SQLException {
+    public boolean updateCusPassword(int phone, String newPass) throws SQLException, NamingException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -176,12 +169,10 @@ public class CustomerDAO {
             conn = DBHelper.makeConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(UPDATE_PASSWORD);
-                ptm.setString(1, customer.getPassword());
-                ptm.setInt(2, customer.getCustomerPhone());
+                ptm.setNString(1, newPass);
+                ptm.setInt(2, phone);
                 check = ptm.executeUpdate() > 0;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             if (conn != null) {
                 conn.close();

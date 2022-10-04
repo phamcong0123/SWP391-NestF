@@ -5,8 +5,15 @@
  */
 package com.nestf.controller;
 
+import com.nestf.vouchertype.VoucherTypeDAO;
+import com.nestf.vouchertype.VoucherTypeDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -29,20 +36,24 @@ public class LoadVoucherServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    private static final String VOUCHER_PAGE = "voucher.jsp";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        String url = VOUCHER_PAGE;
+        try {
             /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet LoadVoucherServlet</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet LoadVoucherServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            VoucherTypeDAO dao = new VoucherTypeDAO();
+            dao.loadVoucher();
+            List<VoucherTypeDTO> list = dao.getList();
+            request.setAttribute("VOUCHER", list);
+        } catch (NamingException ex) {
+            Logger.getLogger(LoadVoucherServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(LoadVoucherServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

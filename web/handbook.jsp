@@ -63,8 +63,16 @@
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div> 
                             <c:if test="${not empty sessionScope.CUSTOMER}">
-                                <a href="cartPage" class="nav-link text-center"><i class="fa-solid fa-cart-shopping"></i></a></div>
-                                </c:if>                              
+                                <a href="cartPage" class="nav-link text-center"><i class="fa-solid fa-cart-shopping position-relative">
+                                        <c:if test="${not empty sessionScope.CART}">
+                                            <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
+                                                <span class="visually-hidden">New alerts</span>
+                                            </span>
+                                        </c:if>
+                                    </i>
+                                </a>
+                            </c:if> 
+                        </div>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div>

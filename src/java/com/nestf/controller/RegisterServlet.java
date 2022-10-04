@@ -45,30 +45,16 @@ public class RegisterServlet extends HttpServlet {
             CustomerError cusError = new CustomerError();
             boolean checkDup = dao.checkDuplicate(customerPhone);
             if (checkDup) {
-                cusError.setCustomerPhoneError("Số điện thoại đã có người đăng ký");
+                cusError.setCustomerPhoneDuplicate("Số điện thoại đã có người đăng ký!");
                 check = false;
-            }
-            if (customerName.length() <= 0) {
-                cusError.setCustomerNameError("Vui lòng nhập tên");
-                check = false;
-            }
-            if (customerAddress.length() <= 0) {
-                cusError.setCustomerAddressError("Vui lòng nhập địa chỉ");
-                check = false;
-            }
-            if (!password.equals(confirm)) {
-                cusError.setConfirm("Vui lòng nhập lại xác nhận mật khẩu");
-                check = false;
-            }
+            }          
             if (check) {
                 checkInsert = dao.insert(customer);
                 if (checkInsert) {
                     url = SUCCESS;
-                } else {
-                    url = ERROR;
-                }
+                } 
             } else {
-                request.setAttribute("CUS_ERROR", cusError);
+                request.setAttribute("CUS_ERROR", cusError);              
             }
         } catch (Exception e) {
             log("Error at Register: " + e.toString());

@@ -44,6 +44,10 @@ function validate(){
     let password = document.getElementById("password").value;
     let confirm = document.getElementById("confirm").value;
     if (password != confirm){
+        let form = document.getElementById("reg-form");
+        form.prevetDefault();
         alert("ko trung");
+    } else {
+        form.removeEventListener()
     }
 }

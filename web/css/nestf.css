@@ -33,6 +33,9 @@ button img{
 #dropDownMenu:hover #dropDownContent{
     display: block!important;
 }
+#dropDownContent a:hover{
+    font-weight: bold;
+}
 .nav-link i{
     margin-right: 10px;
 }
@@ -154,6 +157,9 @@ form div{
 #dropDownBtn img{
     margin-right: 2%;
 }
+#changeForm input[type=password]::placeholder{
+    color:red;
+}
 #changeForm div{
     width: 22%;
     margin-left:5%!important;
@@ -164,6 +170,9 @@ form div{
 #changeAddress form div{
     width:15%;
 } 
+#logout:hover{
+    font-weight: bold;
+}
 #other-article{
     width:30.5%;
 }

@@ -30,25 +30,18 @@ public class UpdateCustomerNameServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-        HttpSession session = request.getSession();
-        CustomerDTO customerLog = (CustomerDTO) session.getAttribute("CUSTOMER");
         try {
-            int customerPhone = Integer.parseInt(request.getParameter("customerPhone"));
+            HttpSession session = request.getSession();
+            CustomerDTO customer= (CustomerDTO) session.getAttribute("CUSTOMER");
+            int phone = customer.getCustomerPhone();
             String newCustomerName = request.getParameter("newCustomerName");
-            String customerAddress = request.getParameter("customerAddress");
-            String password = request.getParameter("password");
-            boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
-            int point = Integer.parseInt(request.getParameter("point"));
-            boolean check = false;
-            if (newCustomerName == null) {
-                check = false;
-            }
-            CustomerDTO customer = new CustomerDTO(customerPhone, password, newCustomerName, customerAddress, gender, point);
             CustomerDAO dao = new CustomerDAO();
-            check = dao.updateCusName(customer);
+            boolean check = dao.updateCusName(phone,newCustomerName);
             if (check) {
                 url = SUCCESS;
-                customerLog.setCustomerName(newCustomerName);
+                customer.setCustomerName(newCustomerName);
+                session.setAttribute("CUSTOMER", customer);
+                request.setAttribute("SUCCESS", 1);
             }
         } catch (Exception e) {
             log("Error at UpdateCustomerName: " + e.toString());

@@ -30,22 +30,19 @@ public class UpdateCustomerAddressServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
-        HttpSession session = request.getSession();
-        CustomerDTO customerLog = (CustomerDTO) session.getAttribute("CUSTOMER");
         try {
-            int customerPhone = Integer.parseInt(request.getParameter("customerPhone"));
-            String customerName = request.getParameter("customerName");
+            HttpSession session = request.getSession();
+            CustomerDTO customer = (CustomerDTO) session.getAttribute("CUSTOMER");
+            int phone = customer.getCustomerPhone();
             String newAddress = request.getParameter("newAddress");
-            String password = request.getParameter("password");
-            boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
-            int point = Integer.parseInt(request.getParameter("point"));
-            CustomerDTO customer = new CustomerDTO(customerPhone, password, customerName, newAddress, gender, point);
             boolean check = false;
             CustomerDAO dao = new CustomerDAO();
-            check = dao.updateCusAddress(customer);
+            check = dao.updateCusAddress(phone, newAddress);
             if (check) {
                 url = SUCCESS;
-                customerLog.setCustomerAddress(newAddress);
+                customer.setCustomerAddress(newAddress);
+                session.setAttribute("CUSTOMER", customer);
+                request.setAttribute("SUCCESS", 1);
             }
         } catch (Exception e) {
             log("Error at UpdateCustomerAddress: " + e.toString());

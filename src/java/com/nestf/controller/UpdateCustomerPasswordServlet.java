@@ -23,45 +23,39 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "UpdateCustomerPasswordServlet", urlPatterns = {"/UpdateCustomerPasswordServlet"})
 public class UpdateCustomerPasswordServlet extends HttpServlet {
-
+    
     private static final String ERROR = "account.jsp";
     private static final String SUCCESS = "LogoutServlet";
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR;
-        HttpSession session = request.getSession();
-        CustomerDTO customerLog = (CustomerDTO) session.getAttribute("CUSTOMER");
-        try {
-            int customerPhone = Integer.parseInt(request.getParameter("customerPhone"));
-            String customerName = request.getParameter("customerName");
-            String customerAddress = request.getParameter("customerAddress");
+        String url = ERROR;        
+        try {            
+            HttpSession session = request.getSession();
+            CustomerDTO customer = (CustomerDTO) session.getAttribute("CUSTOMER");
             String password = request.getParameter("password");
-            String newPass = request.getParameter("newPass");
-            String confirm = request.getParameter("confirm");
-            boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
-            int point = Integer.parseInt(request.getParameter("point"));
+            String newPass = request.getParameter("newPass").trim();          
             boolean check = true;
-            String test = customerLog.getPassword();
+            String curPassword = customer.getPassword(); 
             CustomerError cusError = new CustomerError();
-            if (!password.equals(customerLog.getPassword())) {
-                check = false;
-                cusError.setPasswordError("Vui lòng nhập lại mật khẩu");
+            if (curPassword.equals(newPass)) {
+                check = false;             
+                cusError.setPasswordDuplicate("Mật khẩu mới không khả dụng!");
             }
-            if (!newPass.equals(confirm)) {
+            if (!curPassword.equals(password)){
                 check = false;
-                cusError.setConfirm("Xác nhận không chính xác");
+                cusError.setPasswordWrong("Mật khẩu hiện tại không chính xác!");
             }
-            if (check) {
-                CustomerDTO customer = new CustomerDTO(customerPhone, newPass, customerName, customerAddress, gender, point);
-                boolean checkDao = false;
+            if (check) {               
+                int phone = customer.getCustomerPhone();
                 CustomerDAO dao = new CustomerDAO();
-                checkDao = dao.updateCusPassword(customer);
+                boolean checkDao = dao.updateCusPassword(phone, newPass);
                 if (checkDao) {
                     url = SUCCESS;
-                    customerLog.setPassword(newPass);
                 }
+            } else {
+                request.setAttribute("ERROR", cusError);
             }
         } catch (Exception e) {
             log("Error at UpdateCustomerPassword: " + e.toString());
