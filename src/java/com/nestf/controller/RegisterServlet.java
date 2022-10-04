@@ -37,7 +37,6 @@ public class RegisterServlet extends HttpServlet {
             String customerAddress = request.getParameter("customerAddress");
             boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
             int point = Integer.parseInt(request.getParameter("point"));
-            String confirm = request.getParameter("confirm");
             CustomerDAO dao = new CustomerDAO();
             CustomerDTO customer = new CustomerDTO(customerPhone, password, customerName, customerAddress, gender, point);
             boolean check = true;

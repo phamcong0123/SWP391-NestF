@@ -5,6 +5,7 @@
         <group>
             <file>file:/D:/CN5/SWP/demonestF/DemoNestF/src/java/com/nestf/controller/LoadArticleServlet.java</file>
             <file>file:/D:/CN5/SWP/demonestF/DemoNestF/web/article.jsp</file>
+            <file>file:/D:/CN5/SWP/demonestF/DemoNestF/src/java/com/nestf/controller/LogoutServlet.java</file>
             <file>file:/D:/CN5/SWP/demonestF/DemoNestF/src/java/com/nestf/controller/LoginServlet.java</file>
             <file>file:/D:/CN5/SWP/demonestF/DemoNestF/web/postHTML/post1.html</file>
             <file>file:/D:/CN5/SWP/demonestF/DemoNestF/src/java/com/nestf/voucher/VoucherDAO.java</file>
