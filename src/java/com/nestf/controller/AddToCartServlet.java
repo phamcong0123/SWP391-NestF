@@ -67,12 +67,18 @@ public class AddToCartServlet extends HttpServlet {
                 ProductDTO product = pDao.getProductDetail(productID);
 
 //                4. Customer drops item to cart
-//                Nếu có quantity thì set theo quantity else +1
+//                Nếu có quantity thì set theo quantity Else +1
                 if(request.getParameter("quantity") != null){
                     int amount = Integer.parseInt(request.getParameter("quantity"));
-                    cart.addItemToCart(product, amount);
+                    
+//                    Add product in product detail page Else Add in cart page 
+                    if(request.getParameter("addInPDetail") != null){
+                        cart.addItemToCartFromPDetail(product, amount);
+                    } else{
+                       cart.addItemToCart(product, amount); 
+                    }
                 } else {
-                    cart.addItemToCartFromShopPage(product); 
+                    cart.addItemToCartFromShopPage(product);
                 } 
             }
 //          5. Update scope
