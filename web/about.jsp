@@ -1,3 +1,4 @@
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%-- 
     Document   : newjsp3
     Created on : Sep 20, 2022, 4:00:02 PM

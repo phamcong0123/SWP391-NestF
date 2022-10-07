@@ -190,94 +190,122 @@
                             </li>
                         </ul>
                         <div class="tab-content">
-                            <div id="delivering" class="tab-pane fade show active pb-3" role="tabpanel" aria-labelledby="delivering-tab">                              
-                                <div id="cart-item" class="rounded col-11 m-auto mb-3">
-                                    <div class="row container-fluid m-0">
-                                        <div class="d-inline-block col-2 text-start">
-                                            <img src="img/product1.png" class="rounded w-100">
-                                        </div>     
-                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
-                                            <h4 class="fw-bold">Tổ yến thô cao cấp tiêu chuẩn 100g</h4>
-                                            <font color="green"> Chờ xác nhận</font>
-                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">3</span></p>
-                                            <p>Thành tiền : <span class="fw-bold">2,850,000đ</span></p>
-                                        </div> 
-                                        <div class="d-inline-block col-1 ms-auto">
-                                            <a href="" class="mt-3 nav-link"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a>
+                            <div id="delivering" class="tab-pane fade show active pb-3" role="tabpanel" aria-labelledby="delivering-tab">  
+                                <c:if test="${requestScope.SHOWBILLCONFIRM != null}">
+                                    <c:forEach var="billcf" varStatus="counter" items="${ShowBillConfirm}">
+                                        <div id="cart-item" class="rounded col-11 m-auto mb-3">
+                                            <div class="row container-fluid m-0">    
+                                                <div class="d-inline-block col-8 text-start ms-5 mt-4">
+                                                    <h4 class="fw-bold">Số thứ tự: ${counter.count}${billcf.billID}</h4>
+                                                    <c:choose>
+                                                        <c:when test="${billcf.statusID=5}">
+                                                            <font color="red">Trạng thái: ${billcf.status}</font>
+                                                        </c:when>
+                                                        <c:when test="${billcf.statusID=6}">
+                                                            <font color="red">Trạng thái: ${billcf.status}</font>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <font color="green">Trạng thái: ${billcf.status}</font>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                    <p class="mt-1 mb-0">Địa chỉ: ${billcf.address} <span class="fw-bold">3</span></p>
+                                                    <p class="mt-1 mb-0">Ngày đặt hàng : ${billcf.time} <span class="fw-bold">3</span></p>
+                                                    <p>Thành tiền : <span class="fw-bold">${billcf.total}</span></p>
+                                                </div> 
+                                                <div class="d-inline-block col-1 ms-auto">
+                                                    <a href="" class="mt-3 nav-link"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a>
+                                                </div>
+                                            </div>  
                                         </div>
-                                    </div>  
-                                </div>
-                                <div id="cart-item" class="rounded col-11 m-auto mb-3">
-                                    <div class="row container-fluid m-0">
-                                        <div class="d-inline-block col-2 text-start">
-                                            <img src="img/product1.png" class="rounded w-100">
-                                        </div>     
-                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
-                                            <h4 class="fw-bold">Tổ yến thô cao cấp tiêu chuẩn 100g</h4>
-                                            <font color="green"> Chờ xác nhận</font>
-                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">3</span></p>
-                                            <p>Thành tiền : <span class="fw-bold">2,850,000đ</span></p>
-                                        </div> 
-                                        <div class="d-inline-block col-1 ms-auto">
-                                            <a href="" class="mt-3 nav-link"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a>
-                                        </div>
-                                    </div>  
-                                </div>
-                                <div id="cart-item" class="rounded col-11 m-auto mb-3">
-                                    <div class="row container-fluid m-0">
-                                        <div class="d-inline-block col-2 text-start">
-                                            <img src="img/product1.png" class="rounded w-100">
-                                        </div>     
-                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
-                                            <h4 class="fw-bold">Tổ yến thô cao cấp tiêu chuẩn 100g</h4>
-                                            <font color="green"> Chờ xác nhận</font>
-                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">3</span></p>
-                                            <p>Thành tiền : <span class="fw-bold">2,850,000đ</span></p>
-                                        </div> 
-                                        <div class="d-inline-block col-1 ms-auto">
-                                            <a href="" class="mt-3 nav-link"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a>
-                                        </div>
-                                    </div>  
-                                </div> 
+                                    </c:forEach>
+                                </c:if>
+
+                                <!--                                <div id="cart-item" class="rounded col-11 m-auto mb-3">
+                                                                    <div class="row container-fluid m-0">
+                                                                        <div class="d-inline-block col-2 text-start">
+                                                                            <img src="img/product1.png" class="rounded w-100">
+                                                                        </div>     
+                                                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
+                                                                            <h4 class="fw-bold">Tổ yến thô cao cấp tiêu chuẩn 100g</h4>
+                                                                            <font color="green"> Chờ xác nhận</font>
+                                                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">3</span></p>
+                                                                            <p>Thành tiền : <span class="fw-bold">2,850,000đ</span></p>
+                                                                        </div> 
+                                                                        <div class="d-inline-block col-1 ms-auto">
+                                                                            <a href="" class="mt-3 nav-link"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a>
+                                                                        </div>
+                                                                    </div>  
+                                                                </div>-->
+                                <!--                                <div id="cart-item" class="rounded col-11 m-auto mb-3">
+                                                                    <div class="row container-fluid m-0">
+                                                                        <div class="d-inline-block col-2 text-start">
+                                                                            <img src="img/product1.png" class="rounded w-100">
+                                                                        </div>     
+                                                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
+                                                                            <h4 class="fw-bold">Tổ yến thô cao cấp tiêu chuẩn 100g</h4>
+                                                                            <font color="green"> Chờ xác nhận</font>
+                                                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">3</span></p>
+                                                                            <p>Thành tiền : <span class="fw-bold">2,850,000đ</span></p>
+                                                                        </div> 
+                                                                        <div class="d-inline-block col-1 ms-auto">
+                                                                            <a href="" class="mt-3 nav-link"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a>
+                                                                        </div>
+                                                                    </div>  
+                                                                </div> -->
                             </div>
-                            <div id="delivered" class="tab-pane fade pb-3" role="tabpanel" aria-labelledby="delivered-tab">
-                                <div id="cart-item" class="rounded col-11 m-auto mb-3">
-                                    <div class="row container-fluid m-0">
-                                        <div class="d-inline-block col-2 text-start">
-                                            <img src="img/product1.png" class="rounded w-100">
-                                        </div>     
-                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
-                                            <h4 class="fw-bold">Tổ yến thô cao cấp tiêu chuẩn 100g</h4>
-                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">3</span></p>
-                                            <p>Thành tiền : <span class="fw-bold">2,850,000đ</span></p>
-                                            <font color="red">(Đã huỷ)</font>
-                                        </div> 
-                                    </div>  
-                                </div>
-                                <div id="cart-item" class="rounded col-11 m-auto mb-3">
-                                    <div class="row container-fluid m-0">
-                                        <div class="d-inline-block col-2 text-start">
-                                            <img src="img/product1.png" class="rounded w-100">
-                                        </div>     
-                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
-                                            <h4 class="fw-bold">Tổ yến thô cao cấp tiêu chuẩn 100g</h4>
-                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">3</span></p>
-                                            <p>Thành tiền : <span class="fw-bold">2,850,000đ</span></p>
-                                        </div> 
-                                    </div>  
-                                </div>
-                                <div id="cart-item" class="rounded col-11 m-auto mb-3">
-                                    <div class="row container-fluid m-0">
-                                        <div class="d-inline-block col-2 text-start">
-                                            <img src="img/product1.png" class="rounded w-100">
-                                        </div>     
-                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
-                                            <h4 class="fw-bold">Tổ yến thô cao cấp tiêu chuẩn 100g</h4>
-                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">3</span></p>
-                                            <p>Thành tiền : <span class="fw-bold">2,850,000đ</span></p>
-                                        </div> 
-                                    </div>  
-                                </div>
+                            <div id="delivered" class="tab-pane fade pb-3" role="tabpanel" aria-labelledby="delivered-tab"> 
+                                <c:if test="${requestScope.SHOWBILLCONFIRM != null}">
+                                    <c:forEach var="billcl" varStatus="counter" items="${ShowBill}">
+                                        <div id="cart-item" class="rounded col-11 m-auto mb-3">
+                                            <div class="row container-fluid m-0">    
+                                                <div class="d-inline-block col-8 text-start ms-5 mt-4">
+                                                    <h4 class="fw-bold">Số thứ tự: ${counter.count}${billcl.billID}</h4>
+                                                    <c:choose>
+                                                        <c:when test="${billcf.statusID=5}">
+                                                            <font color="red">Trạng thái: ${billcf.status}</font>
+                                                        </c:when>
+                                                        <c:when test="${billcf.statusID=6}">
+                                                            <font color="red">Trạng thái: ${billcf.status}</font>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <font color="green">Trạng thái: ${billcf.status}</font>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                    <p class="mt-1 mb-0">Địa chỉ: ${billcl.address} <span class="fw-bold">3</span></p>
+                                                    <p class="mt-1 mb-0">Ngày đặt hàng : ${billcl.time} <span class="fw-bold">3</span></p>
+                                                    <p>Thành tiền : <span class="fw-bold">${billcl.total}</span></p>
+                                                </div> 
+                                                <div class="d-inline-block col-1 ms-auto">
+                                                    <a href="" class="mt-3 nav-link"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a>
+                                                </div>
+                                            </div>  
+                                        </div>
+                                    </c:forEach>
+                                </c:if>
+                                <!--                                <div id="cart-item" class="rounded col-11 m-auto mb-3">
+                                                                    <div class="row container-fluid m-0">
+                                                                        <div class="d-inline-block col-2 text-start">
+                                                                            <img src="img/product1.png" class="rounded w-100">
+                                                                        </div>     
+                                                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
+                                                                            <h4 class="fw-bold">Tổ yến thô cao cấp tiêu chuẩn 100g</h4>
+                                                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">3</span></p>
+                                                                            <p>Thành tiền : <span class="fw-bold">2,850,000đ</span></p>
+                                                                        </div> 
+                                                                    </div>  
+                                                                </div>-->
+                                <!--                                <div id="cart-item" class="rounded col-11 m-auto mb-3">
+                                                                    <div class="row container-fluid m-0">
+                                                                        <div class="d-inline-block col-2 text-start">
+                                                                            <img src="img/product1.png" class="rounded w-100">
+                                                                        </div>     
+                                                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
+                                                                            <h4 class="fw-bold">Tổ yến thô cao cấp tiêu chuẩn 100g</h4>
+                                                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">3</span></p>
+                                                                            <p>Thành tiền : <span class="fw-bold">2,850,000đ</span></p>
+                                                                        </div> 
+                                                                    </div>  
+                                                                </div>-->
                             </div>
                         </div>            
                     </div>
