@@ -55,9 +55,8 @@ public class LoadVoucherWalletServlet extends HttpServlet {
                List<VoucherDTO> voucherWallet = dao.getList();
                if (voucherWallet != null){
                    session.setAttribute("VOUCHER_WALLET", voucherWallet);
-               }
-            }
-                                      
+               }             
+            }                                    
         } catch (SQLException ex) {
             Logger.getLogger(LoadVoucherWalletServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NamingException ex) {

@@ -5,17 +5,18 @@
  */
 package com.nestf.controller;
 
-import com.nestf.cart.CartDAO;
+import com.nestf.customer.CustomerDAO;
 import com.nestf.customer.CustomerDTO;
-import com.nestf.product.ProductDAO;
-import com.nestf.product.ProductDTO;
-import com.nestf.util.MyAppConstant;
+import com.nestf.voucher.VoucherDAO;
+import com.nestf.voucher.VoucherDTO;
+import com.nestf.vouchertype.VoucherTypeDAO;
+import com.nestf.vouchertype.VoucherTypeDTO;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Properties;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.NamingException;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,10 +26,10 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author DELL
+ * @author Admin
  */
-@WebServlet(name = "AddToCartServlet", urlPatterns = {"/AddToCartServlet"})
-public class AddToCartServlet extends HttpServlet {
+@WebServlet(name = "BuyVoucherServlet", urlPatterns = {"/BuyVoucherServlet"})
+public class BuyVoucherServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,60 +40,49 @@ public class AddToCartServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    private static final String VOUCHER_PAGE = "LoadVoucherServlet";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
-        ServletContext context = request.getServletContext();
-
-        Properties siteMap = (Properties) context.getAttribute("SITE_MAP");
-        String url = (String) siteMap.get(MyAppConstant.ShoppingFeatures.SHOPPING_ACTION);
-
+        String url = VOUCHER_PAGE;
         try {
-//            1.Cust go to cart place 
+            /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession(false);
             if (session != null) {
-                //2. Customer take his cart
                 CustomerDTO customer = (CustomerDTO) session.getAttribute("CUSTOMER");
-                CartDAO cart = (CartDAO) session.getAttribute("CART");
-                if (cart == null) {
-                    cart = new CartDAO();
-                }
-                cart.setPhone(customer.getCustomerPhone());
-                cart.loadCart();
-//            3. Customer take item to his cart
-                if (request.getParameter("productID") != null) {
-                    int productID = Integer.parseInt(request.getParameter("productID"));
-                    ProductDAO pDao = new ProductDAO();
-                    ProductDTO product = pDao.getProductDetail(productID);
-
-//                4. Customer drops item to cart
-//                Nếu có quantity thì set theo quantity Else +1
-                    if (request.getParameter("quantity") != null) {
-                        int amount = Integer.parseInt(request.getParameter("quantity"));
-
-//                    Add product in product detail page Else Add in cart page 
-                        if (request.getParameter("addInPDetail") != null) {
-                            cart.addItemToCartFromPDetail(product, amount);
-                        } else {
-                            cart.addItemToCart(product, amount);
-                        }
+                int customerPoint = customer.getPoint();
+                int typeID = Integer.parseInt(request.getParameter("typeID"));
+                VoucherTypeDAO typeDAO = new VoucherTypeDAO();
+                int requiredPoint = typeDAO.getVoucher(typeID).getPoint();
+                if (customerPoint > requiredPoint) {                   
+                    int phone = customer.getCustomerPhone();
+                    VoucherDAO dao = new VoucherDAO();
+                    VoucherDTO voucher = dao.addVoucherToWaller(phone, typeID);
+                    if (voucher != null) {
+                        List<VoucherDTO> voucherWallet = (List<VoucherDTO>) session.getAttribute("VOUCHER_WALLET");
+                        voucherWallet.add(voucher);
+                        int newPoint = customerPoint - requiredPoint;
+                        int newQuantity = typeDAO.getVoucher(typeID).getQuantity()-1;
+                        CustomerDAO customerDAO = new CustomerDAO();                        
+                        if (customerDAO.buyVoucher(phone, newPoint)&&typeDAO.updateQuantity(typeID, newQuantity)){
+                            customer.setPoint(newPoint);
+                            session.setAttribute("CUSTOMER", customer);
+                            request.setAttribute("SUCCESS", "");
+                        }                     
                     } else {
-                        cart.addItemToCartFromShopPage(product);
+                        request.setAttribute("FAIL", "");
                     }
+                } else {
+                    request.setAttribute("FAIL", "");
                 }
-//          5. Update scope
-                session.setAttribute("CART", cart);
             }
-        
-        } catch (SQLException ex) {
-            log("Error at AddtoCartServlet_SQL: " + ex.getMessage());
         } catch (NamingException ex) {
-            log("Error at AddtoCartServlet_Naming: " + ex.getMessage());
+            Logger.getLogger(BuyVoucherServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(BuyVoucherServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-//            6. forward to shopping page
-            RequestDispatcher rd = request.getRequestDispatcher(url);
-            rd.forward(request, response);
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

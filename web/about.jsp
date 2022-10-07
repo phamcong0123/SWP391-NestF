@@ -79,7 +79,7 @@
                 </ul>
             </nav>
         </div>
-        <div id="white-board" class="bg-white">         
+        <div id="white-board" class="bg-white w-75">         
             <div class="d-flex justify-content-between col-11 m-auto">
                 <img src="img/about2.png" class="rounded col-5 me-5 mt-4">
                 <div class="d-inline-block">

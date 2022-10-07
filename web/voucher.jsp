@@ -9,9 +9,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html lang="vi">
-    <c:if test="${empty requestScope.VOUCHER}">
-        <c:redirect url="loadVoucher"/>
-    </c:if>
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -25,6 +22,44 @@
     </head>
 
     <body class="text-center">
+        <c:if test="${not empty requestScope.SUCCESS}">
+                <span id="trigger" class="d-none" data-bs-toggle="modal" data-bs-target="#notification">                           
+                </span>                     
+                <div class="modal fade" id="notification" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">  
+                            <div class="text-start">
+                                <img src="img/success.svg" class="col-3 d-inline-block m-3">
+                                <span class="fw-bold d-inline-block fs-2 ms-4">Thành công!</span> 
+                            </div>           
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    window.onload = function () {
+                        document.getElementById("trigger").click();
+                    }
+                </script>
+            </c:if>
+                <c:if test="${not empty requestScope.FAIL}">
+                <span id="trigger" class="d-none" data-bs-toggle="modal" data-bs-target="#notification">                           
+                </span>                     
+                <div class="modal fade" id="notification" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">  
+                            <div class="text-start">
+                                <img src="img/success.svg" class="col-3 d-inline-block m-3">
+                                <span class="fw-bold d-inline-block fs-2 ms-4">Thất bại!</span> 
+                            </div>           
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    window.onload = function () {
+                        document.getElementById("trigger").click();
+                    }
+                </script>
+            </c:if>
         <div id="navbar">
             <nav class="navbar-expand bg-white navbar-light">
                 <ul class="navbar">
@@ -76,7 +111,7 @@
                 </ul>
             </nav>
         </div>
-        <div id="white-board" class="bg-white">
+        <div id="white-board" class="bg-white w-75">
             <h2 class="d-block col-8">Danh sách voucher</h2>
             <div class="row row-cols-4 col-11 m-auto">
                 <c:if test="${not empty requestScope.VOUCHER}">

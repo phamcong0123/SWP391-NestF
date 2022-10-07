@@ -15,18 +15,38 @@ public class VoucherTypeDTO implements Serializable{
     
     private int typeID;
     private String voucherName;
-    private double saleMargin;
+    private Long saleMargin;
     private int quantity;
     private int point;
 
     public VoucherTypeDTO() {
     }
 
-    public VoucherTypeDTO(int typeID, String voucherName, double saleMargin, int quantity, int point) {
+    public VoucherTypeDTO(int typeID, String voucherName, Long saleMargin, int quantity, int point) {
         this.typeID = typeID;
         this.voucherName = voucherName;
         this.saleMargin = saleMargin;
         this.quantity = quantity;
+        this.point = point;
+    }
+
+    public void setTypeID(int typeID) {
+        this.typeID = typeID;
+    }
+
+    public void setVoucherName(String voucherName) {
+        this.voucherName = voucherName;
+    }
+
+    public void setSaleMargin(Long saleMargin) {
+        this.saleMargin = saleMargin;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setPoint(int point) {
         this.point = point;
     }
 
@@ -34,45 +54,22 @@ public class VoucherTypeDTO implements Serializable{
         return typeID;
     }
 
-    public void setTypeID(int typeID) {
-        this.typeID = typeID;
-    }
-
     public String getVoucherName() {
         return voucherName;
     }
 
-    public void setVoucherName(String voucherName) {
-        this.voucherName = voucherName;
-    }
-
-    public double getSaleMargin() {
+    public Long getSaleMargin() {
         return saleMargin;
-    }
-
-    public void setSaleMargin(double saleMargin) {
-        this.saleMargin = saleMargin;
     }
 
     public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
     public int getPoint() {
         return point;
     }
 
-    public void setPoint(int point) {
-        this.point = point;
-    }
-
-    @Override
-    public String toString() {
-        return "VoucherTypeDTO{" + "typeID=" + typeID + ", voucherName=" + voucherName + ", saleMargin=" + saleMargin + ", quantity=" + quantity + ", point=" + point + '}';
-    }
+    
     
 }

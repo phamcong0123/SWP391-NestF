@@ -9,9 +9,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <c:if test="${empty requestScope.LIST_PRODUCT}" >
-        <c:redirect url="shopAction"></c:redirect>
-    </c:if>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">

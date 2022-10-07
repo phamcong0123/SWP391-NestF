@@ -82,70 +82,62 @@
                 </ul>
             </nav>
         </div>
-        <div id="white-board" class="d-flex justify-content-between">
+        <div id="white-board" class="d-flex justify-content-between col-10">
             <div class="bg-white col-8 mt-4 d-inline-block" id="article">  
-                <h2 class="pt-4 fw-bold ms-2">${requestScope.POST.title}</h2>
-                <div id="author">           
-                </div>
+                <h2 class="pt-4 fw-bold ms-4">${requestScope.POST.title}</h2>
+                <div id="author" class="text-start ms-4">   
+                    <span class="fs-5">Tác giả : ${requestScope.POST.seller.name}</span><br>
+                    <span class="text-muted">Ngày đăng : ${requestScope.POST.dateTime}</span>
+                </div><br>
                 <div id="content" class="pb-2 pe-4">            
                     <c:import charEncoding="UTF-8" url="${requestScope.POST.filePath}"></c:import>
+                    </div>
                 </div>
-            </div>
-            <div id="other-article" class="bg-white d-inline-block mt-4 h-100 sticky-top">
-                <h2 class="text-center">Bài viết khác</h2>
-                <a href="article" class="nav-link" id="article-link">
-                    <div class="m-3 d-flex justify-content-start">
-                        <img src="img/post1.jpg" class="d-inline-block col-6">
-                        <div class="d-inline-block text-start ms-2">
-                            <h5>Title</h5>
-                            <span>Nội dung...</span>
-                        </div>            
-                    </div>
-                </a>
-                <a href="article" class="nav-link" id="article-link">
-                    <div class="m-3 d-flex justify-content-start">
-                        <img src="img/post1.jpg" class="d-inline-block col-6">
-                        <div class="d-inline-block text-start ms-2">
-                            <h5>Title</h5>
-                            <span>Nội dung...</span>
-                        </div>            
-                    </div>
-                </a>
-                <a href="article" class="nav-link" id="article-link">
-                    <div class="m-3 d-flex justify-content-start">
-                        <img src="img/post1.jpg" class="d-inline-block col-6">
-                        <div class="d-inline-block text-start ms-2">
-                            <h5>Title</h5>
-                            <span>Nội dung...</span>
-                        </div>            
-                    </div>
-                </a>
-            </div>
+            <c:if test = "${not empty requestScope.RECOMMEND_POST}">
+                <div id="other-article" class="bg-white d-inline-block mt-4 h-100 sticky-top">
+                    <h2 class="text-center">Bài viết khác</h2>
+                    <c:forEach items="${requestScope.RECOMMEND_POST}" var = "post">
+                        <c:url var="postLink" value="loadArticle">
+                            <c:param name="postID" value="${post.postID}"/>     
+                        </c:url>
+                        <a href="${postLink}" class="nav-link text-decoration-none" id="article-link">
+                            <div class="m-3 d-flex justify-content-start">
+                                <img src="${post.image}" class="d-inline-block col-6">
+                                <div class="d-inline-block text-start ms-2">
+                                    <span>${post.title}</span>
+                                </div>            
+                            </div>
+                        </a>
+                    </c:forEach>
+
+                </div>
+            </c:if>
+
         </div>
-        <div id="white-board" class="bg-white">
-            <h4 class="text-start p-4">Các gợi ý khác</h4>
-            <div class="row row-cols-4">
-                <div id="voucher" class="d-inline-block col mb-4">
+        <div id="white-board" class="bg-white col-10">
+            <h4 class="text-start p-4 pb-2">Các gợi ý khác</h4>
+            <div class="row row-cols-4 col-11 m-auto">
+                <div id="item" class="d-inline-block col mb-3 p-3">
                     <img src="img/voucher.png">
-                    <h6>TÊN VOUCHER</h6>
+                    <h6 class="mt-2">TÊN VOUCHER</h6>
                     <span>Giá sản phẩm</span><br>
                     <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
                 </div>
-                <div id="voucher" class="d-inline-block col mb-4">
+                <div id="item" class="d-inline-block col mb-3 p-3">
                     <img src="img/voucher.png">
-                    <h6>TÊN VOUCHER</h6>
+                    <h6 class="mt-2">TÊN VOUCHER</h6>
                     <span>Giá sản phẩm</span><br>
                     <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
                 </div>
-                <div id="voucher" class="d-inline-block col mb-4">
+                <div id="item" class="d-inline-block col mb-3 p-3">
                     <img src="img/voucher.png">
-                    <h6>TÊN VOUCHER</h6>
+                    <h6 class="mt-2">TÊN VOUCHER</h6>
                     <span>Giá sản phẩm</span><br>
                     <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
                 </div>
-                <div id="voucher" class="d-inline-block col mb-4">
+                <div id="item" class="d-inline-block col mb-3 p-3">
                     <img src="img/voucher.png">
-                    <h6>TÊN VOUCHER</h6>
+                    <h6 class="mt-2">TÊN VOUCHER</h6>
                     <span>Giá sản phẩm</span><br>
                     <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
                 </div>           

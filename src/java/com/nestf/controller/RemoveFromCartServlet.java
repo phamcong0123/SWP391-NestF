@@ -6,7 +6,7 @@
 package com.nestf.controller;
 
 import com.nestf.cart.CartDAO;
-import com.nestf.cart.CartDTO;
+import com.nestf.cart.CartItemDTO;
 import com.nestf.util.MyAppConstant;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -56,7 +56,7 @@ public class RemoveFromCartServlet extends HttpServlet {
                      
                      if(cart != null){
 //                         3. Customer take carts
-                           List<CartDTO> carts = cart.getCarts();
+                           List<CartItemDTO> carts = cart.getCarts();
                            if(carts != null){
 //                               4. Get all selected carts
                                 String[] removedItem = request.getParameterValues("chkItem");

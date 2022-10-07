@@ -10,7 +10,7 @@
 <!DOCTYPE html>
 <html lang="vi">
     <c:if test="${not empty sessionScope.CUSTOMER}">
-        <c:redirect url="homePage"></c:redirect>
+        <c:redirect url=""></c:redirect>
     </c:if>
     <head>
         <meta charset="utf-8">

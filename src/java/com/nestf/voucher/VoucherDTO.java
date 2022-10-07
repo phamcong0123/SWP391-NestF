@@ -18,17 +18,14 @@ public class VoucherDTO implements Serializable{
     private VoucherTypeDTO voucherType;
     private int customerPhone;
     private boolean status;
-    private String expriredDate;
+    private String expiredDate;
 
-    public VoucherDTO(int voucherID, VoucherTypeDTO voucherType, int customerPhone, boolean status, String expriredDate) {
+    public VoucherDTO(int voucherID, VoucherTypeDTO voucherType, int customerPhone, boolean status, String expiredDate) {
         this.voucherID = voucherID;
         this.voucherType = voucherType;
         this.customerPhone = customerPhone;
         this.status = status;
-        this.expriredDate = expriredDate;
-    }
-
-    public VoucherDTO() {
+        this.expiredDate = expiredDate;
     }
 
     public int getVoucherID() {
@@ -47,8 +44,8 @@ public class VoucherDTO implements Serializable{
         return status;
     }
 
-    public String getExpriredDate() {
-        return expriredDate;
+    public String getExpiredDate() {
+        return expiredDate;
     }
 
     public void setVoucherID(int voucherID) {
@@ -67,8 +64,10 @@ public class VoucherDTO implements Serializable{
         this.status = status;
     }
 
-    public void setExpriredDate(String expriredDate) {
-        this.expriredDate = expriredDate;
+    public void setExpiredDate(String expiredDate) {
+        this.expiredDate = expiredDate;
     }
+
+    
     
 }

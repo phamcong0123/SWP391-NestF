@@ -5,6 +5,7 @@
  */
 package com.nestf.cart;
 
+import com.nestf.product.ProductDAO;
 import com.nestf.product.ProductDTO;
 import com.nestf.util.DBHelper;
 import java.io.Serializable;
@@ -21,9 +22,9 @@ import javax.naming.NamingException;
  * @author Admin
  */
 public class CartDAO implements Serializable{
-    private List<CartDTO> carts;
+    private List<CartItemDTO> carts;
 
-    public List<CartDTO> getCarts(){
+    public List<CartItemDTO> getCarts(){
         return carts;
     }
     
@@ -55,12 +56,12 @@ public class CartDAO implements Serializable{
 
 //          5. Process result
                 while (rs.next()) {
-                    
-                    int cartID = rs.getInt("cartID");
+
                     int productID = rs.getInt("productID");
+                    ProductDAO dao = new ProductDAO();
+                    ProductDTO product = dao.getProductDetail(productID);
                     int amount = rs.getInt("amount");
-                    CartDTO dto = new CartDTO(cartID, PHONE, productID, amount);
-                    
+                    CartItemDTO dto = new CartItemDTO(product, amount);                  
                     if (this.carts == null) {
                         this.carts = new ArrayList<>();
                     }
@@ -89,13 +90,13 @@ public class CartDAO implements Serializable{
         }
         boolean result = false;
 
-        for (CartDTO dto : carts) {
+        for (CartItemDTO dto : carts) {
 //            Nếu có sẵn trong giỏ thì update số lượng
-            if (dto.getProductID() == product.getProductID()) {
+            /*if (dto.getProductID() == product.getProductID()) {
                 dto.setAmount(amount);
                 result = updateProductQuantityInCart(dto);
                 break;
-            }
+            }*/
         }
 //        Chưa có sẵn trong giỏ => thêm mới
         if (!result) {
@@ -118,13 +119,13 @@ public class CartDAO implements Serializable{
         }
         boolean result = false;
         int amount = 1;
-        for (CartDTO dto : carts) {
+        for (CartItemDTO dto : carts) {
         //    Nếu có sẵn trong giỏ thì +1 số lượng
-            if (dto.getProductID() == product.getProductID()) {
+            /*if (dto.getProductID() == product.getProductID()) {
                 dto.setAmount(dto.getAmount() + amount);
                 result = updateProductQuantityInCart(dto);
                 break;
-            }
+            }*/
         }
           //Chưa có sẵn trong giỏ => thêm mới
         if (!result) {
@@ -146,13 +147,13 @@ public class CartDAO implements Serializable{
         }
         boolean result = false;
 
-        for (CartDTO dto : carts) {
+        for (CartItemDTO dto : carts) {
 //            Nếu có sẵn trong giỏ thì update số lượng
-            if (dto.getProductID() == product.getProductID()) {
+            /*if (dto.getProductID() == product.getProductID()) {
                 dto.setAmount(dto.getAmount() + amount);
                 result = updateProductQuantityInCart(dto);
                 break;
-            }
+            }*/
         }
 //        Chưa có sẵn trong giỏ => thêm mới
         if (!result) {
@@ -210,7 +211,7 @@ public class CartDAO implements Serializable{
         return false;
     }
     
-    public boolean updateProductQuantityInCart(CartDTO dto) throws NamingException, SQLException {
+    public boolean updateProductQuantityInCart(CartItemDTO dto) throws NamingException, SQLException {
         Connection con = null;
         PreparedStatement statement = null;
         ResultSet rs = null;
@@ -218,7 +219,7 @@ public class CartDAO implements Serializable{
             return false;
         }
         
-        int productID = dto.getProductID();
+        //int productID = dto.getProductID();
         int amount = dto.getAmount();
 
         try {
@@ -234,7 +235,7 @@ public class CartDAO implements Serializable{
                 statement = con.prepareStatement(sql);
                 statement.setInt(1, amount);
                 statement.setInt(2, PHONE);
-                statement.setInt(3, productID);
+                //statement.setInt(3, productID);
 
 //          4. Execute Query
                 int affectRow = statement.executeUpdate();

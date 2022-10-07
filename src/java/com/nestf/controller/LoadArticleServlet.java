@@ -10,6 +10,7 @@ import com.nestf.post.PostDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
@@ -50,6 +51,8 @@ public class LoadArticleServlet extends HttpServlet {
             if (post != null){
                 request.setAttribute("POST", post);
                 url = ARTICLE_PAGE;
+                List<PostDTO> recommendList = dao.getRandomRecommendPost(postID);
+                if(recommendList != null) request.setAttribute("RECOMMEND_POST", recommendList);
             }
         } catch (NamingException ex) {
             Logger.getLogger(LoadArticleServlet.class.getName()).log(Level.SEVERE, null, ex);

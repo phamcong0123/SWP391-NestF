@@ -81,7 +81,7 @@
                 </ul>
             </nav>
         </div>
-        <div id="white-board" class="bg-white">
+        <div id="white-board" class="bg-white w-75">
             <div class="row container-fluid m-0">
                 <c:if test="${requestScope.PRODUCT_DETAIL != null}">
                     <c:set var="productDetail" value="${requestScope['PRODUCT_DETAIL']}" scope="page"/>
@@ -110,16 +110,15 @@
             </div>
             <br>
             <div class="container-fluid">
-                Mô tả chi tiết sp
             </div>
         </div>
-        <div id="white-board" class="bg-white">
-            <h4 class="text-start p-4">Các gợi ý khác</h4>
+        <div id="white-board" class="bg-white w-75">
+            <h4 class="text-start pt-4 ms-4">Các gợi ý khác</h4>
             <c:if test="${requestScope.LIST_RELATE_PRODUCT != null}">
                 <div class="row col-11 m-auto">
                     <c:forEach var="otherProduct" varStatus="counter" items="${requestScope.LIST_RELATE_PRODUCT}">
                         <c:if test="${counter.count <= 4}">
-                            <div id="item" class="col-lg-3 col-md-4 d-inline-block">
+                            <div id="item" class="col-lg-3 col-md-4 d-inline-block p-3">
                                 <a href="productDetail?productID=${otherProduct.productID}" 
                                    style="color: #000;
                                    text-decoration: none">

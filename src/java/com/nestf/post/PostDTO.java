@@ -5,6 +5,7 @@
  */
 package com.nestf.post;
 
+import com.nestf.seller.SellerDTO;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -12,12 +13,12 @@ import java.util.Date;
  *
  * @author DELL
  */
-public class PostDTO implements Serializable{
-    
+public class PostDTO implements Serializable {
+
     private int postID;
-    private int sellerID;
+    private SellerDTO seller;
     private String title;
-    private Date dateTime;
+    private String dateTime;
     private boolean status;
     private String filePath;
     private String image;
@@ -25,9 +26,9 @@ public class PostDTO implements Serializable{
     public PostDTO() {
     }
 
-    public PostDTO(int postID, int sellerID, String title, Date dateTime, boolean status, String filePath, String image) {
+    public PostDTO(int postID, SellerDTO seller, String title, String dateTime, boolean status, String filePath, String image) {
         this.postID = postID;
-        this.sellerID = sellerID;
+        this.seller = seller;
         this.title = title;
         this.dateTime = dateTime;
         this.status = status;
@@ -39,61 +40,58 @@ public class PostDTO implements Serializable{
         return postID;
     }
 
-    public void setPostID(int postID) {
-        this.postID = postID;
-    }
-
-    public int getSellerID() {
-        return sellerID;
-    }
-
-    public void setSellerID(int sellerID) {
-        this.sellerID = sellerID;
+    public SellerDTO getSeller() {
+        return seller;
     }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Date getDateTime() {
+    public String getDateTime() {
         return dateTime;
-    }
-
-    public void setDateTime(Date dateTime) {
-        this.dateTime = dateTime;
     }
 
     public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
     public String getFilePath() {
         return filePath;
-    }
-
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
     }
 
     public String getImage() {
         return image;
     }
 
+    public void setPostID(int postID) {
+        this.postID = postID;
+    }
+
+    public void setSeller(SellerDTO seller) {
+        this.seller = seller;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
     public void setImage(String image) {
         this.image = image;
     }
 
-    @Override
-    public String toString() {
-        return "PostDTO{" + "postID=" + postID + ", sellerID=" + sellerID + ", title=" + title + ", dateTime=" + dateTime + ", status=" + status + ", filePath=" + filePath + ", image=" + image + '}';
-    }
     
+
 }

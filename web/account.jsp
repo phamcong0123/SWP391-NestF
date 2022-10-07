@@ -132,10 +132,10 @@
 
                                         <form action="changePasswordAction" method="post" id="changeForm" class="text-start">
                                             <div class="m-3 d-inline-block">Mật khẩu hiện tại</div><input type="password" name="password"
-                                                                                                          class="col-6" required placeholder="${requestScope.ERROR.passwordWrong}"><br>
+                                                                                                          class="col-6" required placeholder=""><br>
                                             <input type="hidden" name="password" value="">
                                             <div class="m-3 d-inline-block">Mật khẩu mới</div><input type="password" name="newPass"
-                                                                                                     class="col-6" required minlength="6" maxlength="20" id="password" placeholder="${requestScope.ERROR.passwordDuplicate}"><br>
+                                                                                                     class="col-6" required minlength="6" maxlength="20" id="password" placeholder=""><br>
                                             <div class="m-3 d-inline-block">Xác nhận mật khẩu mới</div><input type="password" name="confirm" class="col-6" required minlength="6" maxlength="20" id="confirm"><br>                                          
                                             <span class="text-danger text-center d-inline-block container-fluid mt-2">Sau khi thay đổi mật khẩu thành công, tài khoản sẽ tự động đăng xuất !</span>
                                             <input type="submit" value="LƯU" id="color-button" class="mt-3 mb-3">
@@ -154,7 +154,6 @@
                                 <div id="collapse3" class="accordion-collapse collapse">
                                     <div class="accordion-body">
 
-
                                         <form action="changeAddressAction" id="changeForm" class="text-start">
                                             <div class="m-3 d-inline-block">Địa chỉ cũ :</div><span> ${CUSTOMER.customerAddress}</span><br>
                                             <div class="m-3 d-inline-block">Địa chỉ mới</div><input type="text" name="newAddress"
@@ -162,13 +161,12 @@
                                             <input type="submit" value="LƯU" id="color-button" class="mt-3 mb-3">
                                         </form>
 
-
                                     </div>
                                 </div>
                             </div>                                             
                         </div>
                     </div>
-                    <div class="col-10 d-flex justify-content-end mb-5"><a href="logOut" class="nav-link" id="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i>Đăng xuất</a></div>
+                    <div class="col-10 d-flex justify-content-end mb-5"><a href="logOut" class="nav-link text-decoration-none" id="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i>Đăng xuất</a></div>
                 </div>
                 <div id="all-voucher" class="tab-pane fade" role="tabpanel" aria-labelledby="voucher-tab">
                     <div id="whiteboard2" class="col-8 bg-white">
@@ -178,16 +176,15 @@
                                 <c:forEach items="${sessionScope.VOUCHER_WALLET}" var = "voucher">
                                     <div id="item" class="d-inline-block col mb-2">
                                         <img src="img/voucher.png"><br>
-                                        <span>${voucher.voucherType.voucherName}</span>
-                                        <p>Hết hạn vào ${voucher.expiredDate}</p>
+                                        <h5>${voucher.voucherType.voucherName}</h5>
+                                        <p>Hết hạn vào <strong>${voucher.expiredDate}</strong></p>
                                     </div>
                                 </c:forEach>
                             </c:if>
-                            <c:if test="${ empty sessionScope.VOUCHER_WALLET}">
+                            <c:if test="${empty sessionScope.VOUCHER_WALLET}">
                                 <div class="text-center w-100">
                                     <img src="img/search-no-result.png" class="d-block col-4 m-auto">
                                     <h3 class="mb-5">Bạn chưa có voucher nào 😥</h3>
-
                                 </div>
                             </c:if>
                         </div>

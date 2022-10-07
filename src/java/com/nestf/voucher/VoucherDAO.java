@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class VoucherDAO {
         try {
             con = DBHelper.makeConnection();
             if (con != null) {
-                String sql = "SELECT * FROM tblVoucher WHERE status = 1";
+                String sql = "SELECT * FROM tblVoucher WHERE status = 1 AND customerPhone = ? ORDER BY typeID";
                 ptm = con.prepareStatement(sql);
                 ptm.setInt(1, phone);
                 rs = ptm.executeQuery();
@@ -70,23 +71,38 @@ public class VoucherDAO {
         }
     }
 
-    public boolean addVoucherToWaller(int phone, int typeID) throws NamingException, SQLException {
+    public VoucherDTO addVoucherToWaller(int phone, int typeID) throws NamingException, SQLException {
         Connection con = null;
         PreparedStatement ptm = null;
-        boolean check = false;
+        VoucherDTO voucher = null;
+        ResultSet rs = null;
         try {
             con = DBHelper.makeConnection();
             if (con != null) {
                 LocalDate expiredDate = LocalDate.now().plusDays(30);
                 java.sql.Date date = java.sql.Date.valueOf(expiredDate);
-                String sql = "INSERT INTO tblVoucher (typeID, customerPhone, status, expiredDate) VALUES (?, ?, 0, ?)";
-                ptm = con.prepareStatement(sql);
+                String sql = "INSERT INTO tblVoucher (typeID, customerPhone, status, expiredDate) VALUES (?, ?, 1, ?)";
+                ptm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 ptm.setInt(1, typeID);
                 ptm.setInt(2, phone);
                 ptm.setDate(3, date);
-                check = ptm.executeUpdate() > 0;
+                if( ptm.executeUpdate() > 0 ){
+                    int voucherID = 0;
+                    rs = ptm.getGeneratedKeys();
+                    if (rs.next()){
+                       voucherID = rs.getInt(1);
+                    }                 
+                    VoucherTypeDAO dao = new VoucherTypeDAO();
+                    VoucherTypeDTO voucherType = dao.getVoucher(typeID);
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                    String exDate = formatter.format(date);
+                    voucher = new VoucherDTO(voucherID, voucherType, phone, true, exDate);
+                }
             }
         } finally {
+            if (rs != null){
+                rs.close();
+            }
             if (ptm != null) {
                 ptm.close();
             }
@@ -94,6 +110,6 @@ public class VoucherDAO {
                 con.close();
             }
         }
-        return check;
+        return voucher;
     }
 }

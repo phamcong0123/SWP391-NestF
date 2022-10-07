@@ -28,7 +28,7 @@ button img{
 }
 #dropDownContent{
     width:165px;
-    z-index: 1;
+    z-index: 2;  
 }
 #dropDownMenu:hover #dropDownContent{
     display: block!important;
@@ -107,7 +107,6 @@ form div{
     margin-bottom: 5vh!important;
 }
 #white-board{
-    width: 75%;
     margin:2% auto;
     border-radius: 5px;
 }
@@ -175,9 +174,10 @@ form div{
 }
 #other-article{
     width:30.5%;
+    z-index: 1;
 }
 #article-link:hover{
-    text-decoration: none;    
+    font-weight: bold;    
 }
 #number-toggle{
     margin-left: 41.67%;

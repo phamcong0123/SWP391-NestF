@@ -5,11 +5,14 @@
  */
 package com.nestf.post;
 
+import com.nestf.seller.SellerDAO;
+import com.nestf.seller.SellerDTO;
 import com.nestf.util.DBHelper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -35,13 +38,17 @@ public class PostDAO {
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     int postID = Integer.parseInt(rs.getString("postID"));
-                    int sellerID = Integer.parseInt(rs.getString("sellerID"));
+                    int sellerID = rs.getInt("sellerID");
+                    SellerDAO dao = new SellerDAO();
+                    SellerDTO seller = dao.getSellerInformation(sellerID);
                     String title = rs.getString("title");
-                    Date dateTime = rs.getDate("dateTime");
+                    Date date = rs.getDate("dateTime");
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                    String dateTime = formatter.format(date);
                     boolean status = Boolean.parseBoolean(rs.getString("status"));
                     String filePath = rs.getString("filePath");
                     String image = rs.getString("image");
-                    postList.add(new PostDTO(postID, sellerID, title, dateTime, status, filePath, image));
+                    postList.add(new PostDTO(postID, seller, title, dateTime, status, filePath, image));
                 }
             }
         } finally {
@@ -70,16 +77,20 @@ public class PostDAO {
             conn = DBHelper.makeConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(POST);
-                ptm.setInt(1,postID);
+                ptm.setInt(1, postID);
                 rs = ptm.executeQuery();
                 if (rs.next()) {
                     int sellerID = rs.getInt("sellerID");
+                    SellerDAO dao = new SellerDAO();
+                    SellerDTO seller = dao.getSellerInformation(sellerID);
                     String title = rs.getString("title");
-                    Date date = new Date(rs.getDate("dateTime").getTime());
+                    Date date = rs.getDate("dateTime");
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                    String dateTime = formatter.format(date);
                     boolean status = rs.getBoolean("status");
                     String filePath = rs.getString("filePath");
                     String image = rs.getString("image");
-                    post = new PostDTO(postID, sellerID, title, date, status, filePath, image);
+                    post = new PostDTO(postID, seller, title, dateTime, status, filePath, image);
                 }
             }
         } finally {
@@ -94,5 +105,50 @@ public class PostDAO {
             }
         }
         return post;
+    }
+
+    public List<PostDTO> getRandomRecommendPost(int currentPostID) throws NamingException, SQLException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        List<PostDTO> list = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                String sql = "SELECT TOP 3 * FROM tblPost WHERE postID != ? ORDER BY NEWID()";
+                ptm = conn.prepareStatement(sql);
+                ptm.setInt(1, currentPostID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int postID = rs.getInt("postID");
+                    int sellerID = rs.getInt("sellerID");
+                    SellerDAO dao = new SellerDAO();
+                    SellerDTO seller = dao.getSellerInformation(sellerID);
+                    String title = rs.getString("title");
+                    Date date = rs.getDate("dateTime");
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                    String dateTime = formatter.format(date);
+                    boolean status = rs.getBoolean("status");
+                    String filePath = rs.getString("filePath");
+                    String image = rs.getString("image");
+                    PostDTO post = new PostDTO(postID, seller, title, dateTime, status, filePath, image);
+                    if (list == null) {
+                        list = new ArrayList<>();
+                    }
+                    list.add(post);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
     }
 }

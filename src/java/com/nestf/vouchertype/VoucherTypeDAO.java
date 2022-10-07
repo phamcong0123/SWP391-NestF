@@ -34,13 +34,13 @@ public class VoucherTypeDAO {
         try {
             con = DBHelper.makeConnection();
             if (con != null) {
-                String sql = "SELECT * FROM tblVoucherType";
+                String sql = "SELECT * FROM tblVoucherType ";
                 stm = con.createStatement();
                 rs = stm.executeQuery(sql);
                 while (rs.next()) {
                     int typeID = rs.getInt("typeID");
                     String voucherName = rs.getString("voucherName");
-                    double saleMargin = rs.getLong("saleMargin");
+                    Long saleMargin = rs.getLong("saleMargin");
                     int quantity = rs.getInt("quantity");
                     int point = rs.getInt("point");
                     VoucherTypeDTO dto = new VoucherTypeDTO(typeID, voucherName, saleMargin, quantity, point);
@@ -76,7 +76,7 @@ public class VoucherTypeDAO {
                 rs = ptm.executeQuery();
                 if (rs.next()) {
                     String voucherName = rs.getString("voucherName");
-                    double saleMargin = rs.getLong("saleMargin");
+                    Long saleMargin = rs.getLong("saleMargin");
                     int quantity = rs.getInt("quantity");
                     int point = rs.getInt("point");
                     VoucherTypeDTO dto = new VoucherTypeDTO(typeID, voucherName, saleMargin, quantity, point);
@@ -96,5 +96,30 @@ public class VoucherTypeDAO {
 
         }
         return null;
+    }
+    public boolean updateQuantity(int typeID, int newQuantity) throws NamingException, SQLException{
+        Boolean check = false;      
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                String sql = "UPDATE tblVoucherType SET quantity = ? WHERE typeID = ?";
+                ptm = conn.prepareStatement(sql);
+                ptm.setInt(1, newQuantity);
+                ptm.setInt(2, typeID);             
+                if(ptm.executeUpdate() > 0){
+                    check = true;
+                }
+            }
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
     }
 }

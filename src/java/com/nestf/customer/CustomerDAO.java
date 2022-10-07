@@ -183,4 +183,29 @@ public class CustomerDAO {
         }
         return check;
     }
+    public boolean buyVoucher(int phone, int newPoint) throws NamingException, SQLException{
+        Boolean check = false;      
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                String sql = "UPDATE tblCustomer SET point = ? WHERE customerPhone = ?";
+                ptm = conn.prepareStatement(sql);
+                ptm.setInt(1, newPoint);
+                ptm.setInt(2, phone);             
+                if(ptm.executeUpdate() > 0){
+                    check = true;
+                }
+            }
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
 }

@@ -9,10 +9,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="vi">
-    <c:if test="${empty requestScope.POST_LIST}" >
-        <c:redirect url="handbookLoad"></c:redirect>
-    </c:if>
+<html lang="vi">   
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -84,7 +81,7 @@
                 </ul>
             </nav>
         </div>
-        <div id="white-board" class="bg-white">  
+        <div id="white-board" class="bg-white w-75">  
             <h2 class="d-block col-8">Cẩm nang</h2>
             <c:if test="${ not empty requestScope.POST_LIST}" >
                 <div class="row row-cols-3 container-fluid m-0">
