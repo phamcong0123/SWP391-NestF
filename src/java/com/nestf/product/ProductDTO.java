@@ -18,10 +18,10 @@ public class ProductDTO implements Serializable{
     private int productID;
     private int sellerID;
     private String name;
-    private float price;
+    private long price;
     private int quantity;
     private String category;
-    private float discountPrice;
+    private long discountPrice;
     private String productDes;
     private String image;
     private String detailDes;
@@ -30,7 +30,7 @@ public class ProductDTO implements Serializable{
     public ProductDTO() {
     }
 
-    public ProductDTO(int productID, int sellerID, String name, float price, int quantity, String category, float discountPrice, String productDes, String image, String detailDes) {
+    public ProductDTO(int productID, int sellerID, String name, long price, int quantity, String category, long discountPrice, String productDes, String image, String detailDes, boolean status) {
         this.productID = productID;
         this.sellerID = sellerID;
         this.name = name;
@@ -41,6 +41,7 @@ public class ProductDTO implements Serializable{
         this.productDes = productDes;
         this.image = image;
         this.detailDes = detailDes;
+        this.status = status;
     }
 
     public int getProductID() {
@@ -67,11 +68,11 @@ public class ProductDTO implements Serializable{
         this.name = name;
     }
 
-    public float getPrice() {
+    public long getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(long price) {
         this.price = price;
     }
 
@@ -91,11 +92,11 @@ public class ProductDTO implements Serializable{
         this.category = category;
     }
 
-    public float getDiscountPrice() {
+    public long getDiscountPrice() {
         return discountPrice;
     }
 
-    public void setDiscountPrice(float discountPrice) {
+    public void setDiscountPrice(long discountPrice) {
         this.discountPrice = discountPrice;
     }
 
@@ -131,7 +132,7 @@ public class ProductDTO implements Serializable{
         this.status = status;
     }
     
-    public String printPrice(float price) {
+    public String printPrice(long price) {
         Locale vie = new Locale("vi", "VN");
         Currency vnd = Currency.getInstance(vie);
         NumberFormat vndFormat = NumberFormat.getCurrencyInstance(vie);

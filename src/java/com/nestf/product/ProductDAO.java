@@ -19,48 +19,58 @@ import java.util.List;
  */
 public class ProductDAO {
     
-    public static final String GET_LIST = "SELECT productID, sellerID, name, price, quantity, categoryName, discountPrice, productDes, image, detailDes\n" +
+    public static final String GET_LIST = "SELECT productID, sellerID, name, price, quantity, categoryName, discountPrice, productDes, image, detailDes, pro.status\n" +
                                           "FROM tblProducts pro\n" +
                                           "INNER JOIN tblCategory cat\n" +
                                           "ON pro.categoryID = cat.categoryID";
     
-    public static final String FILTER_CATE = "SELECT productID, sellerID, name, price, quantity, categoryName, discountPrice, productDes, image, detailDes, pro.categoryID\n" +
+    public static final String FILTER_CATE = "SELECT productID, sellerID, name, price, quantity, categoryName, discountPrice, productDes, image, detailDes, pro.status, pro.categoryID\n" +
                                             "FROM tblProducts pro\n" +
                                             "INNER JOIN tblCategory cat\n" +
                                             "ON pro.categoryID = cat.categoryID\n" +
                                             "WHERE pro.categoryID = ?";
     
-    public static final String FILTER_PRICE = "SELECT productID, sellerID, name, price, quantity, categoryName, discountPrice, productDes, image, detailDes, pro.categoryID\n" +
+    public static final String FILTER_PRICE = "SELECT productID, sellerID, name, price, quantity, categoryName, discountPrice, productDes, image, detailDes, pro.status, pro.categoryID\n" +
                                             "FROM tblProducts pro\n" +
                                             "INNER JOIN tblCategory cat\n" +
                                             "ON pro.categoryID = cat.categoryID\n" +
                                             "WHERE price BETWEEN ? AND ?";
     
-    public static final String FILTER_BOTH = "SELECT productID, sellerID, name, price, quantity, categoryName, discountPrice, productDes, image, detailDes, pro.categoryID\n" +
+    public static final String FILTER_BOTH = "SELECT productID, sellerID, name, price, quantity, categoryName, discountPrice, productDes, image, detailDes, pro.status, pro.categoryID\n" +
                                             "FROM tblProducts pro\n" +
                                             "INNER JOIN tblCategory cat\n" +
                                             "ON pro.categoryID = cat.categoryID\n" +
                                             "WHERE pro.categoryID = ?\n" + 
                                             "AND price BETWEEN ? AND ?";
     
-    public static final String GET_PRO_DETAIL = "SELECT productID, sellerID, name, price, quantity, categoryName, discountPrice, productDes, image, detailDes\n" +
+    public static final String GET_PRO_DETAIL = "SELECT productID, sellerID, name, price, quantity, categoryName, discountPrice, productDes, image, detailDes, pro.status\n" +
                                                 "FROM tblProducts pro\n" +
                                                 "INNER JOIN tblCategory cat\n" +
                                                 "ON pro.categoryID = cat.categoryID\n" + 
                                                 "WHERE productID = ?";
 
-    public static final String GET_LIST_RELATE = "SELECT productID, sellerID, name, price, quantity, categoryName, discountPrice, productDes, image, detailDes\n" +
+    public static final String GET_LIST_RELATE = "SELECT productID, sellerID, name, price, quantity, categoryName, discountPrice, productDes, image, pro.status, detailDes\n" +
                                                 "FROM tblProducts pro\n" +
                                                 "INNER JOIN tblCategory cat\n" +
                                                 "ON pro.categoryID = cat.categoryID\n" +
                                                 "WHERE cat.categoryName = ?\n" + 
                                                 "AND productID != ?";
     
-    public static final String SEARCH_PRODUCT = "SELECT productID, sellerID, name, price, quantity, categoryName, discountPrice, productDes, image, detailDes, pro.categoryID\n" +
+    public static final String SEARCH_PRODUCT = "SELECT productID, sellerID, name, price, quantity, categoryName, discountPrice, productDes, image, detailDes, pro.status, pro.categoryID\n" +
                                                 "FROM tblProducts pro\n" +
                                                 "INNER JOIN tblCategory cat\n" +
                                                 "on pro.categoryID = cat.categoryID\n" +
                                                 "where name like ?";
+    
+    public static final String GET_BEST_SELL_LIST = "SELECT TOP(4) pro.productID, pro.sellerID, pro.name, pro.price, pro.quantity, cat.categoryName, pro.discountPrice, pro.productDes, pro.image, pro.status, pro.detailDes\n" +
+                                                    "FROM (SELECT productID, SUM(price) as sumPrice\n" +
+                                                    "       FROM tblBillDetail\n" +
+                                                    "       group by productID) as tab\n" +
+                                                    "JOIN tblProducts pro\n" +
+                                                    "ON pro.productID = tab.productID\n" +
+                                                    "JOIN tblCategory cat\n" +
+                                                    "ON pro.categoryID = cat.categoryID\n" +
+                                                    "ORDER BY sumPrice DESC";
     
     public List<ProductDTO> getListProduct() throws SQLException {
         List<ProductDTO> list = new ArrayList<>();
@@ -76,13 +86,18 @@ public class ProductDAO {
                     int productID = Integer.parseInt(rs.getString("productID"));
                     int sellerID = Integer.parseInt(rs.getString("sellerID"));
                     String name = rs.getString("name");
-                    float price = Float.parseFloat(rs.getString("price"));
+                    long price = Long.parseLong(rs.getString("price"));
                     int quantity = Integer.parseInt(rs.getString("quantity"));
                     String category = rs.getString("categoryName");
-                    float discountPrice = Float.parseFloat(rs.getString("discountPrice"));
+                    long discountPrice = Long.parseLong(rs.getString("discountPrice"));
                     String productDes = rs.getString("productDes");
                     String image = rs.getString("image");
-                    list.add(new ProductDTO(productID, sellerID, name, price, quantity, category, discountPrice, productDes, image, "."));
+                    String statusStr = rs.getString("status");
+                    boolean status = false;
+                    if (statusStr.equalsIgnoreCase("1")) {
+                        status = true;
+                    }
+                    list.add(new ProductDTO(productID, sellerID, name, price, quantity, category, discountPrice, productDes, image, ".", status));
                 }
             }
         } catch (Exception e) {
@@ -110,13 +125,18 @@ public class ProductDAO {
                     int productID = Integer.parseInt(rs.getString("productID"));
                     int sellerID = Integer.parseInt(rs.getString("sellerID"));
                     String name = rs.getString("name");
-                    float price = Float.parseFloat(rs.getString("price"));
+                    long price = Long.parseLong(rs.getString("price"));
                     int quantity = Integer.parseInt(rs.getString("quantity"));
                     String category = rs.getString("categoryName");
-                    float discountPrice = Float.parseFloat(rs.getString("discountPrice"));
+                    long discountPrice = Long.parseLong(rs.getString("discountPrice"));
                     String productDes = rs.getString("productDes");
                     String image = rs.getString("image");
-                    list.add(new ProductDTO(productID, sellerID, name, price, quantity, category, discountPrice, productDes, image, "."));
+                    String statusStr = rs.getString("status");
+                    boolean status = false;
+                    if (statusStr.equalsIgnoreCase("1")) {
+                        status = true;
+                    }
+                    list.add(new ProductDTO(productID, sellerID, name, price, quantity, category, discountPrice, productDes, image, ".", status));
                 }
             }
         } catch (Exception e) {
@@ -145,13 +165,18 @@ public class ProductDAO {
                     int productID = Integer.parseInt(rs.getString("productID"));
                     int sellerID = Integer.parseInt(rs.getString("sellerID"));
                     String name = rs.getString("name");
-                    float price = Float.parseFloat(rs.getString("price"));
+                    long price = Long.parseLong(rs.getString("price"));
                     int quantity = Integer.parseInt(rs.getString("quantity"));
                     String category = rs.getString("categoryName");
-                    float discountPrice = Float.parseFloat(rs.getString("discountPrice"));
+                    long discountPrice = Long.parseLong(rs.getString("discountPrice"));
                     String productDes = rs.getString("productDes");
                     String image = rs.getString("image");
-                    list.add(new ProductDTO(productID, sellerID, name, price, quantity, category, discountPrice, productDes, image, "."));
+                    String statusStr = rs.getString("status");
+                    boolean status = false;
+                    if (statusStr.equalsIgnoreCase("1")) {
+                        status = true;
+                    }
+                    list.add(new ProductDTO(productID, sellerID, name, price, quantity, category, discountPrice, productDes, image, ".", status));
                 }
             }
         } catch (Exception e) {
@@ -181,13 +206,18 @@ public class ProductDAO {
                     int productID = Integer.parseInt(rs.getString("productID"));
                     int sellerID = Integer.parseInt(rs.getString("sellerID"));
                     String name = rs.getString("name");
-                    float price = Float.parseFloat(rs.getString("price"));
+                    long price = Long.parseLong(rs.getString("price"));
                     int quantity = Integer.parseInt(rs.getString("quantity"));
                     String category = rs.getString("categoryName");
-                    float discountPrice = Float.parseFloat(rs.getString("discountPrice"));
+                    long discountPrice = Long.parseLong(rs.getString("discountPrice"));
                     String productDes = rs.getString("productDes");
                     String image = rs.getString("image");
-                    list.add(new ProductDTO(productID, sellerID, name, price, quantity, category, discountPrice, productDes, image, "."));
+                    String statusStr = rs.getString("status");
+                    boolean status = false;
+                    if (statusStr.equalsIgnoreCase("1")) {
+                        status = true;
+                    }
+                    list.add(new ProductDTO(productID, sellerID, name, price, quantity, category, discountPrice, productDes, image, ".", status));
                 }
             }
         } catch (Exception e) {
@@ -214,13 +244,18 @@ public class ProductDAO {
                 if (rs.next()) {
                     int sellerID = Integer.parseInt(rs.getString("sellerID"));
                     String name = rs.getString("name");
-                    float price = Float.parseFloat(rs.getString("price"));
+                    long price = Long.parseLong(rs.getString("price"));
                     int quantity = Integer.parseInt(rs.getString("quantity"));
                     String category = rs.getString("categoryName");
-                    float discountPrice = Float.parseFloat(rs.getString("discountPrice"));
+                    long discountPrice = Long.parseLong(rs.getString("discountPrice"));
                     String productDes = rs.getString("productDes");
                     String image = rs.getString("image");
-                    producDetail = new ProductDTO(productID, sellerID, name, price, quantity, category, discountPrice, productDes, image, ".");
+                    String statusStr = rs.getString("status");
+                    boolean status = false;
+                    if (statusStr.equalsIgnoreCase("1")) {
+                        status = true;
+                    }
+                    producDetail = new ProductDTO(productID, sellerID, name, price, quantity, category, discountPrice, productDes, image, ".", status);
                 }
             }
         } catch (Exception e) {
@@ -246,14 +281,20 @@ public class ProductDAO {
                 ptm.setInt(2, productID);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
+                    int otherProductID = Integer.parseInt(rs.getString("productID"));
                     int sellerID = Integer.parseInt(rs.getString("sellerID"));
                     String name = rs.getString("name");
-                    float price = Float.parseFloat(rs.getString("price"));
+                    long price = Long.parseLong(rs.getString("price"));
                     int quantity = Integer.parseInt(rs.getString("quantity"));
-                    float discountPrice = Float.parseFloat(rs.getString("discountPrice"));
+                    long discountPrice = Long.parseLong(rs.getString("discountPrice"));
                     String productDes = rs.getString("productDes");
                     String image = rs.getString("image");
-                    listRelate.add(new ProductDTO(productID, sellerID, name, price, quantity, category, discountPrice, productDes, image, "."));
+                    String statusStr = rs.getString("status");
+                    boolean status = false;
+                    if (statusStr.equalsIgnoreCase("1")) {
+                        status = true;
+                    }
+                    listRelate.add(new ProductDTO(otherProductID, sellerID, name, price, quantity, category, discountPrice, productDes, image, ".", status));
                 }
             }
         } catch (Exception e) {
@@ -282,13 +323,18 @@ public class ProductDAO {
                     int productID = Integer.parseInt(rs.getString("productID"));
                     int sellerID = Integer.parseInt(rs.getString("sellerID"));
                     String name = rs.getString("name");
-                    float price = Float.parseFloat(rs.getString("price"));
+                    long price = Long.parseLong(rs.getString("price"));
                     int quantity = Integer.parseInt(rs.getString("quantity"));
                     String category = rs.getString("categoryName");
-                    float discountPrice = Float.parseFloat(rs.getString("discountPrice"));
+                    long discountPrice = Long.parseLong(rs.getString("discountPrice"));
                     String productDes = rs.getString("productDes");
                     String image = rs.getString("image");
-                    searchList.add(new ProductDTO(productID, sellerID, name, price, quantity, category, discountPrice, productDes, image, "."));
+                    String statusStr = rs.getString("status");
+                    boolean status = false;
+                    if (statusStr.equalsIgnoreCase("1")) {
+                        status = true;
+                    }
+                    searchList.add(new ProductDTO(productID, sellerID, name, price, quantity, category, discountPrice, productDes, image, ".", status));
                 }
             }
         } catch (Exception e) {
@@ -299,5 +345,43 @@ public class ProductDAO {
             if (conn != null) conn.close();
         }
         return searchList;
+    }
+    
+    public List<ProductDTO> getBestSellList() throws SQLException {
+        List<ProductDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_BEST_SELL_LIST);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int productID = Integer.parseInt(rs.getString("productID"));
+                    int sellerID = Integer.parseInt(rs.getString("sellerID"));
+                    String name = rs.getString("name");
+                    long price = Long.parseLong(rs.getString("price"));
+                    int quantity = Integer.parseInt(rs.getString("quantity"));
+                    String category = rs.getString("categoryName");
+                    long discountPrice = Long.parseLong(rs.getString("discountPrice"));
+                    String productDes = rs.getString("productDes");
+                    String image = rs.getString("image");
+                    String statusStr = rs.getString("status");
+                    boolean status = false;
+                    if (statusStr.equalsIgnoreCase("1")) {
+                        status = true;
+                    }
+                    list.add(new ProductDTO(productID, sellerID, name, price, quantity, category, discountPrice, productDes, image, ".", status));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) rs.close();
+            if (ptm != null) ptm.close();
+            if (conn != null) conn.close();
+        }
+        return list;
     } 
 }
