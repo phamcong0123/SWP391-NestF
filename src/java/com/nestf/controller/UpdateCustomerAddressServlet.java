@@ -33,21 +33,20 @@ public class UpdateCustomerAddressServlet extends HttpServlet {
         try {
             HttpSession session = request.getSession();
             CustomerDTO customer = (CustomerDTO) session.getAttribute("CUSTOMER");
-            int phone = customer.getCustomerPhone();
+            String phone = customer.getCustomerPhone();
             String newAddress = request.getParameter("newAddress");
             boolean check = false;
             CustomerDAO dao = new CustomerDAO();
             check = dao.updateCusAddress(phone, newAddress);
             if (check) {
-                url = SUCCESS;
+                url = SUCCESS + "?success=true";
                 customer.setCustomerAddress(newAddress);
                 session.setAttribute("CUSTOMER", customer);
-                request.setAttribute("SUCCESS", 1);
-            }
+            } else url += "success=false";
         } catch (Exception e) {
             log("Error at UpdateCustomerAddress: " + e.toString());
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            response.sendRedirect(url);
         }
     }
 

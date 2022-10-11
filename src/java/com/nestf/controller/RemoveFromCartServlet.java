@@ -38,48 +38,50 @@ public class RemoveFromCartServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    private static final String CART_PAGE = "cart.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
-        ServletContext context = request.getServletContext();
-        Properties siteMap = (Properties) context.getAttribute("SITE_MAP");
-        
-        
-        try{
+
+//        ServletContext context = request.getServletContext();
+//        Properties siteMap = (Properties) context.getAttribute("SITE_MAP");
+        String url = CART_PAGE;
+
+        try {
 //            1 Customer goes to their cart place
-                HttpSession session = request.getSession(false);
-                
-                if(session != null){
+            HttpSession session = request.getSession(false);
+
+            if (session != null) {
 //                    2. Customer take their cart
-                     CartDAO cart = (CartDAO) session.getAttribute("CART");
-                     
-                     if(cart != null){
-//                         3. Customer take carts
-                           List<CartItemDTO> carts = cart.getCarts();
-                           if(carts != null){
-//                               4. Get all selected carts
-                                String[] removedItem = request.getParameterValues("chkItem");
-                                if(removedItem != null){
-//                                    5. remove each item from cart
-                                    for(String productID: removedItem){
-                                        cart.removeItemFromCart(Integer.parseInt(productID));
-                                    }
-                                    session.setAttribute("CART", cart);
-                                }
-                           }
-                     }
+                List<CartItemDTO> cart = (List<CartItemDTO>) session.getAttribute("CART");
+                if (cart != null) {
+                    String[] removedItem = request.getParameterValues("productID");
+                    if (removedItem != null) {
+                        CartDAO dao = new CartDAO();                       
+                        for (String product : removedItem) {
+                            if(dao.removeItemFromCart(Integer.parseInt(product))){
+                                dao.setCarts(cart);
+                                CartItemDTO item = dao.getItemByID(Integer.parseInt(product));
+                                cart.remove(item);
+                            }
+                        }
+                        if (cart.size()>0) session.setAttribute("CART", cart);
+                        else session.removeAttribute("CART");
+                    }
                 }
+
+            }
         } catch (SQLException ex) {
             log("Error at RemovedFromCartServlet_SQL: " + ex.getMessage());
         } catch (NamingException ex) {
             log("Error at RemovedFromCartServlet_Naming: " + ex.getMessage());
-        } finally{
+        } finally {
 //           6. refresh - call view cart again
-            String urlRewriting = (String) siteMap.get(MyAppConstant.RemoveItemsFeatures.CART_PAGE);
-            response.sendRedirect(urlRewriting);
+//            String urlRewriting = (String) siteMap.get(MyAppConstant.RemoveItemsFeatures.CART_PAGE);
+            response.sendRedirect(url);
         }
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

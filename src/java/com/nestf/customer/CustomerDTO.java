@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @author DELL
  */
 public class CustomerDTO implements Serializable{
-    private int customerPhone;
+    private String customerPhone;
     private String password;
     private String customerName;
     private String customerAddress;
@@ -22,7 +22,7 @@ public class CustomerDTO implements Serializable{
     public CustomerDTO() {
     }
 
-    public CustomerDTO(int customerPhone, String password, String customerName, String customerAddress, boolean gender, int point) {
+    public CustomerDTO(String customerPhone, String password, String customerName, String customerAddress, boolean gender, int point) {
         this.customerPhone = customerPhone;
         this.password = password;
         this.customerName = customerName;
@@ -31,13 +31,15 @@ public class CustomerDTO implements Serializable{
         this.point = point;
     }
 
-    public int getCustomerPhone() {
+    public String getCustomerPhone() {
         return customerPhone;
     }
 
-    public void setCustomerPhone(int customerPhone) {
+    public void setCustomerPhone(String customerPhone) {
         this.customerPhone = customerPhone;
     }
+
+    
 
     public String getPassword() {
         return password;

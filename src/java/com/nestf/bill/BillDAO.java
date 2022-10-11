@@ -69,7 +69,7 @@ public class BillDAO {
         return listBill;
     }
 
-    public List<BillDTO> getAllBillByPhone(int customerPhone) {
+    public List<BillDTO> getAllBillByPhone(String customerPhone) {
 // statusID
 //=1:Chờ xác nhận
 //=2:Chờ lấy hàng
@@ -86,7 +86,7 @@ public class BillDAO {
             conn = DBHelper.makeConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(query);
-                ptm.setInt(1, customerPhone);
+                ptm.setString(1, customerPhone);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     listBill.add(new BillDTO(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getInt(4), Integer.parseInt(rs.getString(5)), rs.getDate(6), rs.getDouble(7)));
@@ -99,7 +99,7 @@ public class BillDAO {
         return listBill;
     }
 
-    public List<BillDTO> getAllBillConfirmAndShipping(int customerPhone) {
+    public List<BillDTO> getAllBillConfirmAndShipping(String customerPhone) {
 // statusID
 //=1:Chờ xác nhận
 //=2:Chờ lấy hàng
@@ -115,7 +115,7 @@ public class BillDAO {
             conn = DBHelper.makeConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(GET_CONFIRM_SHIPPING_BILL);
-                ptm.setInt(1, customerPhone);
+                ptm.setString(1, customerPhone);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     listBill.add(new BillDTO(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getInt(4), Integer.parseInt(rs.getString(5)), rs.getDate(6), rs.getDouble(7)));
@@ -244,7 +244,7 @@ public class BillDAO {
         return listBill;
     }
 
-    public List<BillDTO> getAllBillCancelled(int customerPhone) {
+    public List<BillDTO> getAllBillCancelled(String customerPhone) {
 // statusID
 //=1:Chờ xác nhận
 //=2:Chờ lấy hàng
@@ -260,7 +260,7 @@ public class BillDAO {
             conn = DBHelper.makeConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(GET_CANCEL_REJECT);
-                ptm.setInt(1, customerPhone);
+                ptm.setString(1, customerPhone);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     listBill.add(new BillDTO(rs.getInt(1), rs.getInt(2), rs.getString(3), rs.getInt(4), Integer.parseInt(rs.getString(5)), rs.getDate(6), rs.getDouble(7)));

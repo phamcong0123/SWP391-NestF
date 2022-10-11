@@ -34,7 +34,7 @@ public class ShowBillServlet extends HttpServlet {
             HttpSession session = request.getSession();
             if (session != null) {
                 CustomerDTO customer = (CustomerDTO) session.getAttribute("CUSTOMER");
-                int customerPhone = customer.getCustomerPhone();
+                String customerPhone = customer.getCustomerPhone();
                 BillDAO dao = new BillDAO();
                 List<BillDTO> ShowBill = dao.getAllBillByPhone(customerPhone);
                 List<BillDTO> ShowBillConfirm = dao.getAllBillConfirmAndShipping(customerPhone);

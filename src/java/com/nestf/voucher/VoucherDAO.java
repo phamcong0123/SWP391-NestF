@@ -26,22 +26,27 @@ import javax.naming.NamingException;
  */
 public class VoucherDAO {
 
-    List<VoucherDTO> list = null;
+    private List<VoucherDTO> list = null;
+    private static String PHONE;
 
+    public void setPhone(String PHONE) {
+        this.PHONE = PHONE;
+    }
+    
     public List<VoucherDTO> getList() {
         return list;
     }
 
-    public void loadVoucherWallet(int phone) throws SQLException, NamingException {
+    public void loadVoucherWallet() throws SQLException, NamingException {
         Connection con = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
         try {
             con = DBHelper.makeConnection();
             if (con != null) {
-                String sql = "SELECT * FROM tblVoucher WHERE status = 1 AND customerPhone = ? ORDER BY typeID";
+                String sql = "SELECT * FROM tblVoucher WHERE status = 1 AND customerPhone = ? ORDER BY expiredDate, typeID DESC";
                 ptm = con.prepareStatement(sql);
-                ptm.setInt(1, phone);
+                ptm.setString(1, PHONE);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     int voucherID = rs.getInt("voucherID");
@@ -54,7 +59,7 @@ public class VoucherDAO {
                     if (list == null) {
                         list = new ArrayList<>();
                     }
-                    VoucherDTO dto = new VoucherDTO(voucherID, voucherType, phone, status, expiredDate);
+                    VoucherDTO dto = new VoucherDTO(voucherID, voucherType, status, expiredDate);
                     list.add(dto);
                 }
             }
@@ -71,7 +76,7 @@ public class VoucherDAO {
         }
     }
 
-    public VoucherDTO addVoucherToWaller(int phone, int typeID) throws NamingException, SQLException {
+    public VoucherDTO addVoucherToWaller(int typeID) throws NamingException, SQLException {
         Connection con = null;
         PreparedStatement ptm = null;
         VoucherDTO voucher = null;
@@ -84,7 +89,7 @@ public class VoucherDAO {
                 String sql = "INSERT INTO tblVoucher (typeID, customerPhone, status, expiredDate) VALUES (?, ?, 1, ?)";
                 ptm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 ptm.setInt(1, typeID);
-                ptm.setInt(2, phone);
+                ptm.setString(2, PHONE);
                 ptm.setDate(3, date);
                 if( ptm.executeUpdate() > 0 ){
                     int voucherID = 0;
@@ -96,7 +101,7 @@ public class VoucherDAO {
                     VoucherTypeDTO voucherType = dao.getVoucher(typeID);
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
                     String exDate = formatter.format(date);
-                    voucher = new VoucherDTO(voucherID, voucherType, phone, true, exDate);
+                    voucher = new VoucherDTO(voucherID, voucherType, true, exDate);
                 }
             }
         } finally {

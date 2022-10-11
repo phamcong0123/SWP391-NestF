@@ -18,7 +18,7 @@ import javax.naming.NamingException;
  */
 public class CustomerDAO {
 
-    public CustomerDTO checkLogin(int customerPhone, String password) throws SQLException, NamingException {
+    public CustomerDTO checkLogin(String customerPhone, String password) throws SQLException, NamingException {
         CustomerDTO customer = null;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -28,11 +28,11 @@ public class CustomerDAO {
             conn = DBHelper.makeConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(query);
-                ptm.setInt(1, customerPhone);
+                ptm.setString(1, customerPhone);
                 ptm.setString(2, password);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                    return new CustomerDTO(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBoolean(5), rs.getInt(6));
+                    return new CustomerDTO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBoolean(5), rs.getInt(6));
                 }
             }
         } finally {
@@ -52,7 +52,7 @@ public class CustomerDAO {
     private static final String CHECK_DUPLICATE = "SELECT [customerPhone], [password], [customerName], [customerAddress], [gender], [point] FROM [NestF].[dbo].[tblCustomer] WHERE [customerPhone] = ?";
     private static final String INSERT = "INSERT INTO [NestF].[dbo].[tblCustomer]([customerPhone], [password], [customerName], [customerAddress], [gender], [point]) VALUES (?, ?, ?, ?, ?, ?)";
 
-    public boolean checkDuplicate(int customerPhone) throws SQLException, NamingException {
+    public boolean checkDuplicate(String customerPhone) throws SQLException, NamingException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -60,7 +60,7 @@ public class CustomerDAO {
         try {
             conn = DBHelper.makeConnection();
             ptm = conn.prepareStatement(CHECK_DUPLICATE);
-            ptm.setInt(1, customerPhone);
+            ptm.setString(1, customerPhone);
             rs = ptm.executeQuery();
             if (rs.next()) {
                 check = true;
@@ -87,7 +87,7 @@ public class CustomerDAO {
             conn = DBHelper.makeConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(INSERT);
-                ptm.setInt(1, customer.getCustomerPhone());
+                ptm.setString(1, customer.getCustomerPhone());
                 ptm.setString(2, customer.getPassword());
                 ptm.setString(3, customer.getCustomerName());
                 ptm.setString(4, customer.getCustomerAddress());
@@ -109,7 +109,7 @@ public class CustomerDAO {
     private static final String UPDATE_NAME = "UPDATE [NestF].[dbo].[tblCustomer] SET [customerName]= ? "
             + " WHERE [customerPhone]=?";
 
-    public boolean updateCusName(int phone, String newName) throws SQLException, NamingException {
+    public boolean updateCusName(String phone, String newName) throws SQLException, NamingException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -118,7 +118,7 @@ public class CustomerDAO {
             if (conn != null) {
                 ptm = conn.prepareStatement(UPDATE_NAME);
                 ptm.setNString(1, newName);
-                ptm.setInt(2, phone);
+                ptm.setString(2, phone);
                 check = ptm.executeUpdate() > 0;
             }
         } finally {
@@ -135,7 +135,7 @@ public class CustomerDAO {
     private static final String UPDATE_ADDRESS = "UPDATE [NestF].[dbo].[tblCustomer] SET [customerAddress]=? "
             + " WHERE [customerPhone]=?";
 
-    public boolean updateCusAddress(int phone, String newAddress) throws SQLException, NamingException {
+    public boolean updateCusAddress(String phone, String newAddress) throws SQLException, NamingException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -144,7 +144,7 @@ public class CustomerDAO {
             if (conn != null) {
                 ptm = conn.prepareStatement(UPDATE_ADDRESS);
                 ptm.setNString(1, newAddress);
-                ptm.setInt(2, phone);
+                ptm.setString(2, phone);
                 check = ptm.executeUpdate() > 0;
             }
         } finally {
@@ -161,7 +161,7 @@ public class CustomerDAO {
     private static final String UPDATE_PASSWORD = "UPDATE [NestF].[dbo].[tblCustomer] SET [password]=? "
             + " WHERE [customerPhone]=?";
 
-    public boolean updateCusPassword(int phone, String newPass) throws SQLException, NamingException {
+    public boolean updateCusPassword(String phone, String newPass) throws SQLException, NamingException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -170,7 +170,7 @@ public class CustomerDAO {
             if (conn != null) {
                 ptm = conn.prepareStatement(UPDATE_PASSWORD);
                 ptm.setNString(1, newPass);
-                ptm.setInt(2, phone);
+                ptm.setString(2, phone);
                 check = ptm.executeUpdate() > 0;
             }
         } finally {
@@ -183,7 +183,7 @@ public class CustomerDAO {
         }
         return check;
     }
-    public boolean buyVoucher(int phone, int newPoint) throws NamingException, SQLException{
+    public boolean buyVoucher(String phone, int newPoint) throws NamingException, SQLException{
         Boolean check = false;      
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -193,7 +193,7 @@ public class CustomerDAO {
                 String sql = "UPDATE tblCustomer SET point = ? WHERE customerPhone = ?";
                 ptm = conn.prepareStatement(sql);
                 ptm.setInt(1, newPoint);
-                ptm.setInt(2, phone);             
+                ptm.setString(2, phone);             
                 if(ptm.executeUpdate() > 0){
                     check = true;
                 }

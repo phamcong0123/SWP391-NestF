@@ -20,11 +20,24 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
         <link href="css/nestf.css" rel="stylesheet">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.1/js/bootstrap.min.js" integrity="sha512-vyRAVI0IEm6LI/fVSv/Wq/d0KUfrg3hJq2Qz5FlfER69sf3ZHlOrsLriNm49FxnpUGmhx+TaJKwJ+ByTLKT+Yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     </head>
     <body class="text-center">
-        <div id="navbar">
+        <c:if test="${param.success eq 'true'}">
+            <span id="trigger" class="d-none" data-bs-toggle="modal" data-bs-target="#notification">                           
+            </span>                     
+            <div class="modal fade" id="notification" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">  
+                        <div class="text-start">
+                            <img src="img/success.svg" class="col-3 d-inline-block m-3">
+                            <span class="fw-bold d-inline-block fs-2 ms-4">Thành công!</span> 
+                        </div>           
+                    </div>
+                </div>
+            </div>           
+        </c:if>
+        <div id="navbar" class="sticky-top">
             <nav class="navbar-expand bg-white navbar-light">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
@@ -67,26 +80,7 @@
                 </ul>
             </nav>
         </div>
-        <div id="overall">
-            <c:if test="${not empty requestScope.SUCCESS}">
-                <span id="trigger" class="d-none" data-bs-toggle="modal" data-bs-target="#notification">                           
-                </span>                     
-                <div class="modal fade" id="notification" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">  
-                            <div class="text-start">
-                                <img src="img/success.svg" class="col-3 d-inline-block m-3">
-                                <span class="fw-bold d-inline-block fs-2 ms-4">Thành công!</span> 
-                            </div>           
-                        </div>
-                    </div>
-                </div>
-                <script>
-                    window.onload = function () {
-                        document.getElementById("trigger").click();
-                    }
-                </script>
-            </c:if>
+        <div id="overall">           
             <ul id="options" class="nav nav-tabs mt-3" role="tablist">
                 <li class="nav-item m-auto" role="presentation">
                     <button id="setting-tab" data-bs-target="#account-settings" data-bs-toggle="tab" aria-selected="true" role="tab"  aria-controls="account-settings" aria-current="page" class="nav-link active text-black bg-transparent border-0">Cài đặt tài khoản</button>
@@ -191,7 +185,19 @@
                     </div>
                 </div>            
             </div>
-        </div>       
+        </div>          
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.1/js/bootstrap.min.js" integrity="sha512-vyRAVI0IEm6LI/fVSv/Wq/d0KUfrg3hJq2Qz5FlfER69sf3ZHlOrsLriNm49FxnpUGmhx+TaJKwJ+ByTLKT+Yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>        
+        <script>
+            window.onload = function () {
+                document.getElementById("trigger").click();
+            }
+            $('#trigger').click(function () {
+                setTimeout(function () {
+                    $('#notification').modal('hide');
+                }, 1000);
+            });
+        </script>
     </body>
 
 </html>

@@ -135,6 +135,6 @@ public class ProductDTO implements Serializable{
         Locale vie = new Locale("vi", "VN");
         Currency vnd = Currency.getInstance(vie);
         NumberFormat vndFormat = NumberFormat.getCurrencyInstance(vie);
-        return vndFormat.format(price);
+        return vndFormat.format(price).replace("đ", "₫");
     }
 }

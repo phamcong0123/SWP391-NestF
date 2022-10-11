@@ -38,23 +38,23 @@ public class LoadCartServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final String LOAD_VOUCHER = "LoadVoucherServlet";
+    private static final String LOAD_VOUCHER_WALLET = "LoadVoucherWalletServlet";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = "";
+        String url = LOAD_VOUCHER_WALLET;
         try {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession(false);
             if (session != null) {
                 CustomerDTO customer = (CustomerDTO) session.getAttribute("CUSTOMER");
-                int phone = customer.getCustomerPhone();
+                String phone = customer.getCustomerPhone();
                 CartDAO dao = new CartDAO();
-                dao.setPhone(phone);
+                dao.setPHONE(phone);
                 dao.loadCart();
                 List<CartItemDTO> list = dao.getCarts();
-                session.setAttribute("CART", list);
+                if (list != null) session.setAttribute("CART", list);
             }
         } catch (SQLException ex) {
             Logger.getLogger(LoadCartServlet.class.getName()).log(Level.SEVERE, null, ex);

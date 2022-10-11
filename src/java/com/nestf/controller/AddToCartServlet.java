@@ -6,12 +6,15 @@
 package com.nestf.controller;
 
 import com.nestf.cart.CartDAO;
+import com.nestf.cart.CartItemDTO;
 import com.nestf.customer.CustomerDTO;
 import com.nestf.product.ProductDAO;
 import com.nestf.product.ProductDTO;
 import com.nestf.util.MyAppConstant;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
@@ -39,60 +42,110 @@ public class AddToCartServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    private static final String CART_PAGE = "cart.jsp";
+    private static final String ERROR_PAGE = "error.html";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        ServletContext context = request.getServletContext();
-
-        Properties siteMap = (Properties) context.getAttribute("SITE_MAP");
-        String url = (String) siteMap.get(MyAppConstant.ShoppingFeatures.SHOPPING_ACTION);
-
+        //ServletContext context = request.getServletContext();
+        //Properties siteMap = (Properties) context.getAttribute("SITE_MAP");
+        //String url = (String) siteMap.get(MyAppConstant.ShoppingFeatures.SHOPPING_ACTION);
+        String url = request.getHeader("Referer");
+        if (url.contains("productDetail")) {
+            url = url.split("&")[0] + "&";
+        } else {
+            if (url.contains("?")) {
+                url = url.split("\\?")[0];
+            }
+            url += "?";
+        }
+        String param = "";
         try {
-//            1.Cust go to cart place 
             HttpSession session = request.getSession(false);
             if (session != null) {
-                //2. Customer take his cart
-                CustomerDTO customer = (CustomerDTO) session.getAttribute("CUSTOMER");
-                CartDAO cart = (CartDAO) session.getAttribute("CART");
-                if (cart == null) {
-                    cart = new CartDAO();
-                }
-                cart.setPhone(customer.getCustomerPhone());
-                cart.loadCart();
-//            3. Customer take item to his cart
                 if (request.getParameter("productID") != null) {
                     int productID = Integer.parseInt(request.getParameter("productID"));
                     ProductDAO pDao = new ProductDAO();
                     ProductDTO product = pDao.getProductDetail(productID);
-
-//                4. Customer drops item to cart
-//                Nếu có quantity thì set theo quantity Else +1
-                    if (request.getParameter("quantity") != null) {
-                        int amount = Integer.parseInt(request.getParameter("quantity"));
-
-//                    Add product in product detail page Else Add in cart page 
-                        if (request.getParameter("addInPDetail") != null) {
-                            cart.addItemToCartFromPDetail(product, amount);
+                    if (product != null) {
+                        CustomerDTO customer = (CustomerDTO) session.getAttribute("CUSTOMER");
+                        String phone = customer.getCustomerPhone();
+                        CartDAO cartDAO = new CartDAO();
+                        cartDAO.setPHONE(phone);
+                        List<CartItemDTO> cart = (List<CartItemDTO>) session.getAttribute("CART");
+                        if (cart == null) {
+                            cart = new ArrayList<>();
+                            int amount = 1;
+                            if (request.getParameter("quantity") != null) {
+                                amount = Integer.parseInt(request.getParameter("quantity"));
+                            }
+                            if (amount <= product.getQuantity()) {
+                                CartItemDTO item = new CartItemDTO(product, amount);
+                                if (cartDAO.addItemToCart(item)) {
+                                    cart.add(item);
+                                    param = "fail=false";
+                                }
+                            } else {
+                                param = "fail=maxAmount";
+                            }
                         } else {
-                            cart.addItemToCart(product, amount);
+                            cartDAO.setCarts(cart);
+                            if (!cartDAO.checkProductExisted(productID)) {
+                                int amount = 1;
+                                if (request.getParameter("quantity") != null) {
+                                    amount = Integer.parseInt(request.getParameter("quantity"));
+                                }
+                                if (amount <= product.getQuantity()) {
+                                    CartItemDTO item = new CartItemDTO(product, amount);
+                                    if (cartDAO.addItemToCart(item)) {
+                                        cart.add(item);
+                                        param = "fail=false";
+                                    }
+                                } else {
+                                    param = "fail=maxAmount";
+                                }
+                            } else {
+                                CartItemDTO item = cartDAO.getItemByID(productID);
+                                int index = cart.indexOf(item);
+                                int newAmount;
+                                if (request.getParameter("newQuantity") != null) {
+                                    newAmount = Integer.parseInt(request.getParameter("newQuantity"));
+                                } else {
+                                    int amount = 1;
+                                    if (request.getParameter("quantity") != null) {
+                                        amount = Integer.parseInt(request.getParameter("quantity"));
+                                    }
+                                    newAmount = item.getAmount() + amount;
+                                }
+                                if (newAmount <= item.getProduct().getQuantity()) {
+                                    item.setAmount(newAmount);
+                                    if (cartDAO.updateItemAmount(item)) {
+                                        cart.set(index, item);
+                                        param = "fail=false";
+                                    }
+                                } else {
+                                    param = "fail=maxAmount";
+                                }
+                            }
                         }
+                        url += param;
+                        session.setAttribute("CART", cart);
                     } else {
-                        cart.addItemToCartFromShopPage(product);
+                        url = ERROR_PAGE;
+                    }
+                    if ("true".equals(request.getParameter("buynow")) && param.equals("fail=false")) {
+                        url = CART_PAGE;
                     }
                 }
-//          5. Update scope
-                session.setAttribute("CART", cart);
             }
-        
         } catch (SQLException ex) {
             log("Error at AddtoCartServlet_SQL: " + ex.getMessage());
         } catch (NamingException ex) {
             log("Error at AddtoCartServlet_Naming: " + ex.getMessage());
         } finally {
-//            6. forward to shopping page
-            RequestDispatcher rd = request.getRequestDispatcher(url);
-            rd.forward(request, response);
+            response.sendRedirect(url);
         }
     }
 

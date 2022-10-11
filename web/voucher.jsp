@@ -18,49 +18,39 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
-        <link href="css/nestf.css" rel="stylesheet">
+        <link href="css/nestf.css" rel="stylesheet">       
     </head>
 
     <body class="text-center">
-        <c:if test="${not empty requestScope.SUCCESS}">
-                <span id="trigger" class="d-none" data-bs-toggle="modal" data-bs-target="#notification">                           
-                </span>                     
-                <div class="modal fade" id="notification" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">  
-                            <div class="text-start">
-                                <img src="img/success.svg" class="col-3 d-inline-block m-3">
-                                <span class="fw-bold d-inline-block fs-2 ms-4">Thành công!</span> 
-                            </div>           
-                        </div>
+        <c:if test="${param.success eq true}">
+            <span id="trigger" class="d-none" data-bs-toggle="modal" data-bs-target="#notification">                           
+            </span>                     
+            <div class="modal fade" id="notification" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">  
+                        <div class="text-start">
+                            <img src="img/success.svg" class="col-3 d-inline-block m-3">
+                            <span class="fw-bold d-inline-block fs-2 ms-4">Thành công!</span> 
+                        </div>           
                     </div>
                 </div>
-                <script>
-                    window.onload = function () {
-                        document.getElementById("trigger").click();
-                    }
-                </script>
-            </c:if>
-                <c:if test="${not empty requestScope.FAIL}">
-                <span id="trigger" class="d-none" data-bs-toggle="modal" data-bs-target="#notification">                           
-                </span>                     
-                <div class="modal fade" id="notification" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">  
-                            <div class="text-start">
-                                <img src="img/success.svg" class="col-3 d-inline-block m-3">
-                                <span class="fw-bold d-inline-block fs-2 ms-4">Thất bại!</span> 
-                            </div>           
-                        </div>
+            </div>
+        </c:if>
+        <c:if test="${param.success eq false}">
+            <span id="trigger" class="d-none" data-bs-toggle="modal" data-bs-target="#notification">                           
+            </span>                     
+            <div class="modal fade" id="notification" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">  
+                        <div class="text-start">
+                            <img src="img/fail.svg" class="col-3 d-inline-block m-3">
+                            <span class="fw-bold d-inline-block fs-2 ms-4">Thất bại!</span> 
+                        </div>           
                     </div>
                 </div>
-                <script>
-                    window.onload = function () {
-                        document.getElementById("trigger").click();
-                    }
-                </script>
-            </c:if>
-        <div id="navbar">
+            </div>
+        </c:if>
+        <div id="navbar" class="sticky-top">
             <nav class="navbar-expand bg-white navbar-light">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
@@ -137,6 +127,18 @@
                 </c:if>
             </div>
         </div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.1/js/bootstrap.min.js" integrity="sha512-vyRAVI0IEm6LI/fVSv/Wq/d0KUfrg3hJq2Qz5FlfER69sf3ZHlOrsLriNm49FxnpUGmhx+TaJKwJ+ByTLKT+Yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script>
+            window.onload = function () {
+                document.getElementById("trigger").click();
+            }
+            $('#trigger').click(function () {
+                setTimeout(function () {
+                    $('#notification').modal('hide');
+                }, 2000);
+            });
+        </script>
     </body>
 
 </html>

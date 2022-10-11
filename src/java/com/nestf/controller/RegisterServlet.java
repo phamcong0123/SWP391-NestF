@@ -32,7 +32,7 @@ public class RegisterServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String url = ERROR;
         try {
-            int customerPhone = Integer.parseInt(request.getParameter("customerPhone"));
+            String customerPhone = request.getParameter("customerPhone").trim();
             String password = request.getParameter("password");
             String customerName = request.getParameter("customerName");
             String customerAddress = request.getParameter("customerAddress");

@@ -40,12 +40,12 @@ public class BuyVoucherServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final String VOUCHER_PAGE = "LoadVoucherServlet";
+    private static final String LOAD_VOUCHER = "LoadVoucherServlet";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = VOUCHER_PAGE;
+        String url = LOAD_VOUCHER;
         try {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession(false);
@@ -55,26 +55,26 @@ public class BuyVoucherServlet extends HttpServlet {
                 int typeID = Integer.parseInt(request.getParameter("typeID"));
                 VoucherTypeDAO typeDAO = new VoucherTypeDAO();
                 int requiredPoint = typeDAO.getVoucher(typeID).getPoint();
-                if (customerPoint > requiredPoint) {                   
-                    int phone = customer.getCustomerPhone();
+                if (customerPoint >= requiredPoint) {
+                    String phone = customer.getCustomerPhone();
                     VoucherDAO dao = new VoucherDAO();
-                    VoucherDTO voucher = dao.addVoucherToWaller(phone, typeID);
+                    VoucherDTO voucher = dao.addVoucherToWaller(typeID);
                     if (voucher != null) {
                         List<VoucherDTO> voucherWallet = (List<VoucherDTO>) session.getAttribute("VOUCHER_WALLET");
                         voucherWallet.add(voucher);
                         int newPoint = customerPoint - requiredPoint;
-                        int newQuantity = typeDAO.getVoucher(typeID).getQuantity()-1;
-                        CustomerDAO customerDAO = new CustomerDAO();                        
-                        if (customerDAO.buyVoucher(phone, newPoint)&&typeDAO.updateQuantity(typeID, newQuantity)){
+                        int newQuantity = typeDAO.getVoucher(typeID).getQuantity() - 1;
+                        CustomerDAO customerDAO = new CustomerDAO();
+                        if (customerDAO.buyVoucher(phone, newPoint) && typeDAO.updateQuantity(typeID, newQuantity)) {
                             customer.setPoint(newPoint);
                             session.setAttribute("CUSTOMER", customer);
-                            request.setAttribute("SUCCESS", "");
-                        }                     
+                            url += "?success=true";                        
+                        }
                     } else {
-                        request.setAttribute("FAIL", "");
+                        url += "?success=false";
                     }
                 } else {
-                    request.setAttribute("FAIL", "");
+                    url += "?success=false";
                 }
             }
         } catch (NamingException ex) {
@@ -82,7 +82,7 @@ public class BuyVoucherServlet extends HttpServlet {
         } catch (SQLException ex) {
             Logger.getLogger(BuyVoucherServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            response.sendRedirect(url);
         }
     }
 

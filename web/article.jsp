@@ -24,7 +24,7 @@
     </head>
 
     <body class="text-center">
-        <div id="navbar">
+        <div id="navbar" class="sticky-top">
             <nav class="navbar-expand bg-white navbar-light">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
@@ -113,36 +113,7 @@
                 </div>
             </c:if>
 
-        </div>
-        <div id="white-board" class="bg-white col-10">
-            <h4 class="text-start p-4 pb-2">Các gợi ý khác</h4>
-            <div class="row row-cols-4 col-11 m-auto">
-                <div id="item" class="d-inline-block col mb-3 p-3">
-                    <img src="img/voucher.png">
-                    <h6 class="mt-2">TÊN VOUCHER</h6>
-                    <span>Giá sản phẩm</span><br>
-                    <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
-                </div>
-                <div id="item" class="d-inline-block col mb-3 p-3">
-                    <img src="img/voucher.png">
-                    <h6 class="mt-2">TÊN VOUCHER</h6>
-                    <span>Giá sản phẩm</span><br>
-                    <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
-                </div>
-                <div id="item" class="d-inline-block col mb-3 p-3">
-                    <img src="img/voucher.png">
-                    <h6 class="mt-2">TÊN VOUCHER</h6>
-                    <span>Giá sản phẩm</span><br>
-                    <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
-                </div>
-                <div id="item" class="d-inline-block col mb-3 p-3">
-                    <img src="img/voucher.png">
-                    <h6 class="mt-2">TÊN VOUCHER</h6>
-                    <span>Giá sản phẩm</span><br>
-                    <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
-                </div>           
-            </div>
-        </div>
+        </div>       
     </body>
 
 </html>

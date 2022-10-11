@@ -47,7 +47,7 @@ public class LoginServlet extends HttpServlet {
         String url = ERROR;
 //        String url = "login.jsp";
         try {
-            int customerPhone = Integer.parseInt(request.getParameter("customerPhone"));
+            String customerPhone = request.getParameter("customerPhone").trim();
             String password = request.getParameter("password");
 //            String action = request.getParameter("login Action");
 //            if (action.equals("Login")) {

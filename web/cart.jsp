@@ -24,7 +24,7 @@
     </head>
 
     <body class="text-center">
-        <div id="navbar">
+        <div id="navbar" class="sticky-top">
             <nav class="navbar-expand bg-white navbar-light">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
@@ -74,98 +74,118 @@
             </ul>
             <div class="tab-content">
                 <div id="customer-cart" class="tab-pane fade show active" role="tabpanel" aria-labelledby="cart-tab">
-                    <div id="whiteboard2" class="col-8 bg-white">                     
-                        <span class="d-inline-block col-7 mt-4 mb-4 text-start">Giỏ hàng của bạn</span>                      
-                        <div class="d-inline-block col-4 mt-4 mb-4 text-end">
-                            <span>Voucher : <span class="nav-link text-muted d-inline-block col-4" data-bs-toggle="modal" data-bs-target="#voucherModal">
-                                    Chọn voucher                                  
-                                </span></span>                       
-                            <div class="modal fade" id="voucherModal" tabindex="-1" aria-labelledby="choose1Voucher" aria-hidden="true">
-                                <div class="modal-dialog modal-xl">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title m-3" id="choose1Voucher">Chọn voucher quý khách muốn sử dụng</h5>
-                                            <button type="button" class="btn-close m-3" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="row row-cols-4 container-fluid m-0">
-                                                <c:if test = "${not empty sessionScope.VOUCHER_WALLET}">
-                                                    <c:forEach items="${sessionScope.VOUCHER_WALLET}" var = "voucher">                                                       
-                                                        <div id="item" class="d-inline-block col mb-4 text-center">
-                                                            <img src="img/voucher.png">
-                                                            <h6 class="text-center">${voucher.voucherType.voucherName}</h6>
-                                                            <p>Hết hạn vào ${voucher.expiredDate}</p>
-                                                            <a><button type="button" id="buy-button" class="col-6" data-bs-dismiss="modal">Sử dụng</button></a>
-                                                        </div>
-                                                    </c:forEach>
-                                                </c:if>
-                                                <c:if test="${ empty sessionScope.VOUCHER_WALLET}">
-                                                    <div class="text-center w-100">
-                                                        <img src="img/search-no-result.png" class="d-block col-4 m-auto">
-                                                        <h3 class="mb-2">Bạn chưa có voucher nào 😥</h3>
-                                                        <a href="voucherPage" class="nav-link d-inline-block mb-3"><i class="fa-solid fa-basket-shopping"></i>Đi mua voucher</a>
-                                                    </div>
-                                                </c:if>                                                   
+                    <div id="whiteboard2" class="col-8 bg-white">  
+                        <c:if test="${not empty sessionScope.CART}">
+                            <span class="d-inline-block col-7 mt-4 mb-4 text-start">Giỏ hàng của bạn</span>                       
+                            <div id="voucher-modal" class="d-inline-block col-4 text-end">
+                                <span>Voucher : <button id="buy-button" class="col-4" data-bs-toggle="modal" data-bs-target="#voucherModal">
+                                        Chọn voucher                                  
+                                    </button></span>                       
+                                <div class="modal fade" id="voucherModal" tabindex="-1" aria-labelledby="choose1Voucher" aria-hidden="true">
+                                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title m-3" id="choose1Voucher">Chọn voucher quý khách muốn sử dụng</h5>
+                                                <button type="button" class="btn-close m-3" data-bs-dismiss="modal" aria-label="Close"></button>
                                             </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                                            <div class="modal-body">
+                                                <div class="row row-cols-4 container-fluid m-0">
+                                                    <c:if test = "${not empty sessionScope.VOUCHER_WALLET}">
+                                                        <c:forEach items="${sessionScope.VOUCHER_WALLET}" var = "voucher">                                                       
+                                                            <div id="item" class="d-inline-block col p-3 text-center">                                           
+                                                                <img src="img/voucher.png">
+                                                                <h6 class="text-center">${voucher.voucherType.voucherName}</h6>
+                                                                <p>Hết hạn vào ${voucher.expiredDate}</p>
+                                                                <button type="button" id="buy-button" class="col-6" data-bs-dismiss="modal" onclick="pickVoucher(this)" value="${voucher.voucherType.voucherName}">
+                                                                    Sử dụng <input type="hidden" value="${voucher.voucherID}">
+                                                                            <input type="hidden" value="${voucher.voucherType.saleMargin}">
+                                                                </button>
+                                                            </div>
+                                                        </c:forEach>
+                                                    </c:if>
+                                                    <c:if test="${ empty sessionScope.VOUCHER_WALLET}">
+                                                        <div class="text-center w-100">
+                                                            <img src="img/search-no-result.png" class="d-block col-4 m-auto">
+                                                            <h3 class="mb-2">Bạn chưa có voucher nào 😥</h3>
+                                                            <a href="voucherPage" class="nav-link d-inline-block mb-3"><i class="fa-solid fa-basket-shopping"></i>Đi mua voucher</a>
+                                                        </div>
+                                                    </c:if>                                                   
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <c:forEach items="${sessionScope.CART}" var="cartItem">
-                            <div id="cart-item" class="rounded col-11 m-auto mb-3">
-                                <div class="row container-fluid m-0">
-                                    <div class="d-inline-block col-2 text-start">
-                                        <img src="${cartItem.product.image}" class="rounded w-100 m-2 border border-dark">
-                                    </div>     
-                                    <div class="d-inline-block col-8 text-start ms-5 mt-4">
-                                        <h4 class="fw-bold">${cartItem.product.name}</h4>
-                                        <span>
-                                            <c:if test="${cartItem.product.discountPrice ne 0}">
-                                                ${cartItem.product.discountPrice.intValue()}₫
-
-                                                <span class="text-danger text-decoration-line-through ms-3">
-                                                    ${cartItem.product.price.intValue()}₫
-                                                </span>
-                                            </c:if>
-                                            <c:if test="${cartItem.product.discountPrice eq 0}">
-                                                ${cartItem.product.price.intValue()}₫
-                                            </c:if>
-                                        </span>                                       
-                                        <div id="number-toggle" class="text-end">
-                                            <div class="input-group d-inline-flex flex-column align-items-end">
-                                                <form class="mt-auto d-block">
-                                                    <img src="img/plus.svg" data-field="quantity" class="button-plus d-inline-block">
-                                                    <input required id="number-input" type="number" step="1" value="${cartItem.amount}" min="1" max="100" onblur="minCheck(this), maxCheck(this)" name="quantity" class="quantity-field text-center p-0">
-                                                    <img src="img/minus.svg" data-field="quantity" class="button-minus d-inline-block"><br>                                    
-                                                    <h5 class="fw-bold text-end mt-1">
-                                                        <c:if test="${cartItem.product.discountPrice eq 0}">
-                                                            ${(cartItem.product.price*cartItem.amount).intValue()}₫
-                                                        </c:if>
-                                                        <c:if test="${cartItem.product.discountPrice ne 0}">
-                                                            ${(cartItem.product.discountPrice*cartItem.amount).intValue()}₫
-                                                        </c:if>
-                                                    </h5>
-                                                </form>                                          
+                            </div>                                                                       
+                            <jsp:useBean id="productFunc" class="com.nestf.product.ProductDTO"/>
+                            <c:set var="total" value="${0}"/>
+                            <c:forEach items="${sessionScope.CART}" var="cartItem">
+                                <div id="cart-item" class="rounded col-11 m-auto mb-3">
+                                    <div class="row container-fluid m-0">
+                                        <div class="d-inline-block col-2 text-start">
+                                            <img src="${cartItem.product.image}" class="rounded w-100 m-2 border border-dark">
+                                        </div>     
+                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
+                                            <a href="productDetail?productID=${cartItem.product.productID}" class="text-decoration-none text-black"><h4 class="fw-bold">${cartItem.product.name}</h4></a>
+                                            <span>
+                                                <c:if test="${cartItem.product.discountPrice ne 0}">
+                                                    <span class="text-danger">
+                                                        ${productFunc.printPrice(cartItem.product.discountPrice)}
+                                                    </span>                                                 
+                                                    <span class="text-muted text-decoration-line-through ms-3">
+                                                        ${productFunc.printPrice(cartItem.product.price)}
+                                                    </span>
+                                                </c:if>
+                                                <c:if test="${cartItem.product.discountPrice eq 0}">
+                                                    ${productFunc.printPrice(cartItem.product.price)}
+                                                </c:if>
+                                            </span>                                       
+                                            <div id="number-toggle" class="text-end">
+                                                <div class="input-group d-inline-flex flex-column align-items-end">
+                                                    <form action="addToCart">
+                                                        <input type="hidden" name="productID" value="${cartItem.product.productID}">
+                                                        <img src="img/plus.svg" data-field="newQuantity" class="button-plus d-inline-block">                                                
+                                                        <input required id="number-input" type="number" step="1" name="newQuantity" value="${cartItem.amount}" min="1" max="${cartItem.product.quantity}" onblur="minCheck(this), maxCheck(this)" class="quantity-field text-center p-0">                                 
+                                                        <img src="img/minus.svg" data-field="newQuantity" class="button-minus d-inline-block"><br>                                    
+                                                        <h5 class="fw-bold text-end mt-1">
+                                                            <c:if test="${cartItem.product.discountPrice eq 0}">
+                                                                ${productFunc.printPrice(cartItem.product.price*cartItem.amount)}
+                                                                <c:set var="total" value="${total + cartItem.product.price*cartItem.amount}"/>
+                                                            </c:if>
+                                                            <c:if test="${cartItem.product.discountPrice ne 0}">
+                                                                ${productFunc.printPrice(cartItem.product.discountPrice*cartItem.amount)}
+                                                                <c:set var="total" value="${total + cartItem.product.discountPrice*cartItem.amount}"/>
+                                                            </c:if>
+                                                        </h5>
+                                                    </form>
+                                                </div>
                                             </div>
+                                        </div> 
+                                        <div class="d-inline-block col-1 ms-auto">
+                                            <a href="removeFromCart?productID=${cartItem.product.productID}" class="mt-3 nav-link"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a>
                                         </div>
-                                    </div> 
-                                    <div class="d-inline-block col-1 ms-auto">
-                                        <a href="" class="mt-3 nav-link"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a>
-                                    </div>
-                                </div>  
+                                    </div>  
+                                </div>
+                            </c:forEach>
+                            <div class="fs-4 d-flex justify-content-between pb-3">
+                                <span class="ms-5 d-inline-block align-self-center">Thành tiền :<span class="fw-bold" id="total-display"> ${productFunc.printPrice(total)}</span>
+                                    <input type="hidden" name="total" value="${total}" id="total">
+                                </span> 
+                                <form action="checkOutAction" method="POST">
+                                    <input type="hidden" id="voucher-use">
+                                    <button id="buy-button" class="btn ms-auto mt-0 me-5">Thanh toán</button>
+                                </form>
                             </div>
-                        </c:forEach>                     
-                        <div class="fs-4 d-flex justify-content-between pb-3">
-                            <span class="ms-5 d-inline-block align-self-center">Thành tiền :<span class="fw-bold"> 100$</span></span> 
-                            <form action="checkOutAction" method="POST">
-                                <input type="hidden" value="" id="voucher-use">
-                                <button id="buy-button" class="btn ms-auto mt-0 me-5">Thanh toán</button>
-                            </form>
-                        </div>
+                        </c:if>
+                        <c:if test="${empty sessionScope.CART}">
+                            <span class="d-inline-block col-11 mt-4 mb-4 text-start">Giỏ hàng của bạn</span>
+                            <div class="mt-5">
+                                <img src="img/emptyCart.png">
+                                <h4 class="text-muted mt-3 pb-4">Bạn chưa thêm sản phẩm nào</h4>
+                            </div>
+                        </c:if>
                     </div>
                 </div>
                 <div id="order-history" class="tab-pane fade" role="tabpanel" aria-labelledby="history-tab">

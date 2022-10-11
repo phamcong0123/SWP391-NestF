@@ -27,7 +27,7 @@
     </head>
     <body>
         <section>
-            <div id="navbar">
+            <div id="navbar" class="sticky-top">
                 <nav class="navbar-expand bg-white navbar-light text-center">
                     <ul class="navbar">
                         <li class="nav-item col-2 d-inline-block">

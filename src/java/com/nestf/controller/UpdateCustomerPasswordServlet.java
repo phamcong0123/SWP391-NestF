@@ -48,7 +48,7 @@ public class UpdateCustomerPasswordServlet extends HttpServlet {
                 cusError.setPasswordWrong("Mật khẩu hiện tại không chính xác!");
             }
             if (check) {               
-                int phone = customer.getCustomerPhone();
+                String phone = customer.getCustomerPhone();
                 CustomerDAO dao = new CustomerDAO();
                 boolean checkDao = dao.updateCusPassword(phone, newPass);
                 if (checkDao) {

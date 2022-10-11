@@ -23,7 +23,7 @@
     </head>
 
     <body class="text-center">
-        <div id="navbar">
+        <div id="navbar" class="sticky-top">
             <nav class="navbar-expand bg-white navbar-light">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
