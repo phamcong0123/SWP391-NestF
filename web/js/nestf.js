@@ -55,5 +55,11 @@ function pickVoucher(param){
     document.getElementById('buy-button').innerHTML = param.value;
     document.getElementById('voucher-use').value = param.firstElementChild.value;
     var newTotal = document.getElementById('total').value - param.lastElementChild.value;
-    document.getElementById('total-display').innerHTML = Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(newTotal);
+    if (newTotal >0) document.getElementById('total-display').innerHTML = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(newTotal);
+    else document.getElementById('total-display').innerHTML = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(0);
+}
+function cancelVoucher(){
+    var total = document.getElementById('total').value
+    document.getElementById('total-display').innerHTML = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(total);
+    document.getElementById('voucher-use').value = "";
 }

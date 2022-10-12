@@ -246,6 +246,7 @@ public class ProductDAO {
                 ptm.setInt(2, productID);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
+                    int relatedID = rs.getInt("productID");
                     int sellerID = Integer.parseInt(rs.getString("sellerID"));
                     String name = rs.getString("name");
                     float price = Float.parseFloat(rs.getString("price"));
@@ -253,7 +254,7 @@ public class ProductDAO {
                     float discountPrice = Float.parseFloat(rs.getString("discountPrice"));
                     String productDes = rs.getString("productDes");
                     String image = rs.getString("image");
-                    listRelate.add(new ProductDTO(productID, sellerID, name, price, quantity, category, discountPrice, productDes, image, "."));
+                    listRelate.add(new ProductDTO(relatedID, sellerID, name, price, quantity, category, discountPrice, productDes, image, "."));
                 }
             }
         } catch (Exception e) {

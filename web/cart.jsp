@@ -98,7 +98,7 @@
                                                                 <p>Hết hạn vào ${voucher.expiredDate}</p>
                                                                 <button type="button" id="buy-button" class="col-6" data-bs-dismiss="modal" onclick="pickVoucher(this)" value="${voucher.voucherType.voucherName}">
                                                                     Sử dụng <input type="hidden" value="${voucher.voucherID}">
-                                                                            <input type="hidden" value="${voucher.voucherType.saleMargin}">
+                                                                    <input type="hidden" value="${voucher.voucherType.saleMargin}">
                                                                 </button>
                                                             </div>
                                                         </c:forEach>
@@ -113,7 +113,7 @@
                                                 </div>
                                             </div>
                                             <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="cancelVoucher()">Huỷ</button>
                                             </div>
                                         </div>
                                     </div>
@@ -170,11 +170,12 @@
                                 </div>
                             </c:forEach>
                             <div class="fs-4 d-flex justify-content-between pb-3">
-                                <span class="ms-5 d-inline-block align-self-center">Thành tiền :<span class="fw-bold" id="total-display"> ${productFunc.printPrice(total)}</span>
-                                    <input type="hidden" name="total" value="${total}" id="total">
+                                <span class="ms-5 d-inline-block align-self-center">Thành tiền : <span class="fw-bold" id="total-display"> ${productFunc.printPrice(total)}</span>
+
                                 </span> 
                                 <form action="checkOutAction" method="POST">
-                                    <input type="hidden" id="voucher-use">
+                                    <input type="hidden" name="total" value="${total}" id="total">
+                                    <input type="hidden" id="voucher-use" name="voucher-use">
                                     <button id="buy-button" class="btn ms-auto mt-0 me-5">Thanh toán</button>
                                 </form>
                             </div>
@@ -265,7 +266,25 @@
             </div>            
         </div>
 
-    </div>     
+    </div>
+    <footer class="d-flex">
+        <div class="information">
+            <h2>Nest F</h2>
+            <p>Liên hệ chúng tôi <br>
+                <span>Số điện thoại: 01234123</span><br>
+                <span>Email: nestf@gmail.com</span>
+            </p>
+        </div>
+        <div class="social-media">
+            <h2>Theo dõi chúng tôi trên</h2>
+            <a href="#">
+                <i class="fa-brands fa-facebook fa-2x"></i>
+            </a>
+            <a href="#">
+                <i class="fa-brands fa-instagram fa-2x"></i>
+            </a>
+        </div>
+    </footer>
     <script src="js/nestf.js"></script>   
 </body>
 

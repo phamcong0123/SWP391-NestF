@@ -102,7 +102,45 @@
             </nav>
         </div>
         <div id="white-board" class="bg-white w-75">
-            <h2 class="d-block col-8">Danh sách voucher</h2>
+            <h2 class="d-inline-block col-6 ms-0">Danh sách voucher</h2>
+            <div id="voucher-modal" class="d-inline-block col-4 text-end">
+                 <button id="buy-button" class="col-5" data-bs-toggle="modal" data-bs-target="#voucherModal">
+                        Voucher của bạn                            
+                    </button>                     
+                <div class="modal fade" id="voucherModal" tabindex="-1" aria-labelledby="choose1Voucher" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title m-3" id="choose1Voucher">Voucher của bạn</h5>
+                                <button type="button" class="btn-close m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row row-cols-4 container-fluid m-0">
+                                    <c:if test = "${not empty sessionScope.VOUCHER_WALLET}">
+                                        <c:forEach items="${sessionScope.VOUCHER_WALLET}" var = "voucher">                                                       
+                                            <div id="item" class="d-inline-block col p-3 text-center">                                           
+                                                <img src="img/voucher.png">
+                                                <h6 class="text-center">${voucher.voucherType.voucherName}</h6>
+                                                <p>Hết hạn vào ${voucher.expiredDate}</p>                                               
+                                            </div>
+                                        </c:forEach>
+                                    </c:if>
+                                    <c:if test="${ empty sessionScope.VOUCHER_WALLET}">
+                                        <div class="text-center w-100">
+                                            <img src="img/search-no-result.png" class="d-block col-4 m-auto">
+                                            <h3 class="mb-2">Bạn chưa có voucher nào 😥</h3>
+                                            <a href="voucherPage" class="nav-link d-inline-block mb-3"><i class="fa-solid fa-basket-shopping"></i>Đi mua voucher</a>
+                                        </div>
+                                    </c:if>                                                   
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
             <div class="row row-cols-4 col-11 m-auto">
                 <c:if test="${not empty requestScope.VOUCHER}">
                     <c:forEach items="${requestScope.VOUCHER}" var="voucher">
@@ -127,17 +165,35 @@
                 </c:if>
             </div>
         </div>
+        <footer class="d-flex">
+            <div class="information">
+                <h2>Nest F</h2>
+                <p>Liên hệ chúng tôi <br>
+                    <span>Số điện thoại: 01234123</span><br>
+                    <span>Email: nestf@gmail.com</span>
+                </p>
+            </div>
+            <div class="social-media">
+                <h2>Theo dõi chúng tôi trên</h2>
+                <a href="#">
+                    <i class="fa-brands fa-facebook fa-2x"></i>
+                </a>
+                <a href="#">
+                    <i class="fa-brands fa-instagram fa-2x"></i>
+                </a>
+            </div>
+        </footer>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.1/js/bootstrap.min.js" integrity="sha512-vyRAVI0IEm6LI/fVSv/Wq/d0KUfrg3hJq2Qz5FlfER69sf3ZHlOrsLriNm49FxnpUGmhx+TaJKwJ+ByTLKT+Yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script>
-            window.onload = function () {
-                document.getElementById("trigger").click();
-            }
-            $('#trigger').click(function () {
-                setTimeout(function () {
-                    $('#notification').modal('hide');
-                }, 2000);
-            });
+                                    window.onload = function () {
+                                        document.getElementById("trigger").click();
+                                    }
+                                    $('#trigger').click(function () {
+                                        setTimeout(function () {
+                                            $('#notification').modal('hide');
+                                        }, 2000);
+                                    });
         </script>
     </body>
 

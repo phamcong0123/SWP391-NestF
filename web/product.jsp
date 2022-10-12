@@ -167,7 +167,7 @@
                                     <img src="${otherProduct.image}">
                                     <h6>${otherProduct.name}</h6>
                                     <span>${productFunc.printPrice(otherProduct.price)}</span><br>
-                                    <a href="buyVoucher"><button id="buy-button" class="col-6">Mua ngay</button></a>
+                                    <a href="addToCart?productID=${otherProduct.productID}&buynow=true"><button id="buy-button" class="col-6">Mua ngay</button></a>
                                 </a>
                             </div>
                         </c:if>
@@ -177,6 +177,24 @@
             <a href="ShopPageController" class="nav-link pb-3">Tất cả sản phẩm</a>
         </div>
     </div>
+    <footer class="d-flex">
+        <div class="information">
+            <h2>Nest F</h2>
+            <p>Liên hệ chúng tôi <br>
+                <span>Số điện thoại: 01234123</span><br>
+                <span>Email: nestf@gmail.com</span>
+            </p>
+        </div>
+        <div class="social-media">
+            <h2>Theo dõi chúng tôi trên</h2>
+            <a href="#">
+                <i class="fa-brands fa-facebook fa-2x"></i>
+            </a>
+            <a href="#">
+                <i class="fa-brands fa-instagram fa-2x"></i>
+            </a>
+        </div>
+    </footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.1/js/bootstrap.min.js" integrity="sha512-vyRAVI0IEm6LI/fVSv/Wq/d0KUfrg3hJq2Qz5FlfER69sf3ZHlOrsLriNm49FxnpUGmhx+TaJKwJ+ByTLKT+Yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>        
     <script>

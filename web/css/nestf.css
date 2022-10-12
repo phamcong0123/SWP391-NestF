@@ -198,3 +198,12 @@ input[type=number]{
 #order-history #options .nav-link.active{
     border-bottom: green solid!important;
 }
+footer {
+    width: 100%;
+    background: #bbb;
+    height: 15rem;
+    padding: 1rem 7rem;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
