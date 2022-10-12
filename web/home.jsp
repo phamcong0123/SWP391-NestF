@@ -6,6 +6,9 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<c:if test="${requestScope.BEST_SELL_LIST == null}">
+    <c:redirect url="homeAction"/>
+</c:if>
 <!DOCTYPE html>
 <html>
     <head>
@@ -110,114 +113,102 @@
                     </button>
                 </div>
 
+                <jsp:useBean id="proFunc" class="com.nestf.product.ProductDTO"/>
+                <c:set var="productList" value="${requestScope['BEST_SELL_LIST']}" scope="page"/>
                 <div class="best-sell-container">
                     <div class="bestsell-container-spacing pt-3">
                         <div class="bestsell-header-section ms-3">
                             <h3>Sản phẩm bán chạy</h3>
                         </div>
-                        <div class="bestsell-section-content">
-                            <div class="image-collapse">
-                                <ul class="image-list row">
-                                    <li class="image-contain col-lg-3 col-md-6">
-                                        <div class="image-contain-section mx-2">
-                                            <div class="image-contain-detail">
-                                                <a href="productDetail?productID=9" class="product-detail">
-                                                    <img src="https://yensaokhanhhoa.vn/wp-content/uploads/2022/06/lifenest-yen-sao-tinh-che-vuong-7-2.jpg"
-                                                         alt="..." class="mx-2">
-                                                    <p class="image-title">Yến tinh chế vuông đặc biệt 100g<br><span
-                                                            class="image-price">3.600.000 đ</span></p>
-                                                </a>
-                                            </div>
-                                            <div class="buynow-btn">
-                                                <a href="#">
-                                                    <button class="btn btn-dark">
-                                                        <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
-                                                    </button>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="image-contain col-lg-3 col-md-6">
-                                        <div class="image-contain-section mx-2">
-                                            <div class="image-contain-detail">
-                                                <a href="productDetail?productID=6" class="product-detail">
-                                                    <img src="https://yensaokhanhhoa.vn/wp-content/uploads/2022/06/yen-rut-long-kho.png"
-                                                         alt="..." class="mx-2">
-                                                    <p class="image-title">Tổ yến rút lông khô thượng hạng 100g<br><span
-                                                            class="image-price">5.500.000 đ</span></p>
-                                                </a>
-                                            </div>
-                                            <div class="buynow-btn">
-                                                <a href="#">
-                                                    <button class="btn btn-dark">
-                                                        <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
-                                                    </button>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="image-contain col-lg-3 col-md-6">
-                                        <div class="image-contain-section mx-2">
-                                            <div class="image-contain-detail">
-                                                <a href="productDetail?productID=8" class="product-detail">
-                                                    <img src="https://yensaokhanhhoa.vn/wp-content/uploads/2022/06/chan-yen-tinh-che-dac-biet.jpg"
-                                                         alt="..." class="mx-2">
-                                                    <p class="image-title">Chân yến tinh chế đặc biệt 100g<br><span
-                                                            class="image-price">4.050.000 đ</span></p>
-                                                </a>
-                                            </div>
-                                            <div class="buynow-btn">
-                                                <a href="#">
-                                                    <button class="btn btn-dark">
-                                                        <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
-                                                    </button>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="image-contain col-lg-3 col-md-6">
-                                        <div class="image-contain-section mx-2">
-                                            <div class="image-contain-detail">
-                                                <a href="productDetail?productID=10" class="product-detail">
-                                                    <img src="https://yensaokhanhhoa.vn/wp-content/uploads/2022/06/70ml-img.jpg"
-                                                         alt="..." class="mx-2">
-                                                    <p class="image-title">COMBO 6 chai yến chưng tươi 70ml<br><span
-                                                            class="image-price">650.000 đ</span></p>
-                                                </a>
-                                            </div>
-                                            <div class="buynow-btn">
-                                                <a href="#">
-                                                    <button class="btn btn-dark">
-                                                        <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
-                                                    </button>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
+                        <c:if test="${not empty requestScope.BEST_SELL_LIST}">
+                            <div class="bestsell-section-content">
+                                <div class="image-collapse">
+                                    <ul class="image-list row">
+                                        <c:forEach var="product" items="${productList}">
+                                            <li class="image-contain col-lg-3 col-md-6">
+                                                
+                                                <div class="image-contain-section mx-2">
+                                                    <div class="image-contain-detail">
+                                                        <a href="productDetail?productID=${product.productID}" class="product-detail">
+                                                            <img src="${product.image}" alt="Image for ${product.name}" class="mx-2">
+                                                            <p class="image-title">${product.name}<br>
+                                                                <c:if test="${product.discountPrice != 0}">
+                                                                    <span
+                                                                        class="image-price-discout">${proFunc.printPrice(product.price)}
+                                                                    </span>
+                                                                    <br>
+                                                                    <span class="image-price">${proFunc.printPrice(product.discountPrice)}
+                                                                    </span>
+                                                                </c:if>
+                                                                <c:if test="${product.discountPrice == 0}">
+                                                                    <br><span class="image-price">${proFunc.printPrice(product.price)}</span>
+                                                                </c:if>
+                                                            </p>
+                                                        </a>
+                                                    </div>
+                                                    
+                                                    <div class="buynow-btn">
+                                                        <a href="#">
+                                                            <button class="btn btn-dark">
+                                                                <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
+                                                            </button>
+                                                        </a>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </li>
+                                        </c:forEach>
+                                    </ul>
+                                </div>
                             </div>
-                        </div>
+                        </c:if>
                     </div>
                 </div>
 
                 <div class="combo-product">
                     <div class="combo-product-spacing d-flex">
+
                         <div class="combo-product-describe">
                             <h5 class="combo-title">Combo nổi bật</h5>
-                            <p>COMBO 6 chai yến chưng tươi 70ml: <span class="product-price">650.000 đ</span></p>
-                            <p>Yến tinh chế vuông đặc biệt 100g <span class="product-price">3.600.000 đ</span></p>
+                            <p>${productList[0].name}: 
+                                <c:if test="${productList[0].discountPrice == 0}">
+                                    <span class="product-price">${proFunc.printPrice(productList[0].price)}</span>
+                                </c:if>
+                                <c:if test="${productList[0].discountPrice != 0}">
+                                    <span class="product-price">${proFunc.printPrice(productList[0].discountPrice)}</span>
+                                </c:if>
+                            </p>
+                            <p>${productList[1].name}: 
+                                <c:if test="${productList[1].discountPrice == 0}">
+                                    <span class="product-price">${proFunc.printPrice(productList[1].price)}</span>
+                                </c:if>
+                                <c:if test="${productList[1].discountPrice != 0}">
+                                    <span class="product-price">${proFunc.printPrice(productList[1].discountPrice)}</span>
+                                </c:if>
+                            </p>
                         </div>
                         <div class="combo-product-image">
-                            <img src="https://yensaokhanhhoa.vn/wp-content/uploads/2022/06/70ml-img.jpg" alt="..."
-                                 class="ms-2">
+                            <img src="${productList[0].image}" alt="Image for ${productList[0].name}" class="ms-2">
                             <span class="plus-product-img">
                                 <i class="fa-solid fa-plus"></i>
                             </span>
-                            <img src="https://yensaokhanhhoa.vn/wp-content/uploads/2022/06/lifenest-yen-sao-tinh-che-vuong-7-2.jpg"" alt="..."
-                                 class="ms-2">
+                            <img src="${productList[1].image}" alt="Image for ${productList[1].name}" class="ms-2">
                         </div>
                         <div class="combo-product-btn">
-                            <p>Chỉ với 2.000.000 VNĐ</p>
+                            <p>Chỉ với 
+                                <c:if test="${productList[0].discountPrice == 0 && productList[1].discountPrice == 0}">
+                                    ${proFunc.printPrice(productList[0].price + productList[1].price)}
+                                </c:if>
+                                <c:if test="${productList[0].discountPrice != 0 && productList[1].discountPrice == 0}">
+                                    ${proFunc.printPrice(productList[0].discountPrice + productList[1].price)}
+                                </c:if>
+                                <c:if test="${productList[0].discountPrice == 0 && productList[1].discountPrice != 0}">
+                                    ${proFunc.printPrice(productList[0].price + productList[1].discountPrice)}
+                                </c:if>
+                                <c:if test="${productList[0].discountPrice != 0 && productList[1].discountPrice != 0}">
+                                    ${proFunc.printPrice(productList[0].discountPrice + productList[1].discountPrice)}
+                                </c:if>
+                            </p>
                             <a href="#">
                                 <button class="btn btn-dark">
                                     <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
@@ -227,98 +218,56 @@
                     </div>
                 </div>
 
-                <div class="another-suggestion mb-3">
-                    <div class="another-suggestion-spacing">                       
-                        <div class="suggestion-content-section pt-3 pb-3">
-                            <div class="suggestion-header-section ms-3">
-                                <h4>Các gợi ý khác</h4>
-                            </div>
-                            <div class="image-collapse">
-                                <ul class="another-image-list row">
-                                    <li class="image-contain col-lg-3 col-md-6">
-                                        <div class="another-image-contain-section">
-                                            <div class="image-contain-detail">
-                                                <a href="#" class="product-detail">
-                                                    <img src="https://yensaokhanhhoa.vn/wp-content/uploads/2022/06/yen-tho-cao-cap.png"
-                                                         alt="..." class="mx-2">
-                                                    <p class="image-title">Tổ yến thô cao cấp tiêu chuẩn 100g<br><span
-                                                            class="image-price">1.000.000 VNĐ</span></p>
-                                                </a>
-                                            </div>
-                                            <div class="buynow-btn">
-                                                <a href="#">
-                                                    <button class="btn btn-dark">
-                                                        <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
-                                                    </button>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="image-contain col-lg-3 col-md-6">
-                                        <div class="another-image-contain-section">
-                                            <div class="image-contain-detail">
-                                                <a href="#" class="product-detail">
-                                                    <img src="https://yensaokhanhhoa.vn/wp-content/uploads/2022/06/Tinh-che-dac-biet.png"
-                                                         alt="..." class="mx-2">
-                                                    <p class="image-title">Tổ yến tinh chế đặc biệt 100g<br><span
-                                                            class="image-price">1.000.000 VNĐ</span></p>
-                                                </a>
-                                            </div>
-                                            <div class="buynow-btn">
-                                                <a href="#">
-                                                    <button class="btn btn-dark">
-                                                        <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
-                                                    </button>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="image-contain col-lg-3 col-md-6">
-                                        <div class="another-image-contain-section">
-                                            <div class="image-contain-detail">
-                                                <a href="#" class="product-detail">
-                                                    <img src="https://yensaokhanhhoa.vn/wp-content/uploads/2022/06/yen-tho-dac-biet.png"
-                                                         alt="..." class="mx-2">
-                                                    <p class="image-title">Tổ yến thô đặc biệt tiêu chuẩn 100g<br><span
-                                                            class="image-price">1.000.000 VNĐ</span></p>
-                                                </a>
-                                            </div>
-                                            <div class="buynow-btn">
-                                                <a href="#">
-                                                    <button class="btn btn-dark">
-                                                        <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
-                                                    </button>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li class="image-contain col-lg-3 col-md-6">
-                                        <div class="another-image-contain-section">
-                                            <div class="image-contain-detail">
-                                                <a href="#" class="product-detail">
-                                                    <img src="https://yensaokhanhhoa.vn/wp-content/uploads/2022/06/tinh-che-soi-cao-cap.png"
-                                                         alt="..." class="mx-2">
-                                                    <p class="image-title">Tổ yến tinh chế cao cấp 100g<br><span
-                                                            class="image-price">1.000.000 VNĐ</span></p>
-                                                </a>
-                                            </div>
-                                            <div class="buynow-btn">
-                                                <a href="#">
-                                                    <button class="btn btn-dark">
-                                                        <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
-                                                    </button>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                                <a href="ShopPageController" class="all-product">
-                                    Tất cả sản phẩm
-                                </a>
-                            </div>
+                <div class="another-suggestion">
+                    <div class="another-suggestion-spacing">
+                        <div class="suggestion-header-section">
+                            <h4>Các gợi ý khác</h4>
                         </div>
+                        <c:if test="${requestScope.OTHER_PRODUCT_LIST != null}">
+                            <div class="suggestion-content-section">
+                                <div class="image-collapse">
+                                    <ul class="another-image-list row">
+                                        <c:forEach var="anotherSuggest" varStatus="counter" items="${requestScope.OTHER_PRODUCT_LIST}">
+                                            <c:if test="${counter.count <= 4}">
+                                                <li class="image-contain col-lg-3 col-md-6">
+                                                    <div class="another-image-contain-section">
+                                                        <div class="image-contain-detail">
+                                                            <a href="productDetail?productID=${anotherSuggest.productID}" class="product-detail">
+                                                                <img src="${anotherSuggest.image}"
+                                                                     alt="Image for ${anotherSuggest.name}" class="mx-2">
+                                                                <p class="image-title">${anotherSuggest.name}<br>
+                                                                    <c:if test="${anotherSuggest.discountPrice != 0}">
+                                                                        <span
+                                                                            class="image-price-discout">${proFunc.printPrice(anotherSuggest.discountPrice)}</span>
+                                                                        <br><span
+                                                                            class="image-price">${proFunc.printPrice(anotherSuggest.price)}</span></p>
+                                                                    </c:if>
+                                                                    <c:if test="${anotherSuggest.discountPrice == 0}">
+                                                                    <br><span class="image-price">${proFunc.printPrice(anotherSuggest.price)}</span></p>
+                                                                </c:if>
+                                                            </a>
+                                                        </div>
+                                                        <div class="buynow-btn">
+                                                            <a href="#">
+                                                                <button class="btn btn-dark">
+                                                                    <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
+                                                                </button>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            </c:if>
+                                        </c:forEach>
+                                    </ul>
+                                    <a href="shopPage" class="all-product">
+                                        Tất cả sản phẩm
+                                    </a>
+                                </div>
+                            </div>
+                        </c:if>
                     </div>
                 </div>
+                        
             </div>
             <footer class="d-flex">
                 <div class="information">

@@ -95,24 +95,37 @@
                                 <div class="search-content">
                                     <div class="row col-11 m-auto">
                                         <c:forEach var="product" items="${requestScope.SEARCH_LIST}">
-                                            <div class="col-lg-3 col-md-4 product-contain-detail">
-                                                <div class="product-image-contain-detail">
-                                                    <a href="productDetail?productID=${product.productID}" class="product-detail">
-                                                        <img class="img-responsive"
-                                                             src="${product.image}"
-                                                             width="200px" height="200px" alt="..." class="mx-2">
-                                                        <p class="image-title">${product.name}<br><span
-                                                                class="image-price">${productFunc.printPrice(product.price)}</span></p>
-                                                    </a>
+                                            <c:if test="${product.status}">
+                                                <div class="col-lg-3 col-md-4 product-contain-detail">
+                                                    <div class="product-image-contain-detail">
+                                                        <a href="productDetail?productID=${product.productID}" class="product-detail">
+                                                            <img class="img-responsive"
+                                                                 src="${product.image}"
+                                                                 width="200px" height="200px" alt="..." class="mx-2">
+                                                            <p class="image-title">${product.name}<br>
+                                                                <c:if test="${product.discountPrice != 0}">
+                                                                    <span
+                                                                        class="image-price-discout">${productFunc.printPrice(product.price)}
+                                                                    </span>
+                                                                    <br>
+                                                                    <span class="image-price">${productFunc.printPrice(product.discountPrice)}
+                                                                    </span>
+                                                                </c:if>
+                                                                <c:if test="${product.discountPrice == 0}">
+                                                                    <br><span class="image-price">${productFunc.printPrice(product.price)}</span>
+                                                                </c:if>
+                                                            </p>
+                                                        </a>
+                                                    </div>
+                                                    <div class="buynow-btn">
+                                                        <a href="#">
+                                                            <button class="btn btn-dark">
+                                                                <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
+                                                            </button>
+                                                        </a>
+                                                    </div>
                                                 </div>
-                                                <div class="buynow-btn">
-                                                    <a href="#">
-                                                        <button class="btn btn-dark">
-                                                            <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
-                                                        </button>
-                                                    </a>
-                                                </div>
-                                            </div>
+                                            </c:if>
                                         </c:forEach>
                                     </div>
                                 </div>
@@ -144,8 +157,19 @@
                                                             <a href="productDetail?productID=${otherProduct.productID}" class="product-detail">
                                                                 <img src="${otherProduct.image}"
                                                                      alt="..." class="mx-2">
-                                                                <p class="image-title">${otherProduct.name}<br><span
-                                                                        class="image-price">${productFunc.printPrice(otherProduct.price)}</span></p>
+                                                                <p class="image-title">${otherProduct.name}<br>
+                                                                    <c:if test="${otherProduct.discountPrice != 0}">
+                                                                        <span
+                                                                            class="image-price-discout">${productFunc.printPrice(otherProduct.price)}
+                                                                        </span>
+                                                                        <br>
+                                                                        <span class="image-price">${productFunc.printPrice(otherProduct.discountPrice)}
+                                                                        </span>
+                                                                    </c:if>
+                                                                    <c:if test="${otherProduct.discountPrice == 0}">
+                                                                        <br><span class="image-price">${productFunc.printPrice(otherProduct.price)}</span>
+                                                                    </c:if>
+                                                                </p>
                                                             </a>
                                                         </div>
                                                         <div class="buynow-btn">
@@ -161,7 +185,7 @@
                                         </c:forEach>
                                     </ul>
                                 </c:if>
-                                <a href="ShopPageController" class="all-product">
+                                <a href="shopPage" class="all-product">
                                     Tất cả sản phẩm
                                 </a>
                             </div>

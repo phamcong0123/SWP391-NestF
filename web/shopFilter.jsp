@@ -36,7 +36,7 @@
                         <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="shopPage" class="nav-link current-tab disabled">Shop</a>
+                        <a href="shopPage" class="nav-link">Shop</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
                         <a href="handbookPage" class="nav-link">Cẩm nang</a>
@@ -121,19 +121,30 @@
                     </div>
                 </div>
             </div>
-            <c:if test="${requestScope.LIST_PRODUCT_FILTER != null}">
-                <c:if test="${not empty requestScope.LIST_PRODUCT_FILTER}">
-                    <div class="product-content">
-                        <jsp:useBean id="productFunc" class="com.nestf.product.ProductDTO"/>
-                        <div class="row col-11 m-auto">
-                            <c:forEach var="product" items="${requestScope.LIST_PRODUCT_FILTER}">
+            <c:if test="${not empty requestScope.LIST_PRODUCT_FILTER}">
+                <div class="product-content">
+                    <jsp:useBean id="productFunc" class="com.nestf.product.ProductDTO"/>
+                    <div class="row col-11 m-auto">
+                        <c:forEach var="product" items="${requestScope.LIST_PRODUCT_FILTER}">
+                            <c:if test="${product.status}">
                                 <div class="col-lg-3 col-md-4 product-contain-detail">
                                     <div class="product-image-contain-detail">
                                         <a href="productDetail?productID=${product.productID}" class="product-detail">
                                             <img class="img-responsive"
                                                  src="${product.image}" width="200px" height="200px" alt="${product.name}" class="mx-2">
-                                            <p class="image-title">${product.name}<br><span
-                                                    class="image-price">${productFunc.printPrice(product.price)}</span></p>
+                                            <p class="image-title">${product.name}<br>
+                                                <c:if test="${product.discountPrice != 0}">
+                                                    <span
+                                                        class="image-price-discout">${productFunc.printPrice(product.price)}
+                                                    </span>
+                                                    <br>
+                                                    <span class="image-price">${productFunc.printPrice(product.discountPrice)}
+                                                    </span>
+                                                </c:if>
+                                                <c:if test="${product.discountPrice == 0}">
+                                                    <br><span class="image-price">${productFunc.printPrice(product.price)}</span>
+                                                </c:if>
+                                            </p>
                                         </a>
                                     </div>
                                     <div class="buynow-btn">
@@ -144,10 +155,10 @@
                                         </a>
                                     </div>
                                 </div>
-                            </c:forEach>
-                        </div>
+                            </c:if>
+                        </c:forEach>
                     </div>
-                </c:if>
+                </div>
             </c:if>
             <c:if test="${requestScope.LIST_PRODUCT_FILTER == null}">
                 <div class="product-content">
