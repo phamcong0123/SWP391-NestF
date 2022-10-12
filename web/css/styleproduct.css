@@ -208,6 +208,7 @@ li {
 
 .filter-symbols {
     cursor: pointer;
+    width: max-content!important;
 }
 
 .shop-container {
@@ -216,7 +217,6 @@ li {
 
 .filter-category {
     position: relative;
-    display: none;
 }
 
 .category-option {

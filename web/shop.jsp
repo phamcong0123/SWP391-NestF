@@ -89,13 +89,13 @@
             <div class="container bg-white shop-container">
                 <div class="filter-header">
                     <div class="row">
-                        <div class="filter-symbols col-lg-3" onclick="Show()">
+                        <div class="filter-symbols p-0 m-3 me-5" onclick="Show()">
                             <i class="material-symbols-outlined">
                                 filter_list
                             </i>
                             <h4 class="d-inline-block">Bộ lọc</h4>
                         </div>
-                        <div class="filter-category col-lg-9" id="category-show-up">
+                        <div class="filter-category col-lg-9 m-3 ms-5" id="category-show-up" style="display:none">
                             <form class="form-horizontal" action="FilterController" method="POST">
                                 <h4 class="category-title d-inline-block">Phân loại</h4>
                                 <select class="form-controls category-option" name="categoryFilter">
@@ -190,7 +190,7 @@
 
             loadMoreBtn.onclick = () => {
                 let boxes = [...document.querySelectorAll('.product-contain-detail')];
-                for (var i = currentItem; i < currentItem + 4; i++) {
+                for (var i = currentItem; i < currentItem + 4 && i < boxes.length; i++) {
                     boxes[i].style.display = 'block';
                 }
                 currentItem += 4;
