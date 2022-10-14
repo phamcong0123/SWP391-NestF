@@ -7,6 +7,8 @@ package com.nestf.controller;
 
 import com.nestf.customer.CustomerDAO;
 import com.nestf.customer.CustomerDTO;
+import com.nestf.seller.SellerDAO;
+import com.nestf.seller.SellerDTO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -37,6 +39,7 @@ public class LoginServlet extends HttpServlet {
     //        String url = (String) siteMap.get(MyAppConstant.LoginFeatures.LOGIN_ACTION);
     private static final String ERROR = "login.jsp";
     private static final String SUCCESS = "LoadCartServlet";
+    private static final String DASHBOARD = "dashboard.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
@@ -54,12 +57,21 @@ public class LoginServlet extends HttpServlet {
 //            }
             CustomerDAO dao = new CustomerDAO();
             CustomerDTO loginCustomer = dao.checkLogin(customerPhone, password);
+            SellerDAO daos = new SellerDAO();
+            SellerDTO loginSeller = daos.checkLoginSeller(customerPhone, password);
             if (loginCustomer != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("CUSTOMER", loginCustomer);
                 url = SUCCESS;
 //                url="LoadCartServlet"             
-                
+            } else if (loginSeller != null && loginSeller.isIsAdmin()) {
+                HttpSession session = request.getSession();
+                session.setAttribute("ADMIN", loginSeller);
+                url = DASHBOARD;
+            } else if (loginSeller != null && !loginSeller.isIsAdmin()) {
+                HttpSession session = request.getSession();
+                session.setAttribute("SELLER", loginSeller);
+                url = SUCCESS;
             } else {
                 request.setAttribute("ERROR", "Sai mật khẩu hoặc số điện thoại!");
                 url = ERROR;

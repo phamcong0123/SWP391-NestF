@@ -17,7 +17,39 @@ import javax.naming.NamingException;
  * @author Admin
  */
 public class SellerDAO {
-    public SellerDTO getSellerInformation(int sellerID) throws SQLException, NamingException{
+
+    public SellerDTO checkLoginSeller(String phone, String password) throws SQLException, NamingException {
+        SellerDTO seller = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        String query = "SELECT * FROM tblSeller WHERE phone=? AND password=?";
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(query);
+                ptm.setString(1, phone);
+                ptm.setString(2, password);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    return new SellerDTO(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getBoolean(5));
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return seller;
+    }
+
+    public SellerDTO getSellerInformation(int sellerID) throws SQLException, NamingException {
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
@@ -50,5 +82,5 @@ public class SellerDAO {
         }
         return seller;
     }
-    
+
 }
