@@ -2,6 +2,7 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
         <group>
             <file>file:/D:/CN5/SWP/demonestF/DemoNestF/src/java/com/nestf/controller/LoadArticleServlet.java</file>
             <file>file:/D:/CN5/SWP/demonestF/DemoNestF/web/article.jsp</file>
@@ -75,5 +76,8 @@
             <file>file:/D:/CN5/SWP/demonestF/DemoNestF/src/java/com/nestf/controller/ProductDetailController.java</file>
             <file>file:/D:/CN5/SWP/demonestF/DemoNestF/src/java/com/nestf/controller/BuyVoucherServlet.java</file>
         </group>
+=======
+        <group/>
+>>>>>>> 5f1502362f6d3703c009d0c72025aff4bee8d8d5
     </open-files>
 </project-private>
