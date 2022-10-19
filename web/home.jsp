@@ -125,19 +125,24 @@
                                 <div class="image-collapse">
                                     <ul class="image-list row">
                                         <c:forEach var="product" items="${productList}">
-                                            <li class="image-contain col-lg-3 col-md-6">
-                                                
+                                            <li class="image-contain col-lg-3 col-md-6 position-relative"> 
+                                                <c:if test="${product.discountPrice ne 0}">
+                                                    <img class="position-absolute" src="img/saleoff2.png" style="width:100px; height:auto"></img>                                             
+                                                </c:if>
                                                 <div class="image-contain-section mx-2">
                                                     <div class="image-contain-detail">
+
                                                         <a href="productDetail?productID=${product.productID}" class="product-detail">
                                                             <img src="${product.image}" alt="Image for ${product.name}" class="mx-2">
-                                                            <p class="image-title">${product.name}<br>
+                                                            <p class="image-title">
+
+                                                                <span class="product-title d-block">${product.name}</span><br>
                                                                 <c:if test="${product.discountPrice != 0}">
                                                                     <span
                                                                         class="image-price-discout">${proFunc.printPrice(product.price)}
                                                                     </span>
                                                                     <br>
-                                                                    <span class="image-price">${proFunc.printPrice(product.discountPrice)}
+                                                                    <span class="image-price text-danger">${proFunc.printPrice(product.discountPrice)}
                                                                     </span>
                                                                 </c:if>
                                                                 <c:if test="${product.discountPrice == 0}">
@@ -146,7 +151,7 @@
                                                             </p>
                                                         </a>
                                                     </div>
-                                                    
+
                                                     <div class="buynow-btn">
                                                         <a href="#">
                                                             <button class="btn btn-dark">
@@ -154,7 +159,7 @@
                                                             </button>
                                                         </a>
                                                     </div>
-                                                    
+
                                                 </div>
                                             </li>
                                         </c:forEach>
@@ -267,7 +272,7 @@
                         </c:if>
                     </div>
                 </div>
-                        
+
             </div>
             <footer class="d-flex">
                 <div class="information">

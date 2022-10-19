@@ -7,9 +7,15 @@ package com.nestf.controller;
 
 import com.nestf.bill.BillDAO;
 import com.nestf.bill.BillDTO;
+import com.nestf.billdetail.BillDetailDAO;
 import com.nestf.customer.CustomerDTO;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,35 +25,41 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author toanm
+ * @author Admin
  */
-@WebServlet(name = "ShowBillServlet", urlPatterns = {"/ShowBillServlet"})
-public class ShowBillServlet extends HttpServlet {
+@WebServlet(name = "LoadBillServlet", urlPatterns = {"/LoadBillServlet"})
+public class LoadBillServlet extends HttpServlet {
 
-    private static final String CART = "cart.jsp";
-
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    private static final String LOAD_VOUCHER_WALLET = "LoadVoucherWalletServlet";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = CART;
-        try {
-            HttpSession session = request.getSession();
-            if (session != null) {
-                CustomerDTO customer = (CustomerDTO) session.getAttribute("CUSTOMER");
-                String customerPhone = customer.getCustomerPhone();
-                BillDAO dao = new BillDAO();
-                List<BillDTO> ShowBill = dao.getAllBillByPhone(customerPhone);
-                List<BillDTO> ShowBillConfirm = dao.getAllBillConfirmAndShipping(customerPhone);
-                List<BillDTO> ShowBillCancelled = dao.getAllBillCancelled(customerPhone);
-                if (ShowBill != null) {
-                    request.setAttribute("SHOWBILL", ShowBill);
-                    request.setAttribute("SHOWBILLCONFIRM", ShowBillConfirm);
-                    request.setAttribute("SHOWBILLCANCEL", ShowBillCancelled);
-                    url = CART;
-                }
-            }
-        } catch (Exception e) {
-            log("Error at ShowBillServlet: " + e.toString());
+        String url = LOAD_VOUCHER_WALLET;
+        try  {
+            /* TODO output your page here. You may use following sample code. */
+            HttpSession session = request.getSession(false);
+            CustomerDTO customer = (CustomerDTO) request.getSession().getAttribute("CUSTOMER");
+            String customerPhone = customer.getCustomerPhone();
+            BillDAO billDAO = new BillDAO();
+            billDAO.setCustomerPhone(customerPhone);
+            List<BillDTO> onProcessing = billDAO.getBillOnProcessing();
+            if (onProcessing != null) session.setAttribute("ON_PROCESSING", onProcessing);
+            List<BillDTO> completedBills = billDAO.getCompletedBill();
+            if (completedBills != null) session.setAttribute("COMPLETED", completedBills);
+        } catch (NamingException ex) {
+            Logger.getLogger(LoadBillServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(LoadBillServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

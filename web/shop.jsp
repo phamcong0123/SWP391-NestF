@@ -128,23 +128,28 @@
                                 <c:forEach var="product" items="${requestScope.LIST_PRODUCT}">
                                     <c:if test="${product.status}">
                                         <div class="col-lg-3 col-md-4 product-contain-detail">
-                                            <div class="product-image-contain-detail">
+                                            <div class="product-image-contain-detail position-relative">
                                                 <a href="productDetail?productID=${product.productID}" class="product-detail">
                                                     <img class="img-responsive"
                                                          src="${product.image}" width="200px" height="200px" alt="${product.name}" class="mx-2">
-                                                    <p class="image-title">${product.name}<br>
+                                                    <c:if test="${product.discountPrice ne 0}">
+                                                        <img class="saleoff position-absolute" src="img/saleoff2.png" width="100px">                                              
+                                                    </c:if>
+                                                    <p class="image-title">
+                                                        <span class="product-title d-block">${product.name}</span>
+                                                        <br>
                                                         <c:if test="${product.discountPrice != 0}">
                                                             <span
                                                                 class="image-price-discout">${productFunc.printPrice(product.price)}
                                                             </span>
                                                             <br>
-                                                            <span class="image-price">${productFunc.printPrice(product.discountPrice)}
+                                                            <span class="image-price text-danger">${productFunc.printPrice(product.discountPrice)}
                                                             </span>
                                                         </c:if>
                                                         <c:if test="${product.discountPrice == 0}">
                                                             <br><span class="image-price">${productFunc.printPrice(product.price)}</span>
                                                         </c:if>
-                                                    </p>
+                                                    </p>                                        
                                                 </a>
                                             </div>
                                             <div class="buynow-btn">

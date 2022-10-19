@@ -5,83 +5,62 @@
  */
 package com.nestf.billdetail;
 
+import com.nestf.product.ProductDTO;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  *
  * @author DELL
  */
 public class BillDetailDTO implements Serializable{
-    private int billDetailID;
-    private int billID;
-    private int productID;
+    private ProductDTO product;
     private int quantity;
-    private double price;
-    private double total;
+    private long price;
+    private BigDecimal total;
 
     public BillDetailDTO() {
     }
 
-    public BillDetailDTO(int billDetailID, int billID, int productID, int quantity, double price, double total) {
-        this.billDetailID = billDetailID;
-        this.billID = billID;
-        this.productID = productID;
+    public BillDetailDTO(ProductDTO product, int quantity, long price, BigDecimal total) {
+        this.product = product;
         this.quantity = quantity;
         this.price = price;
         this.total = total;
     }
 
-    public int getBillDetailID() {
-        return billDetailID;
-    }
-
-    public void setBillDetailID(int billDetailID) {
-        this.billDetailID = billDetailID;
-    }
-
-    public int getBillID() {
-        return billID;
-    }
-
-    public void setBillID(int billID) {
-        this.billID = billID;
-    }
-
-    public int getProductID() {
-        return productID;
-    }
-
-    public void setProductID(int productID) {
-        this.productID = productID;
+    public ProductDTO getProduct() {
+        return product;
     }
 
     public int getQuantity() {
         return quantity;
     }
 
+    public long getPrice() {
+        return price;
+    }
+
+    public BigDecimal getTotal() {
+        return total;
+    }
+
+    public void setProduct(ProductDTO product) {
+        this.product = product;
+    }
+
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
+    public void setPrice(long price) {
         this.price = price;
     }
 
-    public double getTotal() {
-        return total;
-    }
-
-    public void setTotal(double total) {
+    public void setTotal(BigDecimal total) {
         this.total = total;
     }
 
-    @Override
-    public String toString() {
-        return "BillDetailDTO{" + "billDetailID=" + billDetailID + ", billID=" + billID + ", productID=" + productID + ", quantity=" + quantity + ", price=" + price + ", total=" + total + '}';
-    }
+    
 
 }

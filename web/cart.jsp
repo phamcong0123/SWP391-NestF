@@ -78,7 +78,7 @@
                         <c:if test="${not empty sessionScope.CART}">
                             <span class="d-inline-block col-7 mt-4 mb-4 text-start">Giỏ hàng của bạn</span>                       
                             <div id="voucher-modal" class="d-inline-block col-4 text-end">
-                                <span>Voucher : <button id="buy-button" class="col-4" data-bs-toggle="modal" data-bs-target="#voucherModal">
+                                <span id="voucher-button">Voucher : <button id="buy-button" class="col-4" data-bs-toggle="modal" data-bs-target="#voucherModal">
                                         Chọn voucher                                  
                                     </button></span>                       
                                 <div class="modal fade" id="voucherModal" tabindex="-1" aria-labelledby="choose1Voucher" aria-hidden="true">
@@ -190,7 +190,7 @@
                     </div>
                 </div>
                 <div id="order-history" class="tab-pane fade" role="tabpanel" aria-labelledby="history-tab">
-                    <div id="whiteboard2" class="col-8 bg-white">
+                    <div id="whiteboard2" class="col-8 bg-white">                       
                         <ul id="options" class="nav nav-tabs border-0 p-3" role="tablist">
                             <li class="nav-item w-25 m-0" role="presentation">
                                 <button id="delivering-tab" data-bs-target="#delivering" data-bs-toggle="tab" aria-selected="true" role="tab"  aria-controls="delivering" aria-current="page" class="nav-link active container-fluid text-black bg-transparent border-0">Đang giao</button>
@@ -199,68 +199,79 @@
                                 <button id="delivered-tab" data-bs-target="#delivered" data-bs-toggle="tab" aria-selected="false" role="tab" aria-controls="delivered" aria-current="page" class="nav-link container-fluid text-black bg-transparent border-0">Đã giao / Đã huỷ</button>
                             </li>
                         </ul>
-                        <div class="tab-content">
+                        <div class="tab-content">                          
                             <div id="delivering" class="tab-pane fade show active pb-3" role="tabpanel" aria-labelledby="delivering-tab">  
-                                <div id="cart-item" class="rounded col-11 m-auto mb-3">
-                                    <div class="row container-fluid m-0">
-                                        <div class="d-inline-block col-2 text-start">
-                                            <img src="img/product1.png" class="rounded w-100">
-                                        </div>     
-                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
-                                            <h4 class="fw-bold">Tổ yến thô cao cấp tiêu chuẩn 100g</h4>
-                                            <font color="green"> Chờ xác nhận</font>
-                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">3</span></p>
-                                            <p>Thành tiền : <span class="fw-bold">2,850,000đ</span></p>
-                                        </div> 
-                                        <div class="d-inline-block col-1 ms-auto">
-                                            <a href="" class="mt-3 nav-link"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a>
+                                <c:if test = "${not empty sessionScope.ON_PROCESSING}">
+                                    <c:set var="billList" value="${sessionScope.ON_PROCESSING}"/>
+                                    <c:forEach items="${billList}" var = "bill">
+                                        <div id = "cart-item" class="row col-11 m-auto text-start mb-3 position-relative">
+                                            <h3 class="m-2 mb-0 d-inline-block">Đơn hàng <strong>#NESTF${bill.billID}</strong></h3>
+                                            <h5 class="text-success m-2">${bill.status.status}</h5>
+                                            <jsp:useBean id="billFunc" class="com.nestf.bill.BillDTO"/> 
+                                            <span class="ms-2 mb-4">Ngày đặt hàng: <b>${billFunc.printDate(bill.time)}</b></span>
+                                            <c:forEach items = "${bill.detail}" var = "billDetail">
+                                                <div class="rounded col-11 m-auto mb-3 border border-dark">
+                                                    <div class="row container-fluid m-0">
+                                                        <div class="d-inline-block col-2 text-start">
+                                                            <img src="${billDetail.product.image}" class="rounded w-100">
+                                                        </div>     
+                                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
+                                                            <h4 class="fw-bold">${billDetail.product.name}</h4>
+                                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">${billDetail.quantity}</span></p>
+                                                            <p>Thành tiền : <span class="fw-bold">${billFunc.printMoney(billDetail.total)}</span></p>
+                                                        </div>                                             
+                                                    </div>
+                                                </div>
+                                            </c:forEach>                                          
+                                            <h4 class="text-end">Tổng cộng: <b>${billFunc.printMoney(bill.total)}</b></h4>       
+                                            <c:if test="${bill.status.statusID < 3}">
+                                                <a href="cancelBill?billID=${bill.billID}" id="remove-button" class="mt-3 nav-link position-absolute"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a> 
+                                                </c:if>
+
                                         </div>
-                                    </div>  
-                                </div>              
-                                <div id="cart-item" class="rounded col-11 m-auto mb-3">
-                                    <div class="row container-fluid m-0">
-                                        <div class="d-inline-block col-2 text-start">
-                                            <img src="img/product1.png" class="rounded w-100">
-                                        </div>     
-                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
-                                            <h4 class="fw-bold">Tổ yến thô cao cấp tiêu chuẩn 100g</h4>
-                                            <font color="green"> Chờ xác nhận</font>
-                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">3</span></p>
-                                            <p>Thành tiền : <span class="fw-bold">2,850,000đ</span></p>
-                                        </div> 
-                                        <div class="d-inline-block col-1 ms-auto">
-                                            <a href="" class="mt-3 nav-link"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a>
-                                        </div>
-                                    </div>  
-                                </div> 
-                            </div>
+                                    </c:forEach>
+                                </c:if>
+                                <c:if test="${empty sessionScope.ON_PROCESSING}">
+                                    <div class="mt-5">
+                                        <img src="img/emptyCart.png">
+                                        <h4 class="text-muted mt-3 pb-4">Không có lịch sử giao dịch.</h4>
+                                    </div>
+                                </c:if>
+                            </div>                   
                             <div id="delivered" class="tab-pane fade pb-3" role="tabpanel" aria-labelledby="delivered-tab">                             
-                                <div id="cart-item" class="rounded col-11 m-auto mb-3">
-                                    <div class="row container-fluid m-0">
-                                        <div class="d-inline-block col-2 text-start">
-                                            <img src="img/product1.png" class="rounded w-100">
-                                        </div>     
-                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
-                                            <h4 class="fw-bold">Tổ yến thô cao cấp tiêu chuẩn 100g</h4>
-                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">3</span></p>
-                                            <p>Thành tiền : <span class="fw-bold">2,850,000đ</span></p>
-                                        </div> 
-                                    </div>  
-                                </div>                          
-                                <div id="cart-item" class="rounded col-11 m-auto mb-3">
-                                    <div class="row container-fluid m-0">
-                                        <div class="d-inline-block col-2 text-start">
-                                            <img src="img/product1.png" class="rounded w-100">
-                                        </div>     
-                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
-                                            <h4 class="fw-bold">Tổ yến thô cao cấp tiêu chuẩn 100g</h4>
-                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">3</span></p>
-                                            <p>Thành tiền : <span class="fw-bold">2,850,000đ</span></p>
-                                        </div> 
-                                    </div>  
-                                </div>
+                                <c:if test = "${not empty sessionScope.COMPLETED}">
+                                    <c:set var="completedList" value="${sessionScope.COMPLETED}"/>
+                                    <c:forEach items="${completedList}" var = "completedBill">
+                                        <div id = "cart-item" class="row col-11 m-auto text-start mb-3 position-relative">
+                                            <h3 class="m-2 mb-0 d-inline-block">Đơn hàng <strong>#NESTF${completedBill.billID}</strong></h3>
+                                            <h5 class="text-danger m-2">${completedBill.status.status}</h5>
+                                            <span class="ms-2 mb-4">Ngày đặt hàng: <b>${billFunc.printDate(completedBill.time)}</b></span>
+                                            <c:forEach items = "${completedBill.detail}" var = "billDetail">
+                                                <div class="rounded col-11 m-auto mb-3 border border-dark">
+                                                    <div class="row container-fluid m-0">
+                                                        <div class="d-inline-block col-2 text-start">
+                                                            <img src="${billDetail.product.image}" class="rounded w-100">
+                                                        </div>     
+                                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
+                                                            <h4 class="fw-bold">${billDetail.product.name}</h4>
+                                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">${billDetail.quantity}</span></p>
+                                                            <p>Thành tiền : <span class="fw-bold">${billFunc.printMoney(billDetail.total)}</span></p>
+                                                        </div>                                             
+                                                    </div>
+                                                </div>
+                                            </c:forEach>                                          
+                                            <h4 class="text-end">Tổng cộng: <b>${billFunc.printMoney(completedBill.total)}</b></h4>                                                   
+                                        </div>
+                                    </c:forEach>
+                                </c:if>
+                                <c:if test="${empty sessionScope.COMPLETED}">
+                                    <div class="mt-5">
+                                        <img src="img/emptyCart.png">
+                                        <h4 class="text-muted mt-3 pb-4">Không có lịch sử giao dịch.</h4>
+                                    </div>
+                                </c:if>
                             </div>
-                        </div>            
+                        </div>                     
                     </div>
                 </div>
             </div>            

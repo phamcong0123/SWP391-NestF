@@ -164,9 +164,16 @@
                                 <a href="productDetail?productID=${otherProduct.productID}" 
                                    style="color: #000;
                                    text-decoration: none">
-                                    <img src="${otherProduct.image}">
-                                    <h6>${otherProduct.name}</h6>
-                                    <span>${productFunc.printPrice(otherProduct.price)}</span><br>
+                                    <img src="${otherProduct.image}" class="mb-2">
+                                    <h6 class="product-title">${otherProduct.name}</h6>
+                                    <c:if test="${otherProduct.discountPrice != 0}">
+                                        <span class="text-muted text-decoration-line-through">${productFunc.printPrice(otherProduct.price)}</span>
+                                        <br>
+                                        <span class="text-danger">${productFunc.printPrice(otherProduct.discountPrice)}</span><br>
+                                    </c:if>
+                                    <c:if test="${otherProduct.discountPrice == 0}">
+                                        <br><span>${productFunc.printPrice(otherProduct.price)}</span><br>
+                                    </c:if>
                                     <a href="addToCart?productID=${otherProduct.productID}&buynow=true"><button id="buy-button" class="col-6">Mua ngay</button></a>
                                 </a>
                             </div>

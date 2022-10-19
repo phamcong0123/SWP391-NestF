@@ -5,9 +5,16 @@
  */
 package com.nestf.bill;
 
+import com.nestf.billdetail.BillDetailDTO;
 import com.nestf.product.ProductDTO;
+import com.nestf.status.StatusDTO;
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Currency;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 /**
  *
@@ -16,106 +23,88 @@ import java.util.Date;
 public class BillDTO implements Serializable {
 
     private int billID;
-    private int customerPhone;
     private String address;
-    private int sellerID;
-    private int statusID;
+    private StatusDTO status;
     private Date time;
     private double total;
-    ProductDTO p;
+    private List<BillDetailDTO> detail;
 
     public BillDTO() {
     }
 
-    public BillDTO(int billID, int customerPhone, String address, int sellerID, int statusID, Date time, double total, ProductDTO p) {
+    public BillDTO(int billID, String address, StatusDTO status, Date time, double total, List<BillDetailDTO> detail) {
         this.billID = billID;
-        this.customerPhone = customerPhone;
         this.address = address;
-        this.sellerID = sellerID;
-        this.statusID = statusID;
+        this.status = status;
         this.time = time;
         this.total = total;
-        this.p = p;
+        this.detail = detail;
     }
 
-    public BillDTO(int billID, int customerPhone, String address, int sellerID, int statusID, Date time, double total) {
-        this.billID = billID;
-        this.customerPhone = customerPhone;
-        this.address = address;
-        this.sellerID = sellerID;
-        this.statusID = statusID;
-        this.time = time;
-        this.total = total;
+    public StatusDTO getStatus() {
+        return status;
     }
+
+    public void setStatus(StatusDTO status) {
+        this.status = status;
+    }
+
+    
 
     public int getBillID() {
         return billID;
-    }
-
-    public void setBillID(int billID) {
-        this.billID = billID;
-    }
-
-    public int getCustomerPhone() {
-        return customerPhone;
-    }
-
-    public void setCustomerPhone(int customerPhone) {
-        this.customerPhone = customerPhone;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public int getSellerID() {
-        return sellerID;
-    }
-
-    public void setSellerID(int sellerID) {
-        this.sellerID = sellerID;
-    }
-
-    public int getStatusID() {
-        return statusID;
-    }
-
-    public void setStatusID(int statusID) {
-        this.statusID = statusID;
-    }
+   
 
     public Date getTime() {
         return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
     }
 
     public double getTotal() {
         return total;
     }
 
+    public List<BillDetailDTO> getDetail() {
+        return detail;
+    }
+
+    public void setBillID(int billID) {
+        this.billID = billID;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
+
     public void setTotal(double total) {
         this.total = total;
     }
 
-    public ProductDTO getP() {
-        return p;
+    public void setDetail(List<BillDetailDTO> detail) {
+        this.detail = detail;
     }
 
-    public void setP(ProductDTO p) {
-        this.p = p;
+    public String printDate(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY hh:mm:ss");
+        String dateString = sdf.format(date);
+        return dateString;
+    }
+    public String printMoney(double price) {
+        Locale vie = new Locale("vi", "VN");
+        Currency vnd = Currency.getInstance(vie);
+        NumberFormat vndFormat = NumberFormat.getCurrencyInstance(vie);
+        return vndFormat.format(price).replace("đ", "₫");
     }
 
-    @Override
-    public String toString() {
-        return "BillDTO{" + "billID=" + billID + ", customerPhone=" + customerPhone + ", address=" + address + ", sellerID=" + sellerID + ", statusID=" + statusID + ", time=" + time + ", total=" + total + ", p=" + p + '}';
-    }
-
-   
 }

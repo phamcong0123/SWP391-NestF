@@ -38,12 +38,12 @@ public class LoadCartServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final String LOAD_VOUCHER_WALLET = "LoadVoucherWalletServlet";
+    private static final String LOAD_BILL_CONTROLLER = "LoadBillServlet";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = LOAD_VOUCHER_WALLET;
+        String url = LOAD_BILL_CONTROLLER;
         try {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession(false);

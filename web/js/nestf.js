@@ -62,4 +62,5 @@ function cancelVoucher(){
     var total = document.getElementById('total').value
     document.getElementById('total-display').innerHTML = new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'VND' }).format(total);
     document.getElementById('voucher-use').value = "";
+    document.getElementById('voucher-button').firstElementChild.innerHTML = 'Chọn voucher';
 }

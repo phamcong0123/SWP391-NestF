@@ -22,6 +22,13 @@ section{
 ul li:first-child {
     text-align: center;
 }
+.product-title{
+    height:2rem;
+}
+.saleoff{
+    bottom:77%!important;
+    left:65%!important;
+}
 
 .container{
     margin:2%;
@@ -84,7 +91,10 @@ li {
     padding-top: 1.2rem;
     padding-left: 1.1rem;
 }
-
+.image-contain img{
+    bottom:82%;
+    left:65%;
+}
 .image-contain-section {
     background-color: #fff;
     margin-bottom: 1.2rem;
@@ -204,6 +214,7 @@ li {
 
 .filter-header {
     padding: 2rem 1rem;
+  
 }
 
 .filter-symbols {
