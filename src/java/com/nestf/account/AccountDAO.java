@@ -101,7 +101,7 @@ public class AccountDAO {
                 ptm.setString(4, account.getAddress());
                 ptm.setBoolean(5, account.isGender());
                 ptm.setInt(6, account.getPoint());
-                ptm.setString(6, account.getRole());
+                ptm.setString(7, account.getRole());
                 check = ptm.executeUpdate() > 0;
             }
         } finally {
@@ -110,6 +110,75 @@ public class AccountDAO {
             }
             if (conn != null) {
                 conn.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean updateName(String phone, String newName) throws SQLException, NamingException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(UPDATE_NAME);
+                ptm.setString(1, newName);
+                ptm.setString(2, phone);
+                check = ptm.executeUpdate() > 0;
+            }
+        } finally {
+            if (conn != null) {
+                conn.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean updateAddress(String phone, String newAddress) throws SQLException, NamingException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(UPDATE_ADDRESS);
+                ptm.setString(1, newAddress);
+                ptm.setString(2, phone);
+                check = ptm.executeUpdate() > 0;
+            }
+        } finally {
+            if (conn != null) {
+                conn.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+        }
+        return check;
+    }
+
+    public boolean updatePassword(String phone, String newPass) throws SQLException, NamingException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(UPDATE_PASSWORD);
+                ptm.setString(1, newPass);
+                ptm.setString(2, phone);
+                check = ptm.executeUpdate() > 0;
+            }
+        } finally {
+            if (conn != null) {
+                conn.close();
+            }
+            if (ptm != null) {
+                ptm.close();
             }
         }
         return check;

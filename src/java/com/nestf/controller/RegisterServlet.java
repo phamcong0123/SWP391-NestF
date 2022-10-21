@@ -5,9 +5,9 @@
  */
 package com.nestf.controller;
 
-import com.nestf.customer.CustomerDAO;
-import com.nestf.customer.CustomerDTO;
-import com.nestf.customer.CustomerError;
+import com.nestf.account.AccountDAO;
+import com.nestf.account.AccountDTO;
+import com.nestf.account.AccountError;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -32,32 +32,33 @@ public class RegisterServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String url = ERROR;
         try {
-            String customerPhone = request.getParameter("customerPhone").trim();
+            String phone = request.getParameter("phone").trim();
             String password = request.getParameter("password");
-            String customerName = request.getParameter("customerName");
-            String customerAddress = request.getParameter("customerAddress");
+            String name = request.getParameter("name");
+            String address = request.getParameter("address");
             boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
             int point = Integer.parseInt(request.getParameter("point"));
-            CustomerDAO dao = new CustomerDAO();
-            CustomerDTO customer = new CustomerDTO(customerPhone, password, customerName, customerAddress, gender, point);
+            String role = "US";
+            AccountError error = new AccountError();
+            AccountDAO dao = new AccountDAO();
+            AccountDTO acc = new AccountDTO(phone, password, name, address, gender, point, role);
             boolean check = true;
             boolean checkInsert = false;
-            CustomerError cusError = new CustomerError();
-            boolean checkDup = dao.checkDuplicate(customerPhone);
+            boolean checkDup = dao.checkDuplicate(phone);
             if (checkDup) {
-                cusError.setCustomerPhoneDuplicate("Số điện thoại đã có người đăng ký!");
                 check = false;
-            }          
+                error.setName("Số điện thoại đã có người đăng ký!");
+            }
             if (check) {
-                checkInsert = dao.insert(customer);
+                checkInsert = dao.insert(acc);
                 if (checkInsert) {
                     url = SUCCESS;
-                } 
+                }
             } else {
-                request.setAttribute("CUS_ERROR", cusError);              
+                request.setAttribute("CUS_ERROR", error);
             }
         } catch (Exception e) {
-            log("Error at Register: " + e.toString());
+            log("Error at RegisterServlet: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
