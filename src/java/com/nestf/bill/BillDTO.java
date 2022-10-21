@@ -16,7 +16,7 @@ import java.util.Date;
 public class BillDTO implements Serializable {
 
     private int billID;
-    private int customerPhone;
+    private String cusPhone;
     private String address;
     private int sellerID;
     private int statusID;
@@ -27,9 +27,9 @@ public class BillDTO implements Serializable {
     public BillDTO() {
     }
 
-    public BillDTO(int billID, int customerPhone, String address, int sellerID, int statusID, Date time, double total, ProductDTO p) {
+    public BillDTO(int billID, String cusPhone, String address, int sellerID, int statusID, Date time, double total, ProductDTO p) {
         this.billID = billID;
-        this.customerPhone = customerPhone;
+        this.cusPhone = cusPhone;
         this.address = address;
         this.sellerID = sellerID;
         this.statusID = statusID;
@@ -38,9 +38,9 @@ public class BillDTO implements Serializable {
         this.p = p;
     }
 
-    public BillDTO(int billID, int customerPhone, String address, int sellerID, int statusID, Date time, double total) {
+    public BillDTO(int billID, String cusPhone, String address, int sellerID, int statusID, Date time, double total) {
         this.billID = billID;
-        this.customerPhone = customerPhone;
+        this.cusPhone = cusPhone;
         this.address = address;
         this.sellerID = sellerID;
         this.statusID = statusID;
@@ -56,12 +56,12 @@ public class BillDTO implements Serializable {
         this.billID = billID;
     }
 
-    public int getCustomerPhone() {
-        return customerPhone;
+    public String getCusPhone() {
+        return cusPhone;
     }
 
-    public void setCustomerPhone(int customerPhone) {
-        this.customerPhone = customerPhone;
+    public void setCusPhone(String cusPhone) {
+        this.cusPhone = cusPhone;
     }
 
     public String getAddress() {
@@ -114,7 +114,7 @@ public class BillDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "BillDTO{" + "billID=" + billID + ", customerPhone=" + customerPhone + ", address=" + address + ", sellerID=" + sellerID + ", statusID=" + statusID + ", time=" + time + ", total=" + total + ", p=" + p + '}';
+        return "BillDTO{" + "billID=" + billID + ", customerPhone=" + cusPhone + ", address=" + address + ", sellerID=" + sellerID + ", statusID=" + statusID + ", time=" + time + ", total=" + total + ", p=" + p + '}';
     }
 
    

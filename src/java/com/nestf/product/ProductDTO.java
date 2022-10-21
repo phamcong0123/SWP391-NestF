@@ -5,6 +5,7 @@
  */
 package com.nestf.product;
 
+import com.nestf.category.CategoryDTO;
 import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Currency;
@@ -16,12 +17,11 @@ import java.util.Locale;
  */
 public class ProductDTO implements Serializable{
     private int productID;
-    private int sellerID;
     private String name;
     private long price;
     private int quantity;
-    private String category;
-    private long discountPrice;
+    private CategoryDTO category;
+    private double discountPrice;
     private String productDes;
     private String image;
     private String detailDes;
@@ -30,9 +30,8 @@ public class ProductDTO implements Serializable{
     public ProductDTO() {
     }
 
-    public ProductDTO(int productID, int sellerID, String name, long price, int quantity, String category, long discountPrice, String productDes, String image, String detailDes, boolean status) {
+    public ProductDTO(int productID, String name, long price, int quantity, CategoryDTO category, long discountPrice, String productDes, String image, String detailDes, boolean status) {
         this.productID = productID;
-        this.sellerID = sellerID;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -50,14 +49,6 @@ public class ProductDTO implements Serializable{
 
     public void setProductID(int productID) {
         this.productID = productID;
-    }
-
-    public int getSellerID() {
-        return sellerID;
-    }
-
-    public void setSellerID(int sellerID) {
-        this.sellerID = sellerID;
     }
 
     public String getName() {
@@ -84,19 +75,19 @@ public class ProductDTO implements Serializable{
         this.quantity = quantity;
     }
 
-    public String getCategory() {
+    public CategoryDTO getCategory() {
         return category;
     }
 
-    public void setCategory(String category) {
+    public void setCategory(CategoryDTO category) {
         this.category = category;
     }
 
-    public long getDiscountPrice() {
+    public double getDiscountPrice() {
         return discountPrice;
     }
 
-    public void setDiscountPrice(long discountPrice) {
+    public void setDiscountPrice(double discountPrice) {
         this.discountPrice = discountPrice;
     }
 

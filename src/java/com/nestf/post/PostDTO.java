@@ -16,7 +16,7 @@ import java.util.Date;
 public class PostDTO implements Serializable {
 
     private int postID;
-    private SellerDTO seller;
+    private String adPhone;
     private String title;
     private String dateTime;
     private boolean status;
@@ -26,9 +26,9 @@ public class PostDTO implements Serializable {
     public PostDTO() {
     }
 
-    public PostDTO(int postID, SellerDTO seller, String title, String dateTime, boolean status, String filePath, String image) {
+    public PostDTO(int postID, String adPhone, String title, String dateTime, boolean status, String filePath, String image) {
         this.postID = postID;
-        this.seller = seller;
+        this.adPhone = adPhone;
         this.title = title;
         this.dateTime = dateTime;
         this.status = status;
@@ -40,8 +40,12 @@ public class PostDTO implements Serializable {
         return postID;
     }
 
-    public SellerDTO getSeller() {
-        return seller;
+    public String getAdPhone() {
+        return adPhone;
+    }
+
+    public void setAdPhone(String adPhone) {
+        this.adPhone = adPhone;
     }
 
     public String getTitle() {
@@ -68,10 +72,6 @@ public class PostDTO implements Serializable {
         this.postID = postID;
     }
 
-    public void setSeller(SellerDTO seller) {
-        this.seller = seller;
-    }
-
     public void setTitle(String title) {
         this.title = title;
     }
@@ -91,7 +91,5 @@ public class PostDTO implements Serializable {
     public void setImage(String image) {
         this.image = image;
     }
-
-    
 
 }

@@ -373,7 +373,7 @@ public class BillDAO {
         try {
             conn = DBHelper.makeConnection();
             ptm = conn.prepareStatement(query);
-            ptm.setInt(1, bills.getCustomerPhone());
+            ptm.setInt(1, bills.getCusPhone());
             ptm.setInt(2, bills.getSellerID());
             ptm.setString(3, bills.getAddress());
             ptm.setInt(4, bills.getStatusID());
