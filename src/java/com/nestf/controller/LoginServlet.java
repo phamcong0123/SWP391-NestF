@@ -5,10 +5,8 @@
  */
 package com.nestf.controller;
 
-import com.nestf.customer.CustomerDAO;
-import com.nestf.customer.CustomerDTO;
-import com.nestf.seller.SellerDAO;
-import com.nestf.seller.SellerDTO;
+import com.nestf.account.AccountDAO;
+import com.nestf.account.AccountDTO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -50,27 +48,25 @@ public class LoginServlet extends HttpServlet {
         String url = ERROR;
 //        String url = "login.jsp";
         try {
-            String customerPhone = request.getParameter("customerPhone").trim();
+            String phone = request.getParameter("phone").trim();
             String password = request.getParameter("password");
 //            String action = request.getParameter("login Action");
 //            if (action.equals("Login")) {
 //            }
-            CustomerDAO dao = new CustomerDAO();
-            CustomerDTO loginCustomer = dao.checkLogin(customerPhone, password);
-            SellerDAO daos = new SellerDAO();
-            SellerDTO loginSeller = daos.checkLoginSeller(customerPhone, password);
-            if (loginCustomer != null) {
+            AccountDAO dao = new AccountDAO();
+            AccountDTO login = dao.checkLogin(phone, password);
+            if (login != null && login.getRole().equals("US")) {
                 HttpSession session = request.getSession();
-                session.setAttribute("CUSTOMER", loginCustomer);
+                session.setAttribute("LOGIN_CUSTOMER", login);
                 url = SUCCESS;
 //                url="LoadCartServlet"             
-            } else if (loginSeller != null && loginSeller.isIsAdmin()) {
+            } else if (login != null && login.getRole().equals("AD")) {
                 HttpSession session = request.getSession();
-                session.setAttribute("ADMIN", loginSeller);
+                session.setAttribute("LOGIN_ADMIN", login);
                 url = DASHBOARD;
-            } else if (loginSeller != null && !loginSeller.isIsAdmin()) {
+            } else if (login != null && login.getRole().equals("SE")) {
                 HttpSession session = request.getSession();
-                session.setAttribute("SELLER", loginSeller);
+                session.setAttribute("LOGIN_SELLER", login);
                 url = SUCCESS;
             } else {
                 request.setAttribute("ERROR", "Sai mật khẩu hoặc số điện thoại!");

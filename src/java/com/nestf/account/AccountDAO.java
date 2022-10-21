@@ -28,7 +28,38 @@ public class AccountDAO {
             + " WHERE [phone]=?";
     private static final String UPDATE_PASSWORD = "UPDATE [NestF].[dbo].[tblAccount] SET [password]=? "
             + " WHERE [phone]=?";
-    
+
+    public AccountDTO checkLogin(String phone, String password) throws SQLException, NamingException {
+        AccountDTO account = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        String query = "SELECT * FROM tblAccount WHERE phone=? AND password=?";
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(query);
+                ptm.setString(1, phone);
+                ptm.setString(2, password);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    return new AccountDTO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBoolean(5), rs.getInt(6), rs.getString(7));
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return account;
+    }
+
     public boolean checkDuplicate(String phone) throws SQLException, NamingException {
         boolean check = false;
         Connection conn = null;
