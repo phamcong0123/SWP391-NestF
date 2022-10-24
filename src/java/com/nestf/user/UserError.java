@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nestf.customer;
+package com.nestf.user;
 
 /**
  *
  * @author Admin
  */
-public class CustomerError {
+public class UserError {
     
     private String failLogin;
     private String customerPhoneDuplicate;

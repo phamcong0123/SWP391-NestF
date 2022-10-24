@@ -5,8 +5,8 @@
  */
 package com.nestf.controller;
 
-import com.nestf.customer.CustomerDAO;
-import com.nestf.customer.CustomerDTO;
+import com.nestf.user.UserDAO;
+import com.nestf.user.UserDTO;
 import com.nestf.voucher.VoucherDAO;
 import com.nestf.voucher.VoucherDTO;
 import com.nestf.vouchertype.VoucherTypeDAO;
@@ -50,13 +50,13 @@ public class BuyVoucherServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession(false);
             if (session != null) {
-                CustomerDTO customer = (CustomerDTO) session.getAttribute("CUSTOMER");
+                UserDTO customer = (UserDTO) session.getAttribute("CUSTOMER");
                 int customerPoint = customer.getPoint();
                 int typeID = Integer.parseInt(request.getParameter("typeID"));
                 VoucherTypeDAO typeDAO = new VoucherTypeDAO();
                 int requiredPoint = typeDAO.getVoucher(typeID).getPoint();
                 if (customerPoint >= requiredPoint) {
-                    String phone = customer.getCustomerPhone();
+                    String phone = customer.getUserPhone();
                     VoucherDAO dao = new VoucherDAO();
                     VoucherDTO voucher = dao.addVoucherToWaller(typeID);
                     if (voucher != null) {
@@ -64,7 +64,7 @@ public class BuyVoucherServlet extends HttpServlet {
                         voucherWallet.add(voucher);
                         int newPoint = customerPoint - requiredPoint;
                         int newQuantity = typeDAO.getVoucher(typeID).getQuantity() - 1;
-                        CustomerDAO customerDAO = new CustomerDAO();
+                        UserDAO customerDAO = new UserDAO();
                         if (customerDAO.buyVoucher(phone, newPoint) && typeDAO.updateQuantity(typeID, newQuantity)) {
                             customer.setPoint(newPoint);
                             session.setAttribute("CUSTOMER", customer);

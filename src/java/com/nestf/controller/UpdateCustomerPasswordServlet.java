@@ -5,9 +5,9 @@
  */
 package com.nestf.controller;
 
-import com.nestf.customer.CustomerDAO;
-import com.nestf.customer.CustomerDTO;
-import com.nestf.customer.CustomerError;
+import com.nestf.user.UserDAO;
+import com.nestf.user.UserDTO;
+import com.nestf.user.UserError;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -33,12 +33,12 @@ public class UpdateCustomerPasswordServlet extends HttpServlet {
         String url = ERROR;        
         try {            
             HttpSession session = request.getSession();
-            CustomerDTO customer = (CustomerDTO) session.getAttribute("CUSTOMER");
+            UserDTO customer = (UserDTO) session.getAttribute("CUSTOMER");
             String password = request.getParameter("password");
             String newPass = request.getParameter("newPass").trim();          
             boolean check = true;
             String curPassword = customer.getPassword(); 
-            CustomerError cusError = new CustomerError();
+            UserError cusError = new UserError();
             if (curPassword.equals(newPass)) {
                 check = false;             
                 cusError.setPasswordDuplicate("Mật khẩu mới không khả dụng!");
@@ -48,8 +48,8 @@ public class UpdateCustomerPasswordServlet extends HttpServlet {
                 cusError.setPasswordWrong("Mật khẩu hiện tại không chính xác!");
             }
             if (check) {               
-                String phone = customer.getCustomerPhone();
-                CustomerDAO dao = new CustomerDAO();
+                String phone = customer.getUserPhone();
+                UserDAO dao = new UserDAO();
                 boolean checkDao = dao.updateCusPassword(phone, newPass);
                 if (checkDao) {
                     url = SUCCESS;

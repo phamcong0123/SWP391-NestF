@@ -8,7 +8,7 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="vi">
-    <c:if test="${not empty sessionScope.CUSTOMER}">
+    <c:if test="${not empty sessionScope.USER}">
         <c:redirect url=""></c:redirect>
     </c:if>
     <head>
@@ -33,10 +33,10 @@
                         <a href="shopPage" class="nav-link">Shop</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="handbookPage" class="nav-link">Cẩm nang</a>
+                        <a href="handbook" class="nav-link">Cẩm nang</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="aboutPage" class="nav-link">Về chúng tôi</a>
+                        <a href="about" class="nav-link">Về chúng tôi</a>
                     </li>
                     <li class="nav-item col-7 d-inline-block">
                     </li>         
@@ -46,7 +46,7 @@
         <div class="d-inline-block col-4 p-4 rounded bg-light shadow border border-dark" id="login-form">
             <h1 class="mt-4">Đăng nhập</h1><br>
             <form action="loginAction" method="POST">
-                <input type="text" name="customerPhone" value="${param.customerPhone}" required class="col-6" placeholder="Số điện thoại"><br>
+                <input type="text" name="phone" value="${param.customerPhone}" required class="col-6" placeholder="Số điện thoại"><br>
                 <input type="password" name="password" required class="col-6 mt-3" placeholder="Mật khẩu"><br>   
                 <c:if test="${ not empty requestScope.ERROR}"><div class="text-center text-danger mt-2 col-10 d-inline-block">${requestScope.ERROR}</div><br></c:if>
                 <a href="forgotPassword" class="nav-link col-6 d-inline-block mt-3 mb-3 text-end text-primary" id="forgetPass">Quên mật khẩu</a><br>

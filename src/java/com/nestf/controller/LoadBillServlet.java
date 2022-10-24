@@ -8,7 +8,7 @@ package com.nestf.controller;
 import com.nestf.bill.BillDAO;
 import com.nestf.bill.BillDTO;
 import com.nestf.billdetail.BillDetailDAO;
-import com.nestf.customer.CustomerDTO;
+import com.nestf.user.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -48,8 +48,8 @@ public class LoadBillServlet extends HttpServlet {
         try  {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession(false);
-            CustomerDTO customer = (CustomerDTO) request.getSession().getAttribute("CUSTOMER");
-            String customerPhone = customer.getCustomerPhone();
+            UserDTO customer = (UserDTO) request.getSession().getAttribute("CUSTOMER");
+            String customerPhone = customer.getUserPhone();
             BillDAO billDAO = new BillDAO();
             billDAO.setCustomerPhone(customerPhone);
             List<BillDTO> onProcessing = billDAO.getBillOnProcessing();

@@ -5,9 +5,9 @@
  */
 package com.nestf.controller;
 
-import com.nestf.customer.CustomerDAO;
-import com.nestf.customer.CustomerDTO;
-import com.nestf.customer.CustomerError;
+import com.nestf.user.UserDAO;
+import com.nestf.user.UserDTO;
+import com.nestf.user.UserError;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -37,12 +37,11 @@ public class RegisterServlet extends HttpServlet {
             String customerName = request.getParameter("customerName");
             String customerAddress = request.getParameter("customerAddress");
             boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
-            int point = Integer.parseInt(request.getParameter("point"));
-            CustomerDAO dao = new CustomerDAO();
-            CustomerDTO customer = new CustomerDTO(customerPhone, password, customerName, customerAddress, gender, point);
+            UserDAO dao = new UserDAO();
+            UserDTO customer = new UserDTO(customerPhone, password, customerName, customerAddress, gender, 0, "US");
             boolean check = true;
             boolean checkInsert = false;
-            CustomerError cusError = new CustomerError();
+            UserError cusError = new UserError();
             boolean checkDup = dao.checkDuplicate(customerPhone);
             if (checkDup) {
                 cusError.setCustomerPhoneDuplicate("Số điện thoại đã có người đăng ký!");

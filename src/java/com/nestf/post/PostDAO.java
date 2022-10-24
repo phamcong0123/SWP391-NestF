@@ -5,8 +5,10 @@
  */
 package com.nestf.post;
 
-import com.nestf.seller.SellerDAO;
-import com.nestf.seller.SellerDTO;
+import com.nestf.user.UserDAO;
+import com.nestf.user.UserDTO;
+import com.nestf.user.UserDAO;
+import com.nestf.user.UserDTO;
 import com.nestf.util.DBHelper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -24,7 +26,7 @@ import javax.naming.NamingException;
  */
 public class PostDAO {
 
-    private static String POST_LIST = "SELECT [postID],[sellerID],[title],[dateTime],[status],[filePath],[image] FROM [NestF].[dbo].[tblPost]";
+    private static String POST_LIST = "SELECT [postID],[adPhone],[title],[dateTime],[status],[filePath],[image] FROM [NestF].[dbo].[tblPost]";
 
     public List<PostDTO> postList() throws SQLException, NamingException {
         List<PostDTO> postList = new ArrayList();
@@ -38,9 +40,9 @@ public class PostDAO {
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     int postID = Integer.parseInt(rs.getString("postID"));
-                    int sellerID = rs.getInt("sellerID");
-                    SellerDAO dao = new SellerDAO();
-                    SellerDTO seller = dao.getSellerInformation(sellerID);
+                    String phone = rs.getString("adPhone");
+                    UserDAO dao = new UserDAO();
+                    UserDTO seller = dao.GetUserByPhone(phone);
                     String title = rs.getString("title");
                     Date date = rs.getDate("dateTime");
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -66,7 +68,7 @@ public class PostDAO {
         return postList;
     }
 
-    private static String POST = "SELECT [postID],[sellerID],[title],[dateTime],[status],[filePath],[image] FROM [NestF].[dbo].[tblPost] WHERE [postID] = ?";
+    private static String POST = "SELECT [postID],[adPhone],[title],[dateTime],[status],[filePath],[image] FROM [NestF].[dbo].[tblPost] WHERE [postID] = ?";
 
     public PostDTO getPost(int postID) throws NamingException, SQLException {
         Connection conn = null;
@@ -80,9 +82,9 @@ public class PostDAO {
                 ptm.setInt(1, postID);
                 rs = ptm.executeQuery();
                 if (rs.next()) {
-                    int sellerID = rs.getInt("sellerID");
-                    SellerDAO dao = new SellerDAO();
-                    SellerDTO seller = dao.getSellerInformation(sellerID);
+                    String phone = rs.getString("adPhone");
+                    UserDAO dao = new UserDAO();
+                    UserDTO seller = dao.GetUserByPhone(phone);
                     String title = rs.getString("title");
                     Date date = rs.getDate("dateTime");
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -121,9 +123,9 @@ public class PostDAO {
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     int postID = rs.getInt("postID");
-                    int sellerID = rs.getInt("sellerID");
-                    SellerDAO dao = new SellerDAO();
-                    SellerDTO seller = dao.getSellerInformation(sellerID);
+                    String phone = rs.getString("adPhone");
+                    UserDAO dao = new UserDAO();
+                    UserDTO seller = dao.GetUserByPhone(phone);
                     String title = rs.getString("title");
                     Date date = rs.getDate("dateTime");
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");

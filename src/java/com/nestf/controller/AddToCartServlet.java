@@ -7,7 +7,7 @@ package com.nestf.controller;
 
 import com.nestf.cart.CartDAO;
 import com.nestf.cart.CartItemDTO;
-import com.nestf.customer.CustomerDTO;
+import com.nestf.user.UserDTO;
 import com.nestf.product.ProductDAO;
 import com.nestf.product.ProductDTO;
 import com.nestf.util.MyAppConstant;
@@ -70,8 +70,8 @@ public class AddToCartServlet extends HttpServlet {
                     ProductDAO pDao = new ProductDAO();
                     ProductDTO product = pDao.getProductDetail(productID);
                     if (product != null) {
-                        CustomerDTO customer = (CustomerDTO) session.getAttribute("CUSTOMER");
-                        String phone = customer.getCustomerPhone();
+                        UserDTO customer = (UserDTO) session.getAttribute("CUSTOMER");
+                        String phone = customer.getUserPhone();
                         CartDAO cartDAO = new CartDAO();
                         cartDAO.setPHONE(phone);
                         List<CartItemDTO> cart = (List<CartItemDTO>) session.getAttribute("CART");

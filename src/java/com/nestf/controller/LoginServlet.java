@@ -5,8 +5,8 @@
  */
 package com.nestf.controller;
 
-import com.nestf.customer.CustomerDAO;
-import com.nestf.customer.CustomerDTO;
+import com.nestf.user.UserDAO;
+import com.nestf.user.UserDTO;
 import com.nestf.seller.SellerDAO;
 import com.nestf.seller.SellerDTO;
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class LoginServlet extends HttpServlet {
      */
     //        String url = (String) siteMap.get(MyAppConstant.LoginFeatures.LOGIN_ACTION);
     private static final String ERROR = "login.jsp";
-    private static final String SUCCESS = "LoadCartServlet";
+    private static final String LOAD_USER_CART = "LoadCartServlet";
     private static final String DASHBOARD = "dashboard.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -50,31 +50,21 @@ public class LoginServlet extends HttpServlet {
         String url = ERROR;
 //        String url = "login.jsp";
         try {
-            String customerPhone = request.getParameter("customerPhone").trim();
-            String password = request.getParameter("password");
+            String phone = request.getParameter("phone").trim();
+            String password = request.getParameter("password").trim();
 //            String action = request.getParameter("login Action");
 //            if (action.equals("Login")) {
 //            }
-            CustomerDAO dao = new CustomerDAO();
-            CustomerDTO loginCustomer = dao.checkLogin(customerPhone, password);
-            SellerDAO daos = new SellerDAO();
-            SellerDTO loginSeller = daos.checkLoginSeller(customerPhone, password);
-            if (loginCustomer != null) {
+            UserDAO dao = new UserDAO();
+            UserDTO user = dao.checkLogin(phone, password);
+            if (user != null) {
                 HttpSession session = request.getSession();
-                session.setAttribute("CUSTOMER", loginCustomer);
-                url = SUCCESS;
+                session.setAttribute("USER", user);
+                if (user.getRole().equals("US")) url = LOAD_USER_CART;
+                else url = DASHBOARD;
 //                url="LoadCartServlet"             
-            } else if (loginSeller != null && loginSeller.isIsAdmin()) {
-                HttpSession session = request.getSession();
-                session.setAttribute("ADMIN", loginSeller);
-                url = DASHBOARD;
-            } else if (loginSeller != null && !loginSeller.isIsAdmin()) {
-                HttpSession session = request.getSession();
-                session.setAttribute("SELLER", loginSeller);
-                url = SUCCESS;
             } else {
                 request.setAttribute("ERROR", "Sai mật khẩu hoặc số điện thoại!");
-                url = ERROR;
             }
         } catch (Exception e) {
             log("Error at LoginController: " + e.toString());
