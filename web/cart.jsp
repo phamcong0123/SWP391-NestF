@@ -47,7 +47,7 @@
                     </li>
                     <li class="nav-item col-2 d-inline-block text-center">
                         <div id="dropDownMenu" class="d-inline-block position-relative">
-                            <i class="fas fa-user me-2"></i>${sessionScope.CUSTOMER.customerName}
+                            <i class="fas fa-user me-2"></i>${sessionScope.USER.customerName}
                             <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
                                 <a href="accountPage" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
                                 <a href="logOut" class="nav-link text-decoration-none p-2" id="item">Đăng xuất</a>
@@ -58,7 +58,7 @@
                         <div><a href="cartPage" class="nav-link text-center current-tab disabled"><i class="fa-solid fa-cart-shopping"></i></a></div>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
-                        <div><a href="voucherPage" class="nav-link text-center">${sessionScope.CUSTOMER.point} CP</a></div>
+                        <div><a href="voucherPage" class="nav-link text-center">${sessionScope.USER.point} CP</a></div>
                     </li>
                 </ul>
             </nav>

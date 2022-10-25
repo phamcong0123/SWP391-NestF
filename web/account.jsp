@@ -59,7 +59,7 @@
                         </form>
                     </li>
                     <li class="nav-item col-2 d-inline-block text-center">
-                        <div><a href="accountPage" class="nav-link current-tab disabled"><i class="fas fa-user    "></i>${CUSTOMER.customerName}</div>
+                        <div><a href="accountPage" class="nav-link current-tab disabled"><i class="fas fa-user    "></i>${USER.customerName}</div>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div>
@@ -75,7 +75,7 @@
                         </div>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
-                        <div><a href="voucherPage" class="nav-link">${CUSTOMER.point} CP</a></div>
+                        <div><a href="voucherPage" class="nav-link">${USER.point} CP</a></div>
                     </li>
                 </ul>
             </nav>
@@ -149,7 +149,7 @@
                                     <div class="accordion-body">
 
                                         <form action="changeAddressAction" id="changeForm" class="text-start">
-                                            <div class="m-3 d-inline-block">Địa chỉ cũ :</div><span> ${CUSTOMER.customerAddress}</span><br>
+                                            <div class="m-3 d-inline-block">Địa chỉ cũ :</div><span> ${USER.customerAddress}</span><br>
                                             <div class="m-3 d-inline-block">Địa chỉ mới</div><input type="text" name="newAddress"
                                                                                                     class="col-8" required minlength="20" maxlength="70"><br>                                         
                                             <input type="submit" value="LƯU" id="color-button" class="mt-3 mb-3">
