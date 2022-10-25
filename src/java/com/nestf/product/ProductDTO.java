@@ -17,6 +17,7 @@ import java.util.Locale;
  */
 public class ProductDTO implements Serializable{
     private int productID;
+    private String selPhone;
     private String name;
     private long price;
     private int quantity;
@@ -30,8 +31,9 @@ public class ProductDTO implements Serializable{
     public ProductDTO() {
     }
 
-    public ProductDTO(int productID, String name, long price, int quantity, CategoryDTO category, long discountPrice, String productDes, String image, String detailDes, boolean status) {
+    public ProductDTO(int productID, String selPhone, String name, long price, int quantity, CategoryDTO category, double discountPrice, String productDes, String image, String detailDes, boolean status) {
         this.productID = productID;
+        this.selPhone = selPhone;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
@@ -49,6 +51,14 @@ public class ProductDTO implements Serializable{
 
     public void setProductID(int productID) {
         this.productID = productID;
+    }
+
+    public String getSelPhone() {
+        return selPhone;
+    }
+
+    public void setSelPhone(String selPhone) {
+        this.selPhone = selPhone;
     }
 
     public String getName() {
