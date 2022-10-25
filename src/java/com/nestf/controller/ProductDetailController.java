@@ -35,7 +35,7 @@ public class ProductDetailController extends HttpServlet {
             int productID = Integer.parseInt(request.getParameter("productID"));
             ProductDAO dao = new ProductDAO();
             ProductDTO productDetail = dao.getProductDetail(productID);
-            List<ProductDTO> listRelatePro = dao.getListRelateProduct(productDetail.getCategory(), productID);
+            List<ProductDTO> listRelatePro = dao.getListRelateProduct(productDetail.getCategory().getCategoryName(), productID);
             if (productDetail != null) {
                 request.setAttribute("PRODUCT_DETAIL", productDetail);
                 request.setAttribute("LIST_RELATE_PRODUCT", listRelatePro);
