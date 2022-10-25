@@ -5,8 +5,8 @@
  */
 package com.nestf.controller;
 
-import com.nestf.user.UserDAO;
-import com.nestf.user.UserDTO;
+import com.nestf.account.AccountDAO;
+import com.nestf.account.AccountDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -32,16 +32,16 @@ public class UpdateCustomerAddressServlet extends HttpServlet {
         String url = ERROR;
         try {
             HttpSession session = request.getSession();
-            UserDTO customer = (UserDTO) session.getAttribute("CUSTOMER");
-            String phone = customer.getUserPhone();
+            AccountDTO customer = (AccountDTO) session.getAttribute("USER");
+            String phone = customer.getPhone();
             String newAddress = request.getParameter("newAddress");
             boolean check = false;
-            UserDAO dao = new UserDAO();
-            check = dao.updateCusAddress(phone, newAddress);
+            AccountDAO dao = new AccountDAO();
+            check = dao.updateAddress(phone, newAddress);
             if (check) {
                 url = SUCCESS + "?success=true";
                 customer.setAddress(newAddress);
-                session.setAttribute("CUSTOMER", customer);
+                session.setAttribute("USER", customer);
             } else url += "success=false";
         } catch (Exception e) {
             log("Error at UpdateCustomerAddress: " + e.toString());

@@ -5,10 +5,8 @@
  */
 package com.nestf.controller;
 
-import com.nestf.user.UserDAO;
-import com.nestf.user.UserDTO;
-import com.nestf.seller.SellerDAO;
-import com.nestf.seller.SellerDTO;
+import com.nestf.account.AccountDAO;
+import com.nestf.account.AccountDTO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -37,32 +35,32 @@ public class LoginServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     //        String url = (String) siteMap.get(MyAppConstant.LoginFeatures.LOGIN_ACTION);
-    private static final String ERROR = "login.jsp";
+    private static final String LOGIN_PAGE = "login.jsp";
     private static final String LOAD_USER_CART = "LoadCartServlet";
     private static final String DASHBOARD = "dashboard.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        //        ServletContext context = request.getServletContext();
-        //        PrintWriter out = response.getWriter();
-        //        Properties siteMap = (Properties) context.getAttribute("SITE_MAP");
-        String url = ERROR;
-//        String url = "login.jsp";
+        String url = LOGIN_PAGE;
         try {
             String phone = request.getParameter("phone").trim();
             String password = request.getParameter("password").trim();
-//            String action = request.getParameter("login Action");
-//            if (action.equals("Login")) {
-//            }
-            UserDAO dao = new UserDAO();
-            UserDTO user = dao.checkLogin(phone, password);
+            AccountDAO dao = new AccountDAO();
+            AccountDTO user = dao.checkLogin(phone, password);
             if (user != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("USER", user);
-                if (user.getRole().equals("US")) url = LOAD_USER_CART;
-                else url = DASHBOARD;
-//                url="LoadCartServlet"             
+                switch (user.getRole()) {
+                    case "US":
+                        url = LOAD_USER_CART;
+                        break;
+                    case "AD":
+                        url = DASHBOARD;
+                        break;
+                    case "SE":
+                        break;
+                }
             } else {
                 request.setAttribute("ERROR", "Sai mật khẩu hoặc số điện thoại!");
             }

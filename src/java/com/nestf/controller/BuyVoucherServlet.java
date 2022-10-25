@@ -5,8 +5,8 @@
  */
 package com.nestf.controller;
 
-import com.nestf.user.UserDAO;
-import com.nestf.user.UserDTO;
+import com.nestf.account.AccountDAO;
+import com.nestf.account.AccountDTO;
 import com.nestf.voucher.VoucherDAO;
 import com.nestf.voucher.VoucherDTO;
 import com.nestf.vouchertype.VoucherTypeDAO;
@@ -41,6 +41,7 @@ public class BuyVoucherServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private static final String LOAD_VOUCHER = "LoadVoucherServlet";
+    private static final String ERROR = "error.html";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -50,13 +51,13 @@ public class BuyVoucherServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession(false);
             if (session != null) {
-                UserDTO customer = (UserDTO) session.getAttribute("CUSTOMER");
+                AccountDTO customer = (AccountDTO) session.getAttribute("USER");
                 int customerPoint = customer.getPoint();
                 int typeID = Integer.parseInt(request.getParameter("typeID"));
                 VoucherTypeDAO typeDAO = new VoucherTypeDAO();
                 int requiredPoint = typeDAO.getVoucher(typeID).getPoint();
                 if (customerPoint >= requiredPoint) {
-                    String phone = customer.getUserPhone();
+                    String phone = customer.getPhone();
                     VoucherDAO dao = new VoucherDAO();
                     VoucherDTO voucher = dao.addVoucherToWaller(typeID);
                     if (voucher != null) {
@@ -64,8 +65,8 @@ public class BuyVoucherServlet extends HttpServlet {
                         voucherWallet.add(voucher);
                         int newPoint = customerPoint - requiredPoint;
                         int newQuantity = typeDAO.getVoucher(typeID).getQuantity() - 1;
-                        UserDAO customerDAO = new UserDAO();
-                        if (customerDAO.buyVoucher(phone, newPoint) && typeDAO.updateQuantity(typeID, newQuantity)) {
+                        AccountDAO customerDAO = new AccountDAO();
+                        if (customerDAO.updatePoint(newPoint, phone) && typeDAO.updateQuantity(typeID, newQuantity)) {
                             customer.setPoint(newPoint);
                             session.setAttribute("CUSTOMER", customer);
                             url += "?success=true";                        
@@ -74,7 +75,7 @@ public class BuyVoucherServlet extends HttpServlet {
                         url += "?success=false";
                     }
                 } else {
-                    url += "?success=false";
+                    url = ERROR;
                 }
             }
         } catch (NamingException ex) {

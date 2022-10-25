@@ -5,9 +5,10 @@
  */
 package com.nestf.controller;
 
-import com.nestf.user.UserDAO;
-import com.nestf.user.UserDTO;
-import com.nestf.user.UserError;
+
+import com.nestf.account.AccountDAO;
+import com.nestf.account.AccountDTO;
+import com.nestf.account.AccountError;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -33,29 +34,18 @@ public class UpdateCustomerPasswordServlet extends HttpServlet {
         String url = ERROR;        
         try {            
             HttpSession session = request.getSession();
-            UserDTO customer = (UserDTO) session.getAttribute("CUSTOMER");
-            String password = request.getParameter("password");
+            AccountDTO customer = (AccountDTO) session.getAttribute("USER");
             String newPass = request.getParameter("newPass").trim();          
             boolean check = true;
-            String curPassword = customer.getPassword(); 
-            UserError cusError = new UserError();
-            if (curPassword.equals(newPass)) {
-                check = false;             
-                cusError.setPasswordDuplicate("Mật khẩu mới không khả dụng!");
-            }
-            if (!curPassword.equals(password)){
-                check = false;
-                cusError.setPasswordWrong("Mật khẩu hiện tại không chính xác!");
-            }
-            if (check) {               
-                String phone = customer.getUserPhone();
-                UserDAO dao = new UserDAO();
-                boolean checkDao = dao.updateCusPassword(phone, newPass);
-                if (checkDao) {
+            String curPassword = customer.getPassword();          
+            if (!curPassword.equals(newPass)) {               
+                String phone = customer.getPhone();
+                AccountDAO dao = new AccountDAO();
+                if (dao.updatePassword(phone, newPass)) {
                     url = SUCCESS;
                 }
             } else {
-                request.setAttribute("ERROR", cusError);
+                request.setAttribute("ERROR", "Mật khẩu cũ không trùng khớp");
             }
         } catch (Exception e) {
             log("Error at UpdateCustomerPassword: " + e.toString());

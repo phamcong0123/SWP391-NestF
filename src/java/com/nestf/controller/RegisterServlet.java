@@ -5,9 +5,9 @@
  */
 package com.nestf.controller;
 
-import com.nestf.user.UserDAO;
-import com.nestf.user.UserDTO;
-import com.nestf.user.UserError;
+import com.nestf.account.AccountDAO;
+import com.nestf.account.AccountDTO;
+import com.nestf.account.AccountError;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -23,42 +23,34 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "RegisterServlet", urlPatterns = {"/RegisterServlet"})
 public class RegisterServlet extends HttpServlet {
 
-    private static final String ERROR = "register.jsp";
-    private static final String SUCCESS = "login.jsp";
+    private static final String REGISTER_PAGE = "register.jsp";
+    private static final String LOGIN_PAGE = "login.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-        String url = ERROR;
+        String url = REGISTER_PAGE;
         try {
-            String customerPhone = request.getParameter("customerPhone").trim();
+            String phone = request.getParameter("phone").trim();
             String password = request.getParameter("password");
-            String customerName = request.getParameter("customerName");
-            String customerAddress = request.getParameter("customerAddress");
+            String name = request.getParameter("name");
+            String address = request.getParameter("address");
             boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
-            UserDAO dao = new UserDAO();
-            UserDTO customer = new UserDTO(customerPhone, password, customerName, customerAddress, gender, 0, "US");
-            boolean check = true;
-            boolean checkInsert = false;
-            UserError cusError = new UserError();
-            boolean checkDup = dao.checkDuplicate(customerPhone);
-            if (checkDup) {
-                cusError.setCustomerPhoneDuplicate("Số điện thoại đã có người đăng ký!");
-                check = false;
-            }          
-            if (check) {
-                checkInsert = dao.insert(customer);
-                if (checkInsert) {
-                    url = SUCCESS;
-                } 
+            int point = 0;
+            String role = "US";
+            AccountDAO dao = new AccountDAO();
+            AccountDTO acc = new AccountDTO(phone, password, name, address, gender, point, role);
+            if (dao.getUserByPhone(phone) != null) {
+                request.setAttribute("ERROR", "Số điện thoại đã có người đăng ký");
+                request.getRequestDispatcher(url).forward(request, response);
             } else {
-                request.setAttribute("CUS_ERROR", cusError);              
+                url = LOGIN_PAGE;
+                response.sendRedirect(url);
             }
+
         } catch (Exception e) {
-            log("Error at Register: " + e.toString());
-        } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            log("Error at RegisterServlet: " + e.toString());
         }
     }
 

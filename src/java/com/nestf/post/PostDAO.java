@@ -5,10 +5,8 @@
  */
 package com.nestf.post;
 
-import com.nestf.user.UserDAO;
-import com.nestf.user.UserDTO;
-import com.nestf.user.UserDAO;
-import com.nestf.user.UserDTO;
+import com.nestf.account.AccountDAO;
+import com.nestf.account.AccountDTO;
 import com.nestf.util.DBHelper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -41,16 +39,14 @@ public class PostDAO {
                 while (rs.next()) {
                     int postID = Integer.parseInt(rs.getString("postID"));
                     String phone = rs.getString("adPhone");
-                    UserDAO dao = new UserDAO();
-                    UserDTO seller = dao.GetUserByPhone(phone);
+                    AccountDAO dao = new AccountDAO();
+                    AccountDTO seller = dao.getUserByPhone(phone);
                     String title = rs.getString("title");
-                    Date date = rs.getDate("dateTime");
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                    String dateTime = formatter.format(date);
+                    Date date = rs.getDate("dateTime");                   
                     boolean status = Boolean.parseBoolean(rs.getString("status"));
                     String filePath = rs.getString("filePath");
                     String image = rs.getString("image");
-                    postList.add(new PostDTO(postID, seller, title, dateTime, status, filePath, image));
+                    postList.add(new PostDTO(postID, seller, title, date, status, filePath, image));
                 }
             }
         } finally {
@@ -83,16 +79,14 @@ public class PostDAO {
                 rs = ptm.executeQuery();
                 if (rs.next()) {
                     String phone = rs.getString("adPhone");
-                    UserDAO dao = new UserDAO();
-                    UserDTO seller = dao.GetUserByPhone(phone);
+                    AccountDAO dao = new AccountDAO();
+                    AccountDTO seller = dao.getUserByPhone(phone);
                     String title = rs.getString("title");
                     Date date = rs.getDate("dateTime");
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                    String dateTime = formatter.format(date);
                     boolean status = rs.getBoolean("status");
                     String filePath = rs.getString("filePath");
                     String image = rs.getString("image");
-                    post = new PostDTO(postID, seller, title, dateTime, status, filePath, image);
+                    post = new PostDTO(postID, seller, title, date, status, filePath, image);
                 }
             }
         } finally {
@@ -124,16 +118,14 @@ public class PostDAO {
                 while (rs.next()) {
                     int postID = rs.getInt("postID");
                     String phone = rs.getString("adPhone");
-                    UserDAO dao = new UserDAO();
-                    UserDTO seller = dao.GetUserByPhone(phone);
+                    AccountDAO dao = new AccountDAO();
+                    AccountDTO seller = dao.getUserByPhone(phone);
                     String title = rs.getString("title");
                     Date date = rs.getDate("dateTime");
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-                    String dateTime = formatter.format(date);
                     boolean status = rs.getBoolean("status");
                     String filePath = rs.getString("filePath");
                     String image = rs.getString("image");
-                    PostDTO post = new PostDTO(postID, seller, title, dateTime, status, filePath, image);
+                    PostDTO post = new PostDTO(postID, seller, title, date, status, filePath, image);
                     if (list == null) {
                         list = new ArrayList<>();
                     }

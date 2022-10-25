@@ -5,9 +5,10 @@
  */
 package com.nestf.controller;
 
+import com.nestf.account.AccountDAO;
+import com.nestf.account.AccountDTO;
 import com.nestf.cart.CartDAO;
 import com.nestf.cart.CartItemDTO;
-import com.nestf.user.UserDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -48,11 +49,9 @@ public class LoadCartServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession(false);
             if (session != null) {
-                UserDTO customer = (UserDTO) session.getAttribute("CUSTOMER");
-                String phone = customer.getUserPhone();
+                AccountDTO user = (AccountDTO) session.getAttribute("USER");
                 CartDAO dao = new CartDAO();
-                dao.setPHONE(phone);
-                dao.loadCart();
+                dao.loadCart(user.getPhone());
                 List<CartItemDTO> list = dao.getCarts();
                 if (list != null) session.setAttribute("CART", list);
             }

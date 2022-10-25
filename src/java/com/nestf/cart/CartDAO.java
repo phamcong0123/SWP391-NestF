@@ -33,50 +33,80 @@ public class CartDAO implements Serializable {
         return cart;
     }
 
-    public static String PHONE;
-
-    public void setPHONE(String PHONE) {
-        this.PHONE = PHONE;
-    }
-
-    
-    public boolean checkProductExisted(int productID){
-        for (int i=0; i < cart.size(); i++){
-            if (cart.get(i).getProduct().getProductID() == productID) return true;
-        }
-        return false;
-    }
-    
-    public CartItemDTO getItemByID(int productID){
-        for (int i=0; i < cart.size(); i++){
-            if (cart.get(i).getProduct().getProductID() == productID) return cart.get(i);
+    public CartItemDTO getItemByID(int productID) {
+        for (int i = 0; i < cart.size(); i++) {
+            if (cart.get(i).getProduct().getProductID() == productID) {
+                return cart.get(i);
+            }
         }
         return null;
     }
-    
-    public void loadCart() throws SQLException, NamingException {
+
+    public String AddItem(ProductDTO product, int amount, String phone) throws NamingException, SQLException {
+        String notification = null;
+        if (cart == null) {
+            cart = new ArrayList<>();          
+            if (amount <= product.getQuantity()) {
+                CartItemDTO item = new CartItemDTO(product, amount);
+                if (addItemToCart(item, phone)) {
+                    cart.add(item);
+                    notification = "fail=false";
+                }
+            } else {
+                notification = "fail=maxAmount";
+            }
+        } else {
+            CartItemDTO item = getItemByID(product.getProductID());
+            if (getItemByID(product.getProductID()) == null) {
+                if (amount <= product.getQuantity()) {
+                    CartItemDTO newItem = new CartItemDTO(product, amount);
+                    if (addItemToCart(newItem, phone)) {
+                        cart.add(newItem);
+                        notification = "fail=false";
+                    }
+                } else {
+                    notification = "fail=maxAmount";
+                }
+            } else {
+
+                int newAmount = item.getAmount() + amount;               
+                if (newAmount <= item.getProduct().getQuantity()) {
+                    item.setAmount(newAmount);
+                    if (updateItemAmount(item, phone)) {
+                        int index = cart.indexOf(item);
+                        cart.set(index, item);
+                        notification = "fail=false";
+                    }
+                } else {
+                    notification = "fail=maxAmount";
+                }
+            }
+        }
+        return notification;
+    }
+    public String removeItem(int productID, String phone) throws SQLException, NamingException{
+        String notification = null;
+        CartItemDTO item = getItemByID(productID);
+        if (item != null){
+            removeItemFromCart(productID, phone);
+            cart.remove(item);
+            notification = "fail=false";
+        }
+        return notification;
+    }
+    private static final String LOAD_CART = "Select productID, amount From tblCart Where cusPhone = ?";
+
+    public void loadCart(String phone) throws SQLException, NamingException {
         Connection con = null;
         PreparedStatement statement = null;
         ResultSet rs = null;
         try {
-//        1. Make connection
             con = DBHelper.makeConnection();
-
             if (con != null) {
-                //          2. Create SQL Stirng . co khoang trang sau username
-                String sql = "Select cartID, productID, amount "
-                        + "From tblCart "
-                        + "Where customerPhone = ?";
-//          3. Create Statement Object
-                statement = con.prepareStatement(sql);
-                statement.setString(1, PHONE);
-
-//          4. Execute Query
+                statement = con.prepareStatement(LOAD_CART);
+                statement.setString(1, phone);
                 rs = statement.executeQuery();
-
-//          5. Process result
                 while (rs.next()) {
-
                     int productID = rs.getInt("productID");
                     ProductDAO dao = new ProductDAO();
                     ProductDTO product = dao.getProductDetail(productID);
@@ -100,17 +130,17 @@ public class CartDAO implements Serializable {
             }
         }
     }
+    private static final String INSERT = "INSERT INTO tblCart (cusPhone, productID, amount) VALUES (?, ?, ?)";
 
-    public boolean addItemToCart(CartItemDTO item) throws NamingException, SQLException {
+    public boolean addItemToCart(CartItemDTO item, String phone) throws NamingException, SQLException {
         Connection con = null;
         PreparedStatement ptm = null;
         boolean check = false;
         try {
             con = DBHelper.makeConnection();
             if (con != null) {
-                String sql = "INSERT INTO tblCart (customerPhone, productID, amount) VALUES (?, ?, ?)";
-                ptm = con.prepareStatement(sql);
-                ptm.setString(1, PHONE);
+                ptm = con.prepareStatement(INSERT);
+                ptm.setString(1, phone);
                 ptm.setInt(2, item.getProduct().getProductID());
                 ptm.setInt(3, item.getAmount());
                 check = ptm.executeUpdate() > 0;
@@ -125,18 +155,19 @@ public class CartDAO implements Serializable {
         }
         return check;
     }
-    
-    public boolean updateItemAmount(CartItemDTO item) throws SQLException, NamingException{
+
+    private static final String UPDATE = "UPDATE tblCart SET amount = ? WHERE cusPhone = ? AND productID = ?";
+
+    public boolean updateItemAmount(CartItemDTO item, String phone) throws SQLException, NamingException {
         Connection con = null;
         PreparedStatement ptm = null;
         boolean check = false;
         try {
             con = DBHelper.makeConnection();
             if (con != null) {
-                String sql = "UPDATE tblCart SET amount = ? WHERE customerPhone = ? AND productID = ?";
-                ptm = con.prepareStatement(sql);
+                ptm = con.prepareStatement(UPDATE);
                 ptm.setInt(1, item.getAmount());
-                ptm.setString(2, PHONE);
+                ptm.setString(2, phone);
                 ptm.setInt(3, item.getProduct().getProductID());
                 check = ptm.executeUpdate() > 0;
             }
@@ -151,35 +182,23 @@ public class CartDAO implements Serializable {
         return check;
     }
 
-//  TH1: Xóa từng sản phẩm
-    public boolean removeItemFromCart(int productID) throws SQLException, NamingException {
+    private static final String REMOVE = "Delete From tblCart Where cusPhone = ? And productID = ? ";
+
+    public boolean removeItemFromCart(int productID, String phone) throws SQLException, NamingException {
         Connection con = null;
         PreparedStatement statement = null;
         try {
-
-//        1. Make connection
             con = DBHelper.makeConnection();
-
             if (con != null) {
-                //          2. Create SQL Statement String 
-                String sql = "Delete From tblCart "
-                        + "Where customerPhone = ? And productID = ? ";
-//          3. Create Statement Object
-                statement = con.prepareStatement(sql);
-                statement.setString(1, PHONE);
+                statement = con.prepareStatement(REMOVE);
+                statement.setString(1, phone);
                 statement.setInt(2, productID);
-
-//          4. Execute Query
                 int affectRow = statement.executeUpdate();
-
-//          5. Process result
                 if (affectRow > 0) {
                     return true;
                 }
-            } // end if connection is not null
-
+            }
         } finally {
-
             if (statement != null) {
                 statement.close();
             }

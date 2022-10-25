@@ -16,10 +16,18 @@ public class CartItemDTO implements Serializable{
     private ProductDTO product;
     private int amount;
 
+    public CartItemDTO() {
+    }
+
     public CartItemDTO(ProductDTO product, int amount) {
         this.product = product;
         this.amount = amount;
     }
+
+//    public CartItemDTO(ProductDTO product, int amount) {
+//        this.product = product;
+//        this.amount = amount;
+//    }
 
     public ProductDTO getProduct() {
         return product;
@@ -36,6 +44,4 @@ public class CartItemDTO implements Serializable{
     public void setAmount(int amount) {
         this.amount = amount;
     }
-    
-    
 }

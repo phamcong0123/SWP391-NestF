@@ -5,20 +5,17 @@
  */
 package com.nestf.controller;
 
+import com.nestf.account.AccountDTO;
 import com.nestf.cart.CartDAO;
 import com.nestf.cart.CartItemDTO;
-import com.nestf.user.UserDTO;
 import com.nestf.product.ProductDAO;
 import com.nestf.product.ProductDTO;
-import com.nestf.util.MyAppConstant;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -68,69 +65,17 @@ public class AddToCartServlet extends HttpServlet {
                 if (request.getParameter("productID") != null) {
                     int productID = Integer.parseInt(request.getParameter("productID"));
                     ProductDAO pDao = new ProductDAO();
-                    ProductDTO product = pDao.getProductDetail(productID);
+                    ProductDTO product = pDao.getProductDetail(productID);                   
                     if (product != null) {
-                        UserDTO customer = (UserDTO) session.getAttribute("CUSTOMER");
-                        String phone = customer.getUserPhone();
+                        AccountDTO customer = (AccountDTO) session.getAttribute("USER");
+                        String phone = customer.getPhone();
                         CartDAO cartDAO = new CartDAO();
-                        cartDAO.setPHONE(phone);
                         List<CartItemDTO> cart = (List<CartItemDTO>) session.getAttribute("CART");
-                        if (cart == null) {
-                            cart = new ArrayList<>();
-                            int amount = 1;
-                            if (request.getParameter("quantity") != null) {
-                                amount = Integer.parseInt(request.getParameter("quantity"));
-                            }
-                            if (amount <= product.getQuantity()) {
-                                CartItemDTO item = new CartItemDTO(product, amount);
-                                if (cartDAO.addItemToCart(item)) {
-                                    cart.add(item);
-                                    param = "fail=false";
-                                }
-                            } else {
-                                param = "fail=maxAmount";
-                            }
-                        } else {
-                            cartDAO.setCarts(cart);
-                            if (!cartDAO.checkProductExisted(productID)) {
-                                int amount = 1;
-                                if (request.getParameter("quantity") != null) {
-                                    amount = Integer.parseInt(request.getParameter("quantity"));
-                                }
-                                if (amount <= product.getQuantity()) {
-                                    CartItemDTO item = new CartItemDTO(product, amount);
-                                    if (cartDAO.addItemToCart(item)) {
-                                        cart.add(item);
-                                        param = "fail=false";
-                                    }
-                                } else {
-                                    param = "fail=maxAmount";
-                                }
-                            } else {
-                                CartItemDTO item = cartDAO.getItemByID(productID);
-                                int index = cart.indexOf(item);
-                                int newAmount;
-                                if (request.getParameter("newQuantity") != null) {
-                                    newAmount = Integer.parseInt(request.getParameter("newQuantity"));
-                                } else {
-                                    int amount = 1;
-                                    if (request.getParameter("quantity") != null) {
-                                        amount = Integer.parseInt(request.getParameter("quantity"));
-                                    }
-                                    newAmount = item.getAmount() + amount;
-                                }
-                                if (newAmount <= item.getProduct().getQuantity()) {
-                                    item.setAmount(newAmount);
-                                    if (cartDAO.updateItemAmount(item)) {
-                                        cart.set(index, item);
-                                        param = "fail=false";
-                                    }
-                                } else {
-                                    param = "fail=maxAmount";
-                                }
-                            }
-                        }
+                        cartDAO.setCarts(cart);
+                        int amount = Integer.parseInt(request.getParameter("quantity"));
+                        param = cartDAO.AddItem(product, amount, phone);
                         url += param;
+                        cart = cartDAO.getCarts();
                         session.setAttribute("CART", cart);
                     } else {
                         url = ERROR_PAGE;

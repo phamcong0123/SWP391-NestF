@@ -5,12 +5,11 @@
  */
 package com.nestf.controller;
 
+import com.nestf.account.AccountDTO;
 import com.nestf.bill.BillDAO;
 import com.nestf.bill.BillDTO;
 import com.nestf.billdetail.BillDetailDAO;
-import com.nestf.user.UserDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -48,13 +47,12 @@ public class LoadBillServlet extends HttpServlet {
         try  {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession(false);
-            UserDTO customer = (UserDTO) request.getSession().getAttribute("CUSTOMER");
-            String customerPhone = customer.getUserPhone();
+            AccountDTO customer = (AccountDTO) request.getSession().getAttribute("USER");
+            String phone = customer.getPhone();
             BillDAO billDAO = new BillDAO();
-            billDAO.setCustomerPhone(customerPhone);
-            List<BillDTO> onProcessing = billDAO.getBillOnProcessing();
+            List<BillDTO> onProcessing = billDAO.getMyOnProcessingBills(phone);
             if (onProcessing != null) session.setAttribute("ON_PROCESSING", onProcessing);
-            List<BillDTO> completedBills = billDAO.getCompletedBill();
+            List<BillDTO> completedBills = billDAO.getMyCompletedBills(phone);
             if (completedBills != null) session.setAttribute("COMPLETED", completedBills);
         } catch (NamingException ex) {
             Logger.getLogger(LoadBillServlet.class.getName()).log(Level.SEVERE, null, ex);

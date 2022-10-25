@@ -16,6 +16,7 @@ import java.util.Date;
 public class VoucherDTO implements Serializable {
     private int voucherID;
     private VoucherTypeDTO voucherType;
+    private String cusPhone;
     private boolean status;
     private String expiredDate;
 

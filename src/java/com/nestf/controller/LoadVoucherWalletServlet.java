@@ -5,7 +5,7 @@
  */
 package com.nestf.controller;
 
-import com.nestf.user.UserDTO;
+import com.nestf.account.AccountDTO;
 import com.nestf.voucher.VoucherDAO;
 import com.nestf.voucher.VoucherDTO;
 import java.io.IOException;
@@ -48,8 +48,8 @@ public class LoadVoucherWalletServlet extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession(false);
             if (session != null){
-               UserDTO customer = (UserDTO) session.getAttribute("CUSTOMER");
-               String phone = customer.getUserPhone();
+               AccountDTO customer = (AccountDTO) session.getAttribute("USER");
+               String phone = customer.getPhone();
                VoucherDAO dao = new VoucherDAO();
                dao.setPhone(phone);
                dao.loadVoucherWallet();

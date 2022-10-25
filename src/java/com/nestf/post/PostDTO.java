@@ -5,7 +5,7 @@
  */
 package com.nestf.post;
 
-import com.nestf.user.UserDTO;
+import com.nestf.account.AccountDTO;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -16,9 +16,9 @@ import java.util.Date;
 public class PostDTO implements Serializable {
 
     private int postID;
-    private UserDTO seller;
+    private AccountDTO seller;
     private String title;
-    private String dateTime;
+    private Date dateTime;
     private boolean status;
     private String filePath;
     private String image;
@@ -26,7 +26,7 @@ public class PostDTO implements Serializable {
     public PostDTO() {
     }
 
-    public PostDTO(int postID, UserDTO seller, String title, String dateTime, boolean status, String filePath, String image) {
+    public PostDTO(int postID, AccountDTO seller, String title, Date dateTime, boolean status, String filePath, String image) {
         this.postID = postID;
         this.seller = seller;
         this.title = title;
@@ -40,7 +40,7 @@ public class PostDTO implements Serializable {
         return postID;
     }
 
-    public UserDTO getSeller() {
+    public AccountDTO getSeller() {
         return seller;
     }
 
@@ -48,7 +48,7 @@ public class PostDTO implements Serializable {
         return title;
     }
 
-    public String getDateTime() {
+    public Date getDateTime() {
         return dateTime;
     }
 
@@ -67,16 +67,14 @@ public class PostDTO implements Serializable {
     public void setPostID(int postID) {
         this.postID = postID;
     }
-
-    public void setSeller(UserDTO seller) {
+    public void setSeller(AccountDTO seller) {
         this.seller = seller;
     }
-
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public void setDateTime(String dateTime) {
+    public void setDateTime(Date dateTime) {
         this.dateTime = dateTime;
     }
 
@@ -91,7 +89,5 @@ public class PostDTO implements Serializable {
     public void setImage(String image) {
         this.image = image;
     }
-
-    
 
 }

@@ -23,6 +23,7 @@ import java.util.Locale;
 public class BillDTO implements Serializable {
 
     private int billID;
+    private String cusPhone;
     private String address;
     private StatusDTO status;
     private Date time;
@@ -32,8 +33,9 @@ public class BillDTO implements Serializable {
     public BillDTO() {
     }
 
-    public BillDTO(int billID, String address, StatusDTO status, Date time, double total, List<BillDetailDTO> detail) {
+    public BillDTO(int billID, String cusPhone, String address, StatusDTO status, Date time, double total, List<BillDetailDTO> detail) {
         this.billID = billID;
+        this.cusPhone = cusPhone;
         this.address = address;
         this.status = status;
         this.time = time;
@@ -41,25 +43,21 @@ public class BillDTO implements Serializable {
         this.detail = detail;
     }
 
-    public StatusDTO getStatus() {
-        return status;
-    }
-
-    public void setStatus(StatusDTO status) {
-        this.status = status;
-    }
-
-    
-
     public int getBillID() {
         return billID;
+    }
+
+    public String getCusPhone() {
+        return cusPhone;
     }
 
     public String getAddress() {
         return address;
     }
 
-   
+    public StatusDTO getStatus() {
+        return status;
+    }
 
     public Date getTime() {
         return time;
@@ -77,11 +75,17 @@ public class BillDTO implements Serializable {
         this.billID = billID;
     }
 
+    public void setCusPhone(String cusPhone) {
+        this.cusPhone = cusPhone;
+    }
+
     public void setAddress(String address) {
         this.address = address;
     }
 
-    
+    public void setStatus(StatusDTO status) {
+        this.status = status;
+    }
 
     public void setTime(Date time) {
         this.time = time;
@@ -93,18 +97,5 @@ public class BillDTO implements Serializable {
 
     public void setDetail(List<BillDetailDTO> detail) {
         this.detail = detail;
-    }
-
-    public String printDate(Date date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY hh:mm:ss");
-        String dateString = sdf.format(date);
-        return dateString;
-    }
-    public String printMoney(double price) {
-        Locale vie = new Locale("vi", "VN");
-        Currency vnd = Currency.getInstance(vie);
-        NumberFormat vndFormat = NumberFormat.getCurrencyInstance(vie);
-        return vndFormat.format(price).replace("đ", "₫");
-    }
-
+    }    
 }

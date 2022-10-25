@@ -5,16 +5,13 @@
  */
 package com.nestf.controller;
 
+import com.nestf.account.AccountDTO;
 import com.nestf.cart.CartDAO;
 import com.nestf.cart.CartItemDTO;
-import com.nestf.util.MyAppConstant;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 import javax.naming.NamingException;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -43,34 +40,24 @@ public class RemoveFromCartServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
-//        ServletContext context = request.getServletContext();
-//        Properties siteMap = (Properties) context.getAttribute("SITE_MAP");
         String url = CART_PAGE;
-
         try {
-//            1 Customer goes to their cart place
             HttpSession session = request.getSession(false);
-
             if (session != null) {
-//                    2. Customer take their cart
+                AccountDTO customer = (AccountDTO) session.getAttribute("USER");
                 List<CartItemDTO> cart = (List<CartItemDTO>) session.getAttribute("CART");
                 if (cart != null) {
-                    String[] removedItem = request.getParameterValues("productID");
-                    if (removedItem != null) {
-                        CartDAO dao = new CartDAO();                       
-                        for (String product : removedItem) {
-                            if(dao.removeItemFromCart(Integer.parseInt(product))){
-                                dao.setCarts(cart);
-                                CartItemDTO item = dao.getItemByID(Integer.parseInt(product));
-                                cart.remove(item);
-                            }
-                        }
-                        if (cart.size()>0) session.setAttribute("CART", cart);
-                        else session.removeAttribute("CART");
+                    int productID = Integer.parseInt(request.getParameter("productID"));
+                    CartDAO dao = new CartDAO();
+                    dao.setCarts(cart);
+                    dao.removeItem(productID, customer.getPhone());
+                    cart = dao.getCarts();
+                    if (cart.size() > 0) {
+                        session.setAttribute("CART", cart);
+                    } else {
+                        session.removeAttribute("CART");
                     }
                 }
-
             }
         } catch (SQLException ex) {
             log("Error at RemovedFromCartServlet_SQL: " + ex.getMessage());
