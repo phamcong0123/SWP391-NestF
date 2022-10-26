@@ -19,7 +19,7 @@ public class ProductDTO implements Serializable{
     private int productID;
     private String selPhone;
     private String name;
-    private long price;
+    private double price;
     private int quantity;
     private CategoryDTO category;
     private double discountPrice;
@@ -31,7 +31,7 @@ public class ProductDTO implements Serializable{
     public ProductDTO() {
     }
 
-    public ProductDTO(int productID, String selPhone, String name, long price, int quantity, CategoryDTO category, double discountPrice, String productDes, String image, String detailDes, boolean status) {
+    public ProductDTO(int productID, String selPhone, String name, double price, int quantity, CategoryDTO category, double discountPrice, String productDes, String image, String detailDes, boolean status) {
         this.productID = productID;
         this.selPhone = selPhone;
         this.name = name;
@@ -69,11 +69,11 @@ public class ProductDTO implements Serializable{
         this.name = name;
     }
 
-    public long getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -133,7 +133,7 @@ public class ProductDTO implements Serializable{
         this.status = status;
     }
     
-    public String printPrice(long price) {
+    public String printPrice(double price) {
         Locale vie = new Locale("vi", "VN");
         Currency vnd = Currency.getInstance(vie);
         NumberFormat vndFormat = NumberFormat.getCurrencyInstance(vie);

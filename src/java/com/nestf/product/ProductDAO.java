@@ -105,11 +105,11 @@ public class ProductDAO {
                         int productID = Integer.parseInt(rs.getString("productID"));
                         String selPhone = rs.getString("selPhone");
                         String name = rs.getString("name");
-                        long price = Long.parseLong(rs.getString("price"));
+                        double price = rs.getDouble("price");
                         int quantity = Integer.parseInt(rs.getString("quantity"));
                         int categoryID = rs.getInt("categoryID");
                         String categoryName = rs.getString("categoryName");
-                        long discountPrice = Long.parseLong(rs.getString("discountPrice"));
+                        double discountPrice = rs.getDouble("discountPrice");
                         String productDes = rs.getString("productDes");
                         String image = rs.getString("image");
                         if (list == null) {
@@ -152,10 +152,10 @@ public class ProductDAO {
                         int productID = Integer.parseInt(rs.getString("productID"));
                         String selPhone = rs.getString("selPhone");
                         String name = rs.getString("name");
-                        long price = Long.parseLong(rs.getString("price"));
+                        double price = rs.getDouble("price");
                         int quantity = Integer.parseInt(rs.getString("quantity"));
                         String categoryName = rs.getString("categoryName");
-                        long discountPrice = Long.parseLong(rs.getString("discountPrice"));
+                        double discountPrice = rs.getDouble("discountPrice");
                         String productDes = rs.getString("productDes");
                         String image = rs.getString("image");
                         if (list == null) {
@@ -199,11 +199,11 @@ public class ProductDAO {
                         int productID = Integer.parseInt(rs.getString("productID"));
                         String selPhone = rs.getString("selPhone");
                         String name = rs.getString("name");
-                        long price = Long.parseLong(rs.getString("price"));
+                        double price = rs.getDouble("price");
                         int quantity = Integer.parseInt(rs.getString("quantity"));
                         int categoryID = rs.getInt("categoryID");
                         String categoryName = rs.getString("categoryName");
-                        long discountPrice = Long.parseLong(rs.getString("discountPrice"));
+                        double discountPrice = rs.getDouble("discountPrice");
                         String productDes = rs.getString("productDes");
                         String image = rs.getString("image");
                         if (list == null) {
@@ -248,10 +248,10 @@ public class ProductDAO {
                         int productID = Integer.parseInt(rs.getString("productID"));
                         String selPhone = rs.getString("selPhone");
                         String name = rs.getString("name");
-                        long price = Long.parseLong(rs.getString("price"));
+                        double price = rs.getDouble("price");
                         int quantity = Integer.parseInt(rs.getString("quantity"));
                         String categoryName = rs.getString("categoryName");
-                        long discountPrice = Long.parseLong(rs.getString("discountPrice"));
+                        double discountPrice = rs.getDouble("discountPrice");
                         String productDes = rs.getString("productDes");
                         String image = rs.getString("image");
                         if (list == null) {
@@ -291,11 +291,11 @@ public class ProductDAO {
                 if (rs.next()) {
                     String selPhone = rs.getString("selPhone");
                     String name = rs.getString("name");
-                    long price = Long.parseLong(rs.getString("price"));
+                    double price = rs.getDouble("price");
                     int quantity = Integer.parseInt(rs.getString("quantity"));
                     int categoryID = rs.getInt("categoryID");
                     String categoryName = rs.getString("categoryName");
-                    long discountPrice = Long.parseLong(rs.getString("discountPrice"));
+                    double discountPrice = rs.getDouble("discountPrice");
                     String productDes = rs.getString("productDes");
                     String image = rs.getString("image");
                     String statusStr = rs.getString("status");
@@ -340,11 +340,11 @@ public class ProductDAO {
                         int relatedID = Integer.parseInt(rs.getString("productID"));
                         String selPhone = rs.getString("selPhone");
                         String name = rs.getString("name");
-                        long price = Long.parseLong(rs.getString("price"));
+                        double price = rs.getDouble("price");
                         int quantity = Integer.parseInt(rs.getString("quantity"));
                         int categoryID = rs.getInt("categoryID");
                         String categoryName = rs.getString("categoryName");
-                        long discountPrice = Long.parseLong(rs.getString("discountPrice"));
+                        double discountPrice = rs.getDouble("discountPrice");
                         String productDes = rs.getString("productDes");
                         String image = rs.getString("image");
                         if (listRelate == null) {
@@ -388,11 +388,11 @@ public class ProductDAO {
                         int productID = Integer.parseInt(rs.getString("productID"));
                         String selPhone = rs.getString("selPhone");
                         String name = rs.getString("name");
-                        long price = Long.parseLong(rs.getString("price"));
+                        double price = rs.getDouble("price");
                         int quantity = Integer.parseInt(rs.getString("quantity"));
                         int categoryID = rs.getInt("categoryID");
                         String categoryName = rs.getString("categoryName");
-                        long discountPrice = Long.parseLong(rs.getString("discountPrice"));
+                        double discountPrice = rs.getDouble("discountPrice");
                         String productDes = rs.getString("productDes");
                         String image = rs.getString("image");
                         if (searchList == null) {
@@ -434,11 +434,11 @@ public class ProductDAO {
                         int productID = Integer.parseInt(rs.getString("productID"));
                         String selPhone = rs.getString("selPhone");
                         String name = rs.getString("name");
-                        long price = Long.parseLong(rs.getString("price"));
+                        double price = rs.getDouble("price");
                         int quantity = Integer.parseInt(rs.getString("quantity"));
                         int categoryID = rs.getInt("categoryID");
                         String categoryName = rs.getString("categoryName");
-                        long discountPrice = Long.parseLong(rs.getString("discountPrice"));
+                        double discountPrice = rs.getDouble("discountPrice");
                         String productDes = rs.getString("productDes");
                         String image = rs.getString("image");
                         if (list == null) {
