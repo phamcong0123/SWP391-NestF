@@ -44,21 +44,21 @@
                         </form>
                     </li>
                     <li class="nav-item col-2 d-inline-block text-center">                      
-                        <c:if test="${not empty sessionScope.CUSTOMER}">
+                        <c:if test="${not empty sessionScope.USER}">
                             <div id="dropDownMenu" class="d-inline-block position-relative">
-                                <i class="fas fa-user me-2"></i>${sessionScope.CUSTOMER.customerName}
+                                <i class="fas fa-user me-2"></i>${sessionScope.USER.customerName}
                                 <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
                                     <a href="accountPage" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
                                     <a href="logOut" class="nav-link text-decoration-none p-2" id="item">Đăng xuất</a>
                                 </div>
                             </div>
                         </c:if>
-                        <c:if test="${empty sessionScope.CUSTOMER}"><div><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a></div>
+                        <c:if test="${empty sessionScope.USER}"><div><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a></div>
                         </c:if>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div> 
-                            <c:if test="${not empty sessionScope.CUSTOMER}">
+                            <c:if test="${not empty sessionScope.USER}">
                                 <a href="cartPage" class="nav-link text-center">
                                     <i class="fa-solid fa-cart-shopping position-relative">
                                         <c:if test="${not empty sessionScope.CART}">
@@ -72,8 +72,8 @@
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div>
-                            <c:if test="${not empty sessionScope.CUSTOMER}">
-                                <a href="voucherPage" class="nav-link text-center">${sessionScope.CUSTOMER.point} CP</a>
+                            <c:if test="${not empty sessionScope.USER}">
+                                <a href="voucherPage" class="nav-link text-center">${sessionScope.USER.point} CP</a>
                             </c:if>
                         </div>
                     </li>

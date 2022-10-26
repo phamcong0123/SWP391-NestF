@@ -9,7 +9,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="vi">
-    <c:if test="${not empty sessionScope.CUSTOMER}">
+    <c:if test="${not empty sessionScope.USER}">
         <c:redirect url=""></c:redirect>
     </c:if>
     <head>
