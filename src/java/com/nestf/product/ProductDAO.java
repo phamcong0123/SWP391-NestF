@@ -58,7 +58,7 @@ public class ProductDAO {
             + "ON pro.categoryID = cat.categoryID\n"
             + "INNER JOIN tblProductSeller proSel\n"
             + "ON pro.productID = proSel.productID\n"
-            + "WHERE productID = ?";
+            + "WHERE pro.productID = ?";
 
     public static final String GET_LIST_RELATE = "SELECT pro.productID, proSel.selPhone, name, price, quantity, cat.categoryID, categoryName, discountPrice, productDes, image, detailDes, pro.status\n"
             + "FROM tblProducts pro\n"
@@ -67,7 +67,7 @@ public class ProductDAO {
             + "INNER JOIN tblProductSeller proSel\n"
             + "ON pro.productID = proSel.productID\n"
             + "WHERE cat.categoryName = ?\n"
-            + "AND productID != ?";
+            + "AND pro.productID != ?";
 
     public static final String SEARCH_PRODUCT = "SELECT pro.productID, proSel.selPhone, name, price, quantity, cat.categoryID, categoryName, discountPrice, productDes, image, detailDes, pro.status\n"
             + "FROM tblProducts pro\n"
