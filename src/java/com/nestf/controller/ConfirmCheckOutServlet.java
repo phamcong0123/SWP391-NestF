@@ -58,6 +58,8 @@ public class ConfirmCheckOutServlet extends HttpServlet {
             String phone = customer.getPhone();
             String address = customer.getAddress();
             double total = Double.parseDouble(request.getParameter("total"));
+            String transactionID = request.getParameter("transactionID");
+            System.out.println(transactionID);
             if (request.getParameter("address").length() > 0) {
                 address = request.getParameter("address");
             }

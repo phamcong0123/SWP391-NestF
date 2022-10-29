@@ -115,7 +115,6 @@ public class AuthenticationFilter implements Filter {
             HttpSession session = httpRequest.getSession(false);
             //check resource authentication
             String rule = authentication.getProperty(resource);
-            System.out.println("Rule: " + rule);
             if (rule != null && rule.equals("restricted")) {
                 if (session == null
                         || session.getAttribute("USER") == null) {
