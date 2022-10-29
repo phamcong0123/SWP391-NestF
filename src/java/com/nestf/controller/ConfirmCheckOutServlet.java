@@ -14,6 +14,7 @@ import com.nestf.cart.CartDAO;
 import com.nestf.cart.CartItemDTO;
 import com.nestf.product.ProductDTO;
 import com.nestf.voucher.VoucherDAO;
+import com.nestf.voucher.VoucherDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -88,6 +89,10 @@ public class ConfirmCheckOutServlet extends HttpServlet {
                 for (CartItemDTO cartItem: cart) {
                     cartDAO.removeItemFromCart(cartItem.getProduct().getProductID(), phone);
                 }
+                VoucherDAO voucherDAO = new VoucherDAO();
+                voucherDAO.loadVoucherWallet(phone);
+                List<VoucherDTO> voucherWallet = voucherDAO.getList();
+                session.setAttribute("VOUCHER_WALLET", voucherWallet);
                 session.removeAttribute("CART");
                 url = LOAD_BILL;
             }

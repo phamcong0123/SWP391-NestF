@@ -10,7 +10,6 @@ import com.nestf.account.AccountDTO;
 import com.nestf.voucher.VoucherDAO;
 import com.nestf.voucher.VoucherDTO;
 import com.nestf.vouchertype.VoucherTypeDAO;
-import com.nestf.vouchertype.VoucherTypeDTO;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -59,7 +58,7 @@ public class BuyVoucherServlet extends HttpServlet {
                 if (customerPoint >= requiredPoint) {
                     String phone = customer.getPhone();
                     VoucherDAO dao = new VoucherDAO();
-                    VoucherDTO voucher = dao.addVoucherToWaller(typeID);
+                    VoucherDTO voucher = dao.addVoucherToWaller(typeID, phone);
                     if (voucher != null) {
                         List<VoucherDTO> voucherWallet = (List<VoucherDTO>) session.getAttribute("VOUCHER_WALLET");
                         voucherWallet.add(voucher);

@@ -27,17 +27,12 @@ import javax.naming.NamingException;
 public class VoucherDAO {
 
     private List<VoucherDTO> list = null;
-    private static String PHONE;
-
-    public void setPhone(String PHONE) {
-        this.PHONE = PHONE;
-    }
-    
+   
     public List<VoucherDTO> getList() {
         return list;
     }
 
-    public void loadVoucherWallet() throws SQLException, NamingException {
+    public void loadVoucherWallet(String phone) throws SQLException, NamingException {
         Connection con = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
@@ -46,7 +41,7 @@ public class VoucherDAO {
             if (con != null) {
                 String sql = "SELECT * FROM tblVoucher WHERE expiredDate > GETDATE() AND cusPhone = ? AND status = 1 ORDER BY expiredDate, typeID DESC";
                 ptm = con.prepareStatement(sql);         
-                ptm.setString(1, PHONE);
+                ptm.setString(1, phone);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     int voucherID = rs.getInt("voucherID");
@@ -76,7 +71,7 @@ public class VoucherDAO {
         }
     }
 
-    public VoucherDTO addVoucherToWaller(int typeID) throws NamingException, SQLException {
+    public VoucherDTO addVoucherToWaller(int typeID, String phone) throws NamingException, SQLException {
         Connection con = null;
         PreparedStatement ptm = null;
         VoucherDTO voucher = null;
@@ -89,7 +84,7 @@ public class VoucherDAO {
                 String sql = "INSERT INTO tblVoucher (typeID, cusPhone, status, expiredDate) VALUES (?, ?, 1, ?)";
                 ptm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 ptm.setInt(1, typeID);
-                ptm.setString(2, PHONE);
+                ptm.setString(2, phone);
                 ptm.setDate(3, date);
                 if( ptm.executeUpdate() > 0 ){
                     int voucherID = 0;

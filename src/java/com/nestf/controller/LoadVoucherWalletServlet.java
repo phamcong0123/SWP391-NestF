@@ -51,8 +51,7 @@ public class LoadVoucherWalletServlet extends HttpServlet {
                AccountDTO customer = (AccountDTO) session.getAttribute("USER");
                String phone = customer.getPhone();
                VoucherDAO dao = new VoucherDAO();
-               dao.setPhone(phone);
-               dao.loadVoucherWallet();
+               dao.loadVoucherWallet(phone);
                List<VoucherDTO> voucherWallet = dao.getList();
                if (voucherWallet != null){
                    session.setAttribute("VOUCHER_WALLET", voucherWallet);

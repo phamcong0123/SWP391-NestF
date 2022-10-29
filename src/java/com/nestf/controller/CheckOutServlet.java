@@ -52,6 +52,7 @@ public class CheckOutServlet extends HttpServlet {
                 request.setAttribute("VOUCHERID", voucherID);
             }
             total -= saleMargin;
+            if (total < 0 ) total = 0.0;
             request.setAttribute("TOTAL", total);           
         } catch (SQLException ex) {
             Logger.getLogger(CheckOutServlet.class.getName()).log(Level.SEVERE, null, ex);
