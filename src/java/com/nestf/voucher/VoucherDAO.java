@@ -44,8 +44,8 @@ public class VoucherDAO {
         try {
             con = DBHelper.makeConnection();
             if (con != null) {
-                String sql = "SELECT * FROM tblVoucher WHERE status = 1 AND customerPhone = ? ORDER BY expiredDate, typeID DESC";
-                ptm = con.prepareStatement(sql);
+                String sql = "SELECT * FROM tblVoucher WHERE expiredDate > GETDATE() AND cusPhone = ? AND status = 1 ORDER BY expiredDate, typeID DESC";
+                ptm = con.prepareStatement(sql);         
                 ptm.setString(1, PHONE);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
@@ -86,7 +86,7 @@ public class VoucherDAO {
             if (con != null) {
                 LocalDate expiredDate = LocalDate.now().plusDays(30);
                 java.sql.Date date = java.sql.Date.valueOf(expiredDate);
-                String sql = "INSERT INTO tblVoucher (typeID, customerPhone, status, expiredDate) VALUES (?, ?, 1, ?)";
+                String sql = "INSERT INTO tblVoucher (typeID, cusPhone, status, expiredDate) VALUES (?, ?, 1, ?)";
                 ptm = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 ptm.setInt(1, typeID);
                 ptm.setString(2, PHONE);
@@ -106,6 +106,67 @@ public class VoucherDAO {
             }
         } finally {
             if (rs != null){
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return voucher;
+    }
+    public boolean RemoveVoucher(int voucherID) throws NamingException, SQLException{
+        Connection con = null;
+        PreparedStatement ptm = null;
+        boolean check = false;
+        try {
+            con = DBHelper.makeConnection();
+            if (con != null) {
+                LocalDate expiredDate = LocalDate.now().plusDays(30);
+                java.sql.Date date = java.sql.Date.valueOf(expiredDate);
+                String sql = "UPDATE tblVoucher SET status = 0 WHERE voucherID = ?";
+                ptm = con.prepareStatement(sql);
+                ptm.setInt(1, voucherID);
+                if( ptm.executeUpdate() > 0 ){
+                    check = true;
+                }
+            }
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return check;
+    }
+    private final String GET_VOUCHER = "SELECT * FROM tblVoucher WHERE voucherID = ?";
+    public VoucherDTO getVoucherByID(int voucherID) throws NamingException, SQLException{
+        Connection con = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        VoucherDTO voucher = null;
+        try {
+            con = DBHelper.makeConnection();
+            if (con != null) {               
+                ptm = con.prepareStatement(GET_VOUCHER);         
+                ptm.setInt(1, voucherID);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    VoucherTypeDAO dao = new VoucherTypeDAO();
+                    VoucherTypeDTO voucherType = dao.getVoucher(rs.getInt("typeID"));
+                    boolean status = rs.getBoolean("status");
+                    Date date = rs.getDate("expiredDate");
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+                    String expiredDate = formatter.format(date);
+                    voucher = new VoucherDTO(voucherID, voucherType, status, expiredDate);                   
+                }
+            }
+        } finally {
+            if (rs != null) {
                 rs.close();
             }
             if (ptm != null) {

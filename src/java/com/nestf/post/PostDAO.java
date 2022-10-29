@@ -12,7 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,21 +29,21 @@ public class PostDAO {
     public List<PostDTO> postList() throws SQLException, NamingException {
         List<PostDTO> postList = new ArrayList();
         Connection conn = null;
-        PreparedStatement ptm = null;
+        Statement stm = null;
         ResultSet rs = null;
         try {
             conn = DBHelper.makeConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(POST_LIST);
-                rs = ptm.executeQuery();
+                stm = conn.createStatement();
+                rs = stm.executeQuery(POST_LIST);
                 while (rs.next()) {
-                    int postID = Integer.parseInt(rs.getString("postID"));
+                    int postID = rs.getInt("postID");
                     String phone = rs.getString("adPhone");
                     AccountDAO dao = new AccountDAO();
                     AccountDTO seller = dao.getUserByPhone(phone);
                     String title = rs.getString("title");
-                    Date date = rs.getDate("dateTime");                   
-                    boolean status = Boolean.parseBoolean(rs.getString("status"));
+                    Date date = new Date(rs.getTimestamp("dateTime").getTime());                   
+                    boolean status = rs.getBoolean("status");
                     String filePath = rs.getString("filePath");
                     String image = rs.getString("image");
                     postList.add(new PostDTO(postID, seller, title, date, status, filePath, image));
@@ -53,13 +53,12 @@ public class PostDAO {
             if (rs != null) {
                 rs.close();
             }
-            if (ptm != null) {
-                ptm.close();
+            if (stm != null) {
+                stm.close();
             }
             if (conn != null) {
                 conn.close();
             }
-
         }
         return postList;
     }
@@ -82,7 +81,7 @@ public class PostDAO {
                     AccountDAO dao = new AccountDAO();
                     AccountDTO seller = dao.getUserByPhone(phone);
                     String title = rs.getString("title");
-                    Date date = rs.getDate("dateTime");
+                    Date date = new Date(rs.getTimestamp("dateTime").getTime());             
                     boolean status = rs.getBoolean("status");
                     String filePath = rs.getString("filePath");
                     String image = rs.getString("image");
@@ -121,7 +120,7 @@ public class PostDAO {
                     AccountDAO dao = new AccountDAO();
                     AccountDTO seller = dao.getUserByPhone(phone);
                     String title = rs.getString("title");
-                    Date date = rs.getDate("dateTime");
+                    Date date = new Date(rs.getTimestamp("dateTime").getTime());             
                     boolean status = rs.getBoolean("status");
                     String filePath = rs.getString("filePath");
                     String image = rs.getString("image");

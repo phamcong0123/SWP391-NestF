@@ -27,10 +27,10 @@
             <nav class="navbar-expand bg-white navbar-light">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
-                        <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
+                        <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="shopPage" class="nav-link">Shop</a>
+                        <a href="shop" class="nav-link">Shop</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
                         <a href="handbook" class="nav-link">Cẩm nang</a>

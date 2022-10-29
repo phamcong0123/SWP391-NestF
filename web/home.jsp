@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:if test="${requestScope.BEST_SELL_LIST == null}">
-    <c:redirect url="homeAction"/>
+    <jsp:forward page="homeAction"/>
 </c:if>
 <!DOCTYPE html>
 <html>
@@ -15,7 +15,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Nest F</title>
+        <title>Trang chủ</title>
         <link rel="stylesheet" href="css/styleproduct.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
@@ -32,16 +32,16 @@
                 <nav class="navbar-expand bg-white navbar-light text-center">
                     <ul class="navbar">
                         <li class="nav-item col-2 d-inline-block">
-                            <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
+                            <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
                         </li>
                         <li class="nav-item col-1 d-inline-block">
-                            <a href="shopPage" class="nav-link">Shop</a>
+                            <a href="shop" class="nav-link">Shop</a>
                         </li>
                         <li class="nav-item col-1 d-inline-block">
-                            <a href="handbookPage" class="nav-link">Cẩm nang</a>
+                            <a href="handbook" class="nav-link">Cẩm nang</a>
                         </li>
                         <li class="nav-item col-1 d-inline-block">
-                            <a href="aboutPage" class="nav-link">Về chúng tôi</a>
+                            <a href="about" class="nav-link">Về chúng tôi</a>
                         </li>
                         <li class="nav-item col-3 d-inline-block text-center">
                             <form action="searchAction" method="get" id="search-form">
@@ -52,20 +52,20 @@
                         <li class="nav-item col-2 d-inline-block text-center">                      
                             <c:if test="${not empty sessionScope.USER}">
                                 <div id="dropDownMenu" class="d-inline-block position-relative">
-                                    <i class="fas fa-user me-2"></i>${sessionScope.USER.customerName}
+                                    <i class="fas fa-user me-2"></i>${sessionScope.USER.name}
                                     <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
-                                        <a href="accountPage" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
+                                        <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
                                         <a href="logOut" class="nav-link text-decoration-none p-2" id="item">Đăng xuất</a>
                                     </div>
                                 </div>
                             </c:if>
-                            <c:if test="${empty sessionScope.USER}"><div><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a></div>
+                            <c:if test="${empty sessionScope.USER}"><div><a href="login" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a></div>
                             </c:if>
                         </li>
                         <li class="nav-item col-1 d-inline-block text-center">
                             <div> 
                                 <c:if test="${not empty sessionScope.USER}">
-                                    <a href="cartPage" class="nav-link text-center"><i class="fa-solid fa-cart-shopping position-relative">
+                                    <a href="cart" class="nav-link text-center"><i class="fa-solid fa-cart-shopping position-relative">
                                             <c:if test="${not empty sessionScope.CART}">
                                                 <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
                                                     <span class="visually-hidden">New alerts</span>
@@ -79,7 +79,7 @@
                         <li class="nav-item col-1 d-inline-block text-center">
                             <div>
                                 <c:if test="${not empty sessionScope.USER}">
-                                    <a href="voucherPage" class="nav-link text-center">${sessionScope.USER.point} CP</a>
+                                    <a href="voucher" class="nav-link text-center">${sessionScope.USER.point} CP</a>
                                 </c:if>
                             </div>
                         </li>
@@ -135,7 +135,6 @@
                                                         <a href="productDetail?productID=${product.productID}" class="product-detail">
                                                             <img src="${product.image}" alt="Image for ${product.name}" class="mx-2">
                                                             <p class="image-title">
-
                                                                 <span class="product-title d-block">${product.name}</span><br>
                                                                 <c:if test="${product.discountPrice != 0}">
                                                                     <span
@@ -153,7 +152,7 @@
                                                     </div>
 
                                                     <div class="buynow-btn">
-                                                        <a href="#">
+                                                        <a href="addToCart?productID=${product.productID}&quantity=1">
                                                             <button class="btn btn-dark">
                                                                 <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
                                                             </button>
@@ -234,37 +233,46 @@
                                     <ul class="another-image-list row">
                                         <c:forEach var="anotherSuggest" varStatus="counter" items="${requestScope.OTHER_PRODUCT_LIST}">
                                             <c:if test="${counter.count <= 4}">
-                                                <li class="image-contain col-lg-3 col-md-6">
-                                                    <div class="another-image-contain-section">
-                                                        <div class="image-contain-detail">
-                                                            <a href="productDetail?productID=${anotherSuggest.productID}" class="product-detail">
-                                                                <img src="${anotherSuggest.image}"
-                                                                     alt="Image for ${anotherSuggest.name}" class="mx-2">
-                                                                <p class="image-title">${anotherSuggest.name}<br>
-                                                                    <c:if test="${anotherSuggest.discountPrice != 0}">
-                                                                        <span
-                                                                            class="image-price-discout">${proFunc.printPrice(anotherSuggest.discountPrice)}</span>
-                                                                        <br><span
-                                                                            class="image-price">${proFunc.printPrice(anotherSuggest.price)}</span></p>
-                                                                    </c:if>
-                                                                    <c:if test="${anotherSuggest.discountPrice == 0}">
-                                                                    <br><span class="image-price">${proFunc.printPrice(anotherSuggest.price)}</span></p>
+                                                <li class="image-contain col-lg-3 col-md-6 position-relative"> 
+                                                <c:if test="${anotherSuggest.discountPrice ne 0}">
+                                                    <img class="position-absolute" src="img/saleoff2.png" style="width:100px; height:auto"></img>                                             
+                                                </c:if>
+                                                <div class="image-contain-section mx-2">
+                                                    <div class="image-contain-detail">
+
+                                                        <a href="productDetail?productID=${anotherSuggest.productID}" class="product-detail">
+                                                            <img src="${anotherSuggest.image}" alt="Image for ${anotherSuggest.name}" class="mx-2">
+                                                            <p class="image-title">
+                                                                <span class="product-title d-block">${anotherSuggest.name}</span><br>
+                                                                <c:if test="${anotherSuggest.discountPrice != 0}">
+                                                                    <span
+                                                                        class="image-price-discout">${proFunc.printPrice(anotherSuggest.price)}
+                                                                    </span>
+                                                                    <br>
+                                                                    <span class="image-price text-danger">${proFunc.printPrice(anotherSuggest.discountPrice)}
+                                                                    </span>
                                                                 </c:if>
-                                                            </a>
-                                                        </div>
-                                                        <div class="buynow-btn">
-                                                            <a href="#">
-                                                                <button class="btn btn-dark">
-                                                                    <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
-                                                                </button>
-                                                            </a>
-                                                        </div>
+                                                                <c:if test="${anotherSuggest.discountPrice == 0}">
+                                                                    <br><span class="image-price">${proFunc.printPrice(anotherSuggest.price)}</span>
+                                                                </c:if>
+                                                            </p>
+                                                        </a>
                                                     </div>
-                                                </li>
+
+                                                    <div class="buynow-btn">
+                                                        <a href="addToCart?productID=${anotherSuggest.productID}&quantity=1">
+                                                            <button class="btn btn-dark">
+                                                                <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
+                                                            </button>
+                                                        </a>
+                                                    </div>
+
+                                                </div>
+                                            </li>
                                             </c:if>
                                         </c:forEach>
                                     </ul>
-                                    <a href="shopPage" class="all-product">
+                                    <a href="shop" class="all-product">
                                         Tất cả sản phẩm
                                     </a>
                                 </div>

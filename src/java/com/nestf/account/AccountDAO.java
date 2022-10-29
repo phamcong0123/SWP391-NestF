@@ -57,7 +57,7 @@ public class AccountDAO {
         try {
             conn = DBHelper.makeConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(LOGIN);
+                ptm = conn.prepareStatement(CHECK_DUPLICATE_ACCOUNT);
                 ptm.setString(1, phone);
                 rs = ptm.executeQuery();
                 if (rs.next()) {

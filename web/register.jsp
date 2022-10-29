@@ -3,8 +3,6 @@
     Created on : Sep 20, 2022, 3:59:58 PM
     Author     : Admin
 --%>
-
-<%@page import="com.nestf.customer.CustomerError"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -29,21 +27,21 @@
             <nav class="navbar-expand bg-white navbar-light">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
-                        <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
+                        <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="shopPage" class="nav-link">Shop</a>
+                        <a href="shop" class="nav-link">Shop</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="handbookPage" class="nav-link">Cẩm nang</a>
+                        <a href="handbook" class="nav-link">Cẩm nang</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="aboutPage" class="nav-link">Về chúng tôi</a>
+                        <a href="about" class="nav-link">Về chúng tôi</a>
                     </li>
                     <li class="nav-item col-3 d-inline-block">                      
                     </li>
                     <li class="nav-item col-2 d-inline-block">
-                        <div ><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a></div>
+                        <div ><a href="login" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a></div>
                     </li>
                     <li class="nav-item col-1 d-inline-block">                      
                     </li>
@@ -69,7 +67,7 @@
                 <div class="m-3 d-inline-block col-2">Xác nhận mật khẩu</div><input type="password" name="confirm" required minlength="6" maxlength="20" id="confirm" onblur="validate();"><br>
                 <div class="d-inline-block col-2 m-3">Địa chỉ</div><input type="text" name="address" required="" minlength="20" maxlength="70" placeholder="20 - 70 ký tự"><br>
                 <input type="hidden" name="point" value="0"/>
-                <a href="homePage"><input type="button" value="HUỶ" id="link-button"></a>
+                <a href="home"><input type="button" value="HUỶ" id="link-button"></a>
                 <input type="submit" value="ĐĂNG KÝ" id="color-button">
             </form>
         </div>

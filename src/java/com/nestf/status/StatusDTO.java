@@ -4,11 +4,14 @@
  * and open the template in the editor.
  */
 package com.nestf.status;
+
+import java.io.Serializable;
+
 /**
  *
  * @author Admin
  */
-public class StatusDTO {
+public class StatusDTO implements Serializable{
     private int statusID;
     private String status;
 

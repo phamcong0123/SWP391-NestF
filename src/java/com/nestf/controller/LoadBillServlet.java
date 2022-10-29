@@ -38,12 +38,12 @@ public class LoadBillServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final String LOAD_VOUCHER_WALLET = "LoadVoucherWalletServlet";
+    private static final String CART_PAGE = "cart.jsp";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = LOAD_VOUCHER_WALLET;
+        String url = CART_PAGE;
         try  {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession(false);
@@ -51,9 +51,9 @@ public class LoadBillServlet extends HttpServlet {
             String phone = customer.getPhone();
             BillDAO billDAO = new BillDAO();
             List<BillDTO> onProcessing = billDAO.getMyOnProcessingBills(phone);
-            if (onProcessing != null) session.setAttribute("ON_PROCESSING", onProcessing);
+            if (onProcessing != null) request.setAttribute("ON_PROCESSING", onProcessing);
             List<BillDTO> completedBills = billDAO.getMyCompletedBills(phone);
-            if (completedBills != null) session.setAttribute("COMPLETED", completedBills);
+            if (completedBills != null) request.setAttribute("COMPLETED", completedBills);
         } catch (NamingException ex) {
             Logger.getLogger(LoadBillServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {

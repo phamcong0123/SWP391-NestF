@@ -30,7 +30,7 @@ public class BillDetailDAO {
         try {
             conn = DBHelper.makeConnection();
             if (conn != null) {
-                String query = "SELECT productID, quantity, price, total FROM tblBillDetail WHERE billID = ?";
+                String query = "SELECT billID, productID, quantity, price, total FROM tblBillDetail WHERE billID = ?";
                 ptm = conn.prepareStatement(query);
                 ptm.setInt(1, billID);
                 rs = ptm.executeQuery();
@@ -39,12 +39,12 @@ public class BillDetailDAO {
                     ProductDAO dao = new ProductDAO();
                     ProductDTO product = dao.getProductDetail(productID);
                     int quantity = rs.getInt("quantity");
-                    long price = rs.getLong("price");
-                    BigDecimal total = rs.getBigDecimal("total");
+                    double price = rs.getDouble("price");
+                    double total = rs.getDouble("total");
                     if (list == null){
                         list = new ArrayList<>();
                     }
-                    BillDetailDTO dto = new BillDetailDTO(product, quantity, price, total);
+                    BillDetailDTO dto = new BillDetailDTO(billID, product, quantity, price, total);
                     list.add(dto);
                 }
             }
@@ -56,6 +56,27 @@ public class BillDetailDAO {
         }
         return list;
     }
-
+    private final String INSERT = "INSERT tblBillDetail VALUES ( ?, ?, ?, ?, ?)";
+    public boolean insertBillDetail(BillDetailDTO billDetail) throws SQLException, NamingException{
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        boolean check = false;
+        try{
+            conn = DBHelper.makeConnection();
+            if (conn != null){
+                ptm = conn.prepareStatement(INSERT);
+                ptm.setInt(1, billDetail.getBillID());
+                ptm.setInt(2, billDetail.getProduct().getProductID());
+                ptm.setInt(3, billDetail.getQuantity());
+                ptm.setDouble(4, billDetail.getPrice());
+                ptm.setDouble(5, billDetail.getTotal());
+                check = ptm.executeUpdate() > 0;
+            }
+        } finally{
+            if (ptm != null) ptm.close();
+            if (conn != null) conn.close();
+        }
+        return check;
+    }
     
 }

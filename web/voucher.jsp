@@ -54,16 +54,16 @@
             <nav class="navbar-expand bg-white navbar-light">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
-                        <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
+                        <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="shopPage" class="nav-link text-center">Shop</a>
+                        <a href="shop" class="nav-link text-center">Shop</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="handbookPage" class="nav-link text-center">Cẩm nang</a>
+                        <a href="handbook" class="nav-link text-center">Cẩm nang</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="aboutPage" class="nav-link text-center">Về chúng tôi</a>
+                        <a href="about" class="nav-link text-center">Về chúng tôi</a>
                     </li>
                     <li class="nav-item col-3 d-inline-block text-center">
                         <form action="searchAction" method="get" id="search-form">
@@ -73,9 +73,9 @@
                     </li>
                     <li class="nav-item col-2 d-inline-block text-center">                      
                         <div id="dropDownMenu" class="d-inline-block position-relative">
-                            <i class="fas fa-user me-2"></i>${sessionScope.USER.customerName}
+                            <i class="fas fa-user me-2"></i>${sessionScope.USER.name}
                             <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
-                                <a href="accountPage" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
+                                <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
                                 <a href="logOut" class="nav-link text-decoration-none p-2" id="item">Đăng xuất</a>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div>
                             <c:if test="${not empty sessionScope.USER}">
-                                <a href="cartPage" class="nav-link text-center"><i class="fa-solid fa-cart-shopping position-relative">
+                                <a href="cart" class="nav-link text-center"><i class="fa-solid fa-cart-shopping position-relative">
                                         <c:if test="${not empty sessionScope.CART}">
                                             <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
                                                 <span class="visually-hidden">New alerts</span>
@@ -96,7 +96,7 @@
                         </div>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
-                        <div><a href="voucherPage" class="nav-link text-center current-tab disabled">${sessionScope.USER.point} CP</a></div>
+                        <div><a href="voucher" class="nav-link text-center current-tab disabled">${sessionScope.USER.point} CP</a></div>
                     </li>
                 </ul>
             </nav>
@@ -129,7 +129,6 @@
                                         <div class="text-center w-100">
                                             <img src="img/search-no-result.png" class="d-block col-4 m-auto">
                                             <h3 class="mb-2">Bạn chưa có voucher nào 😥</h3>
-                                            <a href="voucherPage" class="nav-link d-inline-block mb-3"><i class="fa-solid fa-basket-shopping"></i>Đi mua voucher</a>
                                         </div>
                                     </c:if>                                                   
                                 </div>

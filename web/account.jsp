@@ -4,8 +4,6 @@
     Author     : Admin
 --%>
 
-<%@page import="com.nestf.customer.CustomerError"%>
-<%@page import="com.nestf.customer.CustomerDTO"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
@@ -41,16 +39,16 @@
             <nav class="navbar-expand bg-white navbar-light">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
-                        <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
+                        <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="shopPage" class="nav-link">Shop</a>
+                        <a href="shop" class="nav-link">Shop</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="handbookPage" class="nav-link">Cẩm nang</a>
+                        <a href="handbook" class="nav-link">Cẩm nang</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="aboutPage" class="nav-link">Về chúng tôi</a>
+                        <a href="about" class="nav-link">Về chúng tôi</a>
                     </li>
                     <li class="nav-item col-3 d-inline-block text-center">
                         <form action="searchAction" method="get" id="search-form">
@@ -59,11 +57,11 @@
                         </form>
                     </li>
                     <li class="nav-item col-2 d-inline-block text-center">
-                        <div><a href="accountPage" class="nav-link current-tab disabled"><i class="fas fa-user    "></i>${USER.customerName}</div>
+                        <div><a href="account" class="nav-link current-tab disabled"><i class="fas fa-user    "></i>${USER.name}</div>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div>
-                            <a href="cartPage" class="nav-link text-center">
+                            <a href="cart" class="nav-link text-center">
                                 <i class="fa-solid fa-cart-shopping position-relative">
                                     <c:if test="${not empty sessionScope.CART}">
                                         <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
@@ -75,7 +73,7 @@
                         </div>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
-                        <div><a href="voucherPage" class="nav-link">${USER.point} CP</a></div>
+                        <div><a href="voucher" class="nav-link">${USER.point} CP</a></div>
                     </li>
                 </ul>
             </nav>
@@ -149,7 +147,7 @@
                                     <div class="accordion-body">
 
                                         <form action="changeAddressAction" id="changeForm" class="text-start">
-                                            <div class="m-3 d-inline-block">Địa chỉ cũ :</div><span> ${USER.customerAddress}</span><br>
+                                            <div class="m-3 d-inline-block">Địa chỉ cũ :</div><span> ${USER.address}</span><br>
                                             <div class="m-3 d-inline-block">Địa chỉ mới</div><input type="text" name="newAddress"
                                                                                                     class="col-8" required minlength="20" maxlength="70"><br>                                         
                                             <input type="submit" value="LƯU" id="color-button" class="mt-3 mb-3">
@@ -164,7 +162,7 @@
                 </div>
                 <div id="all-voucher" class="tab-pane fade" role="tabpanel" aria-labelledby="voucher-tab">
                     <div id="whiteboard2" class="col-8 bg-white">
-                        <span class="d-inline-block col-9 m-3 text-start">Voucher của bạn</span><a href="voucherPage" class="nav-link d-inline-block"><i class="fa-solid fa-basket-shopping"></i>Đi mua voucher</a> 
+                        <span class="d-inline-block col-9 m-3 text-start">Voucher của bạn</span><a href="voucher" class="nav-link d-inline-block"><i class="fa-solid fa-basket-shopping"></i>Đi mua voucher</a> 
                         <div class="row row-cols-4 col-11 m-auto">
                             <c:if test = "${not empty sessionScope.VOUCHER_WALLET}">
                                 <c:forEach items="${sessionScope.VOUCHER_WALLET}" var = "voucher">

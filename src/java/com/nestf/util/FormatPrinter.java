@@ -21,10 +21,16 @@ public class FormatPrinter {
         String dateString = sdf.format(date);
         return dateString;
     }
-    public static String printMoney(double price) {
+    public static String printMoney(double money) {
         Locale vie = new Locale("vi", "VN");
         Currency vnd = Currency.getInstance(vie);
         NumberFormat vndFormat = NumberFormat.getCurrencyInstance(vie);
-        return vndFormat.format(price).replace("đ", "₫");
+        return vndFormat.format(money).replace("đ", "₫");
+    }
+    public static String toUSD(double VNDmoney){
+        double usd = VNDmoney/24000;
+        NumberFormat usdFormat = NumberFormat.getInstance();
+        usdFormat.setMaximumFractionDigits(2);
+        return usdFormat.format(usd);
     }
 }

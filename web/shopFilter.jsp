@@ -13,7 +13,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Nest F</title>
+        <title>Shop</title>
         <link rel="stylesheet" href="css/styleproduct.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
@@ -33,16 +33,16 @@
             <nav class="navbar-expand bg-white navbar-light text-center">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
-                        <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
+                        <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="shopPage" class="nav-link">Shop</a>
+                        <a href="shop" class="nav-link">Shop</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="handbookPage" class="nav-link">Cẩm nang</a>
+                        <a href="handbook" class="nav-link">Cẩm nang</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="aboutPage" class="nav-link">Về chúng tôi</a>
+                        <a href="about" class="nav-link">Về chúng tôi</a>
                     </li>
                     <li class="nav-item col-3 d-inline-block text-center">
                         <form action="searchAction" method="GET" id="search-form">
@@ -53,20 +53,20 @@
                     <li class="nav-item col-2 d-inline-block text-center">                      
                         <c:if test="${not empty sessionScope.USER}">
                             <div id="dropDownMenu" class="d-inline-block position-relative">
-                                <i class="fas fa-user me-2"></i>${sessionScope.USER.customerName}
+                                <i class="fas fa-user me-2"></i>${sessionScope.USER.name}
                                 <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
-                                    <a href="accountPage" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
+                                    <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
                                     <a href="logOut" class="nav-link text-decoration-none p-2" id="item">Đăng xuất</a>
                                 </div>
                             </div>
                         </c:if>
-                        <c:if test="${empty sessionScope.USER}"><div><a href="loginPage" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a></div>
+                        <c:if test="${empty sessionScope.USER}"><div><a href="login" class="nav-link"><i class="fas fa-user    "></i>Đăng nhập</a></div>
                         </c:if>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div>
                             <c:if test="${not empty sessionScope.USER}">
-                                <a href="cartPage" class="nav-link text-center"><i class="fa-solid fa-cart-shopping position-relative">
+                                <a href="cart" class="nav-link text-center"><i class="fa-solid fa-cart-shopping position-relative">
                                         <c:if test="${not empty sessionScope.CART}">
                                             <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
                                                 <span class="visually-hidden">New alerts</span>
@@ -80,7 +80,7 @@
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div>
                             <c:if test="${not empty sessionScope.USER}">
-                                <a href="voucherPage" class="nav-link text-center">${sessionScope.USER.point} CP</a>
+                                <a href="voucher" class="nav-link text-center">${sessionScope.USER.point} CP</a>
                             </c:if>
                         </div>
                     </li>

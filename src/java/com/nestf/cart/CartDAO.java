@@ -42,7 +42,7 @@ public class CartDAO implements Serializable {
         return null;
     }
 
-    public String AddItem(ProductDTO product, int amount, String phone) throws NamingException, SQLException {
+    public String AddItem(ProductDTO product, int amount, int newQuantity, String phone) throws NamingException, SQLException {
         String notification = null;
         if (cart == null) {
             cart = new ArrayList<>();          
@@ -68,8 +68,11 @@ public class CartDAO implements Serializable {
                     notification = "fail=maxAmount";
                 }
             } else {
-
-                int newAmount = item.getAmount() + amount;               
+                int newAmount;
+                if (newQuantity == -1){
+                 newAmount = item.getAmount() + amount;   
+                } 
+                else newAmount = newQuantity;                       
                 if (newAmount <= item.getProduct().getQuantity()) {
                     item.setAmount(newAmount);
                     if (updateItemAmount(item, phone)) {
@@ -208,5 +211,6 @@ public class CartDAO implements Serializable {
         }
         return false;
     }
+    
 
 }

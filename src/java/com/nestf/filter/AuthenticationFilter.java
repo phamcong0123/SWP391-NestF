@@ -118,8 +118,8 @@ public class AuthenticationFilter implements Filter {
             System.out.println("Rule: " + rule);
             if (rule != null && rule.equals("restricted")) {
                 if (session == null
-                        || session.getAttribute("CUSTOMER") == null) {
-                    httpResponse.sendRedirect("loginPage");                   
+                        || session.getAttribute("USER") == null) {
+                    httpResponse.sendRedirect("login");                   
                 } else {
                     httpResponse.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
                     httpResponse.setHeader("Pragma", "no-cache"); // HTTP 1.0.

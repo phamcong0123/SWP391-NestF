@@ -6,15 +6,10 @@
 package com.nestf.bill;
 
 import com.nestf.billdetail.BillDetailDTO;
-import com.nestf.product.ProductDTO;
 import com.nestf.status.StatusDTO;
 import java.io.Serializable;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.Currency;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  *
@@ -31,6 +26,13 @@ public class BillDTO implements Serializable {
     private List<BillDetailDTO> detail;
 
     public BillDTO() {
+    }
+
+    public BillDTO(String cusPhone, String address, StatusDTO status, double total) {
+        this.cusPhone = cusPhone;
+        this.address = address;
+        this.status = status;
+        this.total = total;
     }
 
     public BillDTO(int billID, String cusPhone, String address, StatusDTO status, Date time, double total, List<BillDetailDTO> detail) {

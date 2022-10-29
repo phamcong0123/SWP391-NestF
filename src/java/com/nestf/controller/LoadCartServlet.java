@@ -5,12 +5,10 @@
  */
 package com.nestf.controller;
 
-import com.nestf.account.AccountDAO;
 import com.nestf.account.AccountDTO;
 import com.nestf.cart.CartDAO;
 import com.nestf.cart.CartItemDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -39,12 +37,12 @@ public class LoadCartServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final String LOAD_BILL_CONTROLLER = "LoadBillServlet";
+    private static final String LOAD_VOUCHER = "LoadVoucherWalletServlet";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = LOAD_BILL_CONTROLLER;
+        String url = LOAD_VOUCHER;
         try {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession(false);

@@ -71,9 +71,12 @@ public class AddToCartServlet extends HttpServlet {
                         String phone = customer.getPhone();
                         CartDAO cartDAO = new CartDAO();
                         List<CartItemDTO> cart = (List<CartItemDTO>) session.getAttribute("CART");
-                        cartDAO.setCarts(cart);
-                        int amount = Integer.parseInt(request.getParameter("quantity"));
-                        param = cartDAO.AddItem(product, amount, phone);
+                        cartDAO.setCarts(cart);                        
+                        int newQuantity = -1;
+                        int amount = 1;
+                        if (url.contains("cart")) newQuantity = Integer.parseInt(request.getParameter("newQuantity"));
+                        else  amount = Integer.parseInt(request.getParameter("quantity"));
+                        param = cartDAO.AddItem(product, amount, newQuantity, phone);
                         url += param;
                         cart = cartDAO.getCarts();
                         session.setAttribute("CART", cart);

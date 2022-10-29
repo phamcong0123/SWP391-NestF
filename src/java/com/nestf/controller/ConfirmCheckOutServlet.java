@@ -6,8 +6,14 @@
 package com.nestf.controller;
 
 import com.nestf.account.AccountDTO;
+import com.nestf.bill.BillDAO;
+import com.nestf.bill.BillDTO;
+import com.nestf.billdetail.BillDetailDAO;
+import com.nestf.billdetail.BillDetailDTO;
+import com.nestf.cart.CartDAO;
+import com.nestf.cart.CartItemDTO;
+import com.nestf.product.ProductDTO;
 import com.nestf.voucher.VoucherDAO;
-import com.nestf.voucher.VoucherDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -26,8 +32,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author Admin
  */
-@WebServlet(name = "LoadVoucherWalletServlet", urlPatterns = {"/LoadVoucherWalletServlet"})
-public class LoadVoucherWalletServlet extends HttpServlet {
+@WebServlet(name = "ConfirmCheckOutServlet", urlPatterns = {"/ConfirmCheckOutServlet"})
+public class ConfirmCheckOutServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -38,32 +44,59 @@ public class LoadVoucherWalletServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final String HOME = "homeAction";
-    
+    private static final String ERROR = "error.html";
+    private static final String LOAD_BILL = "LoadBillServlet";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = HOME;
-        try{
+        String url = ERROR;
+        try {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession(false);
-            if (session != null){
-               AccountDTO customer = (AccountDTO) session.getAttribute("USER");
-               String phone = customer.getPhone();
-               VoucherDAO dao = new VoucherDAO();
-               dao.setPhone(phone);
-               dao.loadVoucherWallet();
-               List<VoucherDTO> voucherWallet = dao.getList();
-               if (voucherWallet != null){
-                   session.setAttribute("VOUCHER_WALLET", voucherWallet);
-               }             
-            }                                    
-        } catch (SQLException ex) {
-            Logger.getLogger(LoadVoucherWalletServlet.class.getName()).log(Level.SEVERE, null, ex);
+            AccountDTO customer = (AccountDTO) session.getAttribute("USER");
+            String phone = customer.getPhone();
+            String address = customer.getAddress();
+            double total = Double.parseDouble(request.getParameter("total"));
+            if (request.getParameter("address").length() > 0) {
+                address = request.getParameter("address");
+            }
+            List<CartItemDTO> cart = (List<CartItemDTO>) session.getAttribute("CART");
+
+            BillDAO billDAO = new BillDAO();
+            int billID = billDAO.checkOut(phone, address, total);
+
+            BillDetailDAO billDetailDAO = new BillDetailDAO();
+            boolean check = true;
+            for (CartItemDTO cartItem : cart) {
+                ProductDTO product = cartItem.getProduct();
+                double price = product.getPrice();
+                if (product.getDiscountPrice() > 0) {
+                    price = product.getDiscountPrice();
+                }
+                BillDetailDTO billDetail = new BillDetailDTO(billID, cartItem.getProduct(), cartItem.getAmount(), price, price*cartItem.getAmount());
+                if (!billDetailDAO.insertBillDetail(billDetail)) {
+                    check = false;
+                }
+            }
+            if (check) {
+                if (request.getParameter("voucherID") != null) {
+                    int voucherID = Integer.parseInt(request.getParameter("voucherID"));
+                    VoucherDAO voucherDAO = new VoucherDAO();
+                    voucherDAO.RemoveVoucher(voucherID);
+                }             
+                CartDAO cartDAO = new CartDAO();
+                for (CartItemDTO cartItem: cart) {
+                    cartDAO.removeItemFromCart(cartItem.getProduct().getProductID(), phone);
+                }
+                session.removeAttribute("CART");
+                url = LOAD_BILL;
+            }
         } catch (NamingException ex) {
-            Logger.getLogger(LoadVoucherWalletServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConfirmCheckOutServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(ConfirmCheckOutServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            response.sendRedirect(url);
         }
     }
 

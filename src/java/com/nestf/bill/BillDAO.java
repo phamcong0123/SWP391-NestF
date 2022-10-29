@@ -16,7 +16,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import javax.naming.NamingException;
@@ -114,9 +113,9 @@ public class BillDAO {
         return list;
     }
 
-    final String INSERT = "INSERT INTO tblBill VALUES (?,?,?,?) ";
+    final String CHECK_OUT = "INSERT tblBill([cusPhone], [address], [statusID], [total]) VALUES (?,?,1,?) ";
 
-    public int AddBill(BillDTO bills) {
+    public int checkOut(String phone, String address, double total) {
 // statusID
 //=1:Chờ xác nhận
 //=2:Chờ lấy hàng
@@ -130,11 +129,10 @@ public class BillDAO {
         try {
             conn = DBHelper.makeConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
-                ptm.setString(1, bills.getCusPhone());
-                ptm.setString(2, bills.getAddress());
-                ptm.setInt(3, bills.getStatus().getStatusID());
-                ptm.setDouble(4, bills.getTotal());
+                ptm = conn.prepareStatement(CHECK_OUT, Statement.RETURN_GENERATED_KEYS);
+                ptm.setString(1, phone);
+                ptm.setNString(2, address);
+                ptm.setDouble(3, total);
                 int check = ptm.executeUpdate();
                 if (check > 0) {
                     if (ptm.getGeneratedKeys().next()) billID = ptm.getGeneratedKeys().getInt(1);
@@ -144,5 +142,23 @@ public class BillDAO {
             e.printStackTrace();
         }
         return billID;
+    }
+    private final String CANCEL = "";
+    public boolean cancelOrder(int billID) throws NamingException, SQLException{
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try{
+            conn = DBHelper.makeConnection();
+            if (conn != null){
+                ptm = conn.prepareStatement(CANCEL);
+                ptm.setInt(1, billID);            
+                check = ptm.executeUpdate() > 0;
+            }
+        } finally {
+            if (ptm != null) ptm.close();
+            if (conn != null) conn.close();
+        }
+        return check;
     }
 }

@@ -6,7 +6,6 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -28,16 +27,16 @@
             <nav class="navbar-expand bg-white navbar-light">
                 <ul class="navbar">
                     <li class="nav-item col-2 d-inline-block">
-                        <a href="homePage"><img src="img/logo.png" id="logo" class="col-3"></a>
+                        <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="shopPage" class="nav-link text-center">Shop</a>
+                        <a href="shop" class="nav-link text-center">Shop</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="handbookPage" class="nav-link text-center">Cẩm nang</a>
+                        <a href="handbook" class="nav-link text-center">Cẩm nang</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="aboutPage" class="nav-link text-center">Về chúng tôi</a>
+                        <a href="about" class="nav-link text-center">Về chúng tôi</a>
                     </li>
                     <li class="nav-item col-3 d-inline-block text-center">
                         <form action="searchAction" method="get" id="search-form">
@@ -47,18 +46,18 @@
                     </li>
                     <li class="nav-item col-2 d-inline-block text-center">
                         <div id="dropDownMenu" class="d-inline-block position-relative">
-                            <i class="fas fa-user me-2"></i>${sessionScope.USER.customerName}
+                            <i class="fas fa-user me-2"></i>${sessionScope.USER.name}
                             <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
-                                <a href="accountPage" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
+                                <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
                                 <a href="logOut" class="nav-link text-decoration-none p-2" id="item">Đăng xuất</a>
                             </div>
                         </div>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
-                        <div><a href="cartPage" class="nav-link text-center current-tab disabled"><i class="fa-solid fa-cart-shopping"></i></a></div>
+                        <div><a href="cart" class="nav-link text-center current-tab disabled"><i class="fa-solid fa-cart-shopping"></i></a></div>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
-                        <div><a href="voucherPage" class="nav-link text-center">${sessionScope.USER.point} CP</a></div>
+                        <div><a href="voucher" class="nav-link text-center">${sessionScope.USER.point} CP</a></div>
                     </li>
                 </ul>
             </nav>
@@ -107,7 +106,7 @@
                                                         <div class="text-center w-100">
                                                             <img src="img/search-no-result.png" class="d-block col-4 m-auto">
                                                             <h3 class="mb-2">Bạn chưa có voucher nào 😥</h3>
-                                                            <a href="voucherPage" class="nav-link d-inline-block mb-3"><i class="fa-solid fa-basket-shopping"></i>Đi mua voucher</a>
+                                                            <a href="voucher" class="nav-link d-inline-block mb-3"><i class="fa-solid fa-basket-shopping"></i>Đi mua voucher</a>
                                                         </div>
                                                     </c:if>                                                   
                                                 </div>
@@ -170,15 +169,16 @@
                                 </div>
                             </c:forEach>
                             <div class="fs-4 d-flex justify-content-between pb-3">
-                                <span class="ms-5 d-inline-block align-self-center">Thành tiền : <span class="fw-bold" id="total-display"> ${productFunc.printPrice(total)}</span>
-
-                                </span> 
+                                <jsp:useBean id="formatPrinter" class="com.nestf.util.FormatPrinter"/>
+                                <c:set var = "totalInUSD" value = "${formatPrinter.toUSD(total)}"/>
+                                <span class="ms-5 d-inline-block align-self-center">Thành tiền : <span class="fw-bold" id="total-display"> ${formatPrinter.printMoney(total)}</span> 
+                                </span>
                                 <form action="checkOutAction" method="POST">
                                     <input type="hidden" name="total" value="${total}" id="total">
                                     <input type="hidden" id="voucher-use" name="voucher-use">
-                                    <button id="buy-button" class="btn ms-auto mt-0 me-5">Thanh toán</button>
-                                </form>
-                            </div>
+                                    <button type="submit" id="buy-button" class="btn ms-auto mt-0 me-5" data-bs-toggle="modal" data-bs-target="#checkOutModal">Thanh toán</button>
+                                </form>              
+                            </div>                                                                     
                         </c:if>
                         <c:if test="${empty sessionScope.CART}">
                             <span class="d-inline-block col-11 mt-4 mb-4 text-start">Giỏ hàng của bạn</span>
@@ -201,14 +201,15 @@
                         </ul>
                         <div class="tab-content">                          
                             <div id="delivering" class="tab-pane fade show active pb-3" role="tabpanel" aria-labelledby="delivering-tab">  
-                                <c:if test = "${not empty sessionScope.ON_PROCESSING}">
-                                    <c:set var="billList" value="${sessionScope.ON_PROCESSING}"/>
+                                <c:if test = "${not empty requestScope.ON_PROCESSING}">
+                                    <c:set var="billList" value="${requestScope.ON_PROCESSING}"/>
                                     <c:forEach items="${billList}" var = "bill">
                                         <div id = "cart-item" class="row col-11 m-auto text-start mb-3 position-relative">
                                             <h3 class="m-2 mb-0 d-inline-block">Đơn hàng <strong>#NESTF${bill.billID}</strong></h3>
                                             <h5 class="text-success m-2">${bill.status.status}</h5>
-                                            <jsp:useBean id="billFunc" class="com.nestf.bill.BillDTO"/> 
-                                            <span class="ms-2 mb-4">Ngày đặt hàng: <b>${billFunc.printDate(bill.time)}</b></span>
+                                            <jsp:useBean id="billFunc" class="com.nestf.util.FormatPrinter"/> 
+                                            <span class="ms-2 mb-2">Ngày đặt hàng: <b>${billFunc.printDate(bill.time)}</b></span>
+                                            <span class="ms-2 mb-4">Địa chỉ nhận hàng : <b>${bill.address}</b></span>
                                             <c:forEach items = "${bill.detail}" var = "billDetail">
                                                 <div class="rounded col-11 m-auto mb-3 border border-dark">
                                                     <div class="row container-fluid m-0">
@@ -231,7 +232,7 @@
                                         </div>
                                     </c:forEach>
                                 </c:if>
-                                <c:if test="${empty sessionScope.ON_PROCESSING}">
+                                <c:if test="${empty requestScope.ON_PROCESSING}">
                                     <div class="mt-5">
                                         <img src="img/emptyCart.png">
                                         <h4 class="text-muted mt-3 pb-4">Không có lịch sử giao dịch.</h4>
@@ -239,13 +240,14 @@
                                 </c:if>
                             </div>                   
                             <div id="delivered" class="tab-pane fade pb-3" role="tabpanel" aria-labelledby="delivered-tab">                             
-                                <c:if test = "${not empty sessionScope.COMPLETED}">
-                                    <c:set var="completedList" value="${sessionScope.COMPLETED}"/>
+                                <c:if test = "${not empty requestScope.COMPLETED}">
+                                    <c:set var="completedList" value="${requestScope.COMPLETED}"/>
                                     <c:forEach items="${completedList}" var = "completedBill">
                                         <div id = "cart-item" class="row col-11 m-auto text-start mb-3 position-relative">
                                             <h3 class="m-2 mb-0 d-inline-block">Đơn hàng <strong>#NESTF${completedBill.billID}</strong></h3>
                                             <h5 class="text-danger m-2">${completedBill.status.status}</h5>
-                                            <span class="ms-2 mb-4">Ngày đặt hàng: <b>${billFunc.printDate(completedBill.time)}</b></span>
+                                            <span class="ms-2 mb-2">Ngày đặt hàng: <b>${billFunc.printDate(completedBill.time)}</b></span>
+                                             <span class="ms-2 mb-4">Địa chỉ nhận hàng : <b>${completedBill.address}</b></span>
                                             <c:forEach items = "${completedBill.detail}" var = "billDetail">
                                                 <div class="rounded col-11 m-auto mb-3 border border-dark">
                                                     <div class="row container-fluid m-0">
@@ -264,7 +266,7 @@
                                         </div>
                                     </c:forEach>
                                 </c:if>
-                                <c:if test="${empty sessionScope.COMPLETED}">
+                                <c:if test="${empty requestScope.COMPLETED}">
                                     <div class="mt-5">
                                         <img src="img/emptyCart.png">
                                         <h4 class="text-muted mt-3 pb-4">Không có lịch sử giao dịch.</h4>

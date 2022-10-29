@@ -14,19 +14,25 @@ import java.math.BigDecimal;
  * @author DELL
  */
 public class BillDetailDTO implements Serializable{
+    private int billID;
     private ProductDTO product;
     private int quantity;
-    private long price;
-    private BigDecimal total;
+    private double price;
+    private double total;
 
     public BillDetailDTO() {
     }
 
-    public BillDetailDTO(ProductDTO product, int quantity, long price, BigDecimal total) {
+    public BillDetailDTO(int billID, ProductDTO product, int quantity, double price, double total) {
+        this.billID = billID;
         this.product = product;
         this.quantity = quantity;
         this.price = price;
         this.total = total;
+    }
+
+    public int getBillID() {
+        return billID;
     }
 
     public ProductDTO getProduct() {
@@ -37,12 +43,16 @@ public class BillDetailDTO implements Serializable{
         return quantity;
     }
 
-    public long getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public BigDecimal getTotal() {
+    public double getTotal() {
         return total;
+    }
+
+    public void setBillID(int billID) {
+        this.billID = billID;
     }
 
     public void setProduct(ProductDTO product) {
@@ -53,14 +63,12 @@ public class BillDetailDTO implements Serializable{
         this.quantity = quantity;
     }
 
-    public void setPrice(long price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public void setTotal(BigDecimal total) {
+    public void setTotal(double total) {
         this.total = total;
     }
-
     
-
 }

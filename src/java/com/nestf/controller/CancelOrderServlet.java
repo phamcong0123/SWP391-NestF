@@ -5,12 +5,11 @@
  */
 package com.nestf.controller;
 
-import com.nestf.post.PostDAO;
-import com.nestf.post.PostDTO;
+import com.nestf.account.AccountDTO;
+import com.nestf.bill.BillDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
@@ -19,33 +18,43 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Admin
  */
-@WebServlet(name = "HandBookServlet", urlPatterns = {"/HandBookServlet"})
-public class HandBookServlet extends HttpServlet {
+@WebServlet(name = "CancelOrderServlet", urlPatterns = {"/CancelOrderServlet"})
+public class CancelOrderServlet extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     private static final String ERROR = "error.html";
-    private static final String SUCCESS = "handbook.jsp";
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+    private static final String CART_PAGE = "cart.jsp";
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
-            PostDAO pdao = new PostDAO();
-            List<PostDTO> post = pdao.postList();
-            if (post.size() > 0) {
-                request.setAttribute("POST_LIST", post);
-                url = SUCCESS;
+            /* TODO output your page here. You may use following sample code. */
+            int billID = Integer.parseInt(request.getParameter("billID"));
+            BillDAO dao = new BillDAO();
+            if (dao.cancelOrder(billID)){
+                url = CART_PAGE;
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(HandBookServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NamingException ex) {
-            Logger.getLogger(HandBookServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }  finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            Logger.getLogger(CancelOrderServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(CancelOrderServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } finally{
+            response.sendRedirect(url);
         }
     }
 

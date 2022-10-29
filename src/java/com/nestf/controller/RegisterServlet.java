@@ -45,6 +45,7 @@ public class RegisterServlet extends HttpServlet {
                 request.setAttribute("ERROR", "Số điện thoại đã có người đăng ký");
                 request.getRequestDispatcher(url).forward(request, response);
             } else {
+                dao.insert(acc);
                 url = LOGIN_PAGE;
                 response.sendRedirect(url);
             }
