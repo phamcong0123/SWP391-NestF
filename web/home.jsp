@@ -6,9 +6,6 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<c:if test="${requestScope.BEST_SELL_LIST == null}">
-    <jsp:forward page="homeAction"/>
-</c:if>
 <!DOCTYPE html>
 <html>
     <head>
@@ -79,7 +76,8 @@
                         <li class="nav-item col-1 d-inline-block text-center">
                             <div>
                                 <c:if test="${not empty sessionScope.USER}">
-                                    <a href="voucher" class="nav-link text-center">${sessionScope.USER.point} CP</a>
+                                    <jsp:useBean id="formatPrinter" class="com.nestf.util.FormatPrinter"/>
+                                    <a href="voucher" class="nav-link text-center">${formatPrinter.noFraction(sessionScope.USER.point)} CP</a>
                                 </c:if>
                             </div>
                         </li>
@@ -234,41 +232,41 @@
                                         <c:forEach var="anotherSuggest" varStatus="counter" items="${requestScope.OTHER_PRODUCT_LIST}">
                                             <c:if test="${counter.count <= 4}">
                                                 <li class="image-contain col-lg-3 col-md-6 position-relative"> 
-                                                <c:if test="${anotherSuggest.discountPrice ne 0}">
-                                                    <img class="position-absolute" src="img/saleoff2.png" style="width:100px; height:auto"></img>                                             
-                                                </c:if>
-                                                <div class="image-contain-section mx-2">
-                                                    <div class="image-contain-detail">
+                                                    <c:if test="${anotherSuggest.discountPrice ne 0}">
+                                                        <img class="position-absolute" src="img/saleoff2.png" style="width:100px; height:auto"></img>                                             
+                                                    </c:if>
+                                                    <div class="image-contain-section mx-2">
+                                                        <div class="image-contain-detail">
 
-                                                        <a href="productDetail?productID=${anotherSuggest.productID}" class="product-detail">
-                                                            <img src="${anotherSuggest.image}" alt="Image for ${anotherSuggest.name}" class="mx-2">
-                                                            <p class="image-title">
-                                                                <span class="product-title d-block">${anotherSuggest.name}</span><br>
-                                                                <c:if test="${anotherSuggest.discountPrice != 0}">
-                                                                    <span
-                                                                        class="image-price-discout">${proFunc.printPrice(anotherSuggest.price)}
-                                                                    </span>
-                                                                    <br>
-                                                                    <span class="image-price text-danger">${proFunc.printPrice(anotherSuggest.discountPrice)}
-                                                                    </span>
-                                                                </c:if>
-                                                                <c:if test="${anotherSuggest.discountPrice == 0}">
-                                                                    <br><span class="image-price">${proFunc.printPrice(anotherSuggest.price)}</span>
-                                                                </c:if>
-                                                            </p>
-                                                        </a>
+                                                            <a href="productDetail?productID=${anotherSuggest.productID}" class="product-detail">
+                                                                <img src="${anotherSuggest.image}" alt="Image for ${anotherSuggest.name}" class="mx-2">
+                                                                <p class="image-title">
+                                                                    <span class="product-title d-block">${anotherSuggest.name}</span><br>
+                                                                    <c:if test="${anotherSuggest.discountPrice != 0}">
+                                                                        <span
+                                                                            class="image-price-discout">${proFunc.printPrice(anotherSuggest.price)}
+                                                                        </span>
+                                                                        <br>
+                                                                        <span class="image-price text-danger">${proFunc.printPrice(anotherSuggest.discountPrice)}
+                                                                        </span>
+                                                                    </c:if>
+                                                                    <c:if test="${anotherSuggest.discountPrice == 0}">
+                                                                        <br><span class="image-price">${proFunc.printPrice(anotherSuggest.price)}</span>
+                                                                    </c:if>
+                                                                </p>
+                                                            </a>
+                                                        </div>
+
+                                                        <div class="buynow-btn">
+                                                            <a href="addToCart?productID=${anotherSuggest.productID}&quantity=1">
+                                                                <button class="btn btn-dark">
+                                                                    <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
+                                                                </button>
+                                                            </a>
+                                                        </div>
+
                                                     </div>
-
-                                                    <div class="buynow-btn">
-                                                        <a href="addToCart?productID=${anotherSuggest.productID}&quantity=1">
-                                                            <button class="btn btn-dark">
-                                                                <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
-                                                            </button>
-                                                        </a>
-                                                    </div>
-
-                                                </div>
-                                            </li>
+                                                </li>
                                             </c:if>
                                         </c:forEach>
                                     </ul>

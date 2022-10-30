@@ -8,6 +8,9 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="vi">
+    <c:if test="${empty requestScope.TOTAL}">
+        <c:redirect url="cart"/>
+    </c:if>
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -68,7 +71,10 @@
                         </div>                                                    
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
-                        <div><a href="voucher" class="nav-link text-center">${sessionScope.USER.point} CP</a></div>
+                        <div>
+                            <jsp:useBean id="formatPrinter" class="com.nestf.util.FormatPrinter"/>
+                            <a href="voucher" class="nav-link text-center">${formatPrinter.noFraction(sessionScope.USER.point)} CP</a>
+                        </div>
                     </li>
                 </ul>
             </nav>
@@ -83,7 +89,8 @@
                     </p>                  
                     <jsp:useBean id="formatter" class="com.nestf.util.FormatPrinter"/>
                     <c:set var = "totalInUSD" value="${formatter.toUSD(requestScope.TOTAL)}"/>
-                    <span>Thành tiền : <b>$${totalInUSD}</b> (quy đổi từ ${formatter.printMoney(requestScope.TOTAL)})</span>
+                    <span>Thành tiền : <b>$${totalInUSD}</b> (quy đổi từ ${formatter.printMoney(requestScope.TOTAL)})</span><br>
+                    <span>Quý khách sẽ được cộng ${requestScope.TOTAL/1000} điểm tích luỹ sau khi đơn hàng đã được nhân viên xác nhận</span>
                 </div>
                 <div id="paypalButtonContainer" class="m-auto col-6"></div>
             </form>

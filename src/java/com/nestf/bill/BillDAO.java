@@ -26,7 +26,7 @@ import javax.naming.NamingException;
  */
 public class BillDAO {
 
-    final String PROCESSING_LIST = "SELECT billID, address, statusID, time, total FROM tblBill WHERE cusPhone = ? AND statusID BETWEEN 1 AND 3 ";
+    final String PROCESSING_LIST = "SELECT billID, address, transactionID, statusID, time, total FROM tblBill WHERE cusPhone = ? AND statusID BETWEEN 1 AND 3 ";
 
     public List<BillDTO> getMyOnProcessingBills(String phone) throws NamingException, SQLException {
         List<BillDTO> list = null;
@@ -44,12 +44,13 @@ public class BillDAO {
                     BillDetailDAO billDetailDAO = new BillDetailDAO();
                     List<BillDetailDTO> billDetail = billDetailDAO.getBillDetail(billID);
                     String address = rs.getNString("address");
+                    String transactionID = rs.getString("transactionID");
                     int statusID = rs.getInt("statusID");
                     StatusDAO statusDAO = new StatusDAO();
                     StatusDTO status = statusDAO.getStatus(statusID);
                     Date date = new Date(rs.getTimestamp("time").getTime());
                     Double total = rs.getDouble("total");
-                    BillDTO dto = new BillDTO(billID, phone, address, status, date, total, billDetail);
+                    BillDTO dto = new BillDTO(billID, phone, address, transactionID, status, date, total, billDetail);
                     if (list == null) {
                         list = new ArrayList<>();
                     }
@@ -69,7 +70,7 @@ public class BillDAO {
         }
         return list;
     }
-    final String COMPLETED_LIST = "SELECT billID, address, statusID, time, total FROM tblBill WHERE cusPhone = ? AND statusID BETWEEN 4 AND 6 ";
+    final String COMPLETED_LIST = "SELECT billID, address, transactionID, statusID, time, total FROM tblBill WHERE cusPhone = ? AND statusID BETWEEN 4 AND 6 ";
 
     public List<BillDTO> getMyCompletedBills(String phone) throws NamingException, SQLException {
         List<BillDTO> list = null;
@@ -87,12 +88,13 @@ public class BillDAO {
                     BillDetailDAO billDetailDAO = new BillDetailDAO();
                     List<BillDetailDTO> billDetail = billDetailDAO.getBillDetail(billID);
                     String address = rs.getNString("address");
+                    String transactionID = rs.getString("transactionID");
                     int statusID = rs.getInt("statusID");
                     StatusDAO statusDAO = new StatusDAO();
                     StatusDTO status = statusDAO.getStatus(statusID);
                     Date date = new Date(rs.getTimestamp("time").getTime());
                     Double total = rs.getDouble("total");
-                    BillDTO dto = new BillDTO(billID, phone, address, status, date, total, billDetail);
+                    BillDTO dto = new BillDTO(billID, phone, address, transactionID, status, date, total, billDetail);
                     if (list == null) {
                         list = new ArrayList<>();
                     }
@@ -113,9 +115,9 @@ public class BillDAO {
         return list;
     }
 
-    final String CHECK_OUT = "INSERT tblBill([cusPhone], [address], [statusID], [total]) VALUES (?,?,1,?) ";
+    final String CHECK_OUT = "INSERT tblBill([cusPhone], [address],[transactionID], [statusID], [total]) VALUES (?,?,?,1,?) ";
 
-    public int checkOut(String phone, String address, double total) {
+    public int checkOut(String phone, String address,String transactionID, double total) {
 // statusID
 //=1:Chờ xác nhận
 //=2:Chờ lấy hàng
@@ -132,7 +134,8 @@ public class BillDAO {
                 ptm = conn.prepareStatement(CHECK_OUT, Statement.RETURN_GENERATED_KEYS);
                 ptm.setString(1, phone);
                 ptm.setNString(2, address);
-                ptm.setDouble(3, total);
+                ptm.setString(3, transactionID);
+                ptm.setDouble(4, total);
                 int check = ptm.executeUpdate();
                 if (check > 0) {
                     if (ptm.getGeneratedKeys().next()) billID = ptm.getGeneratedKeys().getInt(1);

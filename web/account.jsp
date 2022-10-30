@@ -73,7 +73,10 @@
                         </div>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
-                        <div><a href="voucher" class="nav-link">${USER.point} CP</a></div>
+                        <div>
+                            <jsp:useBean id="formatPrinter" class="com.nestf.util.FormatPrinter"/>
+                            <a href="voucher" class="nav-link text-center">${formatPrinter.noFraction(sessionScope.USER.point)} CP</a>
+                        </div>
                     </li>
                 </ul>
             </nav>

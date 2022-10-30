@@ -51,7 +51,7 @@ public class BuyVoucherServlet extends HttpServlet {
             HttpSession session = request.getSession(false);
             if (session != null) {
                 AccountDTO customer = (AccountDTO) session.getAttribute("USER");
-                int customerPoint = customer.getPoint();
+                double customerPoint = customer.getPoint();
                 int typeID = Integer.parseInt(request.getParameter("typeID"));
                 VoucherTypeDAO typeDAO = new VoucherTypeDAO();
                 int requiredPoint = typeDAO.getVoucher(typeID).getPoint();
@@ -62,7 +62,7 @@ public class BuyVoucherServlet extends HttpServlet {
                     if (voucher != null) {
                         List<VoucherDTO> voucherWallet = (List<VoucherDTO>) session.getAttribute("VOUCHER_WALLET");
                         voucherWallet.add(voucher);
-                        int newPoint = customerPoint - requiredPoint;
+                        double newPoint = customerPoint - requiredPoint;
                         int newQuantity = typeDAO.getVoucher(typeID).getQuantity() - 1;
                         AccountDAO customerDAO = new AccountDAO();
                         if (customerDAO.updatePoint(newPoint, phone) && typeDAO.updateQuantity(typeID, newQuantity)) {

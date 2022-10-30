@@ -32,7 +32,7 @@ public class AccountDAO {
                 ptm.setString(2, password);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                    account = new AccountDTO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBoolean(5), rs.getInt(6), rs.getString(7));
+                    account = new AccountDTO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBoolean(5), rs.getDouble(6), rs.getString(7));
                 }
             }
         } finally {
@@ -61,7 +61,7 @@ public class AccountDAO {
                 ptm.setString(1, phone);
                 rs = ptm.executeQuery();
                 if (rs.next()) {
-                    account = new AccountDTO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBoolean(5), rs.getInt(6), rs.getString(7));
+                    account = new AccountDTO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBoolean(5), rs.getDouble(6), rs.getString(7));
                 }
             }
         } finally {
@@ -92,7 +92,7 @@ public class AccountDAO {
                 ptm.setString(3, account.getName());
                 ptm.setString(4, account.getAddress());
                 ptm.setBoolean(5, account.isGender());
-                ptm.setInt(6, account.getPoint());
+                ptm.setDouble(6, account.getPoint());
                 ptm.setString(7, account.getRole());
                 check = ptm.executeUpdate() > 0;
             }
@@ -182,7 +182,7 @@ public class AccountDAO {
         return check;
     }
     final String UPDATE_POINT = "UPDATE [tblAccount] SET [point] = ? WHERE phone = ?";
-    public boolean updatePoint(int point, String phone) throws SQLException, NamingException{
+    public boolean updatePoint(double point, String phone) throws SQLException, NamingException{
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -190,7 +190,7 @@ public class AccountDAO {
             conn = DBHelper.makeConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(UPDATE_POINT);
-                ptm.setInt(1, point);
+                ptm.setDouble(1, point);
                 ptm.setString(2, phone);
                 check = ptm.executeUpdate() > 0;
             }

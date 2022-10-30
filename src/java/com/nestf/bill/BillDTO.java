@@ -20,6 +20,7 @@ public class BillDTO implements Serializable {
     private int billID;
     private String cusPhone;
     private String address;
+    private String transactionID;
     private StatusDTO status;
     private Date time;
     private double total;
@@ -28,20 +29,53 @@ public class BillDTO implements Serializable {
     public BillDTO() {
     }
 
-    public BillDTO(String cusPhone, String address, StatusDTO status, double total) {
-        this.cusPhone = cusPhone;
-        this.address = address;
-        this.status = status;
-        this.total = total;
-    }
-
-    public BillDTO(int billID, String cusPhone, String address, StatusDTO status, Date time, double total, List<BillDetailDTO> detail) {
+    public BillDTO(int billID, String cusPhone, String address, String transactionID, StatusDTO status, Date time, double total, List<BillDetailDTO> detail) {
         this.billID = billID;
         this.cusPhone = cusPhone;
         this.address = address;
+        this.transactionID = transactionID;
         this.status = status;
         this.time = time;
         this.total = total;
+        this.detail = detail;
+    }
+
+    public BillDTO(String cusPhone, String address, String transactionID, double total) {
+        this.cusPhone = cusPhone;
+        this.address = address;
+        this.transactionID = transactionID;
+        this.total = total;
+    }
+
+    public void setBillID(int billID) {
+        this.billID = billID;
+    }
+
+    public void setCusPhone(String cusPhone) {
+        this.cusPhone = cusPhone;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public void setTransactionID(String transactionID) {
+        this.transactionID = transactionID;
+    }
+
+    public void setStatus(StatusDTO status) {
+        this.status = status;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public void setDetail(List<BillDetailDTO> detail) {
         this.detail = detail;
     }
 
@@ -55,6 +89,10 @@ public class BillDTO implements Serializable {
 
     public String getAddress() {
         return address;
+    }
+
+    public String getTransactionID() {
+        return transactionID;
     }
 
     public StatusDTO getStatus() {
@@ -73,31 +111,5 @@ public class BillDTO implements Serializable {
         return detail;
     }
 
-    public void setBillID(int billID) {
-        this.billID = billID;
-    }
-
-    public void setCusPhone(String cusPhone) {
-        this.cusPhone = cusPhone;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setStatus(StatusDTO status) {
-        this.status = status;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
-    }
-
-    public void setDetail(List<BillDetailDTO> detail) {
-        this.detail = detail;
-    }    
+      
 }

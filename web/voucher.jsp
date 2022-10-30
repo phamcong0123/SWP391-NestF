@@ -96,7 +96,10 @@
                         </div>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
-                        <div><a href="voucher" class="nav-link text-center current-tab disabled">${sessionScope.USER.point} CP</a></div>
+                        <div>
+                            <jsp:useBean id="formatPrinter" class="com.nestf.util.FormatPrinter"/>
+                            <a href="voucher" class="nav-link text-center">${formatPrinter.noFraction(sessionScope.USER.point)} CP</a>
+                        </div>
                     </li>
                 </ul>
             </nav>
@@ -104,9 +107,9 @@
         <div id="white-board" class="bg-white w-75">
             <h2 class="d-inline-block col-6 ms-0">Danh sách voucher</h2>
             <div id="voucher-modal" class="d-inline-block col-4 text-end">
-                 <button id="buy-button" class="col-5" data-bs-toggle="modal" data-bs-target="#voucherModal">
-                        Voucher của bạn                            
-                    </button>                     
+                <button id="buy-button" class="col-5" data-bs-toggle="modal" data-bs-target="#voucherModal">
+                    Voucher của bạn                            
+                </button>                     
                 <div class="modal fade" id="voucherModal" tabindex="-1" aria-labelledby="choose1Voucher" aria-hidden="true">
                     <div class="modal-dialog modal-xl modal-dialog-scrollable">
                         <div class="modal-content">
@@ -185,14 +188,14 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.1/js/bootstrap.min.js" integrity="sha512-vyRAVI0IEm6LI/fVSv/Wq/d0KUfrg3hJq2Qz5FlfER69sf3ZHlOrsLriNm49FxnpUGmhx+TaJKwJ+ByTLKT+Yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script>
-                                    window.onload = function () {
-                                        document.getElementById("trigger").click();
-                                    }
-                                    $('#trigger').click(function () {
-                                        setTimeout(function () {
-                                            $('#notification').modal('hide');
-                                        }, 2000);
-                                    });
+            window.onload = function () {
+                document.getElementById("trigger").click();
+            }
+            $('#trigger').click(function () {
+                setTimeout(function () {
+                    $('#notification').modal('hide');
+                }, 2000);
+            });
         </script>
     </body>
 

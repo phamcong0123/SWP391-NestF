@@ -33,4 +33,7 @@ public class FormatPrinter {
         usdFormat.setMaximumFractionDigits(2);
         return usdFormat.format(usd);
     }
+    public static String noFraction(double num){
+        return String.valueOf(num).split("\\.")[0];
+    }
 }

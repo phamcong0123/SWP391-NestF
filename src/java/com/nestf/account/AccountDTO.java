@@ -17,13 +17,17 @@ public class AccountDTO implements Serializable{
     private String name;
     private String address;
     private boolean gender;
-    private int point;
+    private double point;
     private String role;
 
     public AccountDTO() {
     }
 
-    public AccountDTO(String phone, String password, String name, String address, boolean gender, int point, String role) {
+    public double getPoint() {
+        return point;
+    }
+
+    public AccountDTO(String phone, String password, String name, String address, boolean gender, double point, String role) {
         this.phone = phone;
         this.password = password;
         this.name = name;
@@ -73,11 +77,8 @@ public class AccountDTO implements Serializable{
         this.gender = gender;
     }
 
-    public int getPoint() {
-        return point;
-    }
-
-    public void setPoint(int point) {
+    
+    public void setPoint(double point) {
         this.point = point;
     }
 

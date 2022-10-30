@@ -59,14 +59,13 @@ public class ConfirmCheckOutServlet extends HttpServlet {
             String address = customer.getAddress();
             double total = Double.parseDouble(request.getParameter("total"));
             String transactionID = request.getParameter("transactionID");
-            System.out.println(transactionID);
             if (request.getParameter("address").length() > 0) {
                 address = request.getParameter("address");
             }
             List<CartItemDTO> cart = (List<CartItemDTO>) session.getAttribute("CART");
 
             BillDAO billDAO = new BillDAO();
-            int billID = billDAO.checkOut(phone, address, total);
+            int billID = billDAO.checkOut(phone, address, transactionID, total);
 
             BillDetailDAO billDetailDAO = new BillDetailDAO();
             boolean check = true;
@@ -86,7 +85,7 @@ public class ConfirmCheckOutServlet extends HttpServlet {
                     int voucherID = Integer.parseInt(request.getParameter("voucherID"));
                     VoucherDAO voucherDAO = new VoucherDAO();
                     voucherDAO.RemoveVoucher(voucherID);
-                }             
+                }
                 CartDAO cartDAO = new CartDAO();
                 for (CartItemDTO cartItem: cart) {
                     cartDAO.removeItemFromCart(cartItem.getProduct().getProductID(), phone);

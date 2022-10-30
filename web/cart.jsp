@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi">      
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -56,8 +56,12 @@
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div><a href="cart" class="nav-link text-center current-tab disabled"><i class="fa-solid fa-cart-shopping"></i></a></div>
                     </li>
-                    <li class="nav-item col-1 d-inline-block text-center">
-                        <div><a href="voucher" class="nav-link text-center">${sessionScope.USER.point} CP</a></div>
+                    <li class="nav-item col-1 d-inline-block text-center">   
+                        
+                        <div>
+                            <jsp:useBean id="formatPrinter" class="com.nestf.util.FormatPrinter"/>
+                            <a href="voucher" class="nav-link text-center">${formatPrinter.noFraction(sessionScope.USER.point)} CP</a>
+                        </div>
                     </li>
                 </ul>
             </nav>
@@ -118,7 +122,7 @@
                                     </div>
                                 </div>
                             </div>                                                                       
-                            <jsp:useBean id="productFunc" class="com.nestf.product.ProductDTO"/>
+
                             <c:set var="total" value="${0}"/>
                             <c:forEach items="${sessionScope.CART}" var="cartItem">
                                 <div id="cart-item" class="rounded col-11 m-auto mb-3">
@@ -129,8 +133,10 @@
                                         <div class="d-inline-block col-8 text-start ms-5 mt-4">
                                             <a href="productDetail?productID=${cartItem.product.productID}" class="text-decoration-none text-black"><h4 class="fw-bold">${cartItem.product.name}</h4></a>
                                             <span>
+                                                <jsp:useBean id="productFunc" class="com.nestf.product.ProductDTO"/>
                                                 <c:if test="${cartItem.product.discountPrice ne 0}">
                                                     <span class="text-danger">
+
                                                         ${productFunc.printPrice(cartItem.product.discountPrice)}
                                                     </span>                                                 
                                                     <span class="text-muted text-decoration-line-through ms-3">
@@ -169,7 +175,6 @@
                                 </div>
                             </c:forEach>
                             <div class="fs-4 d-flex justify-content-between pb-3">
-                                <jsp:useBean id="formatPrinter" class="com.nestf.util.FormatPrinter"/>
                                 <c:set var = "totalInUSD" value = "${formatPrinter.toUSD(total)}"/>
                                 <span class="ms-5 d-inline-block align-self-center">Thành tiền : <span class="fw-bold" id="total-display"> ${formatPrinter.printMoney(total)}</span> 
                                 </span>
@@ -207,8 +212,7 @@
                                         <div id = "cart-item" class="row col-11 m-auto text-start mb-3 position-relative">
                                             <h3 class="m-2 mb-0 d-inline-block">Đơn hàng <strong>#NESTF${bill.billID}</strong></h3>
                                             <h5 class="text-success m-2">${bill.status.status}</h5>
-                                            <jsp:useBean id="billFunc" class="com.nestf.util.FormatPrinter"/> 
-                                            <span class="ms-2 mb-2">Ngày đặt hàng: <b>${billFunc.printDate(bill.time)}</b></span>
+                                            <span class="ms-2 mb-2">Ngày đặt hàng: <b>${formatPrinter.printDate(bill.time)}</b></span>
                                             <span class="ms-2 mb-4">Địa chỉ nhận hàng : <b>${bill.address}</b></span>
                                             <c:forEach items = "${bill.detail}" var = "billDetail">
                                                 <div class="rounded col-11 m-auto mb-3 border border-dark">
@@ -219,12 +223,12 @@
                                                         <div class="d-inline-block col-8 text-start ms-5 mt-4">
                                                             <h4 class="fw-bold">${billDetail.product.name}</h4>
                                                             <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">${billDetail.quantity}</span></p>
-                                                            <p>Thành tiền : <span class="fw-bold">${billFunc.printMoney(billDetail.total)}</span></p>
+                                                            <p>Thành tiền : <span class="fw-bold">${formatPrinter.printMoney(billDetail.total)}</span></p>
                                                         </div>                                             
                                                     </div>
                                                 </div>
                                             </c:forEach>                                          
-                                            <h4 class="text-end">Tổng cộng: <b>${billFunc.printMoney(bill.total)}</b></h4>       
+                                            <h4 class="text-end">Tổng cộng: <b>${formatPrinter.printMoney(bill.total)}</b></h4>       
                                             <c:if test="${bill.status.statusID < 3}">
                                                 <a href="cancelBill?billID=${bill.billID}" id="remove-button" class="mt-3 nav-link position-absolute"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a> 
                                                 </c:if>
@@ -246,8 +250,8 @@
                                         <div id = "cart-item" class="row col-11 m-auto text-start mb-3 position-relative">
                                             <h3 class="m-2 mb-0 d-inline-block">Đơn hàng <strong>#NESTF${completedBill.billID}</strong></h3>
                                             <h5 class="text-danger m-2">${completedBill.status.status}</h5>
-                                            <span class="ms-2 mb-2">Ngày đặt hàng: <b>${billFunc.printDate(completedBill.time)}</b></span>
-                                             <span class="ms-2 mb-4">Địa chỉ nhận hàng : <b>${completedBill.address}</b></span>
+                                            <span class="ms-2 mb-2">Ngày đặt hàng: <b>${formatPrinter.printDate(completedBill.time)}</b></span>
+                                            <span class="ms-2 mb-4">Địa chỉ nhận hàng : <b>${completedBill.address}</b></span>
                                             <c:forEach items = "${completedBill.detail}" var = "billDetail">
                                                 <div class="rounded col-11 m-auto mb-3 border border-dark">
                                                     <div class="row container-fluid m-0">
@@ -257,12 +261,12 @@
                                                         <div class="d-inline-block col-8 text-start ms-5 mt-4">
                                                             <h4 class="fw-bold">${billDetail.product.name}</h4>
                                                             <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">${billDetail.quantity}</span></p>
-                                                            <p>Thành tiền : <span class="fw-bold">${billFunc.printMoney(billDetail.total)}</span></p>
+                                                            <p>Thành tiền : <span class="fw-bold">${formatPrinter.printMoney(billDetail.total)}</span></p>
                                                         </div>                                             
                                                     </div>
                                                 </div>
                                             </c:forEach>                                          
-                                            <h4 class="text-end">Tổng cộng: <b>${billFunc.printMoney(completedBill.total)}</b></h4>                                                   
+                                            <h4 class="text-end">Tổng cộng: <b>${formatPrinter.printMoney(completedBill.total)}</b></h4>                                                   
                                         </div>
                                     </c:forEach>
                                 </c:if>

@@ -78,7 +78,8 @@
                         <li class="nav-item col-1 d-inline-block text-center">
                             <div>
                                 <c:if test="${not empty sessionScope.USER}">
-                                    <a href="voucher" class="nav-link text-center">${sessionScope.USER.point} CP</a>
+                                    <jsp:useBean id="formatPrinter" class="com.nestf.util.FormatPrinter"/>
+                                    <a href="voucher" class="nav-link text-center">${formatPrinter.noFraction(sessionScope.USER.point)} CP</a>
                                 </c:if>
                             </div>
                         </li>
