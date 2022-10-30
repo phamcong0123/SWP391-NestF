@@ -90,7 +90,7 @@
                     <jsp:useBean id="formatter" class="com.nestf.util.FormatPrinter"/>
                     <c:set var = "totalInUSD" value="${formatter.toUSD(requestScope.TOTAL)}"/>
                     <span>Thành tiền : <b>$${totalInUSD}</b> (quy đổi từ ${formatter.printMoney(requestScope.TOTAL)})</span><br>
-                    <span>Quý khách sẽ được cộng ${requestScope.TOTAL/1000} điểm tích luỹ sau khi đơn hàng đã được nhân viên xác nhận</span>
+                    <span>Quý khách sẽ được cộng ${requestScope.TOTAL/1000} điểm tích luỹ khi quá trình giao hàng bắt đầu</span>
                 </div>
                 <div id="paypalButtonContainer" class="m-auto col-6"></div>
             </form>

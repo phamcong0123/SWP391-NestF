@@ -25,7 +25,25 @@ import javax.naming.NamingException;
  * @author Admin
  */
 public class BillDAO {
-
+    
+    public BillDTO validOnProcessingOrder(int billID, String phone) throws NamingException, SQLException{
+        List<BillDTO> onProcessing = getMyOnProcessingBills(phone);
+        for (BillDTO bill : onProcessing) {
+            if (bill.getBillID() == billID) return bill;
+        }
+        return null;
+    }
+    public boolean cancelOrder(int billID, String phone) throws NamingException, SQLException{
+        boolean check = false;
+        BillDTO bill = validOnProcessingOrder(billID, phone);
+        if (bill == null){
+            return check;
+        }
+        if (bill.getStatus().getStatusID() > 2) return check;
+        if (updateOrderStatus(billID, 5)) check = true;
+        return check;
+    }
+    
     final String PROCESSING_LIST = "SELECT billID, address, transactionID, statusID, time, total FROM tblBill WHERE cusPhone = ? AND statusID BETWEEN 1 AND 3 ";
 
     public List<BillDTO> getMyOnProcessingBills(String phone) throws NamingException, SQLException {
@@ -146,8 +164,8 @@ public class BillDAO {
         }
         return billID;
     }
-    private final String CANCEL = "";
-    public boolean cancelOrder(int billID) throws NamingException, SQLException{
+    private final String CANCEL = "UPDATE tblBill SET statusID = ? WHERE billID = ?";
+    public boolean updateOrderStatus(int billID, int statusID) throws NamingException, SQLException{
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -155,7 +173,8 @@ public class BillDAO {
             conn = DBHelper.makeConnection();
             if (conn != null){
                 ptm = conn.prepareStatement(CANCEL);
-                ptm.setInt(1, billID);            
+                ptm.setInt(1, statusID);    
+                ptm.setInt(2, billID);
                 check = ptm.executeUpdate() > 0;
             }
         } finally {

@@ -7,9 +7,10 @@ package com.nestf.controller;
 
 import com.nestf.account.AccountDTO;
 import com.nestf.bill.BillDAO;
+import com.nestf.bill.BillDTO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
@@ -37,17 +38,20 @@ public class CancelOrderServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private static final String ERROR = "error.html";
-    private static final String CART_PAGE = "cart.jsp";
+    private static final String LOAD_BILL = "LoadBillServlet";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = ERROR;
         try {
             /* TODO output your page here. You may use following sample code. */
-            int billID = Integer.parseInt(request.getParameter("billID"));
-            BillDAO dao = new BillDAO();
-            if (dao.cancelOrder(billID)){
-                url = CART_PAGE;
+            HttpSession session = request.getSession(false);
+            AccountDTO customer = (AccountDTO) session.getAttribute("USER");
+            String phone = customer.getPhone();
+            int billID = Integer.parseInt(request.getParameter("billID"));           
+            BillDAO dao = new BillDAO();         
+            if (dao.cancelOrder(billID, phone)){
+                url = LOAD_BILL;
             }
         } catch (NamingException ex) {
             Logger.getLogger(CancelOrderServlet.class.getName()).log(Level.SEVERE, null, ex);
