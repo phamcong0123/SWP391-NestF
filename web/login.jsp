@@ -49,7 +49,7 @@
                 <input type="text" name="phone" value="${param.phone}" required class="col-6" placeholder="Số điện thoại"><br>
                 <input type="password" name="password" required class="col-6 mt-3" placeholder="Mật khẩu"><br>   
                 <c:if test="${ not empty requestScope.ERROR}"><div class="text-center text-danger mt-2 col-10 d-inline-block">${requestScope.ERROR}</div><br></c:if>
-                <a href="forgotPassword" class="nav-link col-6 d-inline-block mt-3 mb-3 text-end text-primary" id="forgetPass">Quên mật khẩu</a><br>
+                <a href="forgotPass.jsp" class="nav-link col-6 d-inline-block mt-3 mb-3 text-end text-primary" id="forgetPass">Quên mật khẩu</a><br>
                 <a href="registerPage"><input type="button" value="ĐĂNG KÝ" id="link-button"></a>
                 <input type="submit" value="ĐĂNG NHẬP"  id="color-button">
             </form>
