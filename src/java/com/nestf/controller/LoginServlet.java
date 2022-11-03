@@ -7,10 +7,13 @@ package com.nestf.controller;
 
 import com.nestf.account.AccountDAO;
 import com.nestf.account.AccountDTO;
+import com.nestf.util.MyAppConstant;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -42,6 +45,9 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
+        
+        ServletContext context = request.getServletContext();
+        Properties siteMap = (Properties) context.getAttribute("SITEMAP");
         String url = LOGIN_PAGE;
         try {
             String phone = request.getParameter("phone").trim();
@@ -56,7 +62,8 @@ public class LoginServlet extends HttpServlet {
                         url = LOAD_USER_CART;
                         break;
                     case "AD":
-                        url = DASHBOARD;
+                        session.setAttribute("ADMIN", user);
+                        url = (String) siteMap.get(MyAppConstant.AdminFeatures.INIT_ATTRIBUTE_ACTION);
                         break;
                     case "SE":
                         break;
