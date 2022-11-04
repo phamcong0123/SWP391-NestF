@@ -22,12 +22,19 @@ import javax.naming.NamingException;
  */
 public class ProductDAOAdmin {
 
-    public static final String GET_PRO_DETAIL = "SELECT ps.selPhone, name, price, quantity, cat.categoryID, cat.categoryName, discountPrice, productDes, image, status\n"
+    public static final String GET_CATEGORY_NAME_GIVEN_PRODUCTID = "Select distinct c.categoryName\n"
+            + "From tblProducts p, tblCategory c\n"
+            + "Where p.categoryID = c.categoryID\n"
+            + "And p.productID = ?";
+
+    public static final String GET_PRO_DETAIL = "SELECT ps.selPhone, pro.name, price, quantity, cat.categoryID, cat.categoryName, discountPrice, productDes, image, status, ac.name as selName\n"
             + "FROM  tblProducts pro\n"
             + "INNER JOIN tblCategory cat\n"
             + "ON pro.categoryID = cat.categoryID\n"
             + "INNER JOIN tblProductSeller ps\n"
-            + "ON pro.productID = ps.productID \n"
+            + "ON pro.productID = ps.productID\n"
+            + "INNER JOIN tblAccount ac\n"
+            + "ON ac.phone = ps.selPhone\n"
             + "AND pro.productID = ?";
 
     public static final String SET_STATUS_TRUE = "UPDATE tblProducts\n"
@@ -42,30 +49,34 @@ public class ProductDAOAdmin {
             + "SET name = ? , price = ? , quantity = ? , categoryID = ? , discountPrice = ? , productDes = ? , image = ? , status = ?\n"
             + "WHERE productID = ? ";
 
-    public static final String GET_LIST_ACTIVE = "SELECT pro.productID, ps.selPhone, name, price, quantity, cat.categoryID, cat.categoryName, discountPrice, productDes, image, detailDes\n"
-            + "FROM  tblProducts pro\n"
-            + "INNER JOIN tblCategory cat\n"
+    public static final String GET_LIST_ACTIVE = "SELECT ps.selPhone, pro.productID, pro.name, price, quantity, cat.categoryID ,cat.categoryName, discountPrice, productDes, image, acc.name as selName\n"
+            + "FROM  tblCategory cat\n"
+            + "INNER JOIN tblProducts pro\n"
             + "ON pro.categoryID = cat.categoryID\n"
             + "INNER JOIN tblProductSeller ps\n"
-            + "ON pro.productID = ps.productID \n"
-            + "AND pro.status = 1";
+            + "ON pro.productID = ps.productID\n"
+            + "INNER JOIN tblAccount acc\n"
+            + "ON ps.selPhone = acc.phone \n"
+            + "AND pro.status = 1 AND ps.isActive = 1";
 
-    public static final String GET_LIST_NON_ACTIVE = "SELECT pro.productID, ps.selPhone, name, price, quantity, cat.categoryID, cat.categoryName, discountPrice, productDes, image, detailDes\n"
-            + "FROM  tblProducts pro\n"
-            + "INNER JOIN tblCategory cat\n"
+    public static final String GET_LIST_NON_ACTIVE = "SELECT ps.selPhone, pro.productID, pro.name, price, quantity, cat.categoryID ,cat.categoryName, discountPrice, productDes, image, acc.name as selName\n"
+            + "FROM  tblCategory cat\n"
+            + "INNER JOIN tblProducts pro\n"
             + "ON pro.categoryID = cat.categoryID\n"
             + "INNER JOIN tblProductSeller ps\n"
-            + "ON pro.productID = ps.productID \n"
+            + "ON pro.productID = ps.productID\n"
+            + "INNER JOIN tblAccount acc\n"
+            + "ON ps.selPhone = acc.phone \n"
             + "AND pro.status = 0";
 
     public static final String DEACTIVE_PRODUCT_SELLER = "UPdate tblProductSeller \n"
             + "SET isActive = 0\n"
             + "WHERE productID = ? AND selPhone = ?";
-    
+
     public static final String REGEX = "-(ptth)";
     public static final String INSERT_REGEX = "-ptth";
 
-    public static List<ProductDTO> getListActiveProduct() throws SQLException {
+    public static List<ProductDTO> getListActiveProduct() throws SQLException, NamingException {
         List<ProductDTO> list = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -87,11 +98,10 @@ public class ProductDAOAdmin {
                     String productDes = rs.getString("productDes");
                     String image = rs.getString("image");
                     String[] imageLink = image.split(REGEX);
-                    list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, ".", true, imageLink));
+                    String selName = rs.getString("selName");
+                    list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, ".", true, imageLink, selName));
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             if (rs != null) {
                 rs.close();
@@ -128,7 +138,8 @@ public class ProductDAOAdmin {
                     String productDes = rs.getString("productDes");
                     String image = rs.getString("image");
                     String[] imageLink = image.split(REGEX);
-                    list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, ".", false, imageLink));
+                    String selName = rs.getString("selName");
+                    list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, ".", false, imageLink, selName));
                 }
             }
         } catch (Exception e) {
@@ -145,6 +156,38 @@ public class ProductDAOAdmin {
             }
         }
         return list;
+    }
+
+    public static boolean checkSameCategory(ProductDTO dto) throws SQLException, NamingException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        String categoryName = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_CATEGORY_NAME_GIVEN_PRODUCTID);
+                ptm.setInt(1, dto.getProductID());
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    categoryName = rs.getString("categoryName");
+                }
+                if (dto.getCategory().getCategoryName().equalsIgnoreCase(categoryName)) {
+                    return true;
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return false;
     }
 
 //    Chèn vào product + productSeller
@@ -259,10 +302,10 @@ public class ProductDAOAdmin {
 //                        + "WHERE productID = ? ";
                 statement = con.prepareStatement(UPDATE_PRODUCT);
                 statement.setString(1, dto.getName());
-                statement.setFloat(2, (float)dto.getPrice());
+                statement.setFloat(2, (float) dto.getPrice());
                 statement.setInt(3, dto.getQuantity());
                 statement.setInt(4, dto.getCategory().getCategoryID());
-                statement.setFloat(5, (float)dto.getDiscountPrice());
+                statement.setFloat(5, (float) dto.getDiscountPrice());
                 statement.setString(6, dto.getProductDes());
                 statement.setString(7, dto.getImage());
                 statement.setBoolean(8, dto.isStatus());
@@ -353,7 +396,8 @@ public class ProductDAOAdmin {
                     String image = rs.getString("image");
                     boolean status = rs.getBoolean("status");
                     String[] imageLink = image.split(REGEX);
-                    producDetail = new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, category), discountPrice, productDes, ".", status, imageLink);
+                    String selName = rs.getString("selName");
+                    producDetail = new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, category), discountPrice, productDes, ".", status, imageLink, selName);
                 }
             }
         } finally {

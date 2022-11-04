@@ -5,13 +5,16 @@
  */
 package com.nestf.controller.AD;
 
+import com.nestf.account.AccountDTO;
 import com.nestf.dao.ADMIN.ProductDAOAdmin;
+import com.nestf.dao.ADMIN.SellerDAOAdmin;
 import com.nestf.product.ProductDAO;
 import com.nestf.product.ProductDTO;
 import com.nestf.util.MyAppConstant;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +25,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -49,8 +53,11 @@ public class EditProductServlet extends HttpServlet {
         String productType = request.getParameter("productType");
         
         try{
+            HttpSession session = request.getSession();
             int productID = Integer.parseInt(request.getParameter("productID"));
             ProductDTO productDetail = ProductDAOAdmin.getProductDetail(productID);
+            List<AccountDTO> listSeller = SellerDAOAdmin.getListSellerOnly();
+            session.setAttribute("LIST_SELLER", listSeller);
             if (productDetail != null) {
                 request.setAttribute("PRODUCT_DETAIL", productDetail);
                 request.setAttribute("RETURN_PAGE", productType);

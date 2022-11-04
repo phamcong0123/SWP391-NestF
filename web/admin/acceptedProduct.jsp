@@ -384,7 +384,7 @@
                                         <c:forEach var="product" items="${sessionScope.LIST_PRODUCT}">
                                             <tr>
                                                 <td>${product.productID}</td>
-                                                <td>${product.selPhone}</td>
+                                                <td>${product.selName}</td>
                                                 <td>${product.name}</td>
                                                 <td>${product.price}</td>
                                                 <td>${product.quantity}</td>

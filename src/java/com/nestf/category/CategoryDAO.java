@@ -130,7 +130,7 @@ public class CategoryDAO {
         return dto;
     }
 
-    public boolean insertCategory(String categoryName) throws SQLException, NamingException {
+    public static boolean insertCategory(String categoryName) throws SQLException, NamingException {
         boolean result = false;
         List<CategoryDTO> list = getListCategory();
         for (CategoryDTO dto : list) {

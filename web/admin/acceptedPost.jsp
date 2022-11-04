@@ -40,7 +40,7 @@
 
                     <!-- Sidebar - Brand -->
                     <a href="dashboard" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
-                                                                          height="38px"></a>
+                                                                         height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
 
@@ -61,7 +61,7 @@
                             <i class="fa fa-cog fa-chart-area"></i>
                             <span>Edit profile</span></a>
                     </li>
-                    
+
                     <!-- Divider -->
                     <hr class="sidebar-divider">
 
@@ -76,7 +76,7 @@
                              data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">List products:</h6>
-                                <a class="collapse-item" href="addNewProductPage">Add new product</a>
+                                <a class="collapse-item" href="addNewProductPage">Add new products</a>
                                 <a class="collapse-item" href="accpetedProductPage">Active products</a>
                                 <a class="collapse-item" href="pendingProductPage">Non-active products</a>
                             </div>
@@ -110,7 +110,7 @@
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                            aria-expanded="true" aria-controls="collapsePages">
                             <i class="fas fa-fw fa-folder"></i>
-                            <span>Posts</span>
+                            <span>Post</span>
                         </a>
                         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
@@ -384,15 +384,16 @@
                                         <c:forEach var="product" items="${sessionScope.LIST_PRODUCT}">
                                             <tr>
                                                 <td>${product.productID}</td>
-                                                <td>${product.sellerID}</td>
+                                                <td>${product.selName}</td>
                                                 <td>${product.name}</td>
                                                 <td>${product.price}</td>
                                                 <td>${product.quantity}</td>
-                                                <td>${product.category}</td>
+                                                <td>${product.category.categoryName}</td>
                                                 <td>${product.discountPrice}</td>
                                                 <td>
-                                                    <a href="viewProductDetail?productID=${product.productID}&productType=accepted" class="view" title="View" data-toggle="tooltip"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                                                    <a href="deleteProduct?productID=${product.productID}" class="delete" title="Delete" data-toggle="tooltip"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                                    <a href="viewPostDetail?postID=${product.productID}&productType=accepted" class="view" title="View" data-toggle="tooltip"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                    <a href="editPostAction?postID=${product.productID}&productType=accepted" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
+                                                    <a href="deletePost?postID=${product.productID}" class="delete" title="Delete" data-toggle="tooltip"><i class="fa fa-times" aria-hidden="true"></i></a>
                                                 </td>
                                             </tr>
                                         </c:forEach>

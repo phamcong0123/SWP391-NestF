@@ -405,23 +405,29 @@
                                                         <option value="${dto.categoryName}">${dto.categoryName}</option>
                                                     </c:forEach>
                                                 </datalist>
-                                                <c:if test="${not empty errors.categoryName}">
+                                               <c:if test="${not empty errors.category}">
                                                     <font color="red">
-                                                    ${errors.categoryName}
+                                                    ${errors.category}
                                                     </font> <br/>
                                                 </c:if>
                                             </div>
                                             <div class="col-md-6 mb-4 pb-2">
                                                 <c:set var="listSeller" value="${sessionScope.LIST_SELLER}"/>
                                                 <label class="form-label">Seller</label>
-                                                <%--<input class="form-control form-control-lg" type="text" value="${productDetail.selPhone}" name="sellerName" list="sellerlist"/>--%>
-                                                <select class="form-control form-control-lg" name="selPhone">
+                                                
+                                                <input class="form-control form-control-lg" type="text" value="${productDetail.selName}" name="selName" list="sellerlist"/>
+                                                <datalist id="sellerlist">
                                                     <label class="form-label select-label">Choose option:</label>
                                                     <option disabled>Choose option</option>
                                                     <c:forEach var="dto" items="${listSeller}">
-                                                        <option value="${dto.phone}">${dto.name}</option>
+                                                        <option class="" value="${dto.name}">Number of product: ${dto.selQuantity}</option>
                                                     </c:forEach>
-                                                </select>
+                                                </datalist>
+                                                <c:if test="${not empty errors.sellerID}">
+                                                    <font color="red">
+                                                    ${errors.sellerID}
+                                                    </font> <br/>
+                                                </c:if>
                                             </div>
                                         </div>
 

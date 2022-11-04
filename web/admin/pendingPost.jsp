@@ -402,7 +402,7 @@
                                             <tr>
                                                 <td>${product.productID}</td>
                                                 <td>
-                                                    ${product.sellerID}
+                                                    ${product.selName}
                                                     <c:if test="${not empty errors.sellerID}">
                                                         <font color="red">
                                                         ${errors.sellerID}
@@ -425,7 +425,7 @@
                                                 <td>${product.price}</td>
                                                 <td>${product.quantity}</td>
                                                 <td>
-                                                    ${product.category}
+                                                    ${product.category.categoryName}
                                                     <c:if test="${not empty errors.category}">
                                                         <font color="red">
                                                         ${errors.category}
@@ -435,6 +435,7 @@
                                                 <td>${product.discountPrice}</td>
                                                 <td class="justify-content-center">
                                                     <a href="viewProductDetail?productID=${product.productID}&productType=pending" class="view px-2" title="View" data-toggle="tooltip"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                    <a href="editProductAction?productID=${product.productID}&productType=pending" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
                                                     <a href="acceptProductAction?productID=${product.productID}" class="accept px-2" title="Accept" data-toggle="tooltip"><i class="fa fa-check" aria-hidden="true"></i></a>
                                                 </td>
                                             </tr>

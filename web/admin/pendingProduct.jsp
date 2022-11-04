@@ -402,7 +402,7 @@
                                             <tr>
                                                 <td>${product.productID}</td>
                                                 <td>
-                                                    ${product.selPhone}
+                                                    ${product.selName}
                                                     <c:if test="${not empty errors.sellerID}">
                                                         <font color="red">
                                                         ${errors.sellerID}

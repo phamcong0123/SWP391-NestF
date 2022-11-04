@@ -14,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.naming.NamingException;
 
 /**
  *
@@ -26,7 +27,7 @@ public class ProductSellerDAO {
             + "WHERE ps.productID = ? AND ps.isActive = 1";
     
     
-    public static Boolean checkSameSeller(ProductDTO dto) throws SQLException{
+    public static Boolean checkSameSeller(ProductDTO dto) throws SQLException, NamingException{
         Connection conn = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
@@ -44,9 +45,7 @@ public class ProductSellerDAO {
                     return true;
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
+        }finally {
             if (rs != null) {
                 rs.close();
             }

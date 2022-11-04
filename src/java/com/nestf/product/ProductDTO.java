@@ -28,7 +28,8 @@ public class ProductDTO implements Serializable{
     private String detailDes;
     private boolean status;
     private String[] imagelink;
-
+    private String selName;
+    
     public ProductDTO() {
     }
 
@@ -72,8 +73,31 @@ public class ProductDTO implements Serializable{
         this.status = status;
         this.imagelink = imagelink;
     }
-    
 
+
+    public ProductDTO(int productID, String selPhone, String name, double price, int quantity, CategoryDTO category, double discountPrice, String productDes, String detail, boolean status, String[] imageLink, String selName) {
+        this.productID = productID;
+        this.selPhone = selPhone;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.category = category;
+        this.discountPrice = discountPrice;
+        this.productDes = productDes;
+        this.detailDes = detail;
+        this.status = status;
+        this.imagelink = imageLink;
+        this.selName = selName;
+    }
+
+    public String getSelName() {
+        return selName;
+    }
+
+    public void setSelName(String selName) {
+        this.selName = selName;
+    }
+    
     public String[] getImagelink() {
         return imagelink;
     }

@@ -5,9 +5,11 @@
  */
 package com.nestf.controller.AD;
 
+import com.nestf.account.AccountDTO;
 import com.nestf.category.CategoryDAO;
 import com.nestf.category.CategoryDTO;
 import com.nestf.dao.ADMIN.ProductDAOAdmin;
+import com.nestf.dao.ADMIN.SellerDAOAdmin;
 import com.nestf.error.ADMIN.ProductError;
 import com.nestf.product.ProductDTO;
 import com.nestf.productseller.ProductSellerDAO;
@@ -63,7 +65,7 @@ public class SaveProductServlet extends HttpServlet {
         String detailDes = request.getParameter("detaildesc");
         boolean status = Boolean.parseBoolean(request.getParameter("status"));
         String categoryName = request.getParameter("categoryName");
-        String selPhone = request.getParameter("selPhone");
+        String selName = request.getParameter("selName");
 
         if (status) {
             request.setAttribute("RETURN_PAGE", "accepted");
@@ -104,7 +106,7 @@ public class SaveProductServlet extends HttpServlet {
                 error.setCategory("Chọn category name");
                 foundErr = true;
             }
-            if (selPhone.isEmpty()) {
+            if (selName.isEmpty()) {
                 error.setSellerID("Chọn seller");
                 foundErr = true;
             }
@@ -114,6 +116,11 @@ public class SaveProductServlet extends HttpServlet {
                 category = new CategoryDTO(categoryName);
             }
             String[] imageLink = {image1, image2, image3, image4, image5};
+            String selPhone = SellerDAOAdmin.getSellerGivenName(selName).getPhone();
+            if (selPhone == null) {
+                error.setSellerID("Seller no exist!!!");
+                foundErr = true;
+            }
             ProductDTO dto = new ProductDTO(productID, selPhone, name, price, quantity, category, discountPrice, productDes, detailDes, status, imageLink);
             request.setAttribute("PRODUCT_DETAIL", dto);
 
@@ -122,11 +129,17 @@ public class SaveProductServlet extends HttpServlet {
                 url = (String) siteMap.get(MyAppConstant.AdminFeatures.EDIT_PRODUCT_PAGE);
             } else {
                 HttpSession session = request.getSession();
-//                1. Tạo Productdto tạm thời chứa các entity 
+//                0. Tạo Productdto tạm thời chứa các entity 
                 if (dto != null) {
                     request.setAttribute("PREVIEW_PRODUCT", dto);
                 }
                 if (btAction.equalsIgnoreCase("Save")) {
+//                    1. Xem same category ko
+                    boolean checkCategory = ProductDAOAdmin.checkSameCategory(dto);
+//                    Nếu false => new category
+                    if(!checkCategory){
+                        CategoryDAO.insertCategory(dto.getCategory().getCategoryName());
+                    }
                     ProductDAOAdmin dao = new ProductDAOAdmin();
                     String image = "";
                     for (int i = 0; i < imageLink.length; i++) {
@@ -144,16 +157,27 @@ public class SaveProductServlet extends HttpServlet {
                         String oldSelPhone = ProductSellerDAO.getSellerPhone(dto);
                         dao.updateProductWithDiffSeller(dto, oldSelPhone);
                     }
-//                3. Add product to pending or accepted 
+//                3. Update lai product detail
+                    ProductDTO productDetail = ProductDAOAdmin.getProductDetail(productID);
+                    if (productDetail != null) {
+                        request.setAttribute("PRODUCT_DETAIL", productDetail);
+                    }
+                    
+//                4. Add product to pending or accepted 
                     List<ProductDTO> listAccepted;
                     List<ProductDTO> listPending;
 
-                    listAccepted = dao.getListActiveProduct();
+                    listAccepted = ProductDAOAdmin.getListActiveProduct();
                     session.setAttribute("LIST_PRODUCT", listAccepted);
 
-                    listPending = dao.getListNonActiveProduct();
+                    listPending = ProductDAOAdmin.getListNonActiveProduct();
                     session.setAttribute("LIST_PENDING", listPending);
 
+                    List<AccountDTO> listSeller = SellerDAOAdmin.getListSellerOnly();
+                    session.setAttribute("LIST_SELLER", listSeller);
+
+                    List<CategoryDTO> listCategory = CategoryDAO.getListCategory();
+                    session.setAttribute("LIST_CATEGORY", listCategory);
                 }
             }
         } catch (SQLException e) {
