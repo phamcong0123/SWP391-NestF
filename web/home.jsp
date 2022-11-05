@@ -131,7 +131,7 @@
                                                     <div class="image-contain-detail">
 
                                                         <a href="productDetail?productID=${product.productID}" class="product-detail">
-                                                            <img src="${product.image}" alt="Image for ${product.name}" class="mx-2">
+                                                            <img src="${product.imagelink[0]}" alt="Image for ${product.name}" class="mx-2">
                                                             <p class="image-title">
                                                                 <span class="product-title d-block">${product.name}</span><br>
                                                                 <c:if test="${product.discountPrice != 0}">
@@ -190,11 +190,11 @@
                             </p>
                         </div>
                         <div class="combo-product-image">
-                            <img src="${productList[0].image}" alt="Image for ${productList[0].name}" class="ms-2">
+                            <img src="${productList[0].imagelink[0]}" alt="Image for ${productList[0].name}" class="ms-2">
                             <span class="plus-product-img">
                                 <i class="fa-solid fa-plus"></i>
                             </span>
-                            <img src="${productList[1].image}" alt="Image for ${productList[1].name}" class="ms-2">
+                            <img src="${productList[1].imagelink[0]}" alt="Image for ${productList[1].name}" class="ms-2">
                         </div>
                         <div class="combo-product-btn">
                             <p>Chỉ với 
@@ -239,7 +239,7 @@
                                                         <div class="image-contain-detail">
 
                                                             <a href="productDetail?productID=${anotherSuggest.productID}" class="product-detail">
-                                                                <img src="${anotherSuggest.image}" alt="Image for ${anotherSuggest.name}" class="mx-2">
+                                                                <img src="${anotherSuggest.imagelink[0]}" alt="Image for ${anotherSuggest.name}" class="mx-2">
                                                                 <p class="image-title">
                                                                     <span class="product-title d-block">${anotherSuggest.name}</span><br>
                                                                     <c:if test="${anotherSuggest.discountPrice != 0}">
