@@ -20,6 +20,8 @@ import java.util.List;
  */
 public class ProductDAO {
 
+    public static final String REGEX = "-(ptth)";
+
     public static final String GET_LIST = "SELECT pro.productID, proSel.selPhone, name, price, quantity, cat.categoryID, categoryName, discountPrice, productDes, image, detailDes, pro.status\n"
             + "FROM tblProducts pro\n"
             + "INNER JOIN tblCategory cat\n"
@@ -112,10 +114,11 @@ public class ProductDAO {
                         double discountPrice = rs.getDouble("discountPrice");
                         String productDes = rs.getString("productDes");
                         String image = rs.getString("image");
+                        String[] imageLink = image.split(REGEX);
                         if (list == null) {
                             list = new ArrayList<>();
                         }
-                        list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, image, ".", status));
+                        list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, ".", status, imageLink));
                     }
                 }
             }
@@ -158,10 +161,11 @@ public class ProductDAO {
                         double discountPrice = rs.getDouble("discountPrice");
                         String productDes = rs.getString("productDes");
                         String image = rs.getString("image");
+                        String[] imageLink = image.split(REGEX);
                         if (list == null) {
                             list = new ArrayList<>();
                         }
-                        list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, image, ".", status));
+                        list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, ".", status, imageLink));
                     }
                 }
             }
@@ -206,10 +210,11 @@ public class ProductDAO {
                         double discountPrice = rs.getDouble("discountPrice");
                         String productDes = rs.getString("productDes");
                         String image = rs.getString("image");
+                        String[] imageLink = image.split(REGEX);
                         if (list == null) {
                             list = new ArrayList<>();
                         }
-                        list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, image, ".", status));
+                        list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, ".", status, imageLink));
                     }
                 }
             }
@@ -254,10 +259,11 @@ public class ProductDAO {
                         double discountPrice = rs.getDouble("discountPrice");
                         String productDes = rs.getString("productDes");
                         String image = rs.getString("image");
+                        String[] imageLink = image.split(REGEX);
                         if (list == null) {
                             list = new ArrayList<>();
                         }
-                        list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, image, ".", status));
+                        list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, ".", status, imageLink));
                     }
                 }
             }
@@ -299,11 +305,12 @@ public class ProductDAO {
                     String productDes = rs.getString("productDes");
                     String image = rs.getString("image");
                     String statusStr = rs.getString("status");
+                    String[] imageLink = image.split(REGEX);
                     boolean status = false;
                     if (statusStr.equalsIgnoreCase("1")) {
                         status = true;
                     }
-                    producDetail = new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, image, ".", status);
+                    producDetail = new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, ".", status, imageLink);
                 }
             }
         } catch (Exception e) {
@@ -347,10 +354,11 @@ public class ProductDAO {
                         double discountPrice = rs.getDouble("discountPrice");
                         String productDes = rs.getString("productDes");
                         String image = rs.getString("image");
+                        String[] imageLink = image.split(REGEX);
                         if (listRelate == null) {
                             listRelate = new ArrayList<>();
                         }
-                        listRelate.add(new ProductDTO(relatedID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, image, ".", status));
+                        listRelate.add(new ProductDTO(relatedID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, ".", status, imageLink));
                     }
                 }
             }
@@ -395,10 +403,11 @@ public class ProductDAO {
                         double discountPrice = rs.getDouble("discountPrice");
                         String productDes = rs.getString("productDes");
                         String image = rs.getString("image");
+                        String[] imageLink = image.split(REGEX);
                         if (searchList == null) {
                             searchList = new ArrayList<>();
                         }
-                        searchList.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, image, ".", status));
+                        searchList.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, ".", status, imageLink));
                     }
                 }
             }
@@ -441,10 +450,11 @@ public class ProductDAO {
                         double discountPrice = rs.getDouble("discountPrice");
                         String productDes = rs.getString("productDes");
                         String image = rs.getString("image");
+                        String[] imageLink = image.split(REGEX);
                         if (list == null) {
                             list = new ArrayList<>();
                         }
-                        list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, image, ".", status));
+                        list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, ".", status, imageLink));
                     }
                 }
             }

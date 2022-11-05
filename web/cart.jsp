@@ -128,7 +128,7 @@
                                 <div id="cart-item" class="rounded col-11 m-auto mb-3">
                                     <div class="row container-fluid m-0">
                                         <div class="d-inline-block col-2 text-start">
-                                            <img src="${cartItem.product.image}" class="rounded w-100 m-2 border border-dark">
+                                            <img src="${cartItem.product.imagelink[0]}" class="rounded w-100 m-2 border border-dark">
                                         </div>     
                                         <div class="d-inline-block col-8 text-start ms-5 mt-4">
                                             <a href="productDetail?productID=${cartItem.product.productID}" class="text-decoration-none text-black"><h4 class="fw-bold">${cartItem.product.name}</h4></a>
@@ -218,7 +218,7 @@
                                                 <div class="rounded col-11 m-auto mb-3 border border-dark">
                                                     <div class="row container-fluid m-0">
                                                         <div class="d-inline-block col-2 text-start">
-                                                            <img src="${billDetail.product.image}" class="rounded w-100">
+                                                            <img src="${billDetail.product.imagelink[0]}" class="rounded w-100">
                                                         </div>     
                                                         <div class="d-inline-block col-8 text-start ms-5 mt-4">
                                                             <h4 class="fw-bold">${billDetail.product.name}</h4>
@@ -256,7 +256,7 @@
                                                 <div class="rounded col-11 m-auto mb-3 border border-dark">
                                                     <div class="row container-fluid m-0">
                                                         <div class="d-inline-block col-2 text-start">
-                                                            <img src="${billDetail.product.image}" class="rounded w-100">
+                                                            <img src="${billDetail.product.imagelink[0]}" class="rounded w-100">
                                                         </div>     
                                                         <div class="d-inline-block col-8 text-start ms-5 mt-4">
                                                             <h4 class="fw-bold">${billDetail.product.name}</h4>

@@ -132,7 +132,7 @@
                                     <div class="product-image-contain-detail">
                                         <a href="productDetail?productID=${product.productID}" class="product-detail">
                                             <img class="img-responsive"
-                                                 src="${product.image}" width="200px" height="200px" alt="${product.name}" class="mx-2">
+                                                 src="${product.imagelink[0]}" width="200px" height="200px" alt="${product.name}" class="mx-2">
                                             <p class="image-title">${product.name}<br>
                                                 <c:if test="${product.discountPrice != 0}">
                                                     <span

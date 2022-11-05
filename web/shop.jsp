@@ -132,7 +132,7 @@
                                             <div class="product-image-contain-detail position-relative">
                                                 <a href="productDetail?productID=${product.productID}" class="product-detail">
                                                     <img class="img-responsive"
-                                                         src="${product.image}" width="200px" height="200px" alt="${product.name}" class="mx-2">
+                                                         src="${product.imagelink[0]}" width="200px" height="200px" alt="${product.name}" class="mx-2">
                                                     <c:if test="${product.discountPrice ne 0}">
                                                         <img class="saleoff position-absolute" src="img/saleoff2.png" width="100px">                                              
                                                     </c:if>
