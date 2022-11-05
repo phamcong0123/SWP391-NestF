@@ -55,9 +55,9 @@ public class DeleteProductServlet extends HttpServlet {
             ProductDAOAdmin dao = new ProductDAOAdmin();
             ProductDTO product = dao.getProductDetail(productID);
             if (product != null) {
-//                disable 1 product sẽ set active = false trong ProductSeller
+//                disable 1 product sẽ chỉ set status = false trong Product
                 dao.disableProduct(product);
-                dao.deactiveProductSeller(product);
+//                dao.deactiveProductSeller(product);
                 List<ProductDTO> listProduct = ProductDAOAdmin.getListActiveProduct();
                 session.setAttribute("LIST_PRODUCT", listProduct);
                 List<ProductDTO> listPending = ProductDAOAdmin.getListNonActiveProduct();

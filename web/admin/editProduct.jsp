@@ -21,11 +21,15 @@
             rel="stylesheet">
 
         <!-- Custom styles for this template-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
         <!--CKEditor-->
         <%--<script type="text/javascript" src="<c:url value='https://cdn.ckeditor.com/4.7.0/full-all/ckeditor.js'/>"></script>--%>
         <script type="text/javascript" src="<c:url value='https://cdn.ckeditor.com/4.7.0/standard/ckeditor.js'/>"></script>
+
+        <link href="./css/productdetail.css" rel="stylesheet">
+
         <style> 
             .block {
                 display: none;
@@ -388,6 +392,16 @@
 
                             <div class="card-body ">
                                 <c:if test="${requestScope.PRODUCT_DETAIL != null}">
+                                    <c:if test="${requestScope.SAVE_PRODUCT != null}">
+                                        <c:if test="${empty errors}">
+                                            <c:set var="temp" value="${requestScope['SAVE_PRODUCT']}" scope="page"/>
+                                            <font color="green">
+                                            Cập nhật sản phẩm "${temp.name}" thành công! 
+                                            </font> <br/>
+                                            <% request.setAttribute("PREVIEW_PRODUCT", null); %>
+                                            <% request.setAttribute("SAVE_PRODUCT", null); %>
+                                        </c:if>
+                                    </c:if>
                                     <jsp:useBean id="productFunc" class="com.nestf.product.ProductDTO"/>
                                     <form action="saveProductAction" method="Post">
                                         <c:set var="errors" value="${requestScope.PRODUCT_ERR}"/>
@@ -405,7 +419,7 @@
                                                         <option value="${dto.categoryName}">${dto.categoryName}</option>
                                                     </c:forEach>
                                                 </datalist>
-                                               <c:if test="${not empty errors.category}">
+                                                <c:if test="${not empty errors.category}">
                                                     <font color="red">
                                                     ${errors.category}
                                                     </font> <br/>
@@ -414,7 +428,7 @@
                                             <div class="col-md-6 mb-4 pb-2">
                                                 <c:set var="listSeller" value="${sessionScope.LIST_SELLER}"/>
                                                 <label class="form-label">Seller</label>
-                                                
+
                                                 <input class="form-control form-control-lg" type="text" value="${productDetail.selName}" name="selName" list="sellerlist"/>
                                                 <datalist id="sellerlist">
                                                     <label class="form-label select-label">Choose option:</label>
@@ -506,9 +520,9 @@
                                                 <div class="form-outline">
                                                     <label class="form-label" for="disPrice">New Price</label>
                                                     <input type="number" id="disPrice" name="disPrice" min="0" value="${productDetail.discountPrice}" class="form-control form-control-lg" />
-                                                    <c:if test="${not empty errors.disPrice}">
+                                                    <c:if test="${not empty errors.discountPrice}">
                                                         <font color="red">
-                                                        ${errors.disPrice}
+                                                        ${errors.discountPrice}
                                                         </font> <br/>
                                                     </c:if>
                                                 </div>
@@ -535,6 +549,11 @@
                                                 <div class="form-outline text-center">
                                                     <label class="form-label text-gray-800 h5 mt-2" for="">Image</label>
                                                 </div>
+                                                <c:if test="${not empty errors.image}">
+                                                    <font color="red">
+                                                    ${errors.image}
+                                                    </font> <br/>
+                                                </c:if>
                                             </div>
                                             <div class="col-md-8 mb-4 pb-2">
                                                 <c:forEach var="image" items="${productDetail.imagelink}" varStatus="counter"> 
@@ -545,26 +564,58 @@
                                                 </c:forEach>
                                                 <c:forEach var = "num" begin = "${index}" end = "4">
                                                     <div class="form-outline mb-4 block">
-                                                        <input type="text" id="image" name="image${num}" value="" class="form-control form-control-lg" placeholder="Nhập link ảnh" />
+                                                        <input type="text" id="image" name="image${num+1}" value="" class="form-control form-control-lg" placeholder="Nhập link ảnh" />
                                                     </div>
                                                 </c:forEach>
                                             </div>
-                                            <c:if test="${not empty errors.image}">
-                                                <font color="red">
-                                                ${errors.image}
-                                                </font> <br/>
-                                            </c:if>
-                                            <div id="load">
+                                            <div id="load" class="col-md-2">
                                                 <div class=" btn btn-primary btn-lg">More</div>
                                             </div>
                                         </div>
-                                </div>
 
-                                <div class="mt-4 pt-2">
-                                    <input class="btn btn-primary btn-lg" type="submit" name="btAction" value="Preview" />
-                                    <input class="btn btn-danger btn-lg" type="submit" name="btAction" value="Save" />
+                                        <!-- PREVIEW CONTENT -->
+                                        <div id="white-board" class="bg-white rounded-0">
+                                            <c:if test="${requestScope.PREVIEW_PRODUCT != null}">
+                                                <c:set var="productDetail" value="${requestScope['PREVIEW_PRODUCT']}" scope="page"/>
+                                                <div class="row container-fluid m-0 mt-3">
+
+                                                    <div class="d-inline-block col-4 mt-3 text-center">
+                                                        <div class="imgBox"><img src="${productDetail.imagelink[0]}" class="rounded" height="395px" width="395px"></div>
+                                                        <ul class="thumb list-unstyled d-flex row text-center mt-3">
+                                                            <c:forEach var="image" items="${productDetail.imagelink}" varStatus="counter">
+                                                                <li class="col">
+                                                                    <a href="${image}" target="imgBox"><img src="${image}"  width="50px"></a>
+                                                                </li>
+                                                            </c:forEach>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-7 mt-3 ml-5">
+                                                        <div class="d-inline-block">
+                                                            <div class="text-center">
+                                                                <h2 class="text-center">${productDetail.name}</h2>
+                                                                <c:if test="${productDetail.discountPrice != 0}">
+                                                                    <h3 class="text-center">${productFunc.printPrice(productDetail.discountPrice)}  <span class="text-decoration-line-through">${productFunc.printPrice(productDetail.price)}</span></h3>
+                                                                    </c:if>
+                                                                    <c:if test="${productDetail.discountPrice == 0}">
+                                                                    <h3 class="text-center">${productFunc.printPrice(productDetail.price)}</h3>
+                                                                </c:if>
+                                                            </div>
+                                                            <div>
+                                                                ${productDetail.productDes}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </c:if>
+                                        </div>
+                                        <!--END OF PREVIEW CONTENT -->
+
+                                        <div class="mt-4 text-center pt-2">
+                                            <input class="btn btn-primary btn-lg" type="submit" name="btAction" value="Preview" />
+                                            <input class="btn btn-danger btn-lg" type="submit" name="btAction" value="Save" />
+                                        </div>
+                                    </form>
                                 </div>
-                                </form>
                             </c:if>
                         </div>
                     </div>
@@ -606,6 +657,9 @@
             </div>
         </footer>
         <!-- End of Footer -->
+        <!-- Jquery -->
+        <script src="https://code.jquery.com/jquery-2.2.4.js" ></script>
+
         <!-- Bootstrap core JavaScript-->
         <script src="vendor/jquery/jquery.min.js"></script>
         <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -640,6 +694,15 @@
                     }
                 });
             })
+        </script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('.thumb a').click(function (e) {
+                    e.preventDefault();
+                    $('.imgBox img').attr("src", $(this).attr("href"));
+                })
+            });
         </script>
 
         <script>

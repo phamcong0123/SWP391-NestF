@@ -5,9 +5,11 @@
  */
 package com.nestf.controller.AD;
 
+import com.nestf.account.AccountDTO;
 import com.nestf.category.CategoryDAO;
 import com.nestf.category.CategoryDTO;
 import com.nestf.dao.ADMIN.ProductDAOAdmin;
+import com.nestf.dao.ADMIN.SellerDAOAdmin;
 import com.nestf.error.ADMIN.ProductError;
 import com.nestf.product.ProductDTO;
 import com.nestf.util.MyAppConstant;
@@ -54,11 +56,15 @@ public class AddNewProductServlet extends HttpServlet {
         int quantity = !request.getParameter("quantity").isEmpty() ? Integer.parseInt(request.getParameter("quantity")) : 0;
         double discountPrice = !request.getParameter("disPrice").isEmpty() ? Double.parseDouble(request.getParameter("disPrice")) : 0;
         String productDes = request.getParameter("productdesc");
-        String image = request.getParameter("image");
+        String image1 = request.getParameter("image1");
+        String image2 = request.getParameter("image2");
+        String image3 = request.getParameter("image3");
+        String image4 = request.getParameter("image4");
+        String image5 = request.getParameter("image5");
         String detailDes = request.getParameter("detaildesc");
-        boolean status = Boolean.parseBoolean(request.getParameter("status"));
+        boolean status = true;
         String categoryName = request.getParameter("categoryName");
-        String selPhone = request.getParameter("selPhone");
+        String selName = request.getParameter("selName");
 
         String btAction = request.getParameter("btAction");
 
@@ -86,15 +92,15 @@ public class AddNewProductServlet extends HttpServlet {
                 error.setProductDes("Nhập mô tả sản phẩm!");
                 foundErr = true;
             }
-            if (image.isEmpty()) {
-                error.setImage("Nhập link image");
+            if (image1.isEmpty() && image2.isEmpty() && image3.isEmpty() && image4.isEmpty() && image5.isEmpty()) {
+                error.setImage("Nhập link ảnh");
                 foundErr = true;
             }
             if (categoryName.isEmpty()) {
                 error.setCategory("Chọn category name");
                 foundErr = true;
             }
-            if (selPhone.isEmpty()) {
+            if (selName.isEmpty()) {
                 error.setSellerID("Chọn seller");
                 foundErr = true;
             }
@@ -102,8 +108,17 @@ public class AddNewProductServlet extends HttpServlet {
 //            TH thêm mới category
             if (category == null) {
                 category = new CategoryDTO(categoryName);
-            } 
-            ProductDTO dto = new ProductDTO(selPhone, name, price, quantity, category, discountPrice, productDes, image, detailDes, status);
+            }
+            String[] imageLink = {image1, image2, image3, image4, image5};
+            String selPhone = null;
+            if(!selName.isEmpty()){
+                selPhone = SellerDAOAdmin.getSellerGivenName(selName).getPhone();
+            }
+            if (selPhone == null) {
+                error.setSellerID("Chọn seller");
+                foundErr = true;
+            }
+            ProductDTO dto = new ProductDTO( selPhone, name, price, quantity, category, discountPrice, productDes, detailDes, status, imageLink, selName);
             request.setAttribute("PRODUCT_DETAIL", dto);
 
             if (foundErr) {
@@ -116,20 +131,45 @@ public class AddNewProductServlet extends HttpServlet {
                     request.setAttribute("PREVIEW_PRODUCT", dto);
                 }
                 if (btAction.equalsIgnoreCase("Submit")) {
-                    ProductDAOAdmin dao = new ProductDAOAdmin();
-//                2. Insert dto vào DB
-                    dao.insertProduct(dto);
-//                3. Add product to pending or accepted 
-                    List<ProductDTO> listAccepted;
-                    if (status) {
-                        listAccepted = dao.getListActiveProduct();
-                        session.setAttribute("LIST_PRODUCT", listAccepted);
-                    } else {
-                        listAccepted = dao.getListNonActiveProduct();
-                        session.setAttribute("LIST_PENDING", listAccepted);
+//                    1. Xem same category ko
+                    
+//                    Nếu dto ko co cateID => new category => insert db 
+                    if (dto.getCategory().getCategoryID() == 0) {
+                        CategoryDAO.insertCategory(dto.getCategory().getCategoryName());
                     }
-                }
+                    ProductDAOAdmin dao = new ProductDAOAdmin();
+                    String image = "";
+                    for (int i = 0; i < imageLink.length; i++) {
+                        if (imageLink[i] != null) {
+                            image += imageLink[i] + ProductDAOAdmin.INSERT_REGEX;
+                        }
+                    }
+                    dto.setImage(image);
+                    
+//                2. Insert dto vào DB
+//                3. Update lai product detail
+                    ProductDTO productDetail = dao.insertProduct(dto);
+                    if (productDetail != null) {
+                        request.setAttribute("PRODUCT_DETAIL", productDetail);
+                        request.setAttribute("SUBMIT_PRODUCT", productDetail);
+                    }
+                    
+//                4. Add product to pending or accepted 
+                    List<ProductDTO> listAccepted;
+                    List<ProductDTO> listPending;
 
+                    listAccepted = ProductDAOAdmin.getListActiveProduct();
+                    session.setAttribute("LIST_PRODUCT", listAccepted);
+
+                    listPending = ProductDAOAdmin.getListNonActiveProduct();
+                    session.setAttribute("LIST_PENDING", listPending);
+
+                    List<AccountDTO> listSeller = SellerDAOAdmin.getListSellerOnly();
+                    session.setAttribute("LIST_SELLER", listSeller);
+
+                    List<CategoryDTO> listCategory = CategoryDAO.getListCategory();
+                    session.setAttribute("LIST_CATEGORY", listCategory);
+                }
             }
 
         } catch (NamingException ex) {

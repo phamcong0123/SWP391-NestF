@@ -89,6 +89,36 @@ public class ProductDTO implements Serializable{
         this.imagelink = imageLink;
         this.selName = selName;
     }
+    
+    public ProductDTO(int productID, String selPhone, String name, double price, int quantity, CategoryDTO category, double discountPrice, String productDes, String image, String detail, boolean status, String[] imageLink, String selName) {
+        this.productID = productID;
+        this.selPhone = selPhone;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.category = category;
+        this.discountPrice = discountPrice;
+        this.productDes = productDes;
+        this.image = image;
+        this.detailDes = detail;
+        this.status = status;
+        this.imagelink = imageLink;
+        this.selName = selName;
+    }
+
+    public ProductDTO(String selPhone, String name, double price, int quantity, CategoryDTO category, double discountPrice, String productDes, String detailDes, boolean status, String[] imageLink, String selName) {
+        this.selPhone = selPhone;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.category = category;
+        this.discountPrice = discountPrice;
+        this.productDes = productDes;
+        this.detailDes = detailDes;
+        this.status = status;
+        this.imagelink = imageLink;
+        this.selName = selName;
+    }
 
     public String getSelName() {
         return selName;

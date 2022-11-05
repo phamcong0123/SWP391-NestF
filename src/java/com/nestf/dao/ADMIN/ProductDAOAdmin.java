@@ -71,7 +71,7 @@ public class ProductDAOAdmin {
 
     public static final String DEACTIVE_PRODUCT_SELLER = "UPdate tblProductSeller \n"
             + "SET isActive = 0\n"
-            + "WHERE productID = ? AND selPhone = ?";
+            + "WHERE productID = ? AND selPhone = ? AND isActive = 1";
 
     public static final String REGEX = "-(ptth)";
     public static final String INSERT_REGEX = "-ptth";
@@ -99,7 +99,7 @@ public class ProductDAOAdmin {
                     String image = rs.getString("image");
                     String[] imageLink = image.split(REGEX);
                     String selName = rs.getString("selName");
-                    list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, ".", true, imageLink, selName));
+                    list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, image, ".", true, imageLink, selName));
                 }
             }
         } finally {
@@ -139,7 +139,7 @@ public class ProductDAOAdmin {
                     String image = rs.getString("image");
                     String[] imageLink = image.split(REGEX);
                     String selName = rs.getString("selName");
-                    list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, ".", false, imageLink, selName));
+                    list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, categoryName), discountPrice, productDes, image, ".", false, imageLink, selName));
                 }
             }
         } catch (Exception e) {
@@ -191,12 +191,12 @@ public class ProductDAOAdmin {
     }
 
 //    Chèn vào product + productSeller
-    public boolean insertProduct(ProductDTO dto) throws NamingException, SQLException {
+    public ProductDTO insertProduct(ProductDTO dto) throws NamingException, SQLException {
         Connection con = null;
         PreparedStatement statement = null;
         ResultSet rs = null;
         if (dto == null) {
-            return false;
+            return null;
         }
 
         try {
@@ -204,27 +204,28 @@ public class ProductDAOAdmin {
             con = DBHelper.makeConnection();
 
             if (con != null) {
-                String sql = "Insert Into tblProducts(productID, name, price, quantity, categoryID, discountPrice,  productDes, image, detailDes, status) "
-                        + "Values(?,?,?,?,?,?,?,?,?,?) ";
+                String sql = "Insert Into tblProducts(name, price, quantity, categoryID, discountPrice,  productDes, image, detailDes, status) "
+                        + "Values(?,?,?,?,?,?,?,?,?) ";
 //          3. Create Statement Object
                 statement = con.prepareStatement(sql);
-                statement.setInt(1, dto.getProductID());
-                statement.setString(2, dto.getName());
-                statement.setDouble(3, dto.getPrice());
-                statement.setInt(4, dto.getQuantity());
-                statement.setInt(5, dto.getCategory().getCategoryID());
-                statement.setDouble(6, dto.getDiscountPrice());
-                statement.setString(7, dto.getProductDes());
-                statement.setString(8, dto.getImage());
-                statement.setString(9, dto.getDetailDes());
-                statement.setBoolean(10, dto.isStatus());
+                statement.setString(1, dto.getName());
+                statement.setDouble(2, dto.getPrice());
+                statement.setInt(3, dto.getQuantity());
+                statement.setInt(4, dto.getCategory().getCategoryID());
+                statement.setDouble(5, dto.getDiscountPrice());
+                statement.setString(6, dto.getProductDes());
+                statement.setString(7, dto.getImage());
+                statement.setString(8, dto.getDetailDes());
+                statement.setBoolean(9, dto.isStatus());
 
 //          4. Execute Query
                 int affectRow = statement.executeUpdate();
 //          5. Process result
                 if (affectRow > 0) {
+                    int productID = getProductIDInDB(dto); // lay productID
+                    dto.setProductID(productID);
                     insertNEWProductSeller(dto);
-                    return true;
+                    return dto;
                 }
             }
         } finally {
@@ -238,7 +239,7 @@ public class ProductDAOAdmin {
                 con.close();
             }
         }
-        return false;
+        return null;
     }
 
 //    TH1: Khi thêm mới 1 sản phẩm sẽ tự động insert vào ProductSeller với seller.status true
@@ -256,12 +257,11 @@ public class ProductDAOAdmin {
 
             if (con != null) {
                 String sql = "Insert Into tblProductSeller(productID, selPhone, isActive) "
-                        + "Values(?,?,?) ";
+                        + "Values(?,?,1) ";
 //          3. Create Statement Object
                 statement = con.prepareStatement(sql);
                 statement.setInt(1, dto.getProductID());
                 statement.setString(2, dto.getSelPhone());
-                statement.setBoolean(3, true);
 
 //          4. Execute Query
                 int affectRow = statement.executeUpdate();
@@ -331,7 +331,7 @@ public class ProductDAOAdmin {
         return false;
     }
 
-    public boolean updateProductWithDiffSeller(ProductDTO dto, String oldSelPhone) throws NamingException, SQLException {
+    public boolean updateProductWithDiffSellerInProductSeller(ProductDTO dto, String oldSelPhone) throws NamingException, SQLException {
         Connection con = null;
         PreparedStatement statement = null;
         if (dto == null) {
@@ -344,10 +344,8 @@ public class ProductDAOAdmin {
 
 //            2. Create sql string 
             if (con != null) {
-                String sql = "UPDATE tblProductSeller\n"
-                        + "SET isActive = 0 \n"
-                        + "Where productID = ? AND selPhone = ?";
-                statement = con.prepareStatement(sql);
+//                2.1 Gán isActive seller cũ = 0
+                statement = con.prepareStatement(DEACTIVE_PRODUCT_SELLER);
                 statement.setInt(1, dto.getProductID());
                 statement.setString(2, oldSelPhone);
 //          4. Execute Query
@@ -356,7 +354,8 @@ public class ProductDAOAdmin {
 //          5. Process result
                 if (affectRow > 0) {
                     updateProductWithSameSeller(dto);
-                    insertNEWProductSeller(dto);
+//                    5.1 Gán isActive = 1 cho seller mới
+                    insertNEWProductSeller(dto); 
                     return true;
                 }
 
@@ -397,7 +396,7 @@ public class ProductDAOAdmin {
                     boolean status = rs.getBoolean("status");
                     String[] imageLink = image.split(REGEX);
                     String selName = rs.getString("selName");
-                    producDetail = new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, category), discountPrice, productDes, ".", status, imageLink, selName);
+                    producDetail = new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, category), discountPrice, productDes, image, ".", status, imageLink, selName);
                 }
             }
         } finally {
@@ -520,11 +519,50 @@ public class ProductDAOAdmin {
         return false;
     }
 
-    public boolean deactiveProductSeller(ProductDTO dto) throws SQLException, NamingException {
+//    public boolean deactiveProductSeller(ProductDTO dto) throws SQLException, NamingException {
+//        Connection con = null;
+//        PreparedStatement statement = null;
+//        if (dto == null) {
+//            return false;
+//        }
+//
+//        try {
+////            1. make connection
+//            con = DBHelper.makeConnection();
+//
+////            2. Create sql string 
+//            if (con != null) {
+//                statement = con.prepareStatement(DEACTIVE_PRODUCT_SELLER);
+//                statement.setInt(1, dto.getProductID());
+//                statement.setString(2, dto.getSelPhone());
+//
+////          4. Execute Query
+//                int affectRow = statement.executeUpdate();
+//
+////          5. Process result
+//                if (affectRow > 0) {
+//                    return true;
+//                }
+//
+//            }// end if connection is not null
+//
+//        } finally {
+//            if (statement != null) {
+//                statement.close();
+//            }
+//            if (con != null) {
+//                con.close();
+//            }
+//        }
+//        return false;
+//    }
+
+    private int getProductIDInDB(ProductDTO dto) throws SQLException, NamingException {
         Connection con = null;
+        ResultSet rs = null;
         PreparedStatement statement = null;
         if (dto == null) {
-            return false;
+            return 0;
         }
 
         try {
@@ -533,16 +571,33 @@ public class ProductDAOAdmin {
 
 //            2. Create sql string 
             if (con != null) {
-                statement = con.prepareStatement(DEACTIVE_PRODUCT_SELLER);
-                statement.setInt(1, dto.getProductID());
-                statement.setString(2, dto.getSelPhone());
-
+                String GET_PRODUCTID_IN_DB = "SELECT productID\n"
+                        + "FROM tblProducts p\n"
+                        + "WHERE p.name = ? \n"
+                        + "AND p.price = ?\n"
+                        + "AND p.quantity = ? \n"
+                        + "AND p.categoryID = ? \n"
+                        + "AND p.discountPrice = ?\n"
+                        + "AND p.productDes = ? \n"
+                        + "AND p.image = ?\n"
+                        + "AND p.status = ?\n";
+                
+                statement = con.prepareStatement(GET_PRODUCTID_IN_DB);
+                statement.setString(1, dto.getName());
+                statement.setFloat(2, (float) dto.getPrice());
+                statement.setInt(3, dto.getQuantity());
+                statement.setInt(4, dto.getCategory().getCategoryID());
+                statement.setFloat(5, (float) dto.getDiscountPrice());
+                statement.setString(6, dto.getProductDes());
+                statement.setString(7, dto.getImage());
+                statement.setBoolean(8, dto.isStatus());
+                
 //          4. Execute Query
-                int affectRow = statement.executeUpdate();
+                rs = statement.executeQuery();
 
 //          5. Process result
-                if (affectRow > 0) {
-                    return true;
+                if (rs.next()) {
+                    return rs.getInt("productID");
                 }
 
             }// end if connection is not null
@@ -555,7 +610,7 @@ public class ProductDAOAdmin {
                 con.close();
             }
         }
-        return false;
+        return 0;
     }
 
 }

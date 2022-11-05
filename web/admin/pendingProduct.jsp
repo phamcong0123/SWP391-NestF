@@ -360,24 +360,8 @@
                         <div class="container-fluid">
                             <!--//////////////////////////////////////////////////////Kết thúc phần Chung/////////////////-->
                             <!-- Page Heading -->
-                            <div class="mb-4">
-                                <div class="row">
-                                    <div class="col-9">
-                                        <h1 class="h3 mb-0 text-gray-800">List products</h1>
-                                    </div>
-                                    <div class="col-3 ">
-                                        <div class="dropdown float-right">
-                                            <button class="btn btn-dark dropdown-toggle" type="button" data-toggle="dropdown">Filter
-                                                <span class="caret"></span></button>
-                                            <ul class="dropdown-menu px-3 bg-white text-gray-100">
-                                                <li><a href="pendingProductAction">All</a></li>
-                                                <li><a href="pendingProductAction?btAction=noseller">No seller</a></li>
-                                                <li><a href="pendingProductAction?btAction=others">Others</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
+                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                <h1 class="h3 mb-0 text-gray-800">Non-active products</h1>
                             </div>
 
                             <!-- Content Row -->

@@ -24,14 +24,17 @@ public class SellerDAOAdmin {
     public static final String GET_LIST = "SELECT phone, password, name, address, gender, point, role\n"
             + "FROM tblAccount\n";
 
-    public static final String GET_LIST_SELLER_ONLY = "SELECT account.phone, password, name, address, gender, point, count(ps.selPhone) as selQuantity\n"
-            + "FROM tblProductSeller ps\n"
-            + "Right Join\n"
-            + "(SELECT acc.phone, password, name, address, gender, point\n"
-            + "fROM tblAccount acc\n"
-            + "WHERE acc.role = 'SE') as account\n"
-            + "ON account.phone = ps.selPhone AND ps.isActive = 1\n"
-            + "Group by account.phone, password, name, address, gender, point";
+    public static final String GET_LIST_SELLER_ONLY = "SELECT account.phone, password, account.name, address, gender, point, count(ps.selPhone) as selQuantity\n"
+            + "            FROM tblProductSeller ps\n"
+            + "			RIGHT JOIN (SELECT p.productID\n"
+            + "						FROM tblProducts p\n"
+            + "						WHERE p.status = 1) as p\n"
+            + "			ON ps.productID = p.productID\n"
+            + "			FULL JOIN (SELECT acc.phone, password, name, address, gender, point\n"
+            + "						fROM tblAccount acc\n"
+            + "						WHERE acc.role = 'SE') as account\n"
+            + "            ON account.phone = ps.selPhone \n"
+            + "            Group by account.phone, password, name, address, gender, point";
 
     public static final String GET_SELLER_GIVEN_NAME = "SELECT acc.phone, password, address, gender, point\n"
             + "FROM tblAccount acc\n"
@@ -88,7 +91,7 @@ public class SellerDAOAdmin {
             con = DBHelper.makeConnection();
 
             if (con != null) {
-                //          2. Create SQL Stirng . co khoang trang sau username
+//          2. Create SQL Stirng . co khoang trang sau username
                 String sql = "Update tblAccount "
                         + "Set password = ? , name = ? , phone = ? "
                         + "Where phone = ? ";
@@ -153,7 +156,7 @@ public class SellerDAOAdmin {
         }
         return result;
     }
-    
+
     public static AccountDTO getSellerGivenName(String name) throws SQLException, NamingException {
         Connection conn = null;
         PreparedStatement ptm = null;

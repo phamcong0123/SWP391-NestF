@@ -99,7 +99,7 @@ public class SaveProductServlet extends HttpServlet {
                 foundErr = true;
             }
             if (image1.isEmpty() && image2.isEmpty() && image3.isEmpty() && image4.isEmpty() && image5.isEmpty()) {
-                error.setImage("Nhập link image");
+                error.setImage("Nhập link ảnh");
                 foundErr = true;
             }
             if (categoryName.isEmpty()) {
@@ -116,12 +116,15 @@ public class SaveProductServlet extends HttpServlet {
                 category = new CategoryDTO(categoryName);
             }
             String[] imageLink = {image1, image2, image3, image4, image5};
-            String selPhone = SellerDAOAdmin.getSellerGivenName(selName).getPhone();
+            String selPhone = null;
+            if(!selName.isEmpty()){
+                selPhone = SellerDAOAdmin.getSellerGivenName(selName).getPhone();
+            }
             if (selPhone == null) {
-                error.setSellerID("Seller no exist!!!");
+                error.setSellerID("Chọn seller");
                 foundErr = true;
             }
-            ProductDTO dto = new ProductDTO(productID, selPhone, name, price, quantity, category, discountPrice, productDes, detailDes, status, imageLink);
+            ProductDTO dto = new ProductDTO(productID, selPhone, name, price, quantity, category, discountPrice, productDes, detailDes, status, imageLink, selName);
             request.setAttribute("PRODUCT_DETAIL", dto);
 
             if (foundErr) {
@@ -155,12 +158,13 @@ public class SaveProductServlet extends HttpServlet {
                         dao.updateProductWithSameSeller(dto);
                     } else {
                         String oldSelPhone = ProductSellerDAO.getSellerPhone(dto);
-                        dao.updateProductWithDiffSeller(dto, oldSelPhone);
+                        dao.updateProductWithDiffSellerInProductSeller(dto, oldSelPhone);
                     }
 //                3. Update lai product detail
                     ProductDTO productDetail = ProductDAOAdmin.getProductDetail(productID);
                     if (productDetail != null) {
                         request.setAttribute("PRODUCT_DETAIL", productDetail);
+                        request.setAttribute("SAVE_PRODUCT", productDetail);
                     }
                     
 //                4. Add product to pending or accepted 

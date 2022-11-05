@@ -78,10 +78,8 @@ public class AcceptProductServlet extends HttpServlet {
             } else {
 //                Accept 1 product
 //                1. Change product status
-//                2. Check xem ProductSeller active chưa
-//                3. Insert vào productSeller active
                 ProductDAOAdmin.acceptProduct(dto);
-                ProductDAOAdmin.insertNEWProductSeller(dto);
+//                ProductDAOAdmin.insertNEWProductSeller(dto);
                 List<ProductDTO> listProduct = ProductDAOAdmin.getListActiveProduct();
                 session.setAttribute("LIST_PRODUCT", listProduct);
                 List<ProductDTO> listPending = ProductDAOAdmin.getListNonActiveProduct();
