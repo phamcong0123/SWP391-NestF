@@ -34,7 +34,7 @@
                             <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
                         </li>
                         <li class="nav-item col-1 d-inline-block">
-                            <a href="shop" class="nav-link">Shop</a>
+                            <a href="shop" class="nav-link">Sản phẩm</a>
                         </li>
                         <li class="nav-item col-1 d-inline-block">
                             <a href="handbook" class="nav-link">Cẩm nang</a>
@@ -123,11 +123,9 @@
                                                         </a>
                                                     </div>
                                                     <div class="buynow-btn">
-                                                        <a href="#">
-                                                            <button class="btn btn-dark">
-                                                                <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
-                                                            </button>
-                                                        </a>
+                                                        <button class="btn btn-dark" onclick="checkState(${not empty sessionScope.USER ? product.productID : ''})">
+                                                            <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </c:if>
@@ -141,7 +139,7 @@
                         <div class="search-empty">
                             <img src="img/search-no-result.png"/>
                             <h4>Không có kết quả nào phù hợp với tìm kiếm của bạn.<br>Vui lòng thử lại.</h4>
-                            <a href="ShopPageController" class="btn btn-dark">Tiếp tục</a>
+                            <a href="Sản phẩmPageController" class="btn btn-dark">Tiếp tục</a>
                         </div>
                     </c:if>
                 </div>
@@ -178,11 +176,9 @@
                                                             </a>
                                                         </div>
                                                         <div class="buynow-btn">
-                                                            <a href="#">
-                                                                <button class="btn btn-dark">
-                                                                    <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
-                                                                </button>
-                                                            </a>
+                                                            <button class="btn btn-dark" onclick="checkState(${not empty sessionScope.USER ? otherProduct.productID : ''})">
+                                                                <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </li>
@@ -198,24 +194,81 @@
                     </div>
                 </div>
             </div>
-            <footer class="d-flex">
-                <div class="information">
-                    <h2>Nest F</h2>
-                    <p>Liên hệ chúng tôi <br>
-                        <span>Số điện thoại: 01234123</span><br>
-                        <span>Email: nestf@gmail.com</span>
-                    </p>
+            <button type="button" class="btn btn-floating btn-lg position-fixed rounded-circle text-light bottom-25" id="btn-back-to-top">
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            <c:import url="footer.html" charEncoding="UTF-8"/> 
+            <div>
+                <span id="triggerSuccess" class="d-none" data-bs-toggle="modal" data-bs-target="#success"></span>                     
+                <div class="modal fade" id="success" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">  
+                            <div class="text-start m-0 p-0 row d-flex align-items-center container-fluid">
+                                <img src="img/success.svg" class="w-25 d-inline-block p-3">
+                                <span class="text-center fw-bold d-inline-block w-75 fs-4">Đã thêm vào giỏ!</span> 
+                            </div>           
+                        </div>
+                    </div>
                 </div>
-                <div class="social-media">
-                    <h2>Theo dõi chúng tôi trên</h2>
-                    <a href="#">
-                        <i class="fa-brands fa-facebook fa-2x"></i>
-                    </a>
-                    <a href="#">
-                        <i class="fa-brands fa-instagram fa-2x"></i>
-                    </a>
+            </div>
+
+            <div>
+                <span id="triggerFail" class="d-none" data-bs-toggle="modal" data-bs-target="#fail"></span>                     
+                <div class="modal fade" id="fail" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">  
+                            <div class="text-start m-0 p-0 row d-flex align-items-center container-fluid">
+                                <img src="img/fail.svg" class="w-25 d-inline-block p-3">
+                                <span class="text-center fw-bold d-inline-block w-75 fs-4">Sản phẩm này đã đạt giới hạn đặt hàng!</span> 
+                            </div>           
+                        </div>
+                    </div>
                 </div>
-            </footer>
+            </div>
         </section>
+        <script src="js/util.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script>
+                                                                function checkState(productCode) {
+                                                                    if (productCode != null) {
+                                                                        var productID = productCode;
+                                                                        var quantity = 1;
+                                                                        addProduct(productID, quantity);
+                                                                    } else {
+                                                                        window.location.replace('login');
+                                                                    }
+                                                                }
+                                                                addProduct = (productID, quantity) => {
+                                                                    $.ajax({
+                                                                        url: "addToCart",
+                                                                        method: "GET",
+                                                                        cache: "false",
+                                                                        data: {
+                                                                            productID: productID,
+                                                                            quantity: quantity
+                                                                        },
+                                                                        success: function (state) {
+                                                                            console.log(state);
+                                                                            if (state == 'success') {
+                                                                                document.getElementById("triggerSuccess").click();
+                                                                                document.getElementById("redpoint").style.display = 'block';
+                                                                            }
+                                                                            if (state == 'fail') {
+                                                                                document.getElementById("triggerFail").click();
+                                                                            }
+                                                                        }
+                                                                    })
+                                                                }
+                                                                $('#triggerSuccess').click(function () {
+                                                                    setTimeout(function () {
+                                                                        $('#success').modal('hide');
+                                                                    }, 1500);
+                                                                });
+                                                                $('#triggerFail').click(function () {
+                                                                    setTimeout(function () {
+                                                                        $('#fail').modal('hide');
+                                                                    }, 1500);
+                                                                });
+        </script>
     </body>
 </html>

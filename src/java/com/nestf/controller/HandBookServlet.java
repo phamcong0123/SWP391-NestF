@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "HandBookServlet", urlPatterns = {"/HandBookServlet"})
 public class HandBookServlet extends HttpServlet {
 
-    private static final String ERROR = "error.html";
+    private static final String ERROR = "error.jsp";
     private static final String SUCCESS = "handbook.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{

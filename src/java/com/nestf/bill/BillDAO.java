@@ -25,9 +25,15 @@ import javax.naming.NamingException;
  * @author Admin
  */
 public class BillDAO {
-    
+    private List<BillDTO> bills;
+
+    public List<BillDTO> getBills() {
+        return bills;
+    }
     public BillDTO validOnProcessingOrder(int billID, String phone) throws NamingException, SQLException{
-        List<BillDTO> onProcessing = getMyOnProcessingBills(phone);
+        getMyAllBills(phone);
+        List<BillDTO> onProcessing = getThisStatusBills(bills, 1);
+        onProcessing.addAll(getThisStatusBills(bills, 2));
         for (BillDTO bill : onProcessing) {
             if (bill.getBillID() == billID) return bill;
         }
@@ -43,18 +49,25 @@ public class BillDAO {
         if (updateOrderStatus(billID, 5)) check = true;
         return check;
     }
-    
-    final String PROCESSING_LIST = "SELECT billID, address, transactionID, statusID, time, total FROM tblBill WHERE cusPhone = ? AND statusID BETWEEN 1 AND 3 ";
+    public List<BillDTO> getThisStatusBills(List<BillDTO> bills, int statusID){
+        List<BillDTO> atStatusBills = new ArrayList<>();
+        for (BillDTO bill : bills) {
+            if (bill.getStatus().getStatusID() == statusID){
+                atStatusBills.add(bill);
+            }
+        }
+        return atStatusBills;
+    }
+    final String ALL_BILL = "SELECT billID, address, transactionID, statusID, time, total FROM tblBill WHERE cusPhone = ? ORDER BY time DESC";
 
-    public List<BillDTO> getMyOnProcessingBills(String phone) throws NamingException, SQLException {
-        List<BillDTO> list = null;
+    public void getMyAllBills(String phone) throws NamingException, SQLException {
         Connection con = null;
         PreparedStatement ptm = null;
         ResultSet rs = null;
         try {
             con = DBHelper.makeConnection();
             if (con != null) {
-                ptm = con.prepareStatement(PROCESSING_LIST);
+                ptm = con.prepareStatement(ALL_BILL);
                 ptm.setString(1, phone);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
@@ -69,10 +82,10 @@ public class BillDAO {
                     Date date = new Date(rs.getTimestamp("time").getTime());
                     Double total = rs.getDouble("total");
                     BillDTO dto = new BillDTO(billID, phone, address, transactionID, status, date, total, billDetail);
-                    if (list == null) {
-                        list = new ArrayList<>();
+                    if (bills == null) {
+                        bills = new ArrayList<>();
                     }
-                    list.add(dto);
+                    bills.add(dto);
                 }
             }
         } finally {
@@ -86,53 +99,7 @@ public class BillDAO {
                 con.close();
             }
         }
-        return list;
     }
-    final String COMPLETED_LIST = "SELECT billID, address, transactionID, statusID, time, total FROM tblBill WHERE cusPhone = ? AND statusID BETWEEN 4 AND 6 ";
-
-    public List<BillDTO> getMyCompletedBills(String phone) throws NamingException, SQLException {
-        List<BillDTO> list = null;
-        Connection con = null;
-        PreparedStatement ptm = null;
-        ResultSet rs = null;
-        try {
-            con = DBHelper.makeConnection();
-            if (con != null) {
-                ptm = con.prepareStatement(COMPLETED_LIST);
-                ptm.setString(1, phone);
-                rs = ptm.executeQuery();
-                while (rs.next()) {
-                    int billID = rs.getInt("billID");
-                    BillDetailDAO billDetailDAO = new BillDetailDAO();
-                    List<BillDetailDTO> billDetail = billDetailDAO.getBillDetail(billID);
-                    String address = rs.getNString("address");
-                    String transactionID = rs.getString("transactionID");
-                    int statusID = rs.getInt("statusID");
-                    StatusDAO statusDAO = new StatusDAO();
-                    StatusDTO status = statusDAO.getStatus(statusID);
-                    Date date = new Date(rs.getTimestamp("time").getTime());
-                    Double total = rs.getDouble("total");
-                    BillDTO dto = new BillDTO(billID, phone, address, transactionID, status, date, total, billDetail);
-                    if (list == null) {
-                        list = new ArrayList<>();
-                    }
-                    list.add(dto);
-                }
-            }
-        } finally {
-            if (rs != null) {
-                rs.close();
-            }
-            if (ptm != null) {
-                ptm.close();
-            }
-            if (con != null) {
-                con.close();
-            }
-        }
-        return list;
-    }
-
     final String CHECK_OUT = "INSERT tblBill([cusPhone], [address],[transactionID], [statusID], [total]) VALUES (?,?,?,1,?) ";
 
     public int checkOut(String phone, String address,String transactionID, double total) {

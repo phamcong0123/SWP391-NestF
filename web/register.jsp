@@ -30,7 +30,7 @@
                         <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="shop" class="nav-link">Shop</a>
+                        <a href="shop" class="nav-link">Sản phẩm</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
                         <a href="handbook" class="nav-link">Cẩm nang</a>

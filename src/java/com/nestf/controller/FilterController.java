@@ -25,6 +25,7 @@ public class FilterController extends HttpServlet {
 
     public static final String SUCCESS = "shopFilter.jsp";
     public static final String ERROR = "shopFilter.jsp";
+    private static final String SHOP_CONTROLLER = "ShopPageController";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -133,6 +134,8 @@ public class FilterController extends HttpServlet {
                     }
                 }
                 listPro = dao.getFilterProductBoth(category, priceMin, priceMax);
+            } else if (categoryFilter.equals("empty") && priceFilter.equals("empty")){
+                response.sendRedirect(SHOP_CONTROLLER);
             }
             if (listPro != null && listPro.size() > 0) {
                     request.setAttribute("LIST_PRODUCT_FILTER", listPro);

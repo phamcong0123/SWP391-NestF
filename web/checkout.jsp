@@ -11,6 +11,7 @@
     <c:if test="${empty requestScope.TOTAL}">
         <c:redirect url="cart"/>
     </c:if>
+    <jsp:useBean id="formatPrinter" class="com.nestf.util.FormatPrinter"/>
     <head>
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -33,7 +34,7 @@
                         <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="shop" class="nav-link text-center">Shop</a>
+                        <a href="shop" class="nav-link text-center">Sản phẩm</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
                         <a href="handbook" class="nav-link text-center">Cẩm nang</a>
@@ -72,7 +73,6 @@
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div>
-                            <jsp:useBean id="formatPrinter" class="com.nestf.util.FormatPrinter"/>
                             <a href="voucher" class="nav-link text-center">${formatPrinter.noFraction(sessionScope.USER.point)} CP</a>
                         </div>
                     </li>
@@ -81,6 +81,65 @@
         </div>
         <div id="whiteboard2" class="bg-white w-75">
             <h2 class="p-4">Xác nhận thanh toán</h2>
+            <div id="cart-modal" class="d-inline-block col-4">
+                <span id="cart-button">
+                    <button id="buy-button" class="col-6" data-bs-toggle="modal" data-bs-target="#cartModal">
+                        Xem sản phẩm đã chọn                        
+                    </button>
+                </span>                       
+                <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="choose1Voucher" aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title m-3" id="choose1Voucher">Danh sách các sản phẩm quý khách đã chọn mua</h5>
+                                <c:if test="${not empty requestScope.VOUCHER_USE}">
+                                    <span>Voucher sử dụng : <b>${requestScope.VOUCHER_USE.voucherType.voucherName}</b></span>
+                                </c:if>
+                                <button type="button" class="btn-close m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row container-fluid m-0">
+                                    <c:forEach items="${sessionScope.CART}" var="cartItem">
+                                        <div id="cart-item" class="rounded col-11 m-auto mb-3">
+                                            <div class="row container-fluid m-0">
+                                                <div class="d-inline-block col-2 text-start">
+                                                    <img src="${cartItem.product.image}" class="rounded w-100 m-2 border border-dark">
+                                                </div>     
+                                                <div class="d-inline-block col-8 text-start ms-5 mt-4">
+                                                    <a href="productDetail?productID=${cartItem.product.productID}" class="text-decoration-none text-black"><h4 class="fw-bold">${cartItem.product.name}</h4></a>
+                                                    <span> Giá : 
+                                                        <b>
+                                                            <jsp:useBean id="productFunc" class="com.nestf.product.ProductDTO"/>
+                                                            <c:if test="${cartItem.product.discountPrice ne 0}">
+                                                                <span class="text-danger">
+
+                                                                    ${productFunc.printPrice(cartItem.product.discountPrice)}
+                                                                </span>                                                 
+                                                                <span class="text-muted text-decoration-line-through ms-3">
+                                                                    ${productFunc.printPrice(cartItem.product.price)}
+
+                                                                </span>
+                                                            </c:if>
+
+                                                            <c:if test="${cartItem.product.discountPrice eq 0}">
+                                                                ${productFunc.printPrice(cartItem.product.price)}
+                                                            </c:if>
+                                                        </b>
+                                                        <br><span>Số lượng : <b>${cartItem.amount}</b></span>
+                                                    </span>                                                                                        
+                                                </div> 
+                                            </div>  
+                                        </div>
+                                    </c:forEach>                                                 
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <form action="confirmPayment">
                 <div class="fs-5 p-5">
                     <p><span>Địa chỉ giao hàng : </span><input id = "address" class = "col-6" type="text" name="address" placeholder="${sessionScope.USER.address}"/>
@@ -89,31 +148,14 @@
                     </p>                  
                     <jsp:useBean id="formatter" class="com.nestf.util.FormatPrinter"/>
                     <c:set var = "totalInUSD" value="${formatter.toUSD(requestScope.TOTAL)}"/>
-                    <span>Thành tiền : <b>$${totalInUSD}</b> (quy đổi từ ${formatter.printMoney(requestScope.TOTAL)})</span><br>
-                    <span>Quý khách sẽ được cộng ${requestScope.TOTAL/1000} điểm tích luỹ khi quá trình giao hàng bắt đầu</span>
+                    <span>Thành tiền : <b>${formatter.printMoney(requestScope.TOTAL)}</b> (quy đổi sang USD : <b>$${totalInUSD}</b>)</span><br>
+                    <span>Quý khách sẽ được cộng <b>${formatPrinter.noFraction(requestScope.TOTAL/1000)}</b> điểm tích luỹ khi quá trình giao hàng bắt đầu</span>
                 </div>
                 <div id="paypalButtonContainer" class="m-auto col-6"></div>
             </form>
 
         </div>
-        <footer class="d-flex">
-            <div class="information">
-                <h2>Nest F</h2>
-                <p>Liên hệ chúng tôi <br>
-                    <span>Số điện thoại: 01234123</span><br>
-                    <span>Email: nestf@gmail.com</span>
-                </p>
-            </div>
-            <div class="social-media">
-                <h2>Theo dõi chúng tôi trên</h2>
-                <a href="#">
-                    <i class="fa-brands fa-facebook fa-2x"></i>
-                </a>
-                <a href="#">
-                    <i class="fa-brands fa-instagram fa-2x"></i>
-                </a>
-            </div>
-        </footer>
+        <c:import url="footer.html" charEncoding="UTF-8"/>               
         <script src="js/nestf.js"></script>   
         <script src="https://www.paypal.com/sdk/js?client-id=AeJ5oAA7OGoD8dlZNG6MWDNJqDoV2MQaaldDD1xNoq0upDs938zsUah_a2tjlplqHCutIojCuLwYJK__&currency=USD"></script>
         <script>
@@ -132,16 +174,16 @@
                 onApprove: (data, actions) => {
                     return actions.order.capture().then(function (orderData) {
                         // Successful capture! For dev/demo purposes:
-                        const transaction = orderData.purchase_units[0].payments.captures[0];                      
+                        const transaction = orderData.purchase_units[0].payments.captures[0];
                         // When ready to go live, remove the alert and show a success message within this page. For example:
                         // const element = document.getElementById('paypal-button-container');
                         // element.innerHTML = '<h3>Thank you for your payment!</h3>';
                         // Or go to another URL:  actions.redirect('thank_you.html');
-                        var url = 'confirmCheckOut?transactionID='+transaction.id+'&address=';
-                        url+=document.getElementById("address").value;
-                        url+="&total=${requestScope.TOTAL}";
-            <c:if test = "${not empty requestScope.VOUCHERID}">
-                        url += "&voucherID=${requestScope.VOUCHERID}";
+                        var url = 'confirmCheckOut?transactionID=' + transaction.id + '&address=';
+                        url += document.getElementById("address").value;
+                        url += "&total=${requestScope.TOTAL}";
+            <c:if test = "${not empty requestScope.VOUCHER_USE}">
+                        url += "&voucherID=${requestScope.VOUCHER_USE.voucherID}";
             </c:if>
                         window.location.replace(url);
                     });

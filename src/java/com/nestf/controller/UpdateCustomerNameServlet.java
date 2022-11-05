@@ -5,7 +5,6 @@
  */
 package com.nestf.controller;
 
-
 import com.nestf.account.AccountDAO;
 import com.nestf.account.AccountDTO;
 import java.io.IOException;
@@ -24,29 +23,28 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "UpdateCustomerNameServlet", urlPatterns = {"/UpdateCustomerNameServlet"})
 public class UpdateCustomerNameServlet extends HttpServlet {
 
-    private static final String ERROR = "account.jsp";
-    private static final String SUCCESS = "account.jsp";
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR;
+        String state = "success";
         try {
-            HttpSession session = request.getSession();
-            AccountDTO customer= (AccountDTO) session.getAttribute("USER");
+            HttpSession session = request.getSession(false);
+            AccountDTO customer = (AccountDTO) session.getAttribute("USER");
             String phone = customer.getPhone();
+            request.setCharacterEncoding("UTF-8");
             String newCustomerName = request.getParameter("newCustomerName");
             AccountDAO dao = new AccountDAO();
-            boolean check = dao.updateName(phone,newCustomerName);
+            boolean check = dao.updateName(phone, newCustomerName);
             if (check) {
-                url = SUCCESS + "?success=true";
                 customer.setName(newCustomerName);
                 session.setAttribute("USER", customer);
-            } else url +=  "success=false";
+            } else {
+                state = "fail";
+            }
         } catch (Exception e) {
             log("Error at UpdateCustomerName: " + e.toString());
         } finally {
-            response.sendRedirect(url);
+            response.getWriter().write(state);
         }
     }
 

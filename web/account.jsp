@@ -21,20 +21,6 @@
 
     </head>
     <body class="text-center">
-        <c:if test="${param.success eq 'true'}">
-            <span id="trigger" class="d-none" data-bs-toggle="modal" data-bs-target="#notification">                           
-            </span>                     
-            <div class="modal fade" id="notification" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">  
-                        <div class="text-start">
-                            <img src="img/success.svg" class="col-3 d-inline-block m-3">
-                            <span class="fw-bold d-inline-block fs-2 ms-4">Thành công!</span> 
-                        </div>           
-                    </div>
-                </div>
-            </div>           
-        </c:if>
         <div id="navbar" class="sticky-top">
             <nav class="navbar-expand bg-white navbar-light">
                 <ul class="navbar">
@@ -42,7 +28,7 @@
                         <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="shop" class="nav-link">Shop</a>
+                        <a href="shop" class="nav-link">Sản phẩm</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
                         <a href="handbook" class="nav-link">Cẩm nang</a>
@@ -57,7 +43,7 @@
                         </form>
                     </li>
                     <li class="nav-item col-2 d-inline-block text-center">
-                        <div><a href="account" class="nav-link current-tab disabled"><i class="fas fa-user    "></i>${USER.name}</div>
+                        <div><a href="account" class="nav-link current-tab disabled" id="name-display"><i class="fas fa-user    "></i>${USER.name}</a></div>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div>
@@ -105,9 +91,9 @@
                                     <div class="accordion-body">
 
 
-                                        <form action="changeNameAction" id="changeForm" class="text-start">                                     
+                                        <form id="changeForm" class="text-start">                                     
                                             <div class="m-3 d-inline-block">Tên hiển thị mới</div><input type="text" name="newCustomerName" class="col-6" required minlength="2" maxlength="30"><br>     
-                                            <input type="submit" value="LƯU" id="color-button" class="mt-3 mb-3">
+                                            <input type="button" onclick="updateName()" value="LƯU" id="color-button" class="mt-3 mb-3">
                                         </form>
 
 
@@ -129,11 +115,11 @@
                                             <div class="m-3 d-inline-block">Mật khẩu hiện tại</div><input type="password" name="password"
                                                                                                           class="col-6" required placeholder=""><br>
                                             <input type="hidden" name="password" value="">
-                                            <div class="m-3 d-inline-block">Mật khẩu mới</div><input type="password" name="newPass"
-                                                                                                     class="col-6" required minlength="6" maxlength="20" id="password" placeholder=""><br>
-                                            <div class="m-3 d-inline-block">Xác nhận mật khẩu mới</div><input type="password" name="confirm" class="col-6" required minlength="6" maxlength="20" id="confirm"><br>                                          
+                                            <div class="m-3 d-inline-block">Mật khẩu mới</div><input type="password" name="newPass" id="newPass"
+                                                                                                     class="col-6" required minlength="6" maxlength="20" id="password" placeholder="" oninput="checkSimilar()"><br>
+                                            <div class="m-3 d-inline-block">Xác nhận mật khẩu mới</div><input type="password" name="confirm" class="col-6" required minlength="6" maxlength="20" id="confirm" oninput="checkSimilar()"><br>                                          
                                             <span class="text-danger text-center d-inline-block container-fluid mt-2">Sau khi thay đổi mật khẩu thành công, tài khoản sẽ tự động đăng xuất !</span>
-                                            <input type="submit" value="LƯU" id="color-button" class="mt-3 mb-3">
+                                            <input type="submit" name="submitButton" value="LƯU" id="color-button" class="mt-3 mb-3">
                                         </form>
 
 
@@ -149,11 +135,11 @@
                                 <div id="collapse3" class="accordion-collapse collapse">
                                     <div class="accordion-body">
 
-                                        <form action="changeAddressAction" id="changeForm" class="text-start">
-                                            <div class="m-3 d-inline-block">Địa chỉ cũ :</div><span> ${USER.address}</span><br>
+                                        <form id="changeForm" class="text-start">
+                                            <div class="m-3 d-inline-block">Địa chỉ cũ :</div><span id="current-address"> ${USER.address}</span><br>
                                             <div class="m-3 d-inline-block">Địa chỉ mới</div><input type="text" name="newAddress"
                                                                                                     class="col-8" required minlength="20" maxlength="70"><br>                                         
-                                            <input type="submit" value="LƯU" id="color-button" class="mt-3 mb-3">
+                                            <input type="button" value="LƯU" id="color-button" class="mt-3 mb-3" onclick="updateAddress()">
                                         </form>
 
                                     </div>
@@ -187,36 +173,37 @@
                 </div>            
             </div>
         </div>
-        <footer class="d-flex">
-            <div class="information">
-                <h2>Nest F</h2>
-                <p>Liên hệ chúng tôi <br>
-                    <span>Số điện thoại: 01234123</span><br>
-                    <span>Email: nestf@gmail.com</span>
-                </p>
+        <c:import url="footer.html" charEncoding="UTF-8"/>    
+        <div>
+            <span id="triggerSuccess" class="d-none" data-bs-toggle="modal" data-bs-target="#success"></span>                     
+            <div class="modal fade" id="success" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">  
+                        <div class="text-start m-0 p-0 row d-flex align-items-center container-fluid">
+                            <img src="img/success.svg" class="w-25 d-inline-block p-3">
+                            <span class="text-center fw-bold d-inline-block w-75 fs-4">Thay đổi thông tin thành công!</span> 
+                        </div>           
+                    </div>
+                </div>
             </div>
-            <div class="social-media">
-                <h2>Theo dõi chúng tôi trên</h2>
-                <a href="#">
-                    <i class="fa-brands fa-facebook fa-2x"></i>
-                </a>
-                <a href="#">
-                    <i class="fa-brands fa-instagram fa-2x"></i>
-                </a>
+        </div>
+
+        <div>
+            <span id="triggerFail" class="d-none" data-bs-toggle="modal" data-bs-target="#fail"></span>                     
+            <div class="modal fade" id="fail" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">  
+                        <div class="text-start m-0 p-0 row d-flex align-items-center container-fluid">
+                            <img src="img/fail.svg" class="w-25 d-inline-block p-3">
+                            <span class="text-center fw-bold d-inline-block w-75 fs-4">Sản phẩm này đã đạt giới hạn đặt hàng!</span> 
+                        </div>           
+                    </div>
+                </div>
             </div>
-        </footer>
+        </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.1/js/bootstrap.min.js" integrity="sha512-vyRAVI0IEm6LI/fVSv/Wq/d0KUfrg3hJq2Qz5FlfER69sf3ZHlOrsLriNm49FxnpUGmhx+TaJKwJ+ByTLKT+Yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>        
-        <script>
-            window.onload = function () {
-                document.getElementById("trigger").click();
-            }
-            $('#trigger').click(function () {
-                setTimeout(function () {
-                    $('#notification').modal('hide');
-                }, 1000);
-            });
-        </script>
+        <script src="js/account.js"></script>
     </body>
 
 </html>

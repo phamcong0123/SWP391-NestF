@@ -49,10 +49,19 @@ public class LoadBillServlet extends HttpServlet {
             AccountDTO customer = (AccountDTO) request.getSession().getAttribute("USER");
             String phone = customer.getPhone();
             BillDAO billDAO = new BillDAO();
-            List<BillDTO> onProcessing = billDAO.getMyOnProcessingBills(phone);
-            if (onProcessing != null) request.setAttribute("ON_PROCESSING", onProcessing);
-            List<BillDTO> completedBills = billDAO.getMyCompletedBills(phone);
-            if (completedBills != null) request.setAttribute("COMPLETED", completedBills);
+            billDAO.getMyAllBills(phone);
+            List<BillDTO> allBills = billDAO.getBills();
+            List<BillDTO> onProcessing = billDAO.getThisStatusBills(allBills, 1);
+            onProcessing.addAll(billDAO.getThisStatusBills(allBills, 2));
+            request.setAttribute("PROCESSING", onProcessing);
+            List<BillDTO> onDelivering = billDAO.getThisStatusBills(allBills, 3);
+            request.setAttribute("DELIVERING", onDelivering);
+            List<BillDTO> delivered = billDAO.getThisStatusBills(allBills, 4);
+            request.setAttribute("DELIVERED", delivered);
+            List<BillDTO> canceled = billDAO.getThisStatusBills(allBills, 5);
+            request.setAttribute("CANCELED", canceled);
+            List<BillDTO> returned = billDAO.getThisStatusBills(allBills, 6);
+            request.setAttribute("RETURNED", returned);
         } catch (NamingException ex) {
             Logger.getLogger(LoadBillServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {

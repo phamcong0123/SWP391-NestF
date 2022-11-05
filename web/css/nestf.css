@@ -20,11 +20,21 @@ button img{
     height:20px;
 }
 .current-tab{
-    color:rgb(113, 113, 113)!important;
+    color:white!important;
+}
+li:has(.current-tab){
+    background-color: #4B5548;
 }
 #navbar nav ul{
     margin:0;
     height: 8vh;
+    padding: 0;
+}
+#navbar nav ul li{
+    display: flex!important;
+    height:100%;
+    align-items: center;
+    justify-content: center;
 }
 #dropDownContent{
     width:165px;
@@ -75,6 +85,10 @@ input[type=text],input[type=password],#register-form input[type=number]{
 }
 #color-button:active{
     background-color: #2e382b;
+}
+#color-button:disabled{
+    opacity: 50%;
+    background-color:  #4B5548;
 }
 #link-button:hover{
     background-color: rgb(165, 163, 163);
@@ -138,7 +152,7 @@ form div{
 
 }
 #options .nav-link.active{
-    color:rgb(113, 113, 113)!important;
+    font-weight: bold;   
 }
 .dropdown-setting{
     margin-left:auto;
@@ -163,7 +177,7 @@ form div{
     width: 22%;
     margin-left:5%!important;
 }
-#changeForm input[type=submit]{
+#changeForm input[type=submit], #changeForm input[type=button]{
     margin-left:80%;
 }
 #changeAddress form div{
@@ -200,12 +214,15 @@ input[type=number]{
 }
 footer {
     width: 100%;
+    height: 45vh;
     background: #bbb;
-    height: 15rem;
     padding: 1rem 7rem;
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-between;
+}
+footer span {
+    line-height: 2rem;
 }
 .product-title{
     height:2rem;
@@ -215,4 +232,14 @@ footer {
     top:0%;
     left: 95%;
     width: max-content;
+}
+#btn-back-to-top{
+    display: none;
+    background-color: #4B5548;
+    top:45%;
+    left:90%;
+    z-index: 1000;
+}
+.buynow-btn button {
+    background-color: #4B5548;
 }

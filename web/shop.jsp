@@ -13,7 +13,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Shop</title>
+        <title>Sản phẩm</title>
         <link rel="stylesheet" href="css/styleproduct.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
               integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
@@ -28,14 +28,14 @@
     </head>
     <body>
         <section>
-            <div id="navbar navbar-expand-lg bg-white sticky-top" >
+            <div id="navbar" class="sticky-top">
                 <nav class="navbar-expand bg-white navbar-light text-center">
                     <ul class="navbar">
                         <li class="nav-item col-2 d-inline-block">
                             <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
                         </li>
                         <li class="nav-item col-1 d-inline-block">
-                            <a href="shop" class="nav-link current-tab disabled">Shop</a>
+                            <a href="shop" class="nav-link current-tab disabled">Sản phẩm</a>
                         </li>
                         <li class="nav-item col-1 d-inline-block">
                             <a href="handbook" class="nav-link">Cẩm nang</a>
@@ -63,14 +63,12 @@
                             </c:if>
                         </li>
                         <li class="nav-item col-1 d-inline-block text-center">
-                            <div>
+                            <div> 
                                 <c:if test="${not empty sessionScope.USER}">
                                     <a href="cart" class="nav-link text-center"><i class="fa-solid fa-cart-shopping position-relative">
-                                            <c:if test="${not empty sessionScope.CART}">
-                                                <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
-                                                    <span class="visually-hidden">New alerts</span>
-                                                </span>
-                                            </c:if>
+                                            <span id = "redpoint" class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle" style="${empty sessionScope.CART ? 'display: none' : ''}">
+                                                <span class="visually-hidden">New alerts</span>
+                                            </span>
                                         </i>
                                     </a>
                                 </c:if> 
@@ -89,37 +87,28 @@
             </div>
             <div class="container bg-white shop-container">
                 <div class="filter-header">
-                    <div class="row">
-                        <div class="filter-symbols p-0 m-3 me-5" onclick="Show()">
-                            <i class="material-symbols-outlined">
-                                filter_list
-                            </i>
-                            <h4 class="d-inline-block">Bộ lọc</h4>
+                    <form class="form-horizontal" action="FilterController" method="POST">
+                        <div class="m-auto" id="filter">
+                            <h4 class="category-title d-inline-block">Phân loại</h4>
+                            <select class="form-controls category-option" name="categoryFilter">
+                                <option value="empty"></option>
+                                <option value="yenTho">Tổ yến thô</option>
+                                <option value="yenTinhChe">Tổ yến tinh chế</option>
+                                <option value="yenChungTuoi">Yến chưng tươi</option>
+                                <option value="yenChungSan">Yến chưng sẵn</option>
+                            </select>
+                            <select class="form-controls category-option" name="priceFilter">
+                                <option value="empty"></option>
+                                <option value="below1">Dưới 1.000.000 đ</option>
+                                <option value="1to2">Từ 1.000.000 đ ~ 2.000.000 đ</option>
+                                <option value="2to3">Từ 2.000.000 đ ~ 3.000.000 đ</option>
+                                <option value="3to4">Từ 3.000.000 đ ~ 4.000.000 đ</option>
+                                <option value="over4">Trên 4.000.000 đ</option>
+                            </select>
+                            <button class="submit-btn" type="submit" name="Filter" value="Filter">Lọc</button>
                         </div>
-                        <div class="filter-category col-lg-9 m-3 ms-5" id="category-show-up" style="display:none">
-                            <form class="form-horizontal" action="FilterController" method="POST">
-                                <h4 class="category-title d-inline-block">Phân loại</h4>
-                                <select class="form-controls category-option" name="categoryFilter">
-                                    <option value="empty"></option>
-                                    <option value="yenTho">Tổ yến thô</option>
-                                    <option value="yenTinhChe">Tổ yến tinh chế</option>
-                                    <option value="yenChungTuoi">Yến chưng tươi</option>
-                                    <option value="yenChungSan">Yến chưng sẵn</option>
-                                </select>
-                                <select class="form-controls category-option" name="priceFilter">
-                                    <option value="empty"></option>
-                                    <option value="below1">Dưới 1.000.000 đ</option>
-                                    <option value="1to2">Từ 1.000.000 đ ~ 2.000.000 đ</option>
-                                    <option value="2to3">Từ 2.000.000 đ ~ 3.000.000 đ</option>
-                                    <option value="3to4">Từ 3.000.000 đ ~ 4.000.000 đ</option>
-                                    <option value="over4">Trên 4.000.000 đ</option>
-                                </select>
-                                <button class="submit-btn" type="submit" name="Filter" value="Filter">Lọc</button>
-                            </form>
-                            <span class="custom-arrow1"></span>
-                            <span class="custom-arrow2"></span>
-                        </div>
-                    </div>
+                    </form>
+
                 </div>
                 <c:if test="${requestScope.LIST_PRODUCT != null}">
                     <c:if test="${not empty requestScope.LIST_PRODUCT}">
@@ -154,11 +143,9 @@
                                                 </a>
                                             </div>
                                             <div class="buynow-btn">
-                                                <a href="addToCart?productID=${product.productID}&quantity=1">
-                                                    <button class="btn btn-dark">
-                                                        <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
-                                                    </button>
-                                                </a>
+                                                <button class="btn btn-dark" onclick="checkState(${not empty sessionScope.USER ? product.productID : ''})">
+                                                    <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
+                                                </button>
                                             </div>
                                         </div>
                                     </c:if>
@@ -171,49 +158,97 @@
             <div class="load-more-section">
                 <div id="load-more">Xem thêm</div>
             </div>
-            <footer class="d-flex">
-                <div class="information">
-                    <h2>Nest F</h2>
-                    <p>Liên hệ chúng tôi <br>
-                        <span>Số điện thoại: 01234123</span><br>
-                        <span>Email: nestf@gmail.com</span>
-                    </p>
+            <button type="button" class="btn btn-floating btn-lg position-fixed rounded-circle text-light bottom-25" id="btn-back-to-top">
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            <div>
+                <span id="triggerSuccess" class="d-none" data-bs-toggle="modal" data-bs-target="#success"></span>                     
+                <div class="modal fade" id="success" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">  
+                            <div class="text-start m-0 p-0 row d-flex align-items-center container-fluid">
+                                <img src="img/success.svg" class="w-25 d-inline-block p-3">
+                                <span class="text-center fw-bold d-inline-block w-75 fs-4">Đã thêm vào giỏ!</span> 
+                            </div>           
+                        </div>
+                    </div>
                 </div>
-                <div class="social-media">
-                    <h2>Theo dõi chúng tôi trên</h2>
-                    <a href="#">
-                        <i class="fa-brands fa-facebook fa-2x"></i>
-                    </a>
-                    <a href="#">
-                        <i class="fa-brands fa-instagram fa-2x"></i>
-                    </a>
+            </div>
+
+            <div>
+                <span id="triggerFail" class="d-none" data-bs-toggle="modal" data-bs-target="#fail"></span>                     
+                <div class="modal fade" id="fail" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">  
+                            <div class="text-start m-0 p-0 row d-flex align-items-center container-fluid">
+                                <img src="img/fail.svg" class="w-25 d-inline-block p-3">
+                                <span class="text-center fw-bold d-inline-block w-75 fs-4">Sản phẩm này đã đạt giới hạn đặt hàng!</span> 
+                            </div>           
+                        </div>
+                    </div>
                 </div>
-            </footer>
+            </div>
+            <c:import url="footer.html" charEncoding="UTF-8"/>  
         </section>
+        <script src="js/util.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script>
-            let loadMoreBtn = document.querySelector('#load-more');
-            let currentItem = 8;
+                                                    let loadMoreBtn = document.querySelector('#load-more');
+                                                    let currentItem = 8;
 
-            loadMoreBtn.onclick = () => {
-                let boxes = [...document.querySelectorAll('.product-contain-detail')];
-                for (var i = currentItem; i < currentItem + 4 && i < boxes.length; i++) {
-                    boxes[i].style.display = 'block';
-                }
-                currentItem += 4;
+                                                    loadMoreBtn.onclick = () => {
+                                                        let boxes = [...document.querySelectorAll('.product-contain-detail')];
+                                                        for (var i = currentItem; i < currentItem + 4 && i < boxes.length; i++) {
+                                                            boxes[i].style.display = 'block';
+                                                        }
+                                                        currentItem += 4;
 
-                if (currentItem >= boxes.length) {
-                    loadMoreBtn.style.display = 'none';
-                }
-            }
-
-            function Show() {
-                var x = document.getElementById('category-show-up');
-                if (x.style.display === 'none') {
-                    x.style.display = 'block';
+                                                        if (currentItem >= boxes.length) {
+                                                            loadMoreBtn.style.display = 'none';
+                                                        }
+                                                    }
+        </script>
+        <script>
+            function checkState(productCode) {
+                if (productCode != null) {
+                    var productID = productCode;
+                    var quantity = 1;
+                    addProduct(productID, quantity);
                 } else {
-                    x.style.display = 'none';
+                    window.location.replace('login');
                 }
             }
+            addProduct = (productID, quantity) => {
+                $.ajax({
+                    url: "addToCart",
+                    method: "GET",
+                    cache: "false",
+                    data: {
+                        productID: productID,
+                        quantity: quantity
+                    },
+                    success: function (state) {
+                        console.log(state);
+                        if (state == 'success') {
+                            document.getElementById("triggerSuccess").click();
+                            document.getElementById("redpoint").style.display = 'block';
+                        }
+                        if (state == 'fail') {
+                            document.getElementById("triggerFail").click();
+                        }
+                    }
+                })
+            }
+            $('#triggerSuccess').click(function () {
+                setTimeout(function () {
+                    $('#success').modal('hide');
+                }, 1500);
+            });
+            $('#triggerFail').click(function () {
+                setTimeout(function () {
+                    $('#fail').modal('hide');
+                }, 1500);
+            });
         </script>
     </body>
 </html>

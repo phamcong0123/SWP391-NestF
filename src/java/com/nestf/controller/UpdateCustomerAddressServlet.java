@@ -23,30 +23,28 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "UpdateCustomerAddressServlet", urlPatterns = {"/UpdateCustomerAddressServlet"})
 public class UpdateCustomerAddressServlet extends HttpServlet {
 
-    private static final String ERROR = "account.jsp";
-    private static final String SUCCESS = "account.jsp";
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR;
+        String state = "fail";
         try {
             HttpSession session = request.getSession();
             AccountDTO customer = (AccountDTO) session.getAttribute("USER");
             String phone = customer.getPhone();
+            request.setCharacterEncoding("UTF-8");
             String newAddress = request.getParameter("newAddress");
             boolean check = false;
             AccountDAO dao = new AccountDAO();
             check = dao.updateAddress(phone, newAddress);
             if (check) {
-                url = SUCCESS + "?success=true";
                 customer.setAddress(newAddress);
                 session.setAttribute("USER", customer);
-            } else url += "success=false";
+                state="success";
+            }
         } catch (Exception e) {
             log("Error at UpdateCustomerAddress: " + e.toString());
         } finally {
-            response.sendRedirect(url);
+            response.getWriter().write(state);
         }
     }
 

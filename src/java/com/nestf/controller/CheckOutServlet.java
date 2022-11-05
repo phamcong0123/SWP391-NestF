@@ -5,11 +5,15 @@
  */
 package com.nestf.controller;
 
+import com.nestf.cart.CartDAO;
+import com.nestf.cart.CartItemDTO;
 import com.nestf.voucher.VoucherDAO;
+import com.nestf.voucher.VoucherDTO;
 import com.nestf.vouchertype.VoucherTypeDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
@@ -18,6 +22,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -36,24 +41,33 @@ public class CheckOutServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private static final String CHECK_OUT_PAGE = "checkout.jsp";
-    private static final String ERROR = "error.html";
+    private static final String ERROR = "error.jsp";
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = CHECK_OUT_PAGE;
         try {
             /* TODO output your page here. You may use following sample code. */
-            Double total = Double.parseDouble(request.getParameter("total"));
-            Long saleMargin = 0L;
-            if (request.getParameter("voucher-use").length() > 0){
-                int voucherID = Integer.parseInt(request.getParameter("voucher-use"));
-                VoucherDAO dao = new VoucherDAO();
-                saleMargin = dao.getVoucherByID(voucherID).getVoucherType().getSaleMargin();
-                request.setAttribute("VOUCHERID", voucherID);
+            HttpSession session = request.getSession(false);
+            List<CartItemDTO> cart = (List<CartItemDTO>) session.getAttribute("CART");
+            if (cart != null) {
+                CartDAO cartDAO = new CartDAO();
+                Double total = cartDAO.getCartTotal(cart);
+                Long saleMargin = 0L;
+                if (request.getParameter("voucher-use").length() > 0) {
+                    int voucherID = Integer.parseInt(request.getParameter("voucher-use"));
+                    VoucherDAO dao = new VoucherDAO();
+                    VoucherDTO voucherUse = dao.getVoucherByID(voucherID);
+                    saleMargin = voucherUse.getVoucherType().getSaleMargin();
+                    request.setAttribute("VOUCHER_USE", voucherUse);
+                }
+                total -= saleMargin;
+                if (total < 0) {
+                    total = 0.0;
+                }
+                request.setAttribute("TOTAL", total);
             }
-            total -= saleMargin;
-            if (total < 0 ) total = 0.0;
-            request.setAttribute("TOTAL", total);           
         } catch (SQLException ex) {
             Logger.getLogger(CheckOutServlet.class.getName()).log(Level.SEVERE, null, ex);
             url = ERROR;

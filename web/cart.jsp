@@ -30,7 +30,7 @@
                         <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="shop" class="nav-link text-center">Shop</a>
+                        <a href="shop" class="nav-link text-center">Sản phẩm</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
                         <a href="handbook" class="nav-link text-center">Cẩm nang</a>
@@ -57,7 +57,7 @@
                         <div><a href="cart" class="nav-link text-center current-tab disabled"><i class="fa-solid fa-cart-shopping"></i></a></div>
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">   
-                        
+
                         <div>
                             <jsp:useBean id="formatPrinter" class="com.nestf.util.FormatPrinter"/>
                             <a href="voucher" class="nav-link text-center">${formatPrinter.noFraction(sessionScope.USER.point)} CP</a>
@@ -122,8 +122,6 @@
                                     </div>
                                 </div>
                             </div>                                                                       
-
-                            <c:set var="total" value="${0}"/>
                             <c:forEach items="${sessionScope.CART}" var="cartItem">
                                 <div id="cart-item" class="rounded col-11 m-auto mb-3">
                                     <div class="row container-fluid m-0">
@@ -150,20 +148,12 @@
                                             <div id="number-toggle" class="text-end">
                                                 <div class="input-group d-inline-flex flex-column align-items-end">
                                                     <form action="addToCart">
-                                                        <input type="hidden" name="productID" value="${cartItem.product.productID}">
+                                                        <input type="hidden" id = "productID" name="productID" value="${cartItem.product.productID}">
+                                                        <input type="hidden" name="price" value="${cartItem.product.discountPrice eq 0 ? cartItem.product.price : cartItem.product.discountPrice}">
                                                         <img src="img/plus.svg" data-field="newQuantity" class="button-plus d-inline-block">                                                
-                                                        <input required id="number-input" type="number" step="1" name="newQuantity" value="${cartItem.amount}" min="1" max="${cartItem.product.quantity}" onblur="minCheck(this), maxCheck(this)" class="quantity-field text-center p-0">                                 
+                                                        <input required id="number-input" type="number" step="1" name="newQuantity" value="${cartItem.amount}" min="1" max="${cartItem.product.quantity}" onblur="minCheck(this), maxCheck(this)" onchange="checkState(this)" class="quantity-field text-center p-0">                                 
                                                         <img src="img/minus.svg" data-field="newQuantity" class="button-minus d-inline-block"><br>                                    
-                                                        <h5 class="fw-bold text-end mt-1">
-                                                            <c:if test="${cartItem.product.discountPrice eq 0}">
-                                                                ${productFunc.printPrice(cartItem.product.price*cartItem.amount)}
-                                                                <c:set var="total" value="${total + cartItem.product.price*cartItem.amount}"/>
-                                                            </c:if>
-                                                            <c:if test="${cartItem.product.discountPrice ne 0}">
-                                                                ${productFunc.printPrice(cartItem.product.discountPrice*cartItem.amount)}
-                                                                <c:set var="total" value="${total + cartItem.product.discountPrice*cartItem.amount}"/>
-                                                            </c:if>
-                                                        </h5>
+                                                        <h5 class="fw-bold text-end mt-1" id="thisProductTotal"></h5>
                                                     </form>
                                                 </div>
                                             </div>
@@ -175,11 +165,10 @@
                                 </div>
                             </c:forEach>
                             <div class="fs-4 d-flex justify-content-between pb-3">
-                                <c:set var = "totalInUSD" value = "${formatPrinter.toUSD(total)}"/>
-                                <span class="ms-5 d-inline-block align-self-center">Thành tiền : <span class="fw-bold" id="total-display"> ${formatPrinter.printMoney(total)}</span> 
+                                <span class="ms-5 d-inline-block align-self-center">Thành tiền : <span class="fw-bold" id="total-display"></span> 
                                 </span>
+                                <input type="hidden" id="saleMargin" value="0">
                                 <form action="checkOutAction" method="POST">
-                                    <input type="hidden" name="total" value="${total}" id="total">
                                     <input type="hidden" id="voucher-use" name="voucher-use">
                                     <button type="submit" id="buy-button" class="btn ms-auto mt-0 me-5" data-bs-toggle="modal" data-bs-target="#checkOutModal">Thanh toán</button>
                                 </form>              
@@ -195,19 +184,28 @@
                     </div>
                 </div>
                 <div id="order-history" class="tab-pane fade" role="tabpanel" aria-labelledby="history-tab">
-                    <div id="whiteboard2" class="col-8 bg-white">                       
-                        <ul id="options" class="nav nav-tabs border-0 p-3" role="tablist">
-                            <li class="nav-item w-25 m-0" role="presentation">
-                                <button id="delivering-tab" data-bs-target="#delivering" data-bs-toggle="tab" aria-selected="true" role="tab"  aria-controls="delivering" aria-current="page" class="nav-link active container-fluid text-black bg-transparent border-0">Đang giao</button>
+                    <div id="whiteboard2" class="col-9 bg-white">                       
+                        <ul id="options" class="row row-cols-5 nav nav-tabs border-0 p-3" role="tablist">
+                            <li class="nav-item m-0" role="presentation">
+                                <button id="preparing-tab" data-bs-target="#preparing" data-bs-toggle="tab" aria-selected="true" role="tab"  aria-controls="preparing" aria-current="page" class="nav-link active container-fluid text-black bg-transparent border-0">Đang chuẩn bị</button>
                             </li>
-                            <li class="nav-item w-25 m-0" role="presentation">
-                                <button id="delivered-tab" data-bs-target="#delivered" data-bs-toggle="tab" aria-selected="false" role="tab" aria-controls="delivered" aria-current="page" class="nav-link container-fluid text-black bg-transparent border-0">Đã giao / Đã huỷ</button>
+                            <li class="nav-item m-0" role="presentation">
+                                <button id="delivering-tab" data-bs-target="#delivering" data-bs-toggle="tab" aria-selected="false" role="tab" aria-controls="delivering" aria-current="page" class="nav-link container-fluid text-black bg-transparent border-0">Đang giao</button>
+                            </li>
+                            <li class="nav-item m-0" role="presentation">
+                                <button id="delivered-tab" data-bs-target="#delivered" data-bs-toggle="tab" aria-selected="false" role="tab" aria-controls="delivered" aria-current="page" class="nav-link container-fluid text-black bg-transparent border-0">Đã giao</button>
+                            </li>
+                            <li class="nav-item m-0" role="presentation">
+                                <button id="canceled-tab" data-bs-target="#canceled" data-bs-toggle="tab" aria-selected="false" role="tab" aria-controls="canceled" aria-current="page" class="nav-link container-fluid text-black bg-transparent border-0">Đã huỷ</button>
+                            </li>
+                            <li class="nav-item m-0" role="presentation">
+                                <button id="returned-tab" data-bs-target="#returned" data-bs-toggle="tab" aria-selected="false" role="tab" aria-controls="returned" aria-current="page" class="nav-link container-fluid text-black bg-transparent border-0">Trả hàng/Hoàn tiền</button>
                             </li>
                         </ul>
                         <div class="tab-content">                          
-                            <div id="delivering" class="tab-pane fade show active pb-3" role="tabpanel" aria-labelledby="delivering-tab">  
-                                <c:if test = "${not empty requestScope.ON_PROCESSING}">
-                                    <c:set var="billList" value="${requestScope.ON_PROCESSING}"/>
+                            <div id="preparing" class="tab-pane fade show active pb-3" role="tabpanel" aria-labelledby="preparing-tab">  
+                                <c:if test = "${not empty requestScope.PROCESSING}">
+                                    <c:set var="billList" value="${requestScope.PROCESSING}"/>
                                     <c:forEach items="${billList}" var = "bill">
                                         <div id = "cart-item" class="row col-11 m-auto text-start mb-3 position-relative">
                                             <h3 class="m-2 mb-0 d-inline-block">Đơn hàng <strong>#NESTF${bill.billID}</strong></h3>
@@ -218,34 +216,65 @@
                                                 <div class="rounded col-11 m-auto mb-3 border border-dark">
                                                     <div class="row container-fluid m-0">
                                                         <div class="d-inline-block col-2 text-start">
-                                                            <img src="${billDetail.product.image}" class="rounded w-100">
+                                                            <img src="${billDetail.product.image}" class="rounded col-9">
                                                         </div>     
-                                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
+                                                        <div class="d-inline-block col-8 text-start ms-2 mt-2">
                                                             <h4 class="fw-bold">${billDetail.product.name}</h4>
                                                             <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">${billDetail.quantity}</span></p>
-                                                            <p>Thành tiền : <span class="fw-bold">${formatPrinter.printMoney(billDetail.total)}</span></p>
-                                                        </div>                                             
-                                                    </div>
+                                                            <p>Giá : <span class="fw-bold">${formatPrinter.printMoney(billDetail.price)}</span></p> 
+                                                        </div>                                              
+                                                    </div>                                             
                                                 </div>
                                             </c:forEach>                                          
-                                            <h4 class="text-end">Tổng cộng: <b>${formatPrinter.printMoney(bill.total)}</b></h4>       
-                                            <c:if test="${bill.status.statusID < 3}">
-                                                <a href="cancelBill?billID=${bill.billID}" id="remove-button" class="mt-3 nav-link position-absolute"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a> 
-                                                </c:if>
-
+                                            <h4 class="text-end">Thành tiền: <b>${formatPrinter.printMoney(bill.total)}</b></h4>       
+                                            <a href="cancelBill?billID=${bill.billID}" id="remove-button" class="mt-3 nav-link position-absolute"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a> 
                                         </div>
                                     </c:forEach>
                                 </c:if>
-                                <c:if test="${empty requestScope.ON_PROCESSING}">
+                                <c:if test="${empty requestScope.PROCESSING}">
                                     <div class="mt-5">
                                         <img src="img/emptyCart.png">
                                         <h4 class="text-muted mt-3 pb-4">Không có lịch sử giao dịch.</h4>
                                     </div>
                                 </c:if>
-                            </div>                   
+                            </div>
+                            <div id="delivering" class="tab-pane fade pb-3" role="tabpanel" aria-labelledby="delivering-tab">  
+                                <c:if test = "${not empty requestScope.DELIVERING}">
+                                    <c:set var="billList" value="${requestScope.DELIVERING}"/>
+                                    <c:forEach items="${billList}" var = "bill">
+                                        <div id = "cart-item" class="row col-11 m-auto text-start mb-3 position-relative">
+                                            <h3 class="m-2 mb-0 d-inline-block">Đơn hàng <strong>#NESTF${bill.billID}</strong></h3>
+                                            <h5 class="text-success m-2">${bill.status.status}</h5>
+                                            <span class="ms-2 mb-2">Ngày đặt hàng: <b>${formatPrinter.printDate(bill.time)}</b></span>
+                                            <span class="ms-2 mb-4">Địa chỉ nhận hàng : <b>${bill.address}</b></span>
+                                            <c:forEach items = "${bill.detail}" var = "billDetail">
+                                                <div class="rounded col-11 m-auto mb-3 border border-dark">
+                                                    <div class="row container-fluid m-0">
+                                                        <div class="d-inline-block col-2 text-start">
+                                                            <img src="${billDetail.product.image}" class="rounded col-9">
+                                                        </div>     
+                                                        <div class="d-inline-block col-8 text-start ms-2 mt-2">
+                                                            <h4 class="fw-bold">${billDetail.product.name}</h4>
+                                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">${billDetail.quantity}</span></p>
+                                                            <p>Giá : <span class="fw-bold">${formatPrinter.printMoney(billDetail.price)}</span></p>                                                 
+                                                        </div>                                              
+                                                    </div>
+                                                </div>
+                                            </c:forEach>                                          
+                                            <h4 class="text-end">Thành tiền: <b>${formatPrinter.printMoney(bill.total)}</b></h4>       
+                                        </div>
+                                    </c:forEach>
+                                </c:if>
+                                <c:if test="${empty requestScope.DELIVERING}">
+                                    <div class="mt-5">
+                                        <img src="img/emptyCart.png">
+                                        <h4 class="text-muted mt-3 pb-4">Không có lịch sử giao dịch.</h4>
+                                    </div>
+                                </c:if>
+                            </div>
                             <div id="delivered" class="tab-pane fade pb-3" role="tabpanel" aria-labelledby="delivered-tab">                             
-                                <c:if test = "${not empty requestScope.COMPLETED}">
-                                    <c:set var="completedList" value="${requestScope.COMPLETED}"/>
+                                <c:if test = "${not empty requestScope.DELIVERED}">
+                                    <c:set var="completedList" value="${requestScope.DELIVERED}"/>
                                     <c:forEach items="${completedList}" var = "completedBill">
                                         <div id = "cart-item" class="row col-11 m-auto text-start mb-3 position-relative">
                                             <h3 class="m-2 mb-0 d-inline-block">Đơn hàng <strong>#NESTF${completedBill.billID}</strong></h3>
@@ -256,21 +285,89 @@
                                                 <div class="rounded col-11 m-auto mb-3 border border-dark">
                                                     <div class="row container-fluid m-0">
                                                         <div class="d-inline-block col-2 text-start">
-                                                            <img src="${billDetail.product.image}" class="rounded w-100">
+                                                            <img src="${billDetail.product.image}" class="rounded col-9">
                                                         </div>     
-                                                        <div class="d-inline-block col-8 text-start ms-5 mt-4">
+                                                        <div class="d-inline-block col-8 text-start ms-2 mt-2">
                                                             <h4 class="fw-bold">${billDetail.product.name}</h4>
                                                             <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">${billDetail.quantity}</span></p>
-                                                            <p>Thành tiền : <span class="fw-bold">${formatPrinter.printMoney(billDetail.total)}</span></p>
-                                                        </div>                                             
+                                                            <p>Giá : <span class="fw-bold">${formatPrinter.printMoney(billDetail.price)}</span></p> 
+                                                        </div>                                              
                                                     </div>
                                                 </div>
                                             </c:forEach>                                          
-                                            <h4 class="text-end">Tổng cộng: <b>${formatPrinter.printMoney(completedBill.total)}</b></h4>                                                   
+                                            <h4 class="text-end">Thành tiền: <b>${formatPrinter.printMoney(completedBill.total)}</b></h4>                                                       
                                         </div>
                                     </c:forEach>
                                 </c:if>
-                                <c:if test="${empty requestScope.COMPLETED}">
+                                <c:if test="${empty requestScope.DELIVERED}">
+                                    <div class="mt-5">
+                                        <img src="img/emptyCart.png">
+                                        <h4 class="text-muted mt-3 pb-4">Không có lịch sử giao dịch.</h4>
+                                    </div>
+                                </c:if>
+                            </div>
+                            <div id="canceled" class="tab-pane fade pb-3" role="tabpanel" aria-labelledby="canceled-tab">                             
+                                <c:if test = "${not empty requestScope.CANCELED}">
+                                    <c:set var="completedList" value="${requestScope.CANCELED}"/>
+                                    <c:forEach items="${completedList}" var = "completedBill">
+                                        <div id = "cart-item" class="row col-11 m-auto text-start mb-3 position-relative">
+                                            <h3 class="m-2 mb-0 d-inline-block">Đơn hàng <strong>#NESTF${completedBill.billID}</strong></h3>
+                                            <h5 class="text-danger m-2">${completedBill.status.status}</h5>
+                                            <span class="ms-2 mb-2">Ngày đặt hàng: <b>${formatPrinter.printDate(completedBill.time)}</b></span>
+                                            <span class="ms-2 mb-4">Địa chỉ nhận hàng : <b>${completedBill.address}</b></span>
+                                            <c:forEach items = "${completedBill.detail}" var = "billDetail">
+                                                <div class="rounded col-11 m-auto mb-3 border border-dark">
+                                                    <div class="row container-fluid m-0">
+                                                        <div class="d-inline-block col-2 text-start">
+                                                            <img src="${billDetail.product.image}" class="rounded col-9">
+                                                        </div>     
+                                                        <div class="d-inline-block col-8 text-start ms-2 mt-2">
+                                                            <h4 class="fw-bold">${billDetail.product.name}</h4>
+                                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">${billDetail.quantity}</span></p>
+                                                            <p>Giá : <span class="fw-bold">${formatPrinter.printMoney(billDetail.price)}</span></p> 
+                                                        </div>                                              
+                                                    </div>
+                                                </div>
+                                            </c:forEach>                                          
+                                            <h4 class="text-end">Thành tiền: <b>${formatPrinter.printMoney(completedBill.total)}</b></h4>                                                       
+                                        </div>
+                                    </c:forEach>
+                                </c:if>
+                                <c:if test="${empty requestScope.CANCELED}">
+                                    <div class="mt-5">
+                                        <img src="img/emptyCart.png">
+                                        <h4 class="text-muted mt-3 pb-4">Không có lịch sử giao dịch.</h4>
+                                    </div>
+                                </c:if>
+                            </div>
+                            <div id="returned" class="tab-pane fade pb-3" role="tabpanel" aria-labelledby="returned-tab">                             
+                                <c:if test = "${not empty requestScope.RETURNED}">
+                                    <c:set var="completedList" value="${requestScope.RETURNED}"/>
+                                    <c:forEach items="${completedList}" var = "completedBill">
+                                        <div id = "cart-item" class="row col-11 m-auto text-start mb-3 position-relative">
+                                            <h3 class="m-2 mb-0 d-inline-block">Đơn hàng <strong>#NESTF${completedBill.billID}</strong></h3>
+                                            <h5 class="text-danger m-2">${completedBill.status.status}</h5>
+                                            <span class="ms-2 mb-2">Ngày đặt hàng: <b>${formatPrinter.printDate(completedBill.time)}</b></span>
+                                            <span class="ms-2 mb-4">Địa chỉ nhận hàng : <b>${completedBill.address}</b></span>
+                                            <c:forEach items = "${completedBill.detail}" var = "billDetail">
+                                                <div class="rounded col-11 m-auto mb-3 border border-dark">
+                                                    <div class="row container-fluid m-0">
+                                                        <div class="d-inline-block col-2 text-start">
+                                                            <img src="${billDetail.product.image}" class="rounded col-9">
+                                                        </div>     
+                                                        <div class="d-inline-block col-8 text-start ms-2 mt-2">
+                                                            <h4 class="fw-bold">${billDetail.product.name}</h4>
+                                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">${billDetail.quantity}</span></p>
+                                                            <p>Giá : <span class="fw-bold">${formatPrinter.printMoney(billDetail.price)}</span></p> 
+                                                        </div>                                              
+                                                    </div>
+                                                </div>
+                                            </c:forEach>                                          
+                                            <h4 class="text-end">Thành tiền: <b>${formatPrinter.printMoney(completedBill.total)}</b></h4>                                                       
+                                        </div>
+                                    </c:forEach>
+                                </c:if>
+                                <c:if test="${empty requestScope.RETURNED}">
                                     <div class="mt-5">
                                         <img src="img/emptyCart.png">
                                         <h4 class="text-muted mt-3 pb-4">Không có lịch sử giao dịch.</h4>
@@ -282,27 +379,25 @@
                 </div>
             </div>            
         </div>
-
-    </div>
-    <footer class="d-flex">
-        <div class="information">
-            <h2>Nest F</h2>
-            <p>Liên hệ chúng tôi <br>
-                <span>Số điện thoại: 01234123</span><br>
-                <span>Email: nestf@gmail.com</span>
-            </p>
+        <button type="button" class="btn btn-floating btn-lg position-fixed rounded-circle text-light bottom-25" id="btn-back-to-top">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        <div>
+            <span id="triggerFail" class="d-none" data-bs-toggle="modal" data-bs-target="#fail"></span>                     
+            <div class="modal fade" id="fail" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">  
+                        <div class="text-start m-0 row d-flex align-items-center container-fluid">
+                            <img src="img/fail.svg" class="w-25 d-inline-block p-3">
+                            <span class="text-center fw-bold d-inline-block w-75 fs-4">Sản phẩm này đã đạt giới hạn đặt hàng!</span> 
+                        </div>           
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="social-media">
-            <h2>Theo dõi chúng tôi trên</h2>
-            <a href="#">
-                <i class="fa-brands fa-facebook fa-2x"></i>
-            </a>
-            <a href="#">
-                <i class="fa-brands fa-instagram fa-2x"></i>
-            </a>
-        </div>
-    </footer>
-    <script src="js/nestf.js"></script>   
-</body>
+        <c:import url="footer.html" charEncoding="UTF-8"/>               
+        <script src="js/cart.js"></script> 
+        <script src="js/util.js"></script>
+    </body>
 
 </html>

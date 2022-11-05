@@ -45,7 +45,7 @@ public class ConfirmCheckOutServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final String ERROR = "error.html";
+    private static final String ERROR = "error.jsp";
     private static final String LOAD_BILL = "LoadBillServlet";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

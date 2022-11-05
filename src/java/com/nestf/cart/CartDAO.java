@@ -41,56 +41,54 @@ public class CartDAO implements Serializable {
         }
         return null;
     }
-
+    public double getCartTotal(List<CartItemDTO> cart){
+        double total = 0;
+        for (CartItemDTO item : cart) {
+            double price = item.getProduct().getDiscountPrice() != 0 ? item.getProduct().getDiscountPrice() : item.getProduct().getPrice();
+            double thisItemTotal = price*item.getAmount();
+            total+= thisItemTotal;
+        }
+        return total;
+    }
     public String AddItem(ProductDTO product, int amount, int newQuantity, String phone) throws NamingException, SQLException {
         String notification = null;
-        if (cart == null) {
-            cart = new ArrayList<>();          
+        CartItemDTO item = getItemByID(product.getProductID());
+        if (getItemByID(product.getProductID()) == null) {
             if (amount <= product.getQuantity()) {
-                CartItemDTO item = new CartItemDTO(product, amount);
-                if (addItemToCart(item, phone)) {
-                    cart.add(item);
-                    notification = "fail=false";
+                CartItemDTO newItem = new CartItemDTO(product, amount);
+                if (addItemToCart(newItem, phone)) {
+                    cart.add(newItem);
+                    notification = "success";
                 }
             } else {
-                notification = "fail=maxAmount";
+                notification = "fail";
             }
         } else {
-            CartItemDTO item = getItemByID(product.getProductID());
-            if (getItemByID(product.getProductID()) == null) {
-                if (amount <= product.getQuantity()) {
-                    CartItemDTO newItem = new CartItemDTO(product, amount);
-                    if (addItemToCart(newItem, phone)) {
-                        cart.add(newItem);
-                        notification = "fail=false";
-                    }
-                } else {
-                    notification = "fail=maxAmount";
+            int newAmount;
+            if (newQuantity == -1) {
+                newAmount = item.getAmount() + amount;
+            } else {
+                newAmount = newQuantity;
+            }
+            if (newAmount <= item.getProduct().getQuantity()) {
+                item.setAmount(newAmount);
+                if (updateItemAmount(item, phone)) {
+                    int index = cart.indexOf(item);
+                    cart.set(index, item);
+                    notification = "success";
                 }
             } else {
-                int newAmount;
-                if (newQuantity == -1){
-                 newAmount = item.getAmount() + amount;   
-                } 
-                else newAmount = newQuantity;                       
-                if (newAmount <= item.getProduct().getQuantity()) {
-                    item.setAmount(newAmount);
-                    if (updateItemAmount(item, phone)) {
-                        int index = cart.indexOf(item);
-                        cart.set(index, item);
-                        notification = "fail=false";
-                    }
-                } else {
-                    notification = "fail=maxAmount";
-                }
+                notification = "fail";
             }
         }
+
         return notification;
     }
-    public String removeItem(int productID, String phone) throws SQLException, NamingException{
+
+    public String removeItem(int productID, String phone) throws SQLException, NamingException {
         String notification = null;
         CartItemDTO item = getItemByID(productID);
-        if (item != null){
+        if (item != null) {
             removeItemFromCart(productID, phone);
             cart.remove(item);
             notification = "fail=false";
@@ -211,6 +209,5 @@ public class CartDAO implements Serializable {
         }
         return false;
     }
-    
 
 }

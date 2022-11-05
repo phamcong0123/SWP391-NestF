@@ -1,28 +1,26 @@
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%-- 
-    Document   : article
-    Created on : Sep 23, 2022, 3:43:02 PM
+    Document   : newjsp3
+    Created on : Sep 20, 2022, 4:00:02 PM
     Author     : Admin
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="vi">
-    <c:if test="${empty requestScope.POST}" >
-        <c:redirect url="handbook"></c:redirect>
-    </c:if>
+
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Lỗi</title>
         <link rel="icon" href="img/logo.png" type="image/x-icon" />
-        <title>${requestScope.POST.title}</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
         <link href="css/nestf.css" rel="stylesheet">
     </head>
-
     <body class="text-center">
         <div id="navbar" class="sticky-top">
             <nav class="navbar-expand bg-white navbar-light">
@@ -37,7 +35,7 @@
                         <a href="handbook" class="nav-link text-center">Cẩm nang</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="about" class="nav-link text-center">Về chúng tôi</a>
+                        <a href="aboutPage" class="nav-link text-center current-tab disabled">Về chúng tôi</a>
                     </li>
                     <li class="nav-item col-3 d-inline-block text-center">
                         <form action="searchAction" method="get" id="search-form">
@@ -61,7 +59,8 @@
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div> 
                             <c:if test="${not empty sessionScope.USER}">
-                                <a href="cart" class="nav-link text-center"><i class="fa-solid fa-cart-shopping position-relative">
+                                <a href="cart" class="nav-link text-center">
+                                    <i class="fa-solid fa-cart-shopping position-relative">
                                         <c:if test="${not empty sessionScope.CART}">
                                             <span class="position-absolute top-0 start-100 translate-middle p-1 bg-danger border border-light rounded-circle">
                                                 <span class="visually-hidden">New alerts</span>
@@ -69,8 +68,7 @@
                                         </c:if>
                                     </i>
                                 </a>
-                            </c:if> 
-                        </div>                                                    
+                            </c:if>                               
                     </li>
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div>
@@ -83,42 +81,10 @@
                 </ul>
             </nav>
         </div>
-        <div id="white-board" class="d-flex justify-content-between col-10">
-            <div class="bg-white col-8 mt-4 d-inline-block" id="article">  
-                <h2 class="pt-4 fw-bold ms-4">${requestScope.POST.title}</h2>
-                <div id="author" class="text-start ms-4">   
-                    <jsp:useBean id="date" class="com.nestf.util.FormatPrinter"/> 
-                    <span class="text-muted">Ngày đăng : ${date.printDate(requestScope.POST.dateTime)}</span>
-                </div><br>
-                <div id="content" class="pb-2 pe-4">            
-                    <c:import charEncoding="UTF-8" url="${requestScope.POST.filePath}"></c:import>
-                    </div>
-                </div>
-            <c:if test = "${not empty requestScope.RECOMMEND_POST}">
-                <div id="other-article" class="bg-white d-inline-block mt-4 h-100 sticky-top">
-                    <h2 class="text-center">Bài viết khác</h2>
-                    <c:forEach items="${requestScope.RECOMMEND_POST}" var = "post">
-                        <c:url var="postLink" value="loadArticle">
-                            <c:param name="postID" value="${post.postID}"/>     
-                        </c:url>
-                        <a href="${postLink}" class="nav-link text-decoration-none" id="article-link">
-                            <div class="m-3 d-flex justify-content-start">
-                                <img src="${post.image}" class="d-inline-block col-6">
-                                <div class="d-inline-block text-start ms-2">
-                                    <span>${post.title}</span>
-                                </div>            
-                            </div>
-                        </a>
-                    </c:forEach>
-
-                </div>
-            </c:if>
+        <div class="col-11 m-auto p-4">
+            <img class="w-50" src ="img/code400.jpg"/>
         </div>
-        <button type="button" class="btn btn-floating btn-lg position-fixed rounded-circle text-light bottom-25" id="btn-back-to-top" style="left:3%">
-            <i class="fas fa-arrow-up"></i>
-        </button>
-        <c:import url="footer.html" charEncoding="UTF-8"/>  
-        <script src="js/util.js"></script>
+        <c:import url="footer.html" charEncoding="UTF-8"/>                              
     </body>
 
 </html>

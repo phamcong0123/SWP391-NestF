@@ -30,7 +30,7 @@
                         <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="shop" class="nav-link text-center">Shop</a>
+                        <a href="shop" class="nav-link text-center">Sản phẩm</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
                         <a href="handbook" class="nav-link text-center current-tab disabled">Cẩm nang</a>
@@ -104,24 +104,11 @@
             </c:if>
 
         </div>
-        <footer class="d-flex">
-            <div class="information">
-                <h2>Nest F</h2>
-                <p>Liên hệ chúng tôi <br>
-                    <span>Số điện thoại: 01234123</span><br>
-                    <span>Email: nestf@gmail.com</span>
-                </p>
-            </div>
-            <div class="social-media">
-                <h2>Theo dõi chúng tôi trên</h2>
-                <a href="#">
-                    <i class="fa-brands fa-facebook fa-2x"></i>
-                </a>
-                <a href="#">
-                    <i class="fa-brands fa-instagram fa-2x"></i>
-                </a>
-            </div>
-        </footer>
+        <button type="button" class="btn btn-floating btn-lg position-fixed rounded-circle text-light bottom-25" id="btn-back-to-top">
+                <i class="fas fa-arrow-up"></i>
+            </button>
+        <c:import url="footer.html" charEncoding="UTF-8"/>   
+        <script src="js/util.js"></script>
     </body>
 
 </html>

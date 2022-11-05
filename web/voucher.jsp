@@ -57,7 +57,7 @@
                         <a href="home"><img src="img/logo.png" id="logo" class="col-3"></a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
-                        <a href="shop" class="nav-link text-center">Shop</a>
+                        <a href="shop" class="nav-link text-center">Sản phẩm</a>
                     </li>
                     <li class="nav-item col-1 d-inline-block">
                         <a href="handbook" class="nav-link text-center">Cẩm nang</a>
@@ -98,7 +98,7 @@
                     <li class="nav-item col-1 d-inline-block text-center">
                         <div>
                             <jsp:useBean id="formatPrinter" class="com.nestf.util.FormatPrinter"/>
-                            <a href="voucher" class="nav-link text-center">${formatPrinter.noFraction(sessionScope.USER.point)} CP</a>
+                            <a href="voucher" class="nav-link text-center current-tab disabled">${formatPrinter.noFraction(sessionScope.USER.point)} CP</a>
                         </div>
                     </li>
                 </ul>
@@ -167,24 +167,11 @@
                 </c:if>
             </div>
         </div>
-        <footer class="d-flex">
-            <div class="information">
-                <h2>Nest F</h2>
-                <p>Liên hệ chúng tôi <br>
-                    <span>Số điện thoại: 01234123</span><br>
-                    <span>Email: nestf@gmail.com</span>
-                </p>
-            </div>
-            <div class="social-media">
-                <h2>Theo dõi chúng tôi trên</h2>
-                <a href="#">
-                    <i class="fa-brands fa-facebook fa-2x"></i>
-                </a>
-                <a href="#">
-                    <i class="fa-brands fa-instagram fa-2x"></i>
-                </a>
-            </div>
-        </footer>
+        <button type="button" class="btn btn-floating btn-lg position-fixed rounded-circle text-light bottom-25" id="btn-back-to-top">
+            <i class="fas fa-arrow-up"></i>
+        </button>
+        <c:import url="footer.html" charEncoding="UTF-8"/>  
+        <script src="js/util.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.1/js/bootstrap.min.js" integrity="sha512-vyRAVI0IEm6LI/fVSv/Wq/d0KUfrg3hJq2Qz5FlfER69sf3ZHlOrsLriNm49FxnpUGmhx+TaJKwJ+ByTLKT+Yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script>
