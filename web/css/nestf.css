@@ -117,8 +117,8 @@ form div{
 #gender{
     width: 30vw !important;
 }
-#register-form form div:last-of-type{
-    margin-bottom: 5vh!important;
+#reg-form span{
+    padding: 2px;
 }
 #white-board{
     margin:2% auto;
@@ -242,4 +242,15 @@ footer span {
 }
 .buynow-btn button {
     background-color: #4B5548;
+}
+.error-tooltip.tooltip > .tooltip-arrow{
+   display: none;
+}
+.error-tooltip.tooltip > .tooltip-inner
+{
+    background-color: #E5E5E5;
+    color: var(--bs-danger);
+    text-align: left;
+    max-width: 500px;
+    margin-left: 10px;  
 }

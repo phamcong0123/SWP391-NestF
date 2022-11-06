@@ -52,7 +52,15 @@
                         <div id="dropDownMenu" class="d-inline-block position-relative">
                             <i class="fas fa-user me-2"></i>${sessionScope.USER.name}
                             <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
-                                <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
+                                <c:if test="${sessionScope.USER.role eq 'US'}">                              
+                                    <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>     
+                                </c:if>                           
+                                <c:if test="${sessionScope.USER.role eq 'SE'}">               
+                                    <a href="dashboard" class="nav-link mb-2 text-decoration-none p-2" id="item">Quản lý đơn hàng</a>        
+                                </c:if>                            
+                                <c:if test="${sessionScope.USER.role eq 'AD'}">             
+                                    <a href="dashboard" class="nav-link mb-2 text-decoration-none p-2" id="item">Quản lý cửa hàng</a>  
+                                </c:if>
                                 <a href="logOut" class="nav-link text-decoration-none p-2" id="item">Đăng xuất</a>
                             </div>
                         </div>
@@ -103,7 +111,7 @@
                                         <div id="cart-item" class="rounded col-11 m-auto mb-3">
                                             <div class="row container-fluid m-0">
                                                 <div class="d-inline-block col-2 text-start">
-                                                    <img src="${cartItem.product.image}" class="rounded w-100 m-2 border border-dark">
+                                                    <img src="${cartItem.product.imagelink[0]}" class="rounded w-100 m-2 border border-dark">
                                                 </div>     
                                                 <div class="d-inline-block col-8 text-start ms-5 mt-4">
                                                     <a href="productDetail?productID=${cartItem.product.productID}" class="text-decoration-none text-black"><h4 class="fw-bold">${cartItem.product.name}</h4></a>

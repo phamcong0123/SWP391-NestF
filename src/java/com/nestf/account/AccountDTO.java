@@ -19,6 +19,7 @@ public class AccountDTO implements Serializable{
     private boolean gender;
     private double point;
     private String role;
+    private int selQuantity;
 
     public AccountDTO() {
     }
@@ -35,6 +36,17 @@ public class AccountDTO implements Serializable{
         this.gender = gender;
         this.point = point;
         this.role = role;
+    }
+    
+    public AccountDTO(String phone, String password, String name, String address, boolean gender, double point, String role, int selQuantity) {
+        this.phone = phone;
+        this.password = password;
+        this.name = name;
+        this.address = address;
+        this.gender = gender;
+        this.point = point;
+        this.role = role;
+        this.selQuantity = selQuantity;
     }
 
     public String getPhone() {
@@ -89,6 +101,16 @@ public class AccountDTO implements Serializable{
     public void setRole(String role) {
         this.role = role;
     }
+
+    public int getSelQuantity() {
+        return selQuantity;
+    }
+
+    public void setSelQuantity(int selQuantity) {
+        this.selQuantity = selQuantity;
+    }
+    
+    
 
     @Override
     public String toString() {

@@ -49,7 +49,15 @@
                             <div id="dropDownMenu" class="d-inline-block position-relative">
                                 <i class="fas fa-user me-2"></i>${sessionScope.USER.name}
                                 <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
-                                    <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
+                                    <c:if test="${sessionScope.USER.role eq 'US'}">                          
+                                        <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>      
+                                    </c:if>                         
+                                    <c:if test="${sessionScope.USER.role eq 'SE'}">            
+                                        <a href="dashboard" class="nav-link mb-2 text-decoration-none p-2" id="item">Quản lý đơn hàng</a>          
+                                    </c:if>                           
+                                    <c:if test="${sessionScope.USER.role eq 'AD'}">                    
+                                        <a href="dashboard" class="nav-link mb-2 text-decoration-none p-2" id="item">Quản lý cửa hàng</a>             
+                                    </c:if>
                                     <a href="logOut" class="nav-link text-decoration-none p-2" id="item">Đăng xuất</a>
                                 </div>
                             </div>
@@ -86,7 +94,16 @@
                     <c:set var="productDetail" value="${requestScope['PRODUCT_DETAIL']}" scope="page"/>
                     <jsp:useBean id="productFunc" class="com.nestf.product.ProductDTO"/>
                     <div class="d-inline-block col-5 mt-3">
-                        <img src="${productDetail.image}" class="rounded col-11 border border-dark">
+                        <div class="imgBox">
+                            <img src="${productDetail.imagelink[0]}" class="rounded col-11 border border-dark">
+                        </div>
+                        <ul class="thumb list-unstyled d-flex row text-center mt-3">
+                            <c:forEach var="image" items="${productDetail.imagelink}" varStatus="counter">
+                                <li class="col">
+                                    <a href="${image}" target="imgBox"><img src="${image}" class="border border-dark rounded" width="50px"></a>
+                                </li>
+                            </c:forEach>
+                        </ul>
                     </div>     
                     <div class="d-inline-block col-7">
                         <h2 class="text-center">${productDetail.name}</h2>
@@ -103,7 +120,7 @@
                                 </span>
                             </c:if>
                         </span>
-                        <span>${productDetail.description}</span>
+                        <div class="text-start ps-4">${productDetail.productDes}</div>
                     </div>
                 </c:if>           
             </div>
@@ -133,7 +150,7 @@
                                 <a href="productDetail?productID=${otherProduct.productID}" 
                                    style="color: #000;
                                    text-decoration: none">
-                                    <img src="${otherProduct.image}" class="mb-2">
+                                    <img src="${otherProduct.imagelink[0]}" class="mb-2">
                                     <h6 class="product-title">${otherProduct.name}</h6>
                                     <c:if test="${otherProduct.discountPrice != 0}">
                                         <span class="text-muted text-decoration-line-through">${productFunc.printPrice(otherProduct.price)}</span>
@@ -280,7 +297,16 @@
                 if (object.value == '' || object.value < object.min)
                     object.value = object.min;
             }
-
         </script>   
+        <!--
+            <script src="https://code.jquery.com/jquery-2.2.4.js" ></script>-->
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('.thumb a').click(function (e) {
+                    e.preventDefault();
+                    $('.imgBox img').attr("src", $(this).attr("href"));
+                })
+            });
+        </script>
     </body>
 </html>

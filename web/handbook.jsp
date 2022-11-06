@@ -49,7 +49,15 @@
                             <div id="dropDownMenu" class="d-inline-block position-relative">
                                 <i class="fas fa-user me-2"></i>${sessionScope.USER.name}
                                 <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
-                                    <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
+                                    <c:if test="${sessionScope.USER.role eq 'US'}">           
+                                        <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>   
+                                    </c:if>                               
+                                    <c:if test="${sessionScope.USER.role eq 'SE'}">                                  
+                                        <a href="dashboard" class="nav-link mb-2 text-decoration-none p-2" id="item">Quản lý đơn hàng</a>   
+                                    </c:if>                                 
+                                    <c:if test="${sessionScope.USER.role eq 'AD'}">            
+                                        <a href="dashboard" class="nav-link mb-2 text-decoration-none p-2" id="item">Quản lý cửa hàng</a>   
+                                    </c:if>
                                     <a href="logOut" class="nav-link text-decoration-none p-2" id="item">Đăng xuất</a>
                                 </div>
                             </div>
@@ -105,8 +113,8 @@
 
         </div>
         <button type="button" class="btn btn-floating btn-lg position-fixed rounded-circle text-light bottom-25" id="btn-back-to-top">
-                <i class="fas fa-arrow-up"></i>
-            </button>
+            <i class="fas fa-arrow-up"></i>
+        </button>
         <c:import url="footer.html" charEncoding="UTF-8"/>   
         <script src="js/util.js"></script>
     </body>

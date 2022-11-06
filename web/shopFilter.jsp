@@ -55,7 +55,13 @@
                             <div id="dropDownMenu" class="d-inline-block position-relative">
                                 <i class="fas fa-user me-2"></i>${sessionScope.USER.name}
                                 <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
-                                    <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
+                                    <c:if test="${sessionScope.USER.role eq 'US'}">                                         
+                                        <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>             
+                                    </c:if>                                        <c:if test="${sessionScope.USER.role eq 'SE'}">                    
+                                        <a href="dashboard" class="nav-link mb-2 text-decoration-none p-2" id="item">Quản lý đơn hàng</a>            
+                                    </c:if>                                        <c:if test="${sessionScope.USER.role eq 'AD'}">                   
+                                        <a href="dashboard" class="nav-link mb-2 text-decoration-none p-2" id="item">Quản lý cửa hàng</a>               
+                                    </c:if>
                                     <a href="logOut" class="nav-link text-decoration-none p-2" id="item">Đăng xuất</a>
                                 </div>
                             </div>
@@ -120,8 +126,7 @@
                                 <div class="col-lg-3 col-md-4 product-contain-detail">
                                     <div class="product-image-contain-detail position-relative">
                                         <a href="productDetail?productID=${product.productID}" class="product-detail">
-                                            <img class="img-responsive"
-                                                 src="${product.image}" width="200px" height="200px" alt="${product.name}" class="mx-2">
+                                            <img class="img-responsive" src="${product.imagelink[0]}" width="200px" height="200px" alt="${product.name}" class="mx-2">
                                             <c:if test="${product.discountPrice ne 0}">
                                                 <img class="saleoff position-absolute" src="img/saleoff2.png" width="100px">                                              
                                             </c:if>

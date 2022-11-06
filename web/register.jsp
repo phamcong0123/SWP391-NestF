@@ -54,23 +54,51 @@
             <img src="img/account.svg" alt="">
             <h1>Đăng ký</h1>
             <form action="registerAction" method="POST" id="reg-form">
-                <div class="m-3 d-inline-block col-2">Họ và tên</div><input type="text" name="name" required minlength="6" maxlength="30" placeholder="6 - 30 ký tự"><br>
-                <div class="m-3 d-inline-block col-2">Giới tính</div>          
-                <div id="gender" class="d-inline-block">
-                    <input type="radio" id="male" checked="" name="gender" value="1">
-                    <label for="male">Nam&emsp;</label>
-                    <input type="radio" id="female" name="gender" value="0">
-                    <label for="female">Nữ</label>
-                </div><br>
-                <div class="m-3 d-inline-block col-2">Số điện thoại</div><input type="number" name="phone" required minlength="10" maxlength="11" placeholder="10 - 11 chữ số"><br>
-                <div class="m-3 d-inline-block col-2">Mật khẩu</div><input type="password" name="password" required minlength="6" maxlength="20" id="password" placeholder="6 - 20 ký tự"><br>
-                <div class="m-3 d-inline-block col-2">Xác nhận mật khẩu</div><input type="password" name="confirm" required minlength="6" maxlength="20" id="confirm" onblur="validate();"><br>
-                <div class="d-inline-block col-2 m-3">Địa chỉ</div><input type="text" name="address" required="" minlength="20" maxlength="70" placeholder="20 - 70 ký tự"><br>
-                <input type="hidden" name="point" value="0"/>
+                <div class="row m-auto col-6">
+                    <div class="col-4">
+                        <span class="d-inline-block m-3">Họ và tên</span>
+                        <br>
+                        <span class="d-inline-block m-3">Giới tính</span>
+                        <br>
+                        <span class="m-3 d-inline-block">Số điện thoại</span>
+                        <br>
+                        <span class="m-3 d-inline-block">Mật khẩu</span>
+                        <br>
+                        <span class="m-3 d-inline-block">Xác nhận mật khẩu</span>
+                        <br>
+                        <span class="d-inline-block m-3">Địa chỉ</span>
+                    </div>
+                    <div class="col-8">
+                        <input type="text" name="name" required minlength="6" maxlength="30" placeholder="6 - 30 ký tự" class="m-3"><br>
+                        <div id="gender" class="m-3">
+                            <input type="radio" id="male" checked="" name="gender" value="1">
+                            <label for="male">Nam&emsp;</label>
+                            <input type="radio" id="female" name="gender" value="0">
+                            <label for="female">Nữ</label>
+                        </div>
+                        <input type="number" name="phone" value="${requestScope.PHONE}" required oninput="checkLength(this)" maxlength="10" placeholder="10 chữ số" class="m-3 me-0">
+                        <c:if test="${not empty requestScope.ERROR}">
+                            <i id="error-tooltip" class="fa-solid fa-circle-exclamation text-danger" data-bs-custom-class="error-tooltip" data-bs-toggle="tooltip" data-bs-placement="right" title="${requestScope.ERROR}"></i>
+                        </c:if><br>                       
+                        <input type="password" class="m-3" name="password" required minlength="6" maxlength="20" id="password" placeholder="6 - 20 ký tự" oninput="checkSimilar()"><br>
+                        <input type="password" class="m-3 me-0" name="confirm" required minlength="6" maxlength="20" id="confirm" oninput="checkSimilar()">
+                        <i id="similar-tooltip" style="display:none;" class="fa-solid fa-circle-exclamation text-danger" data-bs-custom-class="error-tooltip" data-bs-toggle="tooltip" data-bs-placement="right" title="Không trùng khớp với mật khẩu"></i><br>
+                        <input type="text" class="m-3" name="address" required="" minlength="20" maxlength="70" placeholder="20 - 70 ký tự"><br>
+                    </div>
+                </div>   
+
                 <a href="home"><input type="button" value="HUỶ" id="link-button"></a>
-                <input type="submit" value="ĐĂNG KÝ" id="color-button">
+                <input type="submit" value="ĐĂNG KÝ" id="color-button" name="submitButton">
             </form>
         </div>
-        <script src="js/nestf.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/js/bootstrap.bundle.min.js" integrity="sha512-BOsvKbLb0dB1IVplOL9ptU1EYA+LuCKEluZWRUYG73hxqNBU85JBIBhPGwhQl7O633KtkjMv8lvxZcWP+N3V3w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script src="js/register.js"></script>
+        <script>
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        </script>
     </body>
 </html>

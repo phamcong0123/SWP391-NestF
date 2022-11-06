@@ -18,6 +18,9 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
         <link href="css/nestf.css" rel="stylesheet">
+        <script>
+            window.window.history.forward();
+        </script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.1/js/bootstrap.min.js" integrity="sha512-vyRAVI0IEm6LI/fVSv/Wq/d0KUfrg3hJq2Qz5FlfER69sf3ZHlOrsLriNm49FxnpUGmhx+TaJKwJ+ByTLKT+Yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </head>
@@ -48,7 +51,15 @@
                         <div id="dropDownMenu" class="d-inline-block position-relative">
                             <i class="fas fa-user me-2"></i>${sessionScope.USER.name}
                             <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
-                                <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
+                                <c:if test="${sessionScope.USER.role eq 'US'}"> 
+                                    <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>     
+                                </c:if>                                  
+                                <c:if test="${sessionScope.USER.role eq 'SE'}">     
+                                    <a href="dashboard" class="nav-link mb-2 text-decoration-none p-2" id="item">Quản lý đơn hàng</a>   
+                                </c:if>                                     
+                                <c:if test="${sessionScope.USER.role eq 'AD'}">          
+                                    <a href="dashboard" class="nav-link mb-2 text-decoration-none p-2" id="item">Quản lý cửa hàng</a>             
+                                </c:if>
                                 <a href="logOut" class="nav-link text-decoration-none p-2" id="item">Đăng xuất</a>
                             </div>
                         </div>
@@ -126,7 +137,7 @@
                                 <div id="cart-item" class="rounded col-11 m-auto mb-3">
                                     <div class="row container-fluid m-0">
                                         <div class="d-inline-block col-2 text-start">
-                                            <img src="${cartItem.product.image}" class="rounded w-100 m-2 border border-dark">
+                                            <img src="${cartItem.product.imagelink[0]}" class="rounded w-100 m-2 border border-dark">
                                         </div>     
                                         <div class="d-inline-block col-8 text-start ms-5 mt-4">
                                             <a href="productDetail?productID=${cartItem.product.productID}" class="text-decoration-none text-black"><h4 class="fw-bold">${cartItem.product.name}</h4></a>
@@ -216,7 +227,7 @@
                                                 <div class="rounded col-11 m-auto mb-3 border border-dark">
                                                     <div class="row container-fluid m-0">
                                                         <div class="d-inline-block col-2 text-start">
-                                                            <img src="${billDetail.product.image}" class="rounded col-9">
+                                                            <img src="${billDetail.product.imagelink[0]}" class="rounded col-9">
                                                         </div>     
                                                         <div class="d-inline-block col-8 text-start ms-2 mt-2">
                                                             <h4 class="fw-bold">${billDetail.product.name}</h4>
@@ -251,7 +262,7 @@
                                                 <div class="rounded col-11 m-auto mb-3 border border-dark">
                                                     <div class="row container-fluid m-0">
                                                         <div class="d-inline-block col-2 text-start">
-                                                            <img src="${billDetail.product.image}" class="rounded col-9">
+                                                            <img src="${billDetail.product.imagelink[0]}" class="rounded col-9">
                                                         </div>     
                                                         <div class="d-inline-block col-8 text-start ms-2 mt-2">
                                                             <h4 class="fw-bold">${billDetail.product.name}</h4>
@@ -285,7 +296,7 @@
                                                 <div class="rounded col-11 m-auto mb-3 border border-dark">
                                                     <div class="row container-fluid m-0">
                                                         <div class="d-inline-block col-2 text-start">
-                                                            <img src="${billDetail.product.image}" class="rounded col-9">
+                                                            <img src="${billDetail.product.imagelink[0]}" class="rounded col-9">
                                                         </div>     
                                                         <div class="d-inline-block col-8 text-start ms-2 mt-2">
                                                             <h4 class="fw-bold">${billDetail.product.name}</h4>
@@ -319,7 +330,7 @@
                                                 <div class="rounded col-11 m-auto mb-3 border border-dark">
                                                     <div class="row container-fluid m-0">
                                                         <div class="d-inline-block col-2 text-start">
-                                                            <img src="${billDetail.product.image}" class="rounded col-9">
+                                                            <img src="${billDetail.product.imagelink[0]}" class="rounded col-9">
                                                         </div>     
                                                         <div class="d-inline-block col-8 text-start ms-2 mt-2">
                                                             <h4 class="fw-bold">${billDetail.product.name}</h4>
@@ -353,7 +364,7 @@
                                                 <div class="rounded col-11 m-auto mb-3 border border-dark">
                                                     <div class="row container-fluid m-0">
                                                         <div class="d-inline-block col-2 text-start">
-                                                            <img src="${billDetail.product.image}" class="rounded col-9">
+                                                            <img src="${billDetail.product.imagelink[0]}" class="rounded col-9">
                                                         </div>     
                                                         <div class="d-inline-block col-8 text-start ms-2 mt-2">
                                                             <h4 class="fw-bold">${billDetail.product.name}</h4>
@@ -397,7 +408,7 @@
         </div>
         <c:import url="footer.html" charEncoding="UTF-8"/>               
         <script src="js/cart.js"></script> 
-        <script src="js/util.js"></script>
+        <script src="js/util.js"></script>     
     </body>
 
 </html>

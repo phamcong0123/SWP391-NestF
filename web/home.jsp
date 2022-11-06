@@ -51,7 +51,15 @@
                                 <div id="dropDownMenu" class="d-inline-block position-relative">
                                     <i class="fas fa-user me-2"></i>${sessionScope.USER.name}
                                     <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
-                                        <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
+                                        <c:if test="${sessionScope.USER.role eq 'US'}">
+                                            <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>
+                                        </c:if>
+                                        <c:if test="${sessionScope.USER.role eq 'SE'}">
+                                            <a href="dashboard" class="nav-link mb-2 text-decoration-none p-2" id="item">Quản lý đơn hàng</a>
+                                        </c:if>
+                                        <c:if test="${sessionScope.USER.role eq 'AD'}">
+                                            <a href="dashboard" class="nav-link mb-2 text-decoration-none p-2" id="item">Quản lý cửa hàng</a>
+                                        </c:if>
                                         <a href="logOut" class="nav-link text-decoration-none p-2" id="item">Đăng xuất</a>
                                     </div>
                                 </div>
@@ -146,7 +154,7 @@
                                                     <div class="image-contain-detail">
 
                                                         <a href="productDetail?productID=${product.productID}" class="product-detail">
-                                                            <img src="${product.image}" alt="Image for ${product.name}" class="mx-2">
+                                                            <img src="${product.imagelink[0]}" alt="Image for ${product.name}" class="mx-2">
                                                             <p class="image-title">
                                                                 <span class="product-title d-block">${product.name}</span><br>
                                                                 <c:if test="${product.discountPrice != 0}">
@@ -204,11 +212,11 @@
                             </p>
                         </div>
                         <div class="combo-product-image">
-                            <img src="${productList[0].image}" alt="Image for ${productList[0].name}" class="ms-2">
+                            <img src="${productList[0].imagelink[0]}" alt="Image for ${productList[0].name}" class="ms-2">
                             <span class="plus-product-img">
                                 <i class="fa-solid fa-plus"></i>
                             </span>
-                            <img src="${productList[1].image}" alt="Image for ${productList[1].name}" class="ms-2">
+                            <img src="${productList[1].imagelink[0]}" alt="Image for ${productList[1].name}" class="ms-2">
                         </div>
                         <div class="combo-product-btn">
                             <p>Chỉ với 
@@ -252,7 +260,7 @@
                                                         <div class="image-contain-detail">
 
                                                             <a href="productDetail?productID=${anotherSuggest.productID}" class="product-detail">
-                                                                <img src="${anotherSuggest.image}" alt="Image for ${anotherSuggest.name}" class="mx-2">
+                                                                <img src="${anotherSuggest.imagelink[0]}" alt="Image for ${anotherSuggest.name}" class="mx-2">
                                                                 <p class="image-title">
                                                                     <span class="product-title d-block">${anotherSuggest.name}</span><br>
                                                                     <c:if test="${anotherSuggest.discountPrice != 0}">
