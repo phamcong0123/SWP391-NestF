@@ -368,34 +368,32 @@
                                 <!--Home page popup button-->
                                 <div class="col-3 ">
                                     <div class="float-right start-btn">
-                                        <button class="btn btn-dark" type="button">Add new seller</button>
+                                        <button class="btn btn-dark" type="button" class="open-button" onclick="openForm()">Add new seller</button>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="d-inline-block container-fluid card row">
-                                <div class="card-body" id="register-form">
-                                    <form action="registerAction" method="POST" id="reg-form">
-                                        <div class="m-3 d-inline-block col-2">Họ và tên</div><input type="text" name="customerName" required minlength="6" maxlength="30" placeholder="6 - 30 ký tự"><br>
-                                        <div class="m-3 d-inline-block col-2">Giới tính</div>          
-                                        <div id="gender" class="d-inline-block">
-                                            <input type="radio" id="male" checked="" name="gender" value="1">
-                                            <label for="male">Nam&emsp;</label>
-                                            <input type="radio" id="female" name="gender" value="0">
-                                            <label for="female">Nữ</label>
-                                        </div><br>
-                                        <div class="m-3 d-inline-block col-2">Số điện thoại</div><input type="number" name="customerPhone" required minlength="10" maxlength="11" placeholder="10 - 11 chữ số"><br>
-                                        <div class="m-3 d-inline-block col-2">Mật khẩu</div><input type="password" name="password" required minlength="6" maxlength="20" id="password" placeholder="6 - 20 ký tự"><br>
-                                        <div class="m-3 d-inline-block col-2">Xác nhận mật khẩu</div><input type="password" name="confirm" required minlength="6" maxlength="20" id="confirm" onblur="validate();"><br>
-                                        <div class="d-inline-block col-2 m-3">Địa chỉ</div><input type="text" name="customerAddress" required="" minlength="20" maxlength="70" placeholder="20 - 70 ký tự"><br>
-                                        <input type="hidden" name="point" value="0"/>
-                                        <a href="homePage"><input type="button" value="HUỶ" id="link-button"></a>
-                                        <input type="submit" value="ĐĂNG KÝ" id="color-button">
-                                    </form>
+                            <div class="form-popup" id="myForm" style="display: none">
+                                <div class="d-inline-block container-fluid">
+                                    <div>
+                                        <form action="AddNewSeller" method="POST">
+                                            <div class="m-2 d-inline-block col-3">Họ và tên</div><input type="text" name="name" required minlength="6" maxlength="30" placeholder="6 - 30 ký tự"><br>
+                                            <div class="m-2 d-inline-block col-3">Giới tính</div>          
+                                            <div id="gender" class="d-inline-block">
+                                                <input type="radio" id="male" checked="" name="gender" value="1">
+                                                <label for="male">Nam&emsp;</label>
+                                                <input type="radio" id="female" name="gender" value="0">
+                                                <label for="female">Nữ</label>
+                                            </div><br>
+                                            <div class="m-2 d-inline-block col-3">Số điện thoại</div><input type="number" name="phone" required minlength="10" maxlength="11" placeholder="10 - 11 chữ số"><br>
+                                            <div class="m-2 d-inline-block col-3">Mật khẩu</div><input type="password" name="password" required minlength="6" maxlength="20" id="password" placeholder="6 - 20 ký tự"><br>
+                                            <div class="m-2 d-inline-block col-3">Xác nhận mật khẩu</div><input type="password" name="confirm" required minlength="6" maxlength="20" id="confirm" onblur="validate();"><br>
+                                            <div class="m-2 d-inline-block col-3">Địa chỉ</div><input type="text" name="address" required="" minlength="10" maxlength="70" placeholder="20 - 70 ký tự"><br>
+                                            <input type="button" value="Close" onclick="closeForm()" class="m-3 d-inline-block col-2">
+                                            <input type="submit" value="Add" class="m-3 d-inline-block col-2">
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-
-
                             <!-- Content Row -->
                             <c:set var="result" value="${sessionScope.SELLERS}"/>
                             <c:if test="${empty result}">
@@ -444,58 +442,58 @@
                                 </table>
                             </c:if>
 
-                            <!-- Content Row -->
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="card mb-4">
-                                        <div class="card-body text-center">
-                                            <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
-                                                 class="rounded-circle img-fluid" style="width: 150px;">
-                                            <h5 class="my-3">${ADMIN.getName()}</h5>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-8">        
-                                    <form action="UpdateProfileAction" method="POST">
-                                        <div class="card mb-4">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <p class="mb-0">Full Name</p>
-                                                    </div>
-                                                    <div class="col-sm-9">
-                                                        <input type="text" class="text-muted mb-0" name="txtFullname" value="${ADMIN.getName()}"/>
-                                                    </div>
-                                                </div>
-                                                <hr>
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <p class="mb-0">Password</p>
-                                                    </div>
-                                                    <div class="col-sm-9">
-                                                        <input type="password" class="text-muted mb-0" name="txtPassword" value="${ADMIN.getPassword()}"/>
-                                                    </div>
-                                                </div>
-                                                <hr>
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <p class="mb-0">Phone</p>
-                                                    </div>
-                                                    <div class="col-sm-9">
-                                                        <input type="text" class="text-muted mb-0" name="txtPhone" value="${ADMIN.getPhone()}"/>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-center mb-2">
-                                            <input type="submit" class="btn btn-outline-danger ms-1 mx-2" value="Save" name="UpdateProfile" />
-
-                                            <input type="reset" class="btn btn-outline-primary ms-1 mx-2" value="Reset" />
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+                            <!--                             Content Row 
+                                                        <div class="row">
+                                                            <div class="col-lg-4">
+                                                                <div class="card mb-4">
+                                                                    <div class="card-body text-center">
+                                                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                                                                             class="rounded-circle img-fluid" style="width: 150px;">
+                                                                        <h5 class="my-3">${ADMIN.getName()}</h5>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                            
+                                                            <div class="col-lg-8">        
+                                                                <form action="UpdateProfileAction" method="POST">
+                                                                    <div class="card mb-4">
+                                                                        <div class="card-body">
+                                                                            <div class="row">
+                                                                                <div class="col-sm-3">
+                                                                                    <p class="mb-0">Full Name</p>
+                                                                                </div>
+                                                                                <div class="col-sm-9">
+                                                                                    <input type="text" class="text-muted mb-0" name="txtFullname" value="${ADMIN.getName()}"/>
+                                                                                </div>
+                                                                            </div>
+                                                                            <hr>
+                                                                            <div class="row">
+                                                                                <div class="col-sm-3">
+                                                                                    <p class="mb-0">Password</p>
+                                                                                </div>
+                                                                                <div class="col-sm-9">
+                                                                                    <input type="password" class="text-muted mb-0" name="txtPassword" value="${ADMIN.getPassword()}"/>
+                                                                                </div>
+                                                                            </div>
+                                                                            <hr>
+                                                                            <div class="row">
+                                                                                <div class="col-sm-3">
+                                                                                    <p class="mb-0">Phone</p>
+                                                                                </div>
+                                                                                <div class="col-sm-9">
+                                                                                    <input type="text" class="text-muted mb-0" name="txtPhone" value="${ADMIN.getPhone()}"/>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="d-flex justify-content-center mb-2">
+                                                                        <input type="submit" class="btn btn-outline-danger ms-1 mx-2" value="Save" name="UpdateProfile" />
+                            
+                                                                        <input type="reset" class="btn btn-outline-primary ms-1 mx-2" value="Reset" />
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>-->
                             <!--End of Content Row -->
 
 
@@ -559,6 +557,16 @@
             <script src="js/demo/chart-pie-demo.js"></script>
 
             <script src="./js/nestf.js"></script>
+
+            <script>
+                                                function openForm() {
+                                                    document.getElementById("myForm").style.display = "block";
+                                                }
+
+                                                function closeForm() {
+                                                    document.getElementById("myForm").style.display = "none";
+                                                }
+            </script>
         </c:if>
     </body>
 </html>
