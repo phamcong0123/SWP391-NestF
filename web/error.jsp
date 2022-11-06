@@ -91,7 +91,14 @@
         </div>
         <div class="col-11 m-auto p-4">
             <img class="w-50" src ="img/code400.jpg"/>
-        </div>
+        </div>                        
+        <c:if test="${sessionScope.USER.role eq 'AD'}">
+            <a href="dashboard">
+                <button type="button" id="dashboardRedirect" class="btn btn-floating btn-lg rounded-circle text-light position-fixed d-block"  data-bs-toggle="tooltip" data-bs-placement="right" title="DASHBOARD">
+                    <i class="fa-solid fa-shop"></i>
+                </button>
+            </a>
+        </c:if>
         <c:import url="footer.html" charEncoding="UTF-8"/>                              
     </body>
 

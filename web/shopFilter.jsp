@@ -172,6 +172,13 @@
         <button type="button" class="btn btn-floating btn-lg position-fixed rounded-circle text-light bottom-25" id="btn-back-to-top">
             <i class="fas fa-arrow-up"></i>
         </button>
+        <c:if test="${sessionScope.USER.role eq 'AD'}">
+            <a href="dashboard">
+                <button type="button" id="dashboardRedirect" class="btn btn-floating btn-lg rounded-circle text-light position-fixed d-block"  data-bs-toggle="tooltip" data-bs-placement="right" title="DASHBOARD">
+                    <i class="fa-solid fa-shop"></i>
+                </button>
+            </a>
+        </c:if>
         <div>
             <span id="triggerSuccess" class="d-none" data-bs-toggle="modal" data-bs-target="#success"></span>                     
             <div class="modal fade" id="success" tabindex="-1" aria-hidden="true">
