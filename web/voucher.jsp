@@ -75,7 +75,7 @@
                         <div id="dropDownMenu" class="d-inline-block position-relative">
                             <i class="fas fa-user me-2"></i>${sessionScope.USER.name}
                             <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
-                                <c:if test="${sessionScope.USER.role eq 'US'}">                                      
+                                     <c:if test="${not empty sessionScope.USER}">                                      
                                     <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>         
                                 </c:if>                                        <c:if test="${sessionScope.USER.role eq 'SE'}">              
                                     <a href="dashboard" class="nav-link mb-2 text-decoration-none p-2" id="item">Quản lý đơn hàng</a>       
