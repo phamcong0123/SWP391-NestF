@@ -363,7 +363,7 @@
                             <div class="mb-4">
                                 <div class="row">
                                     <div class="col-9">
-                                        <h1 class="h3 mb-0 text-gray-800">List products</h1>
+                                        <h1 class="h3 mb-0 text-gray-800">List posts</h1>
                                     </div>
                                     <div class="col-3 ">
                                         <div class="dropdown float-right">
@@ -382,61 +382,33 @@
 
                             <!-- Content Row -->
 
-                            <c:if test="${not empty sessionScope.LIST_PRODUCT}">
-                                <c:set var="errors" value="${requestScope.PRODUCT_ERR}"/>
+                            <c:if test="${not empty sessionScope.LIST_PENDING_POST}">
                                 <table class="table table-striped table-hover table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
-                                            <th>Seller</th>
-                                            <th>Name</th>
-                                            <th>Price <a href="sortPriceAction"><i class="fa fa-sort"></i></a></th>
-                                            <th>Quantity <a href="sortQuantityAction"><i class="fa fa-sort"></i></a></th>
-                                            <th>Category</th>
-                                            <th>Discount <a href="sortDiscountAction"><i class="fa fa-sort"></i></a></th>
-                                            <th>Action</th>
+                                            <th>PostID</th>
+                                            <th>ADPhone</th>
+                                            <th>Title</th>
+                                            <th>Date Time</th>
+                                            <th>Status</th>
+                                            <th>File Path</th>
+                                            <th>Image</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="product" items="${sessionScope.LIST_PENDING}">
+                                        <c:forEach var="post" items="${sessionScope.LIST_PENDING_POST}">
                                             <tr>
-                                                <td>${product.productID}</td>
+                                                <td>${post.postID}</td>
+                                                <td>${post.seller.phone}</td>
+                                                <td>${post.title}</td>
+                                                <td>${post.dateTime}</td>
+                                                <td>${post.status}</td>
+                                                <td>${post.filePath}</td>
+                                                <td>${post.image}</td>
                                                 <td>
-                                                    ${product.selName}
-                                                    <c:if test="${not empty errors.sellerID}">
-                                                        <font color="red">
-                                                        ${errors.sellerID}
-                                                        </font> <br/>
-                                                    </c:if>
-                                                </td>
-                                                <td>
-                                                    ${product.name}
-                                                    <c:if test="${not empty errors.name}">
-                                                        <font color="red">
-                                                        ${errors.name}
-                                                        </font> <br/>
-                                                    </c:if>
-                                                    <c:if test="${not empty errors.productDesc}">
-                                                        <font color="red">
-                                                        ${errors.productDesc}
-                                                        </font> <br/>
-                                                    </c:if>
-                                                </td>
-                                                <td>${product.price}</td>
-                                                <td>${product.quantity}</td>
-                                                <td>
-                                                    ${product.category.categoryName}
-                                                    <c:if test="${not empty errors.category}">
-                                                        <font color="red">
-                                                        ${errors.category}
-                                                        </font> <br/>
-                                                    </c:if>
-                                                </td>
-                                                <td>${product.discountPrice}</td>
-                                                <td class="justify-content-center">
-                                                    <a href="viewProductDetail?productID=${product.productID}&productType=pending" class="view px-2" title="View" data-toggle="tooltip"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                                                    <a href="editProductAction?productID=${product.productID}&productType=pending" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
-                                                    <a href="acceptProductAction?productID=${product.productID}" class="accept px-2" title="Accept" data-toggle="tooltip"><i class="fa fa-check" aria-hidden="true"></i></a>
+                                                    <a href="viewPostDetail?postID=${product.productID}&productType=accepted" class="view" title="View" data-toggle="tooltip"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                    <a href="editPostAction?postID=${product.productID}&productType=accepted" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
+                                                    <a href="acceptPost?postID=${post.postID}" class="delete" title="Delete" data-toggle="tooltip"><i class="fa fa-times" aria-hidden="true"></i></a>
                                                 </td>
                                             </tr>
                                         </c:forEach>

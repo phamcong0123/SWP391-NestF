@@ -146,7 +146,37 @@ public class PostDAOAdmin {
         }
         return false;
     }
+    public void acceptedPost(int postID) throws SQLException, NamingException {
+        Connection con = null;
+        PreparedStatement statement = null;
 
+
+        try {
+//            1. make connection
+            con = DBHelper.makeConnection();
+
+//            2. Create sql string 
+            if (con != null) {
+                statement = con.prepareStatement(SET_STATUS_TRUE);
+                statement.setInt(1, postID);
+
+//          4. Execute Query
+                int affectRow = statement.executeUpdate();
+
+//          5. Process result
+
+
+            }// end if connection is not null
+
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+    }
     public static boolean disablePost(PostDTO dto) throws SQLException, NamingException {
         Connection con = null;
         PreparedStatement statement = null;
