@@ -361,39 +361,39 @@
                             <!--//////////////////////////////////////////////////////Kết thúc phần Chung/////////////////-->
                             <!-- Page Heading -->
                             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 class="h3 mb-0 text-gray-800">List products</h1>
+                                <h1 class="h3 mb-0 text-gray-800">List posts</h1>
                             </div>
 
                             <!-- Content Row -->
 
-                            <c:if test="${not empty sessionScope.LIST_PRODUCT}">
+                            <c:if test="${not empty sessionScope.LIST_POST}">
                                 <table class="table table-striped table-hover table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>ID</th>
-                                            <th>Seller</th>
-                                            <th>Name</th>
-                                            <th>Price <a href="sortPriceAction"><i class="fa fa-sort"></i></a></th>
-                                            <th>Quantity <a href="sortQuantityAction"><i class="fa fa-sort"></i></a></th>
-                                            <th>Category</th>
-                                            <th>Discount <a href="sortDiscountAction"><i class="fa fa-sort"></i></a></th>
-                                            <th>Action</th>
+                                            <th>PostID</th>
+                                            <th>ADPhone</th>
+                                            <th>Title</th>
+                                            <th>Date Time</th>
+                                            <th>Status</th>
+                                            <th>File Path</th>
+                                            <th>Image</th>
+
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="product" items="${sessionScope.LIST_PRODUCT}">
+                                        <c:forEach var="post" items="${sessionScope.LIST_POST}">
                                             <tr>
-                                                <td>${product.productID}</td>
-                                                <td>${product.selName}</td>
-                                                <td>${product.name}</td>
-                                                <td>${product.price}</td>
-                                                <td>${product.quantity}</td>
-                                                <td>${product.category.categoryName}</td>
-                                                <td>${product.discountPrice}</td>
+                                                <td>${post.postID}</td>
+                                                <td>${post.seller.phone}</td>
+                                                <td>${post.title}</td>
+                                                <td>${post.dateTime}</td>
+                                                <td>${post.status}</td>
+                                                <td>${post.filePath}</td>
+                                                <td>${post.image}</td>
                                                 <td>
                                                     <a href="viewPostDetail?postID=${product.productID}&productType=accepted" class="view" title="View" data-toggle="tooltip"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                                     <a href="editPostAction?postID=${product.productID}&productType=accepted" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
-                                                    <a href="deletePost?postID=${product.productID}" class="delete" title="Delete" data-toggle="tooltip"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                                    <a href="deletePost?postID=${post.postID}" class="delete" title="Delete" data-toggle="tooltip"><i class="fa fa-times" aria-hidden="true"></i></a>
                                                 </td>
                                             </tr>
                                         </c:forEach>
