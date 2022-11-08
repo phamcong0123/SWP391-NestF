@@ -48,7 +48,7 @@
                             <div id="dropDownMenu" class="d-inline-block position-relative">
                                 <i class="fas fa-user me-2"></i>${sessionScope.USER.name}
                                 <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
-                                    <c:if test="${sessionScope.USER.role eq 'US'}">      
+                                         <c:if test="${not empty sessionScope.USER}">      
                                         <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>     
                                     </c:if>                                      
                                     <c:if test="${sessionScope.USER.role eq 'SE'}">           
@@ -91,7 +91,14 @@
         </div>
         <div class="col-11 m-auto p-4">
             <img class="w-50" src ="img/code400.jpg"/>
-        </div>
+        </div>                        
+        <c:if test="${sessionScope.USER.role eq 'AD'}">
+            <a href="dashboard">
+                <button type="button" id="dashboardRedirect" class="btn btn-floating btn-lg rounded-circle text-light position-fixed d-block"  data-bs-toggle="tooltip" data-bs-placement="right" title="DASHBOARD">
+                    <i class="fa-solid fa-shop"></i>
+                </button>
+            </a>
+        </c:if>
         <c:import url="footer.html" charEncoding="UTF-8"/>                              
     </body>
 

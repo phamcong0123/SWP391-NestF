@@ -3,35 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nestf.controller.AD;
+package com.nestf.controller.AD.nonactive;
 
-import com.nestf.category.CategoryDAO;
-import com.nestf.category.CategoryDTO;
-import com.nestf.dao.ADMIN.ProductDAOAdmin;
-import com.nestf.dao.ADMIN.SellerDAOAdmin;
 import com.nestf.dao.ADMIN.PostDAOAdmin;
-import com.nestf.product.ProductDTO;
-import com.nestf.account.AccountDTO;
-import com.nestf.dao.ADMIN.CustomerDAOAdmin;
-import com.nestf.post.PostDTO;
 import com.nestf.util.MyAppConstant;
 import java.io.IOException;
-import java.util.List;
+import java.sql.SQLException;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author DELL
+ * @author toanm
  */
-@WebServlet(name = "InitAttributeServlet", urlPatterns = {"/InitAttributeServlet"})
-public class InitAttributeServlet extends HttpServlet {
+@WebServlet(name = "AcceptPostServlet", urlPatterns = {"/AcceptPostServlet"})
+public class AcceptPostServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,37 +37,15 @@ public class InitAttributeServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException, NamingException {
         response.setContentType("text/html;charset=UTF-8");
         ServletContext context = request.getServletContext();
-
         Properties siteMap = (Properties) context.getAttribute("SITEMAP");
-        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.DASHBORAD_PAGE);
-
+        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.ACCEPTED_POST_PAGE);
         try {
-            HttpSession session = request.getSession();
-            List<CategoryDTO> listCategory = CategoryDAO.getListCategory();
-            session.setAttribute("LIST_CATEGORY", listCategory);
-            List<AccountDTO> listSeller = SellerDAOAdmin.getListSellerOnly();
-            session.setAttribute("LIST_SELLER", listSeller);
-            List<ProductDTO> listProduct = ProductDAOAdmin.getListActiveProduct();
-            session.setAttribute("LIST_PRODUCT", listProduct);
-            List<ProductDTO> listNonActicve = ProductDAOAdmin.getListNonActiveProduct();
-            session.setAttribute("LIST_PENDING", listNonActicve);
-            List<AccountDTO> listActiveCustomer = CustomerDAOAdmin.getAllCustomer();
-            session.setAttribute("LIST_CUSTOMER", listActiveCustomer);
-            List<AccountDTO> listBlockCustomer = CustomerDAOAdmin.getBlockCustomer();
-            session.setAttribute("BLOCK_CUSTOMER", listBlockCustomer);
-            
-            List<AccountDTO> manageSeller = SellerDAOAdmin.getListSellerIncome();
-            session.setAttribute("MANAGE_SELLER", manageSeller);
-            
-            List<PostDTO> listActivePost = PostDAOAdmin.getPostListActive();
-            session.setAttribute("LIST_POST", listActivePost);
-            List<PostDTO> listPending = PostDAOAdmin.getPostListNonActive();
-            session.setAttribute("LIST_PENDING_POST", listPending);
+            PostDAOAdmin dao = new PostDAOAdmin();
+            dao.acceptedPost(Integer.parseInt(request.getParameter("postID")));
         } catch (Exception e) {
-            log("Error at InitAttributeServlet: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
@@ -92,7 +64,13 @@ public class InitAttributeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(AcceptPostServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NamingException ex) {
+            Logger.getLogger(AcceptPostServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -106,7 +84,13 @@ public class InitAttributeServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(AcceptPostServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NamingException ex) {
+            Logger.getLogger(AcceptPostServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

@@ -3,16 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nestf.controller.AD;
+package com.nestf.controller.AD.active;
 
-import com.nestf.category.CategoryDAO;
-import com.nestf.category.CategoryDTO;
-import com.nestf.dao.ADMIN.ProductDAOAdmin;
-import com.nestf.dao.ADMIN.SellerDAOAdmin;
 import com.nestf.dao.ADMIN.PostDAOAdmin;
-import com.nestf.product.ProductDTO;
-import com.nestf.account.AccountDTO;
-import com.nestf.dao.ADMIN.CustomerDAOAdmin;
 import com.nestf.post.PostDTO;
 import com.nestf.util.MyAppConstant;
 import java.io.IOException;
@@ -28,10 +21,10 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author DELL
+ * @author toanm
  */
-@WebServlet(name = "InitAttributeServlet", urlPatterns = {"/InitAttributeServlet"})
-public class InitAttributeServlet extends HttpServlet {
+@WebServlet(name = "DeletePostServlet", urlPatterns = {"/DeletePostServlet"})
+public class DeletePostServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,38 +39,25 @@ public class InitAttributeServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         ServletContext context = request.getServletContext();
-
         Properties siteMap = (Properties) context.getAttribute("SITEMAP");
-        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.DASHBORAD_PAGE);
-
+        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.ACCEPTED_POST_PAGE);
         try {
             HttpSession session = request.getSession();
-            List<CategoryDTO> listCategory = CategoryDAO.getListCategory();
-            session.setAttribute("LIST_CATEGORY", listCategory);
-            List<AccountDTO> listSeller = SellerDAOAdmin.getListSellerOnly();
-            session.setAttribute("LIST_SELLER", listSeller);
-            List<ProductDTO> listProduct = ProductDAOAdmin.getListActiveProduct();
-            session.setAttribute("LIST_PRODUCT", listProduct);
-            List<ProductDTO> listNonActicve = ProductDAOAdmin.getListNonActiveProduct();
-            session.setAttribute("LIST_PENDING", listNonActicve);
-            List<AccountDTO> listActiveCustomer = CustomerDAOAdmin.getAllCustomer();
-            session.setAttribute("LIST_CUSTOMER", listActiveCustomer);
-            List<AccountDTO> listBlockCustomer = CustomerDAOAdmin.getBlockCustomer();
-            session.setAttribute("BLOCK_CUSTOMER", listBlockCustomer);
-            
-            List<AccountDTO> manageSeller = SellerDAOAdmin.getListSellerIncome();
-            session.setAttribute("MANAGE_SELLER", manageSeller);
-            
-            List<PostDTO> listActivePost = PostDAOAdmin.getPostListActive();
-            session.setAttribute("LIST_POST", listActivePost);
-            List<PostDTO> listPending = PostDAOAdmin.getPostListNonActive();
-            session.setAttribute("LIST_PENDING_POST", listPending);
+            int postID = Integer.parseInt(request.getParameter("postID"));
+            PostDAOAdmin dao = new PostDAOAdmin();
+            PostDTO post = dao.getPostListActiveByID(postID);
+            if (post != null) {
+                dao.disablePost(post);
+                List<PostDTO> listActivePost = PostDAOAdmin.getPostListActive();
+                session.setAttribute("LIST_POST", listActivePost);
+                List<PostDTO> listPending = PostDAOAdmin.getPostListNonActive();
+                session.setAttribute("LIST_PENDING_POST", listPending);
+                url = (String) siteMap.get(MyAppConstant.AdminFeatures.ACCEPTED_POST_PAGE);
+            }
         } catch (Exception e) {
-            log("Error at InitAttributeServlet: " + e.toString());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

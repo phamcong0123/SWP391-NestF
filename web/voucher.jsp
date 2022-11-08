@@ -75,7 +75,7 @@
                         <div id="dropDownMenu" class="d-inline-block position-relative">
                             <i class="fas fa-user me-2"></i>${sessionScope.USER.name}
                             <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
-                                <c:if test="${sessionScope.USER.role eq 'US'}">                                      
+                                     <c:if test="${not empty sessionScope.USER}">                                      
                                     <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>         
                                 </c:if>                                        <c:if test="${sessionScope.USER.role eq 'SE'}">              
                                     <a href="dashboard" class="nav-link mb-2 text-decoration-none p-2" id="item">Quản lý đơn hàng</a>       
@@ -176,6 +176,13 @@
         <button type="button" class="btn btn-floating btn-lg position-fixed rounded-circle text-light bottom-25" id="btn-back-to-top">
             <i class="fas fa-arrow-up"></i>
         </button>
+        <c:if test="${sessionScope.USER.role eq 'AD'}">
+            <a href="dashboard">
+                <button type="button" id="dashboardRedirect" class="btn btn-floating btn-lg rounded-circle text-light position-fixed d-block"  data-bs-toggle="tooltip" data-bs-placement="right" title="DASHBOARD">
+                    <i class="fa-solid fa-shop"></i>
+                </button>
+            </a>
+        </c:if>
         <c:import url="footer.html" charEncoding="UTF-8"/>  
         <script src="js/util.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
