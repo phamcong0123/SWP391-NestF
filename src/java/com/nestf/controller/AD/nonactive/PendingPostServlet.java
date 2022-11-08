@@ -6,17 +6,12 @@
 package com.nestf.controller.AD.nonactive;
 
 import com.nestf.dao.ADMIN.PostDAOAdmin;
-import com.nestf.post.PostDAO;
 import com.nestf.post.PostDTO;
 import com.nestf.util.MyAppConstant;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,8 +24,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author toanm
  */
-@WebServlet(name = "AcceptPostServlet", urlPatterns = {"/AcceptPostServlet"})
-public class AcceptPostServlet extends HttpServlet {
+@WebServlet(name = "PendingPostServlet", urlPatterns = {"/PendingPostServlet"})
+public class PendingPostServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -42,14 +37,14 @@ public class AcceptPostServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException, NamingException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         ServletContext context = request.getServletContext();
         Properties siteMap = (Properties) context.getAttribute("SITEMAP");
-        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.PENDING_POST_PAGE);
+        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.ACCEPTED_POST_PAGE);
         try {
             PostDAOAdmin dao = new PostDAOAdmin();
-            dao.acceptedPost(Integer.parseInt(request.getParameter("postID")));
+            dao.pendingPost(Integer.parseInt(request.getParameter("postID")));
             HttpSession session = request.getSession();
             List<PostDTO> listActivePost = PostDAOAdmin.getPostListActive();
             session.setAttribute("LIST_POST", listActivePost);
@@ -59,7 +54,6 @@ public class AcceptPostServlet extends HttpServlet {
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -74,13 +68,7 @@ public class AcceptPostServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(AcceptPostServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NamingException ex) {
-            Logger.getLogger(AcceptPostServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -94,13 +82,7 @@ public class AcceptPostServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(AcceptPostServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NamingException ex) {
-            Logger.getLogger(AcceptPostServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
