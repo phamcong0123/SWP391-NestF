@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nestf.controller.AD.prodile;
+package com.nestf.controller.AD.profile;
 
 import com.nestf.account.AccountDTO;
 import com.nestf.dao.ADMIN.SellerDAOAdmin;

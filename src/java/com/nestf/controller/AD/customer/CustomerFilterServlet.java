@@ -3,19 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nestf.controller.AD;
+package com.nestf.controller.AD.customer;
 
-import com.nestf.category.CategoryDAO;
-import com.nestf.category.CategoryDTO;
-import com.nestf.dao.ADMIN.ProductDAOAdmin;
-import com.nestf.dao.ADMIN.SellerDAOAdmin;
-import com.nestf.product.ProductDTO;
 import com.nestf.account.AccountDTO;
 import com.nestf.dao.ADMIN.CustomerDAOAdmin;
 import com.nestf.util.MyAppConstant;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
+import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,10 +24,10 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author DELL
+ * @author ADMIN
  */
-@WebServlet(name = "InitAttributeServlet", urlPatterns = {"/InitAttributeServlet"})
-public class InitAttributeServlet extends HttpServlet {
+@WebServlet(name = "CustomerFilterServlet", urlPatterns = {"/CustomerFilterServlet"})
+public class CustomerFilterServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,39 +38,52 @@ public class InitAttributeServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        response.setCharacterEncoding("utf-8");
         ServletContext context = request.getServletContext();
-
         Properties siteMap = (Properties) context.getAttribute("SITEMAP");
-        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.DASHBORAD_PAGE);
+        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.MANAGE_CUSTOMER_PAGE);
+        String btAction = request.getParameter("btAction");
 
+        boolean result = false;
         try {
             HttpSession session = request.getSession();
-            List<CategoryDTO> listCategory = CategoryDAO.getListCategory();
-            session.setAttribute("LIST_CATEGORY", listCategory);
-            List<AccountDTO> listSeller = SellerDAOAdmin.getListSellerOnly();
-            session.setAttribute("LIST_SELLER", listSeller);
-            List<ProductDTO> listProduct = ProductDAOAdmin.getListActiveProduct();
-            session.setAttribute("LIST_PRODUCT", listProduct);
-            List<ProductDTO> listNonActicve = ProductDAOAdmin.getListNonActiveProduct();
-            session.setAttribute("LIST_PENDING", listNonActicve);
-            List<AccountDTO> listActiveCustomer = CustomerDAOAdmin.getAllCustomer();
-            session.setAttribute("LIST_CUSTOMER", listActiveCustomer);
-            List<AccountDTO> listBlockCustomer = CustomerDAOAdmin.getBlockCustomer();
-            session.setAttribute("BLOCK_CUSTOMER", listBlockCustomer);
-            
-            List<AccountDTO> manageSeller = SellerDAOAdmin.getListSellerIncome();
-            session.setAttribute("MANAGE_SELLER", manageSeller);
-            
-        } catch (Exception e) {
-            log("Error at InitAttributeServlet: " + e.toString());
+            List<AccountDTO> listCustomer = null;
+            if (btAction.equals("all")) {
+                listCustomer = CustomerDAOAdmin.getAllCustomer();
+                session.setAttribute("LIST_CUSTOMER", listCustomer);
+            }
+            if (btAction.equals("xacnhan")) {
+                listCustomer = CustomerDAOAdmin.getConfirmBill(1);
+                request.setAttribute("SORT_CUSTOMER", listCustomer);
+            }
+            if (btAction.equals("layhang")) {
+                listCustomer = CustomerDAOAdmin.getConfirmBill(2);
+                request.setAttribute("SORT_CUSTOMER", listCustomer);
+            }
+            if (btAction.equals("danggiao")) {
+                listCustomer = CustomerDAOAdmin.getConfirmBill(3);
+                request.setAttribute("SORT_CUSTOMER", listCustomer);
+            }
+            if (btAction.equals("dagiao")) {
+                listCustomer = CustomerDAOAdmin.getConfirmBill(4);
+                request.setAttribute("SORT_CUSTOMER", listCustomer);
+            }
+            if (btAction.equals("dahuy")) {
+                listCustomer = CustomerDAOAdmin.getConfirmBill(5);
+                request.setAttribute("SORT_CUSTOMER", listCustomer);
+            }
+
+
+        } catch (SQLException e) {
+            log("Error at CustomerFilterServlet_SQL: " + e.getMessage());
+        } catch (NamingException e) {
+            log("Error at CustomerFilterServlet_Naming: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

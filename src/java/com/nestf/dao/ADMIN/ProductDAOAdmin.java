@@ -27,7 +27,7 @@ public class ProductDAOAdmin {
             + "Where p.categoryID = c.categoryID\n"
             + "And p.productID = ?";
 
-    public static final String GET_PRO_DETAIL = "SELECT ps.selPhone, pro.name, price, quantity, cat.categoryID, cat.categoryName, discountPrice, productDes, image, status, ac.name as selName\n"
+    public static final String GET_PRO_DETAIL = "SELECT ps.selPhone, pro.name, price, quantity, cat.categoryID, cat.categoryName, discountPrice, productDes, image, pro.status, ac.name as selName\n"
             + "FROM  tblProducts pro\n"
             + "INNER JOIN tblCategory cat\n"
             + "ON pro.categoryID = cat.categoryID\n"
@@ -72,6 +72,14 @@ public class ProductDAOAdmin {
     public static final String DEACTIVE_PRODUCT_SELLER = "UPdate tblProductSeller \n"
             + "SET isActive = 0\n"
             + "WHERE productID = ? AND selPhone = ? AND isActive = 1";
+
+    public static final String GET_LIST_PRODUCT_OF_SELLER = "SELECT p.productID, p.name, c.categoryName, p.price, p.discountPrice, p.quantity \n"
+            + "FROM tblProducts p\n"
+            + "Inner Join tblCategory c\n"
+            + "ON p.categoryID = c.categoryID\n"
+            + "INNER JOIN tblProductSeller s\n"
+            + "ON p.productID = s.productID \n"
+            + "WHERE p.status = 1 AND s.isActive = 1 AND s.selPhone = ?";
 
     public static final String REGEX = "-(ptth)";
     public static final String INSERT_REGEX = "-ptth";
@@ -355,7 +363,7 @@ public class ProductDAOAdmin {
                 if (affectRow > 0) {
                     updateProductWithSameSeller(dto);
 //                    5.1 Gán isActive = 1 cho seller mới
-                    insertNEWProductSeller(dto); 
+                    insertNEWProductSeller(dto);
                     return true;
                 }
 
@@ -450,38 +458,7 @@ public class ProductDAOAdmin {
         return false;
     }
 
-//    public static List<ProductDTO> getProductWithoutSeller() throws SQLException {
-//        List<ProductDTO> list = new ArrayList<>();
-//        Connection conn = null;
-//        PreparedStatement ptm = null;
-//        ResultSet rs = null;
-//        try {
-//            conn = DBHelper.makeConnection();
-//            if (conn != null) {
-//                ptm = conn.prepareStatement(GET_LIST_NON_ACTIVE);
-//                rs = ptm.executeQuery();
-//                while (rs.next()) {
-//                    int productID = Integer.parseInt(rs.getString("productID"));
-//                    int sellerID = Integer.parseInt(rs.getString("sellerID"));
-//                    String name = rs.getString("name");
-//                    float price = Float.parseFloat(rs.getString("price"));
-//                    int quantity = Integer.parseInt(rs.getString("quantity"));
-//                    String category = rs.getString("categoryName");
-//                    float discountPrice = Float.parseFloat(rs.getString("discountPrice"));
-//                    String productDes = rs.getString("productDes");
-//                    String image = rs.getString("image");
-//                    list.add(new ProductDTO(productID, sellerID, name, price, quantity, category, discountPrice, productDes, image, "."));
-//                }
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        } finally {
-//            if (rs != null) rs.close();
-//            if (ptm != null) ptm.close();
-//            if (conn != null) conn.close();
-//        }
-//        return list;
-//    }
+
     public static boolean acceptProduct(ProductDTO dto) throws SQLException, NamingException {
         Connection con = null;
         PreparedStatement statement = null;
@@ -519,44 +496,6 @@ public class ProductDAOAdmin {
         return false;
     }
 
-//    public boolean deactiveProductSeller(ProductDTO dto) throws SQLException, NamingException {
-//        Connection con = null;
-//        PreparedStatement statement = null;
-//        if (dto == null) {
-//            return false;
-//        }
-//
-//        try {
-////            1. make connection
-//            con = DBHelper.makeConnection();
-//
-////            2. Create sql string 
-//            if (con != null) {
-//                statement = con.prepareStatement(DEACTIVE_PRODUCT_SELLER);
-//                statement.setInt(1, dto.getProductID());
-//                statement.setString(2, dto.getSelPhone());
-//
-////          4. Execute Query
-//                int affectRow = statement.executeUpdate();
-//
-////          5. Process result
-//                if (affectRow > 0) {
-//                    return true;
-//                }
-//
-//            }// end if connection is not null
-//
-//        } finally {
-//            if (statement != null) {
-//                statement.close();
-//            }
-//            if (con != null) {
-//                con.close();
-//            }
-//        }
-//        return false;
-//    }
-
     private int getProductIDInDB(ProductDTO dto) throws SQLException, NamingException {
         Connection con = null;
         ResultSet rs = null;
@@ -581,7 +520,7 @@ public class ProductDAOAdmin {
                         + "AND p.productDes = ? \n"
                         + "AND p.image = ?\n"
                         + "AND p.status = ?\n";
-                
+
                 statement = con.prepareStatement(GET_PRODUCTID_IN_DB);
                 statement.setString(1, dto.getName());
                 statement.setFloat(2, (float) dto.getPrice());
@@ -591,7 +530,7 @@ public class ProductDAOAdmin {
                 statement.setString(6, dto.getProductDes());
                 statement.setString(7, dto.getImage());
                 statement.setBoolean(8, dto.isStatus());
-                
+
 //          4. Execute Query
                 rs = statement.executeQuery();
 
@@ -611,6 +550,41 @@ public class ProductDAOAdmin {
             }
         }
         return 0;
+    }
+    
+    public static List<ProductDTO> getListProductOfSeller(String phone) throws SQLException, NamingException {
+        List<ProductDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_LIST_PRODUCT_OF_SELLER);
+                ptm.setString(1, phone);
+                rs = ptm.executeQuery();
+                while (rs.next()) { //SELECT p.name, c.categoryName, p.price, p.discountPrice, p.quantity
+                    int productID = Integer.parseInt(rs.getString("productID"));
+                    String name = rs.getString("name");
+                    String categoryName = rs.getString("categoryName");
+                    float price = Float.parseFloat(rs.getString("price"));
+                    float discountPrice = Float.parseFloat(rs.getString("discountPrice"));
+                    int quantity = Integer.parseInt(rs.getString("quantity"));                    
+                    list.add(new ProductDTO(productID, name, new CategoryDTO(categoryName), price, discountPrice, quantity));
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
     }
 
 }

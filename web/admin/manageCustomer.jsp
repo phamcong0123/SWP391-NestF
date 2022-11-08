@@ -7,14 +7,13 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix = "f" uri = "http://java.sun.com/jsp/jstl/fmt" %>
-
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="icon" href="img/logo.png" type="image/x-icon" />
-        <title>Manage Seller</title>
+        <title>Accepted Product</title>
 
         <!-- Custom fonts for this template-->
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -24,8 +23,7 @@
 
         <!-- Custom styles for this template-->
         <link href="css/sb-admin-2.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
-        <link rel="stylesheet" href="admin/css/register.css">
+
     </head>
     <body id="page-top">
         <!--///////////////Bắt đầu phần Chung//////////////////////////////////////////////////////////-->
@@ -62,7 +60,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="adminProfilePage">
                             <i class="fa fa-cog fa-chart-area"></i>
-                            <span>Edit Profile</span></a>
+                            <span>Edit profile</span></a>
                     </li>
 
                     <!-- Divider -->
@@ -73,13 +71,13 @@
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProducts"
                            aria-expanded="true" aria-controls="collapseProducts">
                             <i class="fa fa-cube"></i>
-                            <span>Product</span>
+                            <span>Products</span>
                         </a>
                         <div id="collapseProducts" class="collapse" aria-labelledby="headingProducts"
                              data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">List product:</h6>
-                                <a class="collapse-item" href="addNewProductPage">Add new product</a>
+                                <h6 class="collapse-header">List products:</h6>
+                                <a class="collapse-item" href="addNewProductPage">Add new products</a>
                                 <a class="collapse-item" href="accpetedProductPage">Active products</a>
                                 <a class="collapse-item" href="pendingProductPage">Non-active products</a>
                             </div>
@@ -94,13 +92,13 @@
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                            aria-expanded="true" aria-controls="collapseTwo">
                             <i class="fa fa-users"></i>
-                            <span>Users</span>
+                            <span>User</span>
                         </a>
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">Manage: </h6>
-                                <a class="collapse-item" href="manageSellerPage">Seller</a>
-                                <a class="collapse-item" href="manageCustomerPage">Customer</a>
+                                <h6 class="collapse-header">Manage :</h6>
+                                <a class="collapse-item" href="manageSellerPage">Sellers</a>
+                                <a class="collapse-item" href="manageCustomerPage">Customers</a>
                             </div>
                         </div>
                     </li>
@@ -361,100 +359,150 @@
 
                         <!-- Begin Page Content -->
                         <div class="container-fluid">
-                            <!--//////////////////////////////////////////////////////Kết thúc phần Chung//////////////////////////////////////////////////////////-->
-
+                            <!--//////////////////////////////////////////////////////Kết thúc phần Chung/////////////////-->
                             <!-- Page Heading -->
-                            <div class="d-sm-flex align-items-center justify-content-between row mb-4">
+                            <div class="d-sm-flex align-items-center justify-content-between mb-4 row">
                                 <div class="col-9">
-                                    <h1 class="h3 mb-0 text-gray-800 col-9">Manage seller</h1>
+                                    <h1 class="h3 mb-0 text-gray-800 col-9">List customer</h1> 
                                 </div>
-                                <!--Home page popup button-->
                                 <div class="col-3 ">
-                                    <div class="float-right start-btn">
-                                        <input type="checkbox" id="show">
-                                        <input type="button" class="show-btn btn btn-dark" onclick="openForm()" value="Add new seller"></input>
+                                    <div class="dropdown float-right">
+                                        <button class="btn btn-dark dropdown-toggle" type="button" data-toggle="dropdown">Filter
+                                            <span class="caret"></span></button>
+                                        <ul class="dropdown-menu px-3 bg-white text-gray-100">
+                                            <li class="my-2"><a href="customerFilter?btAction=all">Tất cả</a></li>
+                                            <li class="my-2"><a href="customerFilter?btAction=xacnhan">Chờ xác nhận</a></li>
+                                            <li class="my-2"><a href="customerFilter?btAction=layhang">Chờ lấy hàng</a></li>
+                                            <li class="my-2"><a href="customerFilter?btAction=danggiao">Đang giao</a></li>
+                                            <li class="my-2"><a href="customerFilter?btAction=dagiao">Đã giao</a></li>
+                                            <li class="my-2"><a href="customerFilter?btAction=dahuy">Đã hủy</a></li>
+                                        </ul>
                                     </div>
                                 </div>
-                            </div>
-                            <div id="container-register" style="display: none">
-                                <input type="button" class="close-btn" title="close" onclick="closeForm()" value="X"></input>
-                                <div class="text">
-                                    Create new seller
-                                </div>
-                                <form action="AddNewSeller">
-                                    <div class="data">
-                                        <label>Full Name</label>
-                                        <input type="text" required  name="name" required minlength="6" maxlength="30" placeholder="6 - 30 ký tự">
-                                    </div>
-                                    <div class="data sencondchild">
-                                        <label>Gender</label>
-                                        <span class="gender" style="white-space: nowrap;">
-                                            <input type="radio" id="male" checked="" name="gender" value="1">
-                                            <label for="male">Nam&emsp;</label>
-                                            <input type="radio" id="female" name="gender" value="0">
-                                            <label for="female">Nữ</label>
-                                        </span>
-                                    </div>
-                                    <div class="data">
-                                        <label>Phone number</label>
-                                        <input type="number"  name="phone" required minlength="10" maxlength="11" placeholder="10 - 11 chữ số">
-                                    </div>
-                                    <div class="data">
-                                        <label>Password</label>
-                                        <input type="password" required minlength="6" maxlength="20" id="password" placeholder="6 - 20 ký tự">
-                                    </div>
-                                    <div class="data">
-                                        <label>Confirm Password</label>
-                                        <input type="password" name="confirm" required minlength="6" maxlength="20" id="confirm" onblur="validate();">
-                                    </div>
-                                    <div class="data">
-                                        <label>Address</label>
-                                        <input type="text" name="address" required minlength="10" maxlength="70" placeholder="20 - 70 ký tự">
-                                    </div>
-                                    <div class="btn btn-dark">
-                                        <div class="inner"></div>
-                                        <button type="submit">Create</button>
-                                    </div>
-                                </form>
                             </div>
 
                             <!-- Content Row -->
-                            <c:if test="${not empty sessionScope.MANAGE_SELLER}">
+
+                            <c:if test="${empty requestScope.SORT_CUSTOMER}">
+                                <c:if test="${not empty sessionScope.LIST_CUSTOMER}">
+                                    <table class="table table-striped table-hover table-bordered">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>Name</th>
+                                                <th>Phone</th>
+                                                <th>Address</th>
+                                                <th>Bill ID</th>
+                                                <th>Bill Status</th>
+                                                <th>Total(VND)</th>
+                                                <th>Cancel Reason</th>
+                                                <th>Block</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="customer" items="${sessionScope.LIST_CUSTOMER}">
+                                                <tr class="text-center">
+                                                    <td>${customer.name}</td>
+                                                    <td>${customer.phone}</td>
+                                                    <td>${customer.address}</td>
+                                                    <td>${customer.billID}</td>
+                                                    <td>${customer.billStatus}</td>
+                                                    <td><f:formatNumber  maxIntegerDigits="7" minIntegerDigits="2" value="${customer.total}" var="formattedPrice" />${customer.total}</td>
+                                                    <td>${customer.cancelReason}</td>
+                                                    <td>
+                                                        <c:if test="${customer.status}">
+                                                            <a href="blockCustomerAction?phone=${customer.phone}&btAction=block" class="btn btn-danger">Block</a>
+                                                        </c:if>
+                                                        <c:if test="${not customer.status}">
+                                                            <a href="blockCustomerAction?phone=${customer.phone}&btAction=unblock" class="btn btn-dark">Unblock</a>
+                                                        </c:if>
+                                                    </td>
+                                                </tr>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </c:if>
+                            </c:if>
+
+                            <c:if test="${not empty requestScope.SORT_CUSTOMER}">
                                 <table class="table table-striped table-hover table-bordered">
                                     <thead>
                                         <tr class="text-center">
                                             <th>Name</th>
                                             <th>Phone</th>
                                             <th>Address</th>
-                                            <th>Revenue(VND)</th>
+                                            <th>Bill ID</th>
+                                            <th>Bill Status</th>
+                                            <th>Total(VND)</th>
+                                            <th>Cancel Reason</th>
                                             <th>Block</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="seller" items="${sessionScope.MANAGE_SELLER}">
+                                        <c:forEach var="customer" items="${requestScope.SORT_CUSTOMER}">
                                             <tr class="text-center">
-                                                <td><a class="text-decoration-none" href="showProduct?phone=${seller.phone}">${seller.name}</td>
-                                                <td>${seller.phone}</td>
-                                                <td>${seller.address}</td>
-                                                <td><f:formatNumber  maxIntegerDigits="7" minIntegerDigits="2" value="${seller.total}" var="formattedPrice" />${seller.total}</td>
+                                                <td>${customer.name}</td>
+                                                <td>${customer.phone}</td>
+                                                <td>${customer.address}</td>
+                                                <td>${customer.billID}</td>
+                                                <td>${customer.billStatus}</td>
+                                                <td><f:formatNumber  maxIntegerDigits="7" minIntegerDigits="2" value="${customer.total}" var="formattedPrice" />${customer.total}</td>
+                                                <td>${customer.cancelReason}</td>
                                                 <td>
-                                                    <c:if test="${seller.status}">
-                                                        <a href="blockCustomerAction?phone=${seller.phone}&btAction=block" class="btn btn-danger">Block</a>
+                                                    <c:if test="${customer.status}">
+                                                        <a href="blockCustomerAction?phone=${customer.phone}&btAction=block" class="btn btn-danger">Block</a>
                                                     </c:if>
-
-                                                    <c:if test="${not seller.status}">
-                                                        <a href="blockCustomerAction?phone=${seller.phone}&btAction=unblock" class="btn btn-dark">Unblock</a>
+                                                    <c:if test="${not customer.status}">
+                                                        <a href="blockCustomerAction?phone=${customer.phone}&btAction=unblock" class="btn btn-dark">Unblock</a>
                                                     </c:if>
                                                 </td>
                                             </tr>
                                         </c:forEach>
                                     </tbody>
                                 </table>
-                            </c:if>                   
-                            <!--End of Content Row -->
-                        </div>
-                        <!-- End of Content Wrapper -->
+                            </c:if>
+                            <br/>
 
+                            <!--BLock List -->
+                            <c:if test="${empty requestScope.SORT_CUSTOMER}">
+                                <c:if test="${not empty sessionScope.BLOCK_CUSTOMER}">
+                                    <h1 class="h3 mb-0 text-gray-800 col-9">Block customer</h1> 
+                                    <br>
+
+                                    <table class="table table-striped table-hover table-bordered">
+                                        <thead>
+                                            <tr class="text-center">
+                                                <th>Name</th>
+                                                <th>Phone</th>
+                                                <th>Address</th>
+                                                <th>Bill ID</th>
+                                                <th>Bill Status</th>
+                                                <th>Total(VND)</th>
+                                                <th>Cancel Reason</th>
+                                                <th>Block</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="customer" items="${sessionScope.LIST_CUSTOMER}">
+                                                <c:if test="${not customer.status}">
+                                                    <tr class="text-center">
+                                                        <td>${customer.name}</td>
+                                                        <td>${customer.phone}</td>
+                                                        <td>${customer.address}</td>
+                                                        <td>${customer.billID}</td>
+                                                        <td>${customer.billStatus}</td>
+                                                        <td><f:formatNumber  maxIntegerDigits="7" minIntegerDigits="2" value="${customer.total}" var="formattedPrice" />${customer.total}</td>
+                                                        <td>${customer.cancelReason}</td>
+                                                        <td>
+                                                            <a href="blockCustomerAction?phone=${customer.phone}&btAction=unblock" class="btn btn-dark">Unblock</a>
+                                                        </td>
+                                                    </tr>
+                                                </c:if>
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </c:if>
+                            </c:if>
+                        </div>
                     </div>
                     <!-- End of Page Wrapper -->
 
@@ -509,18 +557,7 @@
             <!-- Page level custom scripts -->
             <script src="js/demo/chart-area-demo.js"></script>
             <script src="js/demo/chart-pie-demo.js"></script>
-
-            <script src="./js/nestf.js"></script>
-
-            <script>
-                                            function openForm() {
-                                                document.getElementById("container-register").style.display = "block";
-                                            }
-
-                                            function closeForm() {
-                                                document.getElementById("container-register").style.display = "none";
-                                            }
-            </script>
         </c:if>
+
     </body>
 </html>

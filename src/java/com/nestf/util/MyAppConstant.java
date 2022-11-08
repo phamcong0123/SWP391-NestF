@@ -44,5 +44,7 @@ public class MyAppConstant implements Serializable {
         public static final String EDIT_PRODUCT_PAGE = "editProductPage";
         public static final String PENDING_PRODUCT_PAGE = "pendingProductPage";
         
+//        User
+        public static final String MANAGE_CUSTOMER_PAGE = "manageCustomerPage";
     }      
 }
