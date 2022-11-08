@@ -227,12 +227,6 @@ footer span {
 .product-title{
     height:2rem;
 }
-
-#remove-button{
-    top:0%;
-    left: 95%;
-    width: max-content;
-}
 #btn-back-to-top{
     display: none;
     background-color: #4B5548;
@@ -258,4 +252,12 @@ footer span {
     top: 15%;
     left: 4%;
     background-color: #4B5548;
+}
+#remove-button{
+    top:20px;
+    right: 20px;
+    width: max-content;
+}
+input[name=cancelReason]{
+    margin-bottom: 20px;
 }

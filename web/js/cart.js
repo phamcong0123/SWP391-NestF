@@ -98,24 +98,38 @@ $('#triggerFail').click(function () {
 function calculateTotal() {
     var cartTotal = 0;
     var products = document.getElementsByName('productID');
-    for (let i = 0; i < products.length; i++) {
-        var parentForm = products[i].parentElement;
+    if (products.length > 0) {
+        for (let i = 0; i < products.length; i++) {
+            var parentForm = products[i].parentElement;
 //        console.log(parentForm);
-        var price = $(parentForm).find('input[name=price]').val();
-        var quantity = $(parentForm).find('#number-input').val();
-        var thisTotal = price*quantity;
-        $(parentForm).find('#thisProductTotal').html(new Intl.NumberFormat('de-DE', {style: 'currency', currency: 'VND'}).format(thisTotal));
-        cartTotal += thisTotal;
+            var price = $(parentForm).find('input[name=price]').val();
+            var quantity = $(parentForm).find('#number-input').val();
+            var thisTotal = price * quantity;
+            $(parentForm).find('#thisProductTotal').html(new Intl.NumberFormat('de-DE', {style: 'currency', currency: 'VND'}).format(thisTotal));
+            cartTotal += thisTotal;
+        }
+        var voucherId = document.getElementById('voucher-use').value;
+        if (voucherId != "") {
+            var saleMargin = document.getElementById('saleMargin').value;
+            cartTotal -= saleMargin;
+        }
+        document.getElementById('total-display').innerHTML = new Intl.NumberFormat('de-DE', {style: 'currency', currency: 'VND'}).format(cartTotal);
+        console.log(cartTotal);
     }
-    var voucherId = document.getElementById('voucher-use');
-    if (voucherId.value != ""){
-        var saleMargin = document.getElementById('saleMargin').value;
-        cartTotal -= saleMargin;
-    }
-    document.getElementById('total-display').innerHTML = new Intl.NumberFormat('de-DE', {style: 'currency', currency: 'VND'}).format(cartTotal);
-    console.log(cartTotal);
 }
 $(document).ready(function () {
     calculateTotal();
+    var reasons = document.getElementsByName('cancelReason');
+    for (var i = 0; i < reasons.length; i++) {
+        getReason(reasons[i]);
+    }
 }
 );
+function getReason(reason) {
+    var value = $('label[for=' + reason.id + ']').text();
+    $(reason).val(value);
+}
+function loadCancelForm(button) {
+    var billID = $(button).find('input[name=billID').val();
+    $('form[action=cancelBill]').find('input[name=billID').val(billID);
+}

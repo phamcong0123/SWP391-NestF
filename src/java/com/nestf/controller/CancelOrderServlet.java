@@ -42,15 +42,17 @@ public class CancelOrderServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
         String url = ERROR;
         try {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession(false);
             AccountDTO customer = (AccountDTO) session.getAttribute("USER");
             String phone = customer.getPhone();
-            int billID = Integer.parseInt(request.getParameter("billID"));           
+            int billID = Integer.parseInt(request.getParameter("billID")); 
+            String cancelReason = request.getParameter("cancelReason");
             BillDAO dao = new BillDAO();         
-            if (dao.cancelOrder(billID, phone)){
+            if (dao.cancelOrder(billID, phone, cancelReason)){
                 url = LOAD_BILL;
             }
         } catch (NamingException ex) {

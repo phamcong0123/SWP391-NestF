@@ -27,14 +27,13 @@ public class SendSmsServlet extends HttpServlet {
 
     public static final String ACCOUNT_SID = "AC18fbe6abbf5bde29bdcec02de4d9741b";
     public static final String AUTH_TOKEN = "eb60b0243f3cc32b6441c6e1ee5c37cd";
-    private static final String SUCCESS = "login.jsp";
     private static final String ERROR = "error.jsp";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         Twilio.init(ACCOUNT_SID, AUTH_TOKEN);
-        String url = ERROR;
+        String result = "notfound";
         try {
             String phone = request.getParameter("phone");
             AccountDAO dao = new AccountDAO();
@@ -44,14 +43,14 @@ public class SendSmsServlet extends HttpServlet {
                 String newConvert = "+84" + convert;
                 Message message = Message.creator(new PhoneNumber(newConvert),
                         new PhoneNumber("+19302033329"),
-                        "Mật khẩu của bạn là: " + acc.getPassword() + " .\nXin vui lòng đừng chia sẻ cho ai khác.").create();
+                        "Mật khẩu của bạn là: " + acc.getPassword() + " .\nXin vui lòng không chia sẻ cho ai khác.").create();
                 System.out.println(message.getSid());
-                url = SUCCESS;
+                result = "sent";
             }
         } catch (Exception e) {
-            log("Error at LoginController: " + e.toString());
+            log("Error at SendSMSController: " + e.toString());
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            response.getWriter().write(result);
         }
 
     }

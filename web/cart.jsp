@@ -18,9 +18,6 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
         <link href="css/nestf.css" rel="stylesheet">
-        <script>
-            window.window.history.forward();
-        </script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.1/js/bootstrap.min.js" integrity="sha512-vyRAVI0IEm6LI/fVSv/Wq/d0KUfrg3hJq2Qz5FlfER69sf3ZHlOrsLriNm49FxnpUGmhx+TaJKwJ+ByTLKT+Yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </head>
@@ -51,7 +48,7 @@
                         <div id="dropDownMenu" class="d-inline-block position-relative">
                             <i class="fas fa-user me-2"></i>${sessionScope.USER.name}
                             <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
-                                     <c:if test="${not empty sessionScope.USER}"> 
+                                <c:if test="${not empty sessionScope.USER}"> 
                                     <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>     
                                 </c:if>                                  
                                 <c:if test="${sessionScope.USER.role eq 'SE'}">     
@@ -180,7 +177,7 @@
                                 </span>
                                 <input type="hidden" id="saleMargin" value="0">
                                 <form action="checkOutAction" method="POST">
-                                    <input type="hidden" id="voucher-use" name="voucher-use">
+                                    <input type="hidden" id="voucher-use" name="voucher-use" value="">
                                     <button type="submit" id="buy-button" class="btn ms-auto mt-0 me-5" data-bs-toggle="modal" data-bs-target="#checkOutModal">Thanh toán</button>
                                 </form>              
                             </div>                                                                     
@@ -238,9 +235,51 @@
                                                 </div>
                                             </c:forEach>                                          
                                             <h4 class="text-end">Thành tiền: <b>${formatPrinter.printMoney(bill.total)}</b></h4>       
-                                            <a href="cancelBill?billID=${bill.billID}" id="remove-button" class="mt-3 nav-link position-absolute"><i class="fa-solid fa-xmark fa-2xl me-0"></i></a> 
+                                            <button id="remove-button" class="p-0 position-absolute border-0" data-bs-toggle="modal" data-bs-target="#cancelModal" onclick="loadCancelForm(this)">
+                                                <input type="hidden" name="billID" value="${bill.billID}"/>
+                                                <i class="fa-solid fa-xmark fa-2xl me-0"></i>
+                                            </button> 
                                         </div>
                                     </c:forEach>
+                                    <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelThis" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-scrollable">
+                                            <div class="modal-content">
+                                                <form action="cancelBill" method="post">
+                                                    <input type="hidden" name="billID">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title m-3" id="cancelThis">Chọn lý do huỷ đơn</h5>
+                                                        <button type="button" class="btn-close m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="col-11 border border-warning m-auto mt-3 alert alert-warning" role="alert">
+                                                            <div class="row m-0 container-fluid">
+                                                                <div class="col-1 text-center d-flex justify-content-center align-items-center"><i class="fa-solid fa-circle-exclamation"></i></div>
+                                                                <div class="col-11 mt-2 mb-2">Lưu ý: Thao tác này sẽ huỷ tất cả các sản phẩm có trong đơn hàng và không thể hoàn tác</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="m-4">
+                                                            <input type="radio" id="reason1" checked name="cancelReason" value=""/>
+                                                              <label for="reason1">Muốn thay đổi địa chỉ giao hàng</label><br>
+                                                            <input type="radio" id="reason2" name="cancelReason" value=""/>
+                                                              <label for="reason2">Muốn sử dụng voucher</label><br>
+                                                            <input type="radio" id="reason3" name="cancelReason" value=""/>
+                                                              <label for="reason3">Muốn thay đổi sản phẩm trong đơn hàng</label><br>
+                                                            <input type="radio" id="reason4" name="cancelReason" value=""/>
+                                                              <label for="reason4">Tìm thấy giá rẻ hơn ở nơi khác</label><br>
+                                                            <input type="radio" id="reason5" name="cancelReason" value=""/>
+                                                              <label for="reason5">Đổi ý, không muốn mua nữa</label><br>
+                                                            <input type="radio" id="reason6" name="cancelReason" value=""/>
+                                                              <label for="reason6"><input type="text" class="p-0" placeholder="Lý do khác..."/></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn bg-secondary" id="buy-button" data-bs-dismiss="modal">Không phải bây giờ</button>
+                                                        <button type="submit" class="btn" id="buy-button">Xác nhận huỷ</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </c:if>
                                 <c:if test="${empty requestScope.PROCESSING}">
                                     <div class="mt-5">

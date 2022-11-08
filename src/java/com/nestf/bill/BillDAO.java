@@ -25,40 +25,53 @@ import javax.naming.NamingException;
  * @author Admin
  */
 public class BillDAO {
+
     private List<BillDTO> bills;
 
     public List<BillDTO> getBills() {
         return bills;
     }
-    public BillDTO validOnProcessingOrder(int billID, String phone) throws NamingException, SQLException{
+
+    public BillDTO validOnProcessingOrder(int billID, String phone) throws NamingException, SQLException {
         getMyAllBills(phone);
-        List<BillDTO> onProcessing = getThisStatusBills(bills, 1);
-        onProcessing.addAll(getThisStatusBills(bills, 2));
+        List<BillDTO> onProcessing = getThisStatusBills(bills, 1, 2);
         for (BillDTO bill : onProcessing) {
-            if (bill.getBillID() == billID) return bill;
+            if (bill.getBillID() == billID) {
+                return bill;
+            }
         }
         return null;
     }
-    public boolean cancelOrder(int billID, String phone) throws NamingException, SQLException{
+
+    public boolean cancelOrder(int billID, String phone, String cancelReason) throws NamingException, SQLException {
         boolean check = false;
         BillDTO bill = validOnProcessingOrder(billID, phone);
-        if (bill == null){
+        if (bill == null) {
             return check;
         }
-        if (bill.getStatus().getStatusID() > 2) return check;
-        if (updateOrderStatus(billID, 5)) check = true;
+        if (bill.getStatus().getStatusID() > 2) {
+            return check;
+        }
+        if (updateOrderStatus(billID, 5)) {
+            addCancelReason(billID, cancelReason);
+            check = true;
+        }
         return check;
     }
-    public List<BillDTO> getThisStatusBills(List<BillDTO> bills, int statusID){
+
+    public List<BillDTO> getThisStatusBills(List<BillDTO> bills, int... statusIDs) {
         List<BillDTO> atStatusBills = new ArrayList<>();
         for (BillDTO bill : bills) {
-            if (bill.getStatus().getStatusID() == statusID){
-                atStatusBills.add(bill);
+            for (int i = 0; i < statusIDs.length; i++) {
+                if (bill.getStatus().getStatusID() == statusIDs[i]) {
+                    atStatusBills.add(bill);
+                    break;
+                }
             }
         }
         return atStatusBills;
     }
-    final String ALL_BILL = "SELECT billID, address, transactionID, statusID, time, total FROM tblBill WHERE cusPhone = ? ORDER BY time DESC";
+    final String ALL_BILL = "SELECT billID, address, transactionID, statusID, time, total, cancelReason FROM tblBill WHERE cusPhone = ? ORDER BY time DESC";
 
     public void getMyAllBills(String phone) throws NamingException, SQLException {
         Connection con = null;
@@ -81,7 +94,8 @@ public class BillDAO {
                     StatusDTO status = statusDAO.getStatus(statusID);
                     Date date = new Date(rs.getTimestamp("time").getTime());
                     Double total = rs.getDouble("total");
-                    BillDTO dto = new BillDTO(billID, phone, address, transactionID, status, date, total, billDetail);
+                    String cancelReason = rs.getNString("cancelReason");
+                    BillDTO dto = new BillDTO(billID, phone, address, transactionID, status, date, total, cancelReason, billDetail);
                     if (bills == null) {
                         bills = new ArrayList<>();
                     }
@@ -100,9 +114,9 @@ public class BillDAO {
             }
         }
     }
-    final String CHECK_OUT = "INSERT tblBill([cusPhone], [address],[transactionID], [statusID], [total]) VALUES (?,?,?,1,?) ";
+    final String CHECK_OUT = "INSERT tblBill([cusPhone], [address],[transactionID], [statusID], [time], [total]) VALUES (?,?,?,1, GETDATE(),?) ";
 
-    public int checkOut(String phone, String address,String transactionID, double total) {
+    public int checkOut(String phone, String address, String transactionID, double total) {
 // statusID
 //=1:Chờ xác nhận
 //=2:Chờ lấy hàng
@@ -123,7 +137,9 @@ public class BillDAO {
                 ptm.setDouble(4, total);
                 int check = ptm.executeUpdate();
                 if (check > 0) {
-                    if (ptm.getGeneratedKeys().next()) billID = ptm.getGeneratedKeys().getInt(1);
+                    if (ptm.getGeneratedKeys().next()) {
+                        billID = ptm.getGeneratedKeys().getInt(1);
+                    }
                 }
             }
         } catch (Exception e) {
@@ -131,22 +147,50 @@ public class BillDAO {
         }
         return billID;
     }
-    private final String CANCEL = "UPDATE tblBill SET statusID = ? WHERE billID = ?";
-    public boolean updateOrderStatus(int billID, int statusID) throws NamingException, SQLException{
+    private final String UPDATE = "UPDATE tblBill SET statusID = ? WHERE billID = ?";
+
+    public boolean updateOrderStatus(int billID, int statusID) throws NamingException, SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
-        try{
+        try {
             conn = DBHelper.makeConnection();
-            if (conn != null){
-                ptm = conn.prepareStatement(CANCEL);
-                ptm.setInt(1, statusID);    
+            if (conn != null) {
+                ptm = conn.prepareStatement(UPDATE);
+                ptm.setInt(1, statusID);
                 ptm.setInt(2, billID);
                 check = ptm.executeUpdate() > 0;
             }
         } finally {
-            if (ptm != null) ptm.close();
-            if (conn != null) conn.close();
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return check;
+    }
+    private final String CANCEL = "UPDATE tblBill SET cancelReason = ? WHERE billID = ?";
+    public boolean addCancelReason(int billID, String cancelReason) throws NamingException, SQLException{
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(CANCEL);
+                ptm.setString(1, cancelReason);
+                ptm.setInt(2, billID);
+                check = ptm.executeUpdate() > 0;
+            }
+        } finally {
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
         }
         return check;
     }

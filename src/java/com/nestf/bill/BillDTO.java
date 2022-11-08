@@ -24,6 +24,15 @@ public class BillDTO implements Serializable {
     private StatusDTO status;
     private Date time;
     private double total;
+    private String cancelReason;
+
+    public void setCancelReason(String cancelReason) {
+        this.cancelReason = cancelReason;
+    }
+
+    public String getCancelReason() {
+        return cancelReason;
+    }
     private List<BillDetailDTO> detail;
 
     public BillDTO() {
@@ -40,13 +49,18 @@ public class BillDTO implements Serializable {
         this.detail = detail;
     }
 
-    public BillDTO(String cusPhone, String address, String transactionID, double total) {
+    public BillDTO(int billID, String cusPhone, String address, String transactionID, StatusDTO status, Date time, double total, String cancelReason, List<BillDetailDTO> detail) {
+        this.billID = billID;
         this.cusPhone = cusPhone;
         this.address = address;
         this.transactionID = transactionID;
+        this.status = status;
+        this.time = time;
         this.total = total;
+        this.cancelReason = cancelReason;
+        this.detail = detail;
     }
-
+   
     public void setBillID(int billID) {
         this.billID = billID;
     }

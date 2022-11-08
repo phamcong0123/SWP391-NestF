@@ -106,7 +106,7 @@
                         </ul>
                     </div>     
                     <div class="d-inline-block col-7">
-                        <h2 class="text-center">${productDetail.name}</h2>
+                        <span class="text-center fs-2 mt-3 mb-2 d-block fw-bold">${productDetail.name}</span>
                         <span class="d-inline-block pb-3 fs-5 text-danger">
                             <c:if test="${productDetail.discountPrice ne 0}">
                                 ${productFunc.printPrice(productDetail.discountPrice)}

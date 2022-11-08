@@ -51,8 +51,7 @@ public class LoadBillServlet extends HttpServlet {
             BillDAO billDAO = new BillDAO();
             billDAO.getMyAllBills(phone);
             List<BillDTO> allBills = billDAO.getBills();
-            List<BillDTO> onProcessing = billDAO.getThisStatusBills(allBills, 1);
-            onProcessing.addAll(billDAO.getThisStatusBills(allBills, 2));
+            List<BillDTO> onProcessing = billDAO.getThisStatusBills(allBills, 1, 2);
             request.setAttribute("PROCESSING", onProcessing);
             List<BillDTO> onDelivering = billDAO.getThisStatusBills(allBills, 3);
             request.setAttribute("DELIVERING", onDelivering);

@@ -56,7 +56,7 @@ public class BillDetailDAO {
         }
         return list;
     }
-    private final String INSERT = "INSERT tblBillDetail VALUES ( ?, ?, ?, ?, ?)";
+    private final String INSERT = "INSERT tblBillDetail VALUES ( ?, ?, ?, ?, ?, ?)";
     public boolean insertBillDetail(BillDetailDTO billDetail) throws SQLException, NamingException{
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -70,6 +70,7 @@ public class BillDetailDAO {
                 ptm.setInt(3, billDetail.getQuantity());
                 ptm.setDouble(4, billDetail.getPrice());
                 ptm.setDouble(5, billDetail.getTotal());
+                ptm.setString(6, billDetail.getProduct().getSelPhone());
                 check = ptm.executeUpdate() > 0;
             }
         } finally{
