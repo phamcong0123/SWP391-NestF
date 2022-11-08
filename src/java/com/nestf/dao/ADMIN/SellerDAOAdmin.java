@@ -40,6 +40,14 @@ public class SellerDAOAdmin {
             + "FROM tblAccount acc\n"
             + "WHERE acc.role = 'SE' AND acc.name = ?";
 
+    public static final String GET_LIST_SELLER_INCOME = "Select a.name, a.phone, a.address, SUM(d.total) as total, a.status\n"
+            + "FROM tblBillDetail d\n"
+            + "Right join tblAccount a\n"
+            + "ON d.selPhone = a.phone \n"
+            + "WHERE a.role = 'SE'\n"
+            + "Group by  a.name, a.phone, a.address, a.status\n"
+            + "Order by total DESC";
+
     public static List<AccountDTO> getListSellerOnly() throws SQLException, NamingException {
         List<AccountDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -59,6 +67,39 @@ public class SellerDAOAdmin {
                     double point = rs.getDouble("point");
                     int selQuantity = rs.getInt("selQuantity");
                     list.add(new AccountDTO(phone, password, name, address, gender, point, "SE", selQuantity));
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
+
+    public static List<AccountDTO> getListSellerIncome() throws SQLException, NamingException {
+        List<AccountDTO> list = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_LIST_SELLER_INCOME);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String phone = rs.getString("phone");
+                    String name = rs.getString("name");
+                    String address = rs.getString("address");
+                    double total = rs.getDouble("total");
+                    boolean status = rs.getBoolean("status");
+                    list.add(new AccountDTO(phone, name, address, total, status));
                 }
             }
         } finally {

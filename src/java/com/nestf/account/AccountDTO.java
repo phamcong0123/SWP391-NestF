@@ -11,7 +11,8 @@ import java.io.Serializable;
  *
  * @author DELL
  */
-public class AccountDTO implements Serializable{
+public class AccountDTO implements Serializable {
+
     private String phone;
     private String password;
     private String name;
@@ -19,7 +20,14 @@ public class AccountDTO implements Serializable{
     private boolean gender;
     private double point;
     private String role;
+    private boolean status;
+
+//    Admin
     private int selQuantity;
+    private int billID;
+    private String billStatus;
+    private String cancelReason;
+    private double total; 
 
     public AccountDTO() {
     }
@@ -37,7 +45,8 @@ public class AccountDTO implements Serializable{
         this.point = point;
         this.role = role;
     }
-    
+
+//    Admin: list seller
     public AccountDTO(String phone, String password, String name, String address, boolean gender, double point, String role, int selQuantity) {
         this.phone = phone;
         this.password = password;
@@ -47,6 +56,38 @@ public class AccountDTO implements Serializable{
         this.point = point;
         this.role = role;
         this.selQuantity = selQuantity;
+    }
+
+//    Admin : All cus
+    public AccountDTO(String phone, String name, String address, boolean status, int billID, String billStatus, double total, String cancelReason) {
+        this.phone = phone;
+        this.name = name;
+        this.address = address;
+        this.status = status;
+        this.billID = billID;
+        this.billStatus = billStatus;
+        this.total = total;
+        this.cancelReason = cancelReason;
+    }
+
+// Admin : block list
+    public AccountDTO(String phone, String password, String name, String address, boolean gender, double point, boolean status) {
+        this.phone = phone;
+        this.password = password;
+        this.name = name;
+        this.address = address;
+        this.gender = gender;
+        this.point = point;
+        this.status = status;
+    }
+    
+//    Admin: manage seller
+    public AccountDTO(String phone, String name, String address, double total, boolean status) {
+        this.phone = phone;
+        this.name = name;
+        this.address = address;
+        this.total = total;
+        this.status = status;
     }
 
     public String getPhone() {
@@ -89,7 +130,6 @@ public class AccountDTO implements Serializable{
         this.gender = gender;
     }
 
-    
     public void setPoint(double point) {
         this.point = point;
     }
@@ -109,12 +149,50 @@ public class AccountDTO implements Serializable{
     public void setSelQuantity(int selQuantity) {
         this.selQuantity = selQuantity;
     }
-    
-    
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
+    public int getBillID() {
+        return billID;
+    }
+
+    public void setBillID(int billID) {
+        this.billID = billID;
+    }
+
+    public String getBillStatus() {
+        return billStatus;
+    }
+
+    public void setBillStatus(String billStatus) {
+        this.billStatus = billStatus;
+    }
+
+    public String getCancelReason() {
+        return cancelReason;
+    }
+
+    public void setCancelReason(String cancelReason) {
+        this.cancelReason = cancelReason;
+    }
+
+    public double getTotal() {
+        return total;
+    }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
 
     @Override
     public String toString() {
         return "AccountDTO{" + "phone=" + phone + ", password=" + password + ", name=" + name + ", address=" + address + ", gender=" + gender + ", point=" + point + ", role=" + role + '}';
     }
-    
+
 }

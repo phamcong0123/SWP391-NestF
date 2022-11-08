@@ -25,6 +25,7 @@ import javax.naming.NamingException;
 public class PostDAO {
 
     private static String POST_LIST = "SELECT [postID],[adPhone],[title],[dateTime],[status],[filePath],[image] FROM [NestF].[dbo].[tblPost]";
+    private static String POST_LIST_ACTIVE = "SELECT [postID],[adPhone],[title],[dateTime],[status],[filePath],[image] FROM [NestF].[dbo].[tblPost] WHERE status=1 ORDER BY dateTime DESC ";
 
     public List<PostDTO> postList() throws SQLException, NamingException {
         List<PostDTO> postList = new ArrayList();

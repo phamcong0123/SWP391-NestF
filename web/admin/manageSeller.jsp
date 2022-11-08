@@ -6,6 +6,8 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix = "f" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -22,7 +24,8 @@
 
         <!-- Custom styles for this template-->
         <link href="css/sb-admin-2.min.css" rel="stylesheet">
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+        <link rel="stylesheet" href="admin/css/register.css">
     </head>
     <body id="page-top">
         <!--///////////////Bắt đầu phần Chung//////////////////////////////////////////////////////////-->
@@ -368,136 +371,87 @@
                                 <!--Home page popup button-->
                                 <div class="col-3 ">
                                     <div class="float-right start-btn">
-                                        <button class="btn btn-dark" type="button" class="open-button" onclick="openForm()">Add new seller</button>
+                                        <input type="checkbox" id="show">
+                                        <input type="button" class="show-btn btn btn-dark" onclick="openForm()" value="Add new seller"></input>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-popup" id="myForm" style="display: none">
-                                <div class="d-inline-block container-fluid">
-                                    <div>
-                                        <form action="AddNewSeller" method="POST">
-                                            <div class="m-2 d-inline-block col-3">Họ và tên</div><input type="text" name="name" required minlength="6" maxlength="30" placeholder="6 - 30 ký tự"><br>
-                                            <div class="m-2 d-inline-block col-3">Giới tính</div>          
-                                            <div id="gender" class="d-inline-block">
-                                                <input type="radio" id="male" checked="" name="gender" value="1">
-                                                <label for="male">Nam&emsp;</label>
-                                                <input type="radio" id="female" name="gender" value="0">
-                                                <label for="female">Nữ</label>
-                                            </div><br>
-                                            <div class="m-2 d-inline-block col-3">Số điện thoại</div><input type="number" name="phone" required minlength="10" maxlength="11" placeholder="10 - 11 chữ số"><br>
-                                            <div class="m-2 d-inline-block col-3">Mật khẩu</div><input type="password" name="password" required minlength="6" maxlength="20" id="password" placeholder="6 - 20 ký tự"><br>
-                                            <div class="m-2 d-inline-block col-3">Xác nhận mật khẩu</div><input type="password" name="confirm" required minlength="6" maxlength="20" id="confirm" onblur="validate();"><br>
-                                            <div class="m-2 d-inline-block col-3">Địa chỉ</div><input type="text" name="address" required="" minlength="10" maxlength="70" placeholder="20 - 70 ký tự"><br>
-                                            <input type="button" value="Close" onclick="closeForm()" class="m-3 d-inline-block col-2">
-                                            <input type="submit" value="Add" class="m-3 d-inline-block col-2">
-                                        </form>
-                                    </div>
+                            <div id="container-register" style="display: none">
+                                <input type="button" class="close-btn" title="close" onclick="closeForm()" value="X"></input>
+                                <div class="text">
+                                    Create new seller
                                 </div>
+                                <form action="AddNewSeller">
+                                    <div class="data">
+                                        <label>Full Name</label>
+                                        <input type="text" required  name="name" required minlength="6" maxlength="30" placeholder="6 - 30 ký tự">
+                                    </div>
+                                    <div class="data sencondchild">
+                                        <label>Gender</label>
+                                        <span class="gender" style="white-space: nowrap;">
+                                            <input type="radio" id="male" checked="" name="gender" value="1">
+                                            <label for="male">Nam&emsp;</label>
+                                            <input type="radio" id="female" name="gender" value="0">
+                                            <label for="female">Nữ</label>
+                                        </span>
+                                    </div>
+                                    <div class="data">
+                                        <label>Phone number</label>
+                                        <input type="number"  name="phone" required minlength="10" maxlength="11" placeholder="10 - 11 chữ số">
+                                    </div>
+                                    <div class="data">
+                                        <label>Password</label>
+                                        <input type="password" required minlength="6" maxlength="20" id="password" placeholder="6 - 20 ký tự">
+                                    </div>
+                                    <div class="data">
+                                        <label>Confirm Password</label>
+                                        <input type="password" name="confirm" required minlength="6" maxlength="20" id="confirm" onblur="validate();">
+                                    </div>
+                                    <div class="data">
+                                        <label>Address</label>
+                                        <input type="text" name="address" required minlength="10" maxlength="70" placeholder="20 - 70 ký tự">
+                                    </div>
+                                    <div class="btn btn-dark">
+                                        <div class="inner"></div>
+                                        <button type="submit">Create</button>
+                                    </div>
+                                </form>
                             </div>
+
                             <!-- Content Row -->
-                            <c:set var="result" value="${sessionScope.SELLERS}"/>
-                            <c:if test="${empty result}">
-                                <h4>There is no sellers</h4>
-                            </c:if>
-                            <c:if test="${not empty result}">
-                                <table class="table table-success table-striped">
+                            <c:if test="${not empty sessionScope.MANAGE_SELLER}">
+                                <table class="table table-striped table-hover table-bordered">
                                     <thead>
-                                        <tr>
-                                            <th>No.</th>
+                                        <tr class="text-center">
                                             <th>Name</th>
-                                            <th>Password</th>
                                             <th>Phone</th>
-                                            <th>Income(M)</th>
+                                            <th>Address</th>
+                                            <th>Revenue(VND)</th>
                                             <th>Block</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="dto" items="${result}" varStatus="counter" >       
-                                        <form action="" method="Post">
-                                            <tr>
+                                        <c:forEach var="seller" items="${sessionScope.MANAGE_SELLER}">
+                                            <tr class="text-center">
+                                                <td><a class="text-decoration-none" href="showProduct?phone=${seller.phone}">${seller.name}</td>
+                                                <td>${seller.phone}</td>
+                                                <td>${seller.address}</td>
+                                                <td><f:formatNumber  maxIntegerDigits="7" minIntegerDigits="2" value="${seller.total}" var="formattedPrice" />${seller.total}</td>
                                                 <td>
-                                                    ${counter.count}
-                                                    .</td>
-                                                <td>
-                                                    ${dto.name}
+                                                    <c:if test="${seller.status}">
+                                                        <a href="blockCustomerAction?phone=${seller.phone}&btAction=block" class="btn btn-danger">Block</a>
+                                                    </c:if>
 
-                                                </td>
-                                                <td>
-                                                    <button type="password" name="txtPassword" 
-                                                            value="${dto.password}" />
-                                                </td>
-                                                <td>
-                                                    ${dto.phone}
-                                                </td>
-                                                <td>
-                                                    ${dto.Income}
-                                                </td>
-                                                <td>
-                                                    <a href="blockSellerAction?name=sellerID&value=${dto.sellerID}" class="text-decoration-none"><i class="bg-danger fa-regular fa-circle-xmark"></i></a>
+                                                    <c:if test="${not seller.status}">
+                                                        <a href="blockCustomerAction?phone=${seller.phone}&btAction=unblock" class="btn btn-dark">Unblock</a>
+                                                    </c:if>
                                                 </td>
                                             </tr>
-                                        </form> <br>
-                                    </c:forEach>
+                                        </c:forEach>
                                     </tbody>
                                 </table>
-                            </c:if>
-
-                            <!--                             Content Row 
-                                                        <div class="row">
-                                                            <div class="col-lg-4">
-                                                                <div class="card mb-4">
-                                                                    <div class="card-body text-center">
-                                                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
-                                                                             class="rounded-circle img-fluid" style="width: 150px;">
-                                                                        <h5 class="my-3">${ADMIN.getName()}</h5>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                            
-                                                            <div class="col-lg-8">        
-                                                                <form action="UpdateProfileAction" method="POST">
-                                                                    <div class="card mb-4">
-                                                                        <div class="card-body">
-                                                                            <div class="row">
-                                                                                <div class="col-sm-3">
-                                                                                    <p class="mb-0">Full Name</p>
-                                                                                </div>
-                                                                                <div class="col-sm-9">
-                                                                                    <input type="text" class="text-muted mb-0" name="txtFullname" value="${ADMIN.getName()}"/>
-                                                                                </div>
-                                                                            </div>
-                                                                            <hr>
-                                                                            <div class="row">
-                                                                                <div class="col-sm-3">
-                                                                                    <p class="mb-0">Password</p>
-                                                                                </div>
-                                                                                <div class="col-sm-9">
-                                                                                    <input type="password" class="text-muted mb-0" name="txtPassword" value="${ADMIN.getPassword()}"/>
-                                                                                </div>
-                                                                            </div>
-                                                                            <hr>
-                                                                            <div class="row">
-                                                                                <div class="col-sm-3">
-                                                                                    <p class="mb-0">Phone</p>
-                                                                                </div>
-                                                                                <div class="col-sm-9">
-                                                                                    <input type="text" class="text-muted mb-0" name="txtPhone" value="${ADMIN.getPhone()}"/>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="d-flex justify-content-center mb-2">
-                                                                        <input type="submit" class="btn btn-outline-danger ms-1 mx-2" value="Save" name="UpdateProfile" />
-                            
-                                                                        <input type="reset" class="btn btn-outline-primary ms-1 mx-2" value="Reset" />
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>-->
+                            </c:if>                   
                             <!--End of Content Row -->
-
-
-
                         </div>
                         <!-- End of Content Wrapper -->
 
@@ -559,13 +513,13 @@
             <script src="./js/nestf.js"></script>
 
             <script>
-                                                function openForm() {
-                                                    document.getElementById("myForm").style.display = "block";
-                                                }
+                                            function openForm() {
+                                                document.getElementById("container-register").style.display = "block";
+                                            }
 
-                                                function closeForm() {
-                                                    document.getElementById("myForm").style.display = "none";
-                                                }
+                                            function closeForm() {
+                                                document.getElementById("container-register").style.display = "none";
+                                            }
             </script>
         </c:if>
     </body>
