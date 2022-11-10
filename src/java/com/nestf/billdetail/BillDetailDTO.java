@@ -22,6 +22,13 @@ public class BillDetailDTO implements Serializable{
 
     public BillDetailDTO() {
     }
+    
+    public BillDetailDTO(ProductDTO product, int quantity, double price, double total) {
+        this.product = product;
+        this.quantity = quantity;
+        this.price = price;
+        this.total = total;
+    }
 
     public BillDetailDTO(int billID, ProductDTO product, int quantity, double price, double total) {
         this.billID = billID;

@@ -41,6 +41,7 @@ public class LoginServlet extends HttpServlet {
     private static final String LOGIN_PAGE = "login.jsp";
     private static final String LOAD_USER_CART = "LoadCartServlet";
     private static final String DASHBOARD = "dashboard.jsp";
+    private static final String SELLER_PAGE = "sellerPage";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
@@ -66,6 +67,7 @@ public class LoginServlet extends HttpServlet {
                         url = (String) siteMap.get(MyAppConstant.AdminFeatures.INIT_ATTRIBUTE_ACTION);
                         break;
                     case "SE":
+                        url = SELLER_PAGE;
                         break;
                 }
             } else {

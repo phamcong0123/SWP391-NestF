@@ -55,6 +55,8 @@ public class MyAppConstant implements Serializable {
 
         public static final String ACCEPTED_POST_PAGE = "activePostPage";
         public static final String PENDING_POST_PAGE = "nonActivePost";
+        public static final String ADD_POST_ACTION = "addNewPostAction";
+        public static final String ADD_POST_PAGE = "addPostPage";
 
     }
 }
