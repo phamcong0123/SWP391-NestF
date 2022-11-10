@@ -56,7 +56,7 @@ public class EditProductServlet extends HttpServlet {
             HttpSession session = request.getSession();
             int productID = Integer.parseInt(request.getParameter("productID"));
             ProductDTO productDetail = ProductDAOAdmin.getProductDetail(productID);
-            List<AccountDTO> listSeller = SellerDAOAdmin.getListSellerOnly();
+            List<AccountDTO> listSeller = SellerDAOAdmin.getListSeller();
             session.setAttribute("LIST_SELLER", listSeller);
             if (productDetail != null) {
                 request.setAttribute("PRODUCT_DETAIL", productDetail);

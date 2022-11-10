@@ -82,12 +82,13 @@ public class AccountDTO implements Serializable {
     }
     
 //    Admin: manage seller
-    public AccountDTO(String phone, String name, String address, double total, boolean status) {
+    public AccountDTO(String phone, String name, String address, boolean status, int selQuantity, double total) {
         this.phone = phone;
         this.name = name;
         this.address = address;
-        this.total = total;
         this.status = status;
+        this.selQuantity = selQuantity;
+        this.total = total;
     }
 
     public String getPhone() {

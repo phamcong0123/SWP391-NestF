@@ -33,11 +33,11 @@ public class CustomerDAOAdmin {
             + "FROM tblAccount a\n"
             + "WHERE a.status = 0 AND a.role = 'US'";
 
-    public static String UNBLOCK_CUSTOMER = "UPDATE tblAccount\n"
+    public static String UNBLOCK_USER = "UPDATE tblAccount\n"
             + "SET status = 1 \n"
             + "WHERE phone = ?";
 
-    public static String BLOCK_CUS_GIVEN_PHONE = "UPDATE tblAccount\n"
+    public static String BLOCK_USER = "UPDATE tblAccount\n"
             + "SET status = 0 \n"
             + "WHERE phone = ?";
     
@@ -175,7 +175,7 @@ public class CustomerDAOAdmin {
 
             if (con != null) {
 //          2. Create SQL Stirng . co khoang trang sau username
-                statement = con.prepareStatement(BLOCK_CUS_GIVEN_PHONE);
+                statement = con.prepareStatement(BLOCK_USER);
                 statement.setString(1, phone);
 
 //          4. Execute Query
@@ -214,7 +214,7 @@ public class CustomerDAOAdmin {
 
             if (con != null) {
 //          2. Create SQL Stirng . co khoang trang sau username
-                statement = con.prepareStatement(UNBLOCK_CUSTOMER);
+                statement = con.prepareStatement(UNBLOCK_USER);
                 statement.setString(1, phone);
 
 //          4. Execute Query

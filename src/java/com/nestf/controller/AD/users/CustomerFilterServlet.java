@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nestf.controller.AD.customer;
+package com.nestf.controller.AD.users;
 
 import com.nestf.account.AccountDTO;
 import com.nestf.dao.ADMIN.CustomerDAOAdmin;
