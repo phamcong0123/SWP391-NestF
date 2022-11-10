@@ -173,9 +173,9 @@ function searchFunc(txtSearch) {
     }
 }
 
-function removeLabel() {
-    var input = document.getElementById('reasonInput');
-    var label = document.getElementById('labelRequired');
+function removeLabel(reason, labelInput) {
+    var input = document.getElementById(reason);
+    var label = document.getElementById(labelInput);
     if (input.value.length !== 0) {
         label.innerHTML = '';
     } else {
@@ -187,5 +187,77 @@ function checkEmptyReason(textbox) {
     if (textbox.value === '') {
         textbox.setCustomValidity
                 ('Lí do hủy đơn không được để trống!');
+    }
+}
+
+function setMinDate(dateValue1, dateValue2, dateSpan, clearBtn) {
+    var startDate = document.getElementById(dateValue1).value;
+    var endDate = document.getElementById(dateValue2);
+
+    endDate.setAttribute("min", startDate);
+    if (endDate.value != '') {
+        filterDate(dateValue1, dateValue2);
+    }
+    document.getElementById(dateSpan).removeAttribute("hidden");
+    endDate.removeAttribute("hidden");
+    document.getElementById(clearBtn).removeAttribute("hidden");
+    var orderDateRange = document.getElementsByClassName('order-date-range');
+    for (var i = 0; i < orderDateRange.length; i++) {
+        orderDateRange[i].style.width = "100%";
+        orderDateRange[i].style.float = "none";
+    }
+}
+
+function filterDate(dateValue1, dateValue2) {
+    var startDate = document.getElementById(dateValue1).value;
+    var endDate = document.getElementById(dateValue2).value;
+
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    var content = document.getElementsByClassName('all-order-content');
+    for (var i = 0; i < content.length; i++) {
+        var p = content[i].getElementsByTagName('p')[1];
+        var txtValue = p.innerText || p.textContent;
+        const dateValue = new Date(txtValue);
+        if (dateValue >= start && dateValue <= end) {
+            content[i].style.display = ''
+        } else {
+            content[i].style.display = 'none';
+        }
+    }
+
+    document.getElementById(dateValue1).setAttribute("max", endDate);
+}
+
+function clearDate(startDate, endDate, dateSpan, clearBtn) {
+    var startDateInput = document.getElementById(startDate);
+    var endDateInput = document.getElementById(endDate);
+
+    startDateInput.value = '';
+    if (startDateInput.type === 'date') {
+        startDateInput.type = 'text';
+        startDateInput.type = 'date';
+    }
+
+    endDateInput.value = '';
+    if (endDateInput.type === 'date') {
+        endDateInput.type = 'text';
+        endDateInput.type = 'date';
+    }
+
+    var content = document.getElementsByClassName('all-order-content');
+    for (var i = 0; i < content.length; i++) {
+        content[i].style.display = '';
+    }
+
+    startDateInput.removeAttribute("max");
+    document.getElementById(dateSpan).setAttribute("hidden", "hidden");
+    endDateInput.setAttribute("hidden", "hidden");
+    document.getElementById(clearBtn).setAttribute("hidden", "hidden");
+    var orderDateRange = document.getElementsByClassName('order-date-range');
+    for (var i = 0; i < orderDateRange.length; i++) {
+        orderDateRange[i].style.width = "60%";
+        orderDateRange[i].style.float = "right";
     }
 }

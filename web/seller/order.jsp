@@ -33,7 +33,7 @@
 
                     <!-- Sidebar - Brand -->
                     <a href="sellerPage" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
-                                                                                height="38px"></a>
+                                                                          height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
 
@@ -394,11 +394,19 @@
                                         </div>
                                     </form>
                                     <div class="order-date col-6 d-inline-block float-right">
-                                        <div class="order-date-range input-group" id="day-order">
+                                        <div class="order-date-range input-group">
                                             <label for="day-order" class="pt-2 pr-2">Ngày đặt hàng</label>
-                                            <input type="date" class="form-control" name="firstDay" aria-label="firstDay">
-                                            <span class="input-group-text border-0">-</span>
-                                            <input type="date" class="form-control" name="secondDay" aria-label="secondDay">
+                                            <input type="date" class="form-control" name="firstDay"
+                                                   id="all-order-start-date" aria-label="firstDay"
+                                                   onchange="setMinDate('all-order-start-date', 'all-order-end-date', 'all-order-date-span', 'all-order-clear-btn')" />
+                                            <span class="input-group-text border-0" id="all-order-date-span" hidden>-</span>
+                                            <input type="date" class="form-control" name="secondDay" id="all-order-end-date"
+                                                   aria-label="secondDay"
+                                                   onchange="filterDate('all-order-start-date', 'all-order-end-date')" hidden>
+                                            <button class="border-0 pl-3 text-dark" id="all-order-clear-btn" hidden
+                                                    onclick="clearDate('all-order-start-date', 'all-order-end-date', 'all-order-date-span', 'all-order-clear-btn')">
+                                                <i class="fa-solid fa-circle-xmark"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -568,10 +576,10 @@
                                                                         <br>
                                                                         Lí do:
                                                                         <form action="processOrder" class="d-inline-block ml-5">
-                                                                            <input type="text" name="cancelReason" id="reasonInput"
-                                                                                   placeholder="Lí do hủy đơn..." onkeyup="removeLabel()"
+                                                                            <input type="text" name="cancelReason" id="reasonInput1"
+                                                                                   placeholder="Lí do hủy đơn..." onkeyup="removeLabel('reasonInput1', 'labelRequired1')"
                                                                                    oninvalid="checkEmptyReason(this)" required/>
-                                                                            <label id="labelRequired" style="color: #f00;">*</label>
+                                                                            <label id="labelRequired1" style="color: #f00;">*</label>
                                                                             <input type="hidden" name="orderID" value="${order.billID}"/>
                                                                             <input type="hidden" name="statusID" value="5"/>
                                                                     </div>
@@ -726,9 +734,17 @@
                                     <div class="order-date col-6 d-inline-block float-right">
                                         <div class="order-date-range input-group" id="day-order">
                                             <label for="day-order" class="pt-2 pr-2">Ngày đặt hàng</label>
-                                            <input type="date" class="form-control" name="firstDay" aria-label="firstDay">
-                                            <span class="input-group-text border-0">-</span>
-                                            <input type="date" class="form-control" name="secondDay" aria-label="secondDay">
+                                            <input type="date" class="form-control" name="firstDay"
+                                                   id="wait-confirm-start-date" aria-label="firstDay"
+                                                   onchange="setMinDate('wait-confirm-start-date', 'wait-confirm-end-date', 'wait-confirm-date-span', 'wait-confirm-clear-btn')" />
+                                            <span class="input-group-text border-0" id="wait-confirm-date-span" hidden>-</span>
+                                            <input type="date" class="form-control" name="secondDay" id="wait-confirm-end-date"
+                                                   aria-label="secondDay"
+                                                   onchange="filterDate('wait-confirm-start-date', 'wait-confirm-end-date')" hidden>
+                                            <button class="border-0 pl-3 text-dark" id="wait-confirm-clear-btn" hidden
+                                                    onclick="clearDate('wait-confirm-start-date', 'wait-confirm-end-date', 'wait-confirm-date-span', 'wait-confirm-clear-btn')">
+                                                <i class="fa-solid fa-circle-xmark"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -898,10 +914,10 @@
                                                                         <br>
                                                                         Lí do:
                                                                         <form action="processOrder" class="d-inline-block ml-5">
-                                                                            <input type="text" name="cancelReason" id="reasonInput"
-                                                                                   placeholder="Lí do hủy đơn..." onkeyup="removeLabel()"
+                                                                            <input type="text" name="cancelReason" id="reasonInput2"
+                                                                                   placeholder="Lí do hủy đơn..." onkeyup="removeLabel('reasonInput2', 'labelRequired2')"
                                                                                    oninvalid="checkEmptyReason(this)" required/>
-                                                                            <label id="labelRequired" style="color: #f00;">*</label>
+                                                                            <label id="labelRequired2" style="color: #f00;">*</label>
                                                                             <input type="hidden" name="orderID" value="${order.billID}"/>
                                                                             <input type="hidden" name="statusID" value="5"/>
                                                                     </div>
@@ -951,9 +967,17 @@
                                     <div class="order-date col-6 d-inline-block float-right">
                                         <div class="order-date-range input-group" id="day-order">
                                             <label for="day-order" class="pt-2 pr-2">Ngày đặt hàng</label>
-                                            <input type="date" class="form-control" name="firstDay" aria-label="firstDay">
-                                            <span class="input-group-text border-0">-</span>
-                                            <input type="date" class="form-control" name="secondDay" aria-label="secondDay">
+                                            <input type="date" class="form-control" name="firstDay"
+                                                   id="wait-delivery-start-date" aria-label="firstDay"
+                                                   onchange="setMinDate('wait-delivery-start-date', 'wait-delivery-end-date', 'wait-delivery-date-span', 'wait-delivery-clear-btn')" />
+                                            <span class="input-group-text border-0" id="wait-delivery-date-span" hidden>-</span>
+                                            <input type="date" class="form-control" name="secondDay" id="wait-delivery-end-date"
+                                                   aria-label="secondDay"
+                                                   onchange="filterDate('wait-delivery-start-date', 'wait-delivery-end-date')" hidden>
+                                            <button class="border-0 pl-3 text-dark" id="wait-delivery-clear-btn" hidden
+                                                    onclick="clearDate('wait-delivery-start-date', 'wait-delivery-end-date', 'wait-delivery-date-span', 'wait-delivery-clear-btn')">
+                                                <i class="fa-solid fa-circle-xmark"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -1132,9 +1156,17 @@
                                     <div class="order-date col-6 d-inline-block float-right">
                                         <div class="order-date-range input-group" id="day-order">
                                             <label for="day-order" class="pt-2 pr-2">Ngày đặt hàng</label>
-                                            <input type="date" class="form-control" name="firstDay" aria-label="firstDay">
-                                            <span class="input-group-text border-0">-</span>
-                                            <input type="date" class="form-control" name="secondDay" aria-label="secondDay">
+                                            <input type="date" class="form-control" name="firstDay"
+                                                   id="delivered-start-date" aria-label="firstDay"
+                                                   onchange="setMinDate('delivered-start-date', 'delivered-end-date', 'delivered-date-span', 'delivered-clear-btn')" />
+                                            <span class="input-group-text border-0" id="delivered-date-span" hidden>-</span>
+                                            <input type="date" class="form-control" name="secondDay" id="delivered-end-date"
+                                                   aria-label="secondDay"
+                                                   onchange="filterDate('delivered-start-date', 'delivered-end-date')" hidden>
+                                            <button class="border-0 pl-3 text-dark" id="delivered-clear-btn" hidden
+                                                    onclick="clearDate('delivered-start-date', 'delivered-end-date', 'delivered-date-span', 'delivered-clear-btn')">
+                                                <i class="fa-solid fa-circle-xmark"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -1412,9 +1444,17 @@
                                     <div class="order-date col-6 d-inline-block float-right">
                                         <div class="order-date-range input-group" id="day-order">
                                             <label for="day-order" class="pt-2 pr-2">Ngày đặt hàng</label>
-                                            <input type="date" class="form-control" name="firstDay" aria-label="firstDay">
-                                            <span class="input-group-text border-0">-</span>
-                                            <input type="date" class="form-control" name="secondDay" aria-label="secondDay">
+                                            <input type="date" class="form-control" name="firstDay"
+                                                   id="cancel-order-start-date" aria-label="firstDay"
+                                                   onchange="setMinDate('cancel-order-start-date', 'cancel-order-end-date', 'cancel-order-date-span', 'cancel-order-clear-btn')" />
+                                            <span class="input-group-text border-0" id="cancel-order-date-span" hidden>-</span>
+                                            <input type="date" class="form-control" name="secondDay" id="cancel-order-end-date"
+                                                   aria-label="secondDay"
+                                                   onchange="filterDate('cancel-order-start-date', 'cancel-order-end-date')" hidden>
+                                            <button class="border-0 pl-3 text-dark" id="cancel-order-clear-btn" hidden
+                                                    onclick="clearDate('cancel-order-start-date', 'cancel-order-end-date', 'cancel-order-date-span', 'cancel-order-clear-btn')">
+                                                <i class="fa-solid fa-circle-xmark"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
