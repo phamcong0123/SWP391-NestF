@@ -418,6 +418,7 @@
                                         <c:forEach var="order" varStatus="counter" items="${requestScope.ORDER_LIST}">
                                             <div class="all-order-content">
                                                 <p class="order-id">Mã đơn: #<strong>NESTF${order.billID}</strong></p>
+                                                <p hidden><fmt:formatDate value="${order.time}" pattern="yyyy-MM-dd"/></p>
 
                                                 <c:if test="${order.status.statusID == 1 || order.status.statusID == 2}">
                                                     <div class="information-btn">
@@ -759,6 +760,7 @@
                                                 <c:set var="contains" value="true"></c:set>
                                                     <div class="all-order-content">
                                                         <p class="order-id">Mã đơn: #<strong>NESTF${order.billID}</strong></p>
+                                                    <p hidden><fmt:formatDate value="${order.time}" pattern="yyyy-MM-dd"/></p>
 
                                                     <div class="information-btn">
                                                         <i class="fa-solid fa-circle-info" data-toggle="modal"
@@ -992,6 +994,7 @@
                                                 <c:set var="contains" value="true"></c:set>
                                                     <div class="all-order-content">
                                                         <p class="order-id">Mã đơn: #<strong>NESTF${order.billID}</strong></p>
+                                                    <p hidden><fmt:formatDate value="${order.time}" pattern="yyyy-MM-dd"/></p>
 
                                                     <div class="information-btn">
                                                         <i class="fa-solid fa-circle-info" data-toggle="modal"
@@ -1181,6 +1184,7 @@
                                                 <c:set var="contains" value="true"></c:set>
                                                     <div class="all-order-content">
                                                         <p class="order-id">Mã đơn: #<strong>NESTF${order.billID}</strong></p>
+                                                    <p hidden><fmt:formatDate value="${order.time}" pattern="yyyy-MM-dd"/></p>
                                                     <table class="table table-content">
                                                         <thead class="orders-table-header">
                                                         <th colspan="2" scope="col">Sản phẩm</th>
@@ -1321,6 +1325,8 @@
                                                 <c:set var="contains" value="true"></c:set>
                                                     <div class="all-order-content">
                                                         <p class="order-id">Mã đơn: #<strong>NESTF${order.billID}</strong></p>
+                                                    <p hidden><fmt:formatDate value="${order.time}" pattern="yyyy-MM-dd"/></p>
+
                                                     <table class="table table-content">
                                                         <thead class="orders-table-header">
                                                         <th colspan="2" scope="col">Sản phẩm</th>
@@ -1469,6 +1475,8 @@
                                                 <c:set var="contains" value="true"></c:set>
                                                     <div class="all-order-content">
                                                         <p class="order-id">Mã đơn: #<strong>NESTF${order.billID}</strong></p>
+                                                    <p hidden><fmt:formatDate value="${order.time}" pattern="yyyy-MM-dd"/></p>
+
                                                     <table class="table table-content">
                                                         <thead class="orders-table-header">
                                                         <th colspan="2" scope="col">Sản phẩm</th>
