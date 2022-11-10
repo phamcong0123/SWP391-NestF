@@ -3,23 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nestf.controller.AD;
+package com.nestf.controller.AD.users;
 
-import com.nestf.category.CategoryDAO;
-import com.nestf.category.CategoryDTO;
+import com.nestf.account.AccountDTO;
 import com.nestf.dao.ADMIN.ProductDAOAdmin;
 import com.nestf.dao.ADMIN.SellerDAOAdmin;
-import com.nestf.dao.ADMIN.PostDAOAdmin;
 import com.nestf.product.ProductDTO;
-import com.nestf.account.AccountDTO;
-import com.nestf.dao.ADMIN.CustomerDAOAdmin;
-import com.nestf.post.PostDTO;
 import com.nestf.util.MyAppConstant;
 import java.io.IOException;
-import java.time.Month;
-import java.util.Date;
+import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
+import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,10 +26,10 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author DELL
+ * @author ADMIN
  */
-@WebServlet(name = "InitAttributeServlet", urlPatterns = {"/InitAttributeServlet"})
-public class InitAttributeServlet extends HttpServlet {
+@WebServlet(name = "ChangeSellerServlet", urlPatterns = {"/ChangeSellerServlet"})
+public class ChangeSellerServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -47,43 +43,56 @@ public class InitAttributeServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        response.setCharacterEncoding("utf-8");
         ServletContext context = request.getServletContext();
-
         Properties siteMap = (Properties) context.getAttribute("SITEMAP");
-        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.DASHBORAD_PAGE);
+        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.MANAGE_SELLER_PAGE);
 
+        int productID = Integer.parseInt(request.getParameter("productID"));
+        String selNameNew = request.getParameter("selNameNew");
+        String selNameOld = request.getParameter("selNameOld");
+        boolean result = false;
+        String newSelPhone = null;
         try {
-            HttpSession session = request.getSession();
-            List<CategoryDTO> listCategory = CategoryDAO.getListCategory();
-            session.setAttribute("LIST_CATEGORY", listCategory);
-            List<AccountDTO> listSeller = SellerDAOAdmin.getListSeller();
-            session.setAttribute("LIST_SELLER", listSeller);
-            List<ProductDTO> listProduct = ProductDAOAdmin.getListActiveProduct();
-            session.setAttribute("LIST_PRODUCT", listProduct);
-            List<ProductDTO> listNonActicve = ProductDAOAdmin.getListNonActiveProduct();
-            session.setAttribute("LIST_PENDING", listNonActicve);
-            List<AccountDTO> listActiveCustomer = CustomerDAOAdmin.getAllCustomer();
-            session.setAttribute("LIST_CUSTOMER", listActiveCustomer);
-            List<AccountDTO> listBlockCustomer = CustomerDAOAdmin.getBlockCustomer();
-            session.setAttribute("BLOCK_CUSTOMER", listBlockCustomer);
-            
-            int month = java.time.LocalDateTime.now().getMonth().getValue(); 
-            int year = java.time.LocalDateTime.now().getYear(); 
-            String choosetime = "" + year + "-" + month;
-            List<AccountDTO> manageSeller = SellerDAOAdmin.getListSellerIncome(month, year);
-            session.setAttribute("MANAGE_SELLER", manageSeller);
-            session.setAttribute("MONTH", choosetime);
-           
-            List<PostDTO> listActivePost = PostDAOAdmin.getPostListActive();
-            session.setAttribute("LIST_POST", listActivePost);
-            List<PostDTO> listPending = PostDAOAdmin.getPostListNonActive();
-            session.setAttribute("LIST_PENDING_POST", listPending);
-        } catch (Exception e) {
-            log("Error at InitAttributeServlet: " + e.toString());
+            ProductDAOAdmin dao = new ProductDAOAdmin();
+            ProductDTO dto = ProductDAOAdmin.getProductDetail(productID);
+
+            if (!selNameNew.isEmpty()) {
+                if (!selNameNew.equalsIgnoreCase(selNameOld)) {
+                    newSelPhone = SellerDAOAdmin.getSellerGivenName(selNameNew).getPhone();
+                }
+            }
+
+            if (newSelPhone == null) {
+                request.setAttribute("CHANGE_ERROR", "Hãy chọn seller!");
+            } else {
+                result = true;
+                String oldSelPhone = dto.getSelPhone();
+                dto.setSelPhone(newSelPhone);
+                dao.changeSeller(dto, oldSelPhone);
+            }
+            if (result) {
+                HttpSession session = request.getSession();
+                String choosetime = (String) session.getAttribute("MONTH");
+                if (!choosetime.isEmpty()) {
+                    String[] array = choosetime.split("-");
+                    int year = Integer.parseInt(array[0]);
+                    int month = Integer.parseInt(array[1]);
+                    List<AccountDTO> manageSeller
+                            = SellerDAOAdmin.getListSellerIncome(year, month);
+                    session.setAttribute("MANAGE_SELLER", manageSeller);
+                    List<AccountDTO> listSeller = SellerDAOAdmin.getListSeller();
+                    session.setAttribute("LIST_SELLER", listSeller);
+                }
+            }
+
+        } catch (SQLException e) {
+            log("Error at BlockCustomerServlet_SQL: " + e.getMessage());
+        } catch (NamingException e) {
+            log("Error at BlockCustomerServlet_Naming: " + e.getMessage());
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
-
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

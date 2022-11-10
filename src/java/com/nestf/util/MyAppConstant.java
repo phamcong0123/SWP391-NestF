@@ -48,6 +48,11 @@ public class MyAppConstant implements Serializable {
         public static final String VIEW_PRODUCT_PAGE = "viewProductDetailPage";
         public static final String EDIT_PRODUCT_PAGE = "editProductPage";
         public static final String PENDING_PRODUCT_PAGE = "pendingProductPage";
+        
+//        User
+        public static final String MANAGE_CUSTOMER_PAGE = "manageCustomerPage";
+        public static final String MANAGE_SELLER_PAGE = "manageSellerPage";
+
         public static final String ACCEPTED_POST_PAGE = "activePostPage";
         public static final String PENDING_POST_PAGE = "nonActivePost";
         public static final String ADD_POST_ACTION = "addNewPostAction";

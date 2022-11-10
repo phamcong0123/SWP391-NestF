@@ -177,7 +177,7 @@ public class SaveProductServlet extends HttpServlet {
                     listPending = ProductDAOAdmin.getListNonActiveProduct();
                     session.setAttribute("LIST_PENDING", listPending);
 
-                    List<AccountDTO> listSeller = SellerDAOAdmin.getListSellerOnly();
+                    List<AccountDTO> listSeller = SellerDAOAdmin.getListSeller();
                     session.setAttribute("LIST_SELLER", listSeller);
 
                     List<CategoryDTO> listCategory = CategoryDAO.getListCategory();

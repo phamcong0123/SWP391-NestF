@@ -365,11 +365,26 @@
 
                             <!-- Page Heading -->
                             <div class="d-sm-flex align-items-center justify-content-between row mb-4">
-                                <div class="col-9">
-                                    <h1 class="h3 mb-0 text-gray-800 col-9">Manage seller</h1>
+                                <div class="col-6">
+                                    <h1 class="h3 mb-1 text-gray-800 col-9">Manage seller</h1>
+                                    <c:if test="${not empty requestScope.SELLER_ERROR}">
+                                        <font color="red">
+                                        ${requestScope.SELLER_ERROR}
+                                        </font> <br/>
+                                    </c:if>
+                                </div>
+                                <div class="col-4">
+                                    <c:if test="${not empty sessionScope.MONTH}">
+                                        <c:set var="MONTH" value="${sessionScope.MONTH}"/>
+                                        <form action="checkSellerMonthly" class="row">
+                                            <div class="col-2 font-weight-bold">Time :</div>
+                                            <input class="col-5 mr-2" value="${MONTH}" min="2022-09" type="month" name="choosetime">
+                                            <input type="submit" value="Check" class="btn btn-dark col-3">
+                                        </form>
+                                    </c:if>
                                 </div>
                                 <!--Home page popup button-->
-                                <div class="col-3 ">
+                                <div class="col-2 ">
                                     <div class="float-right start-btn">
                                         <input type="checkbox" id="show">
                                         <input type="button" class="show-btn btn btn-dark" onclick="openForm()" value="Add new seller"></input>
@@ -426,31 +441,81 @@
                                             <th>Name</th>
                                             <th>Phone</th>
                                             <th>Address</th>
-                                            <th>Revenue(VND)</th>
+                                            <th>Number of product</th>
+                                            <th>Revenue</th>
                                             <th>Block</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <c:forEach var="seller" items="${sessionScope.MANAGE_SELLER}">
                                             <tr class="text-center">
-                                                <td><a class="text-decoration-none" href="showProduct?phone=${seller.phone}">${seller.name}</td>
+                                                <td><a class="text-decoration-none" href="managePSeller?phone=${seller.phone}&type=show">${seller.name}</a></td>
                                                 <td>${seller.phone}</td>
                                                 <td>${seller.address}</td>
-                                                <td><f:formatNumber  maxIntegerDigits="7" minIntegerDigits="2" value="${seller.total}" var="formattedPrice" />${seller.total}</td>
+                                                <td><a class="text-decoration-none" href="managePSeller?phone=${seller.phone}&type=show">${seller.selQuantity}</td>
+                                                <td>${seller.total}</td>
                                                 <td>
                                                     <c:if test="${seller.status}">
-                                                        <a href="blockCustomerAction?phone=${seller.phone}&btAction=block" class="btn btn-danger">Block</a>
+                                                        <a href="managePSeller?phone=${seller.phone}&product=${seller.selQuantity}&type=block" class="btn btn-danger">Block</a>
                                                     </c:if>
 
                                                     <c:if test="${not seller.status}">
-                                                        <a href="blockCustomerAction?phone=${seller.phone}&btAction=unblock" class="btn btn-dark">Unblock</a>
+                                                        <a href="managePSeller?phone=${seller.phone}&type=unblock" class="btn btn-dark">Unblock</a>
                                                     </c:if>
                                                 </td>
                                             </tr>
                                         </c:forEach>
                                     </tbody>
                                 </table>
-                            </c:if>                   
+                            </c:if>
+
+                            <c:if test="${not empty requestScope.PRODUCT_SELLER}">
+                                <table class="table table-striped table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">ID</th>
+                                            <th class="text-center">Name</th>
+                                            <th class="text-center">Price</th>
+                                            <th class="text-center">Quantity</th>
+                                            <th class="text-center">Category</th>
+                                            <th class="text-center">Discount</th>
+                                            <th class="text-center">Change Seller</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="product" items="${requestScope.PRODUCT_SELLER}">
+                                            <tr>
+                                                <td>${product.productID}</td>
+                                                <td>${product.name}</td>
+                                                <td>${product.price}</td>
+                                                <td>${product.quantity}</td>
+                                                <td>${product.category.categoryName}</td>
+                                                <td>${product.discountPrice}</td>
+                                                <td>
+                                                    <c:set var="listSeller" value="${sessionScope.LIST_SELLER}"/>
+                                                    <form action="changeSeller">
+                                                        <div  class="row">
+                                                            <input type="hidden" value="${product.selName}" name="selNameOld"/>
+                                                            <input class="form-control form-control-sm col-7 mx-3" type="text" value="${product.selName}" name="selNameNew" list="sellerlist"/>
+                                                            <input type="hidden" value="${product.productID}" name="productID"/>
+
+                                                            <datalist id="sellerlist">
+                                                                <label class="form-label select-label">Choose option:</label>
+                                                                <option disabled>Choose option</option>
+                                                                <c:forEach var="dto" items="${listSeller}">
+                                                                    <option class="" value="${dto.name}">Number of product: ${dto.selQuantity}</option>
+                                                                </c:forEach>
+                                                            </datalist>
+                                                            <input class="btn btn-dark col-3" type="submit" name="btAction" value="Change" />
+                                                        </div>
+                                                    </form>
+
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </c:if>
                             <!--End of Content Row -->
                         </div>
                         <!-- End of Content Wrapper -->

@@ -3,10 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nestf.controller.AD.customer;
+package com.nestf.controller.AD.users;
 
 import com.nestf.account.AccountDTO;
 import com.nestf.dao.ADMIN.CustomerDAOAdmin;
+import com.nestf.dao.ADMIN.ProductDAOAdmin;
+import com.nestf.dao.ADMIN.SellerDAOAdmin;
+import com.nestf.product.ProductDTO;
 import com.nestf.util.MyAppConstant;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -26,8 +29,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author ADMIN
  */
-@WebServlet(name = "BlockCustomerServlet", urlPatterns = {"/BlockCustomerServlet"})
-public class BlockCustomerServlet extends HttpServlet {
+@WebServlet(name = "ManagePSellerServlet", urlPatterns = {"/ManagePSellerServlet"})
+public class ManagePSellerServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,12 +47,39 @@ public class BlockCustomerServlet extends HttpServlet {
         response.setCharacterEncoding("utf-8");
         ServletContext context = request.getServletContext();
         Properties siteMap = (Properties) context.getAttribute("SITEMAP");
-        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.MANAGE_CUSTOMER_PAGE);
+        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.MANAGE_SELLER_PAGE);
         String phone = request.getParameter("phone");
-        String btAction = request.getParameter("btAction");
+//        String choosetime = request.getParameter("choosetime"); // yyyy-mm
+//        int year = 0, month = 0;
+        String btAction = request.getParameter("type"); // show, block, unblock
+
         boolean result = false;
+        if (btAction.equals("block")) {
+            int numProduct = !request.getParameter("product").isEmpty() ? Integer.parseInt(request.getParameter("product")) : 0;
+            if (numProduct > 0) {
+                result = true;
+                request.setAttribute("SELLER_ERROR", "Seller đang quản lý sản phẩm! Không thể block");
+            }
+        }
         try {
-            if (!phone.isEmpty() && btAction.equals("block")) {
+
+//            TH1: input time to check revenue
+//            if (!choosetime.isEmpty() && choosetime != null) {
+//                String[] array = choosetime.split("-");
+//                year = Integer.parseInt(array[0]);
+//                month = Integer.parseInt(array[1]);
+//
+//                if (year != 0 && month != 0) {
+//                    List<AccountDTO> manageSeller = SellerDAOAdmin.getListSellerIncome(month, year);
+//                    request.setAttribute("FILTER_TIME", manageSeller);
+//                }
+//            }
+            if (btAction.equals("show")) {
+                List<ProductDTO> listProduct = ProductDAOAdmin.getListProductOfSeller(phone);
+                request.setAttribute("PRODUCT_SELLER", listProduct);
+            }
+
+            if (!phone.isEmpty() && btAction.equals("block") && !result) {
                 result = CustomerDAOAdmin.blockCustomer(phone);
             }
             if (!phone.isEmpty() && btAction.equals("unblock")) {
@@ -58,10 +88,18 @@ public class BlockCustomerServlet extends HttpServlet {
 
             if (result) {
                 HttpSession session = request.getSession();
-                List<AccountDTO> listCustomer = CustomerDAOAdmin.getAllCustomer();
-                session.setAttribute("LIST_CUSTOMER", listCustomer);
-                List<AccountDTO> listBlockCustomer = CustomerDAOAdmin.getBlockCustomer();
-                session.setAttribute("BLOCK_CUSTOMER", listBlockCustomer);
+                String choosetime = (String) session.getAttribute("MONTH");
+                if (!choosetime.isEmpty()) {
+                    String[] array = choosetime.split("-");
+                    int year = Integer.parseInt(array[0]);
+                    int month = Integer.parseInt(array[1]);
+                    List<AccountDTO> manageSeller
+                            = SellerDAOAdmin.getListSellerIncome(year, month);
+                    session.setAttribute("MANAGE_SELLER", manageSeller);
+                    List<AccountDTO> listSeller = SellerDAOAdmin.getListSeller();
+                    session.setAttribute("LIST_SELLER", listSeller);
+                }
+
             }
 
         } catch (SQLException e) {
