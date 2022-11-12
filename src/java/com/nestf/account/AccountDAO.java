@@ -32,7 +32,7 @@ public class AccountDAO {
                 ptm.setString(2, password);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
-                    account = new AccountDTO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBoolean(5), rs.getDouble(6), rs.getString(7));
+                    account = new AccountDTO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getBoolean(5), rs.getDouble(6), rs.getString(7), rs.getBoolean(8));
                 }
             }
         } finally {

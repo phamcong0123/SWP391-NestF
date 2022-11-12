@@ -38,12 +38,12 @@ public class LoadBillServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private static final String CART_PAGE = "cart.jsp";
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = CART_PAGE;
-        try  {
+        try {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession(false);
             AccountDTO customer = (AccountDTO) request.getSession().getAttribute("USER");
@@ -51,16 +51,16 @@ public class LoadBillServlet extends HttpServlet {
             BillDAO billDAO = new BillDAO();
             billDAO.getMyAllBills(phone);
             List<BillDTO> allBills = billDAO.getBills();
-            List<BillDTO> onProcessing = billDAO.getThisStatusBills(allBills, 1, 2);
-            request.setAttribute("PROCESSING", onProcessing);
-            List<BillDTO> onDelivering = billDAO.getThisStatusBills(allBills, 3);
-            request.setAttribute("DELIVERING", onDelivering);
-            List<BillDTO> delivered = billDAO.getThisStatusBills(allBills, 4);
-            request.setAttribute("DELIVERED", delivered);
-            List<BillDTO> canceled = billDAO.getThisStatusBills(allBills, 5);
-            request.setAttribute("CANCELED", canceled);
-            List<BillDTO> returned = billDAO.getThisStatusBills(allBills, 6);
-            request.setAttribute("RETURNED", returned);
+            if (allBills != null) {
+                List<BillDTO> onProcessing = billDAO.getThisStatusBills(allBills, 1, 2);
+                request.setAttribute("PROCESSING", onProcessing);
+                List<BillDTO> onDelivering = billDAO.getThisStatusBills(allBills, 3);
+                request.setAttribute("DELIVERING", onDelivering);
+                List<BillDTO> delivered = billDAO.getThisStatusBills(allBills, 4);
+                request.setAttribute("DELIVERED", delivered);
+                List<BillDTO> canceled = billDAO.getThisStatusBills(allBills, 5);
+                request.setAttribute("CANCELED", canceled);
+            }
         } catch (NamingException ex) {
             Logger.getLogger(LoadBillServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {

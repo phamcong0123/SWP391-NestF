@@ -36,6 +36,17 @@ public class AccountDTO implements Serializable {
         return point;
     }
 
+    public AccountDTO(String phone, String password, String name, String address, boolean gender, double point, String role, boolean status) {
+        this.phone = phone;
+        this.password = password;
+        this.name = name;
+        this.address = address;
+        this.gender = gender;
+        this.point = point;
+        this.role = role;
+        this.status = status;
+    }
+
     public AccountDTO(String phone, String password, String name, String address, boolean gender, double point, String role) {
         this.phone = phone;
         this.password = password;

@@ -27,7 +27,9 @@ public class ProductDAO {
             + "INNER JOIN tblCategory cat\n"
             + "ON pro.categoryID = cat.categoryID\n"
             + "INNER JOIN tblProductSeller proSel\n"
-            + "ON pro.productID = proSel.productID";
+            + "ON pro.productID = proSel.productID\n"
+            + "WHERE pro.status = 1\n"
+            + "ORDER BY pro.quantity DESC, pro.productID";
 
     public static final String FILTER_CATE = "SELECT pro.productID, proSel.selPhone, name, price, quantity, cat.categoryID, categoryName, discountPrice, productDes, image, detailDes, pro.status\n"
             + "FROM tblProducts pro\n"
@@ -35,16 +37,16 @@ public class ProductDAO {
             + "ON pro.categoryID = cat.categoryID\n"
             + "INNER JOIN tblProductSeller proSel\n"
             + "ON pro.productID = proSel.productID\n"
-            + "WHERE pro.categoryID = ?";
-
+            + "WHERE pro.categoryID = ? AND pro.status = 1\n"
+            + "ORDER BY pro.quantity DESC, pro.productID";
     public static final String FILTER_PRICE = "SELECT pro.productID, proSel.selPhone, name, price, quantity, cat.categoryID, categoryName, discountPrice, productDes, image, detailDes, pro.status\n"
             + "FROM tblProducts pro\n"
             + "INNER JOIN tblCategory cat\n"
             + "ON pro.categoryID = cat.categoryID\n"
             + "INNER JOIN tblProductSeller proSel\n"
             + "ON pro.productID = proSel.productID\n"
-            + "WHERE price BETWEEN ? AND ?";
-
+            + "WHERE price BETWEEN ? AND ? AND pro.status = 1\n"
+            + "ORDER BY pro.quantity DESC, pro.productID";
     public static final String FILTER_BOTH = "SELECT pro.productID, proSel.selPhone, name, price, quantity, cat.categoryID, categoryName, discountPrice, productDes, image, detailDes, pro.status\n"
             + "FROM tblProducts pro\n"
             + "INNER JOIN tblCategory cat\n"
@@ -52,8 +54,8 @@ public class ProductDAO {
             + "INNER JOIN tblProductSeller proSel\n"
             + "ON pro.productID = proSel.productID\n"
             + "WHERE pro.categoryID = ?\n"
-            + "AND price BETWEEN ? AND ?";
-
+            + "AND price BETWEEN ? AND ? AND pro.status = 1"
+            + "ORDER BY pro.quantity DESC, pro.productID";
     public static final String GET_PRO_DETAIL = "SELECT pro.productID, proSel.selPhone, name, price, quantity, cat.categoryID, categoryName, discountPrice, productDes, image, detailDes, pro.status\n"
             + "FROM tblProducts pro\n"
             + "INNER JOIN tblCategory cat\n"
@@ -68,7 +70,7 @@ public class ProductDAO {
             + "ON pro.categoryID = cat.categoryID\n"
             + "INNER JOIN tblProductSeller proSel\n"
             + "ON pro.productID = proSel.productID\n"
-            + "WHERE cat.categoryName = ?\n"
+            + "WHERE cat.categoryName = ? AND pro.status = 1\n"
             + "AND pro.productID != ?";
 
     public static final String SEARCH_PRODUCT = "SELECT pro.productID, proSel.selPhone, name, price, quantity, cat.categoryID, categoryName, discountPrice, productDes, image, detailDes, pro.status\n"
@@ -77,10 +79,11 @@ public class ProductDAO {
             + "ON pro.categoryID = cat.categoryID\n"
             + "INNER JOIN tblProductSeller proSel\n"
             + "ON pro.productID = proSel.productID\n"
-            + "WHERE name LIKE ?";
+            + "WHERE name LIKE ? AND pro.status = 1\n"
+            + "ORDER BY pro.quantity DESC, pro.productID";
 
     public static final String GET_BEST_SELL_LIST = "SELECT TOP(4) pro.productID, proSel.selPhone, name, price, quantity, cat.categoryID, categoryName, discountPrice, productDes, image, detailDes, pro.status\n"
-            + "FROM (SELECT productID, SUM(price) as sumPrice\n"
+            + "FROM (SELECT productID, COUNT(productID) as sellQuantity\n"
             + "       FROM tblBillDetail\n"
             + "       group by productID) as tab\n"
             + "JOIN tblProducts pro\n"
@@ -89,7 +92,8 @@ public class ProductDAO {
             + "ON pro.categoryID = cat.categoryID\n"
             + "JOIN tblProductSeller proSel\n"
             + "ON pro.productID = proSel.productID\n"
-            + "ORDER BY sumPrice DESC";
+            + "WHERE pro.status = 1\n"
+            + "ORDER BY sellQuantity DESC";
 
     public List<ProductDTO> getListProduct() throws SQLException {
         List<ProductDTO> list = null;

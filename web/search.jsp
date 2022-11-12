@@ -131,8 +131,13 @@
                                                         </a>
                                                     </div>
                                                     <div class="buynow-btn">
-                                                        <button class="btn btn-dark" onclick="checkState(${not empty sessionScope.USER ? product.productID : ''})">
-                                                            <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
+                                                        <button class="btn btn-dark" ${product.quantity eq 0 ? 'disabled' : ''} onclick="checkState(${not empty sessionScope.USER ? product.productID : ''})">
+                                                            <c:if test="${product.quantity eq 0}">
+                                                                <i class="fa-solid fa-cart-xmark"></i> Hết hàng
+                                                            </c:if>
+                                                            <c:if test="${product.quantity ne 0}">
+                                                                <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
+                                                            </c:if>                                                           
                                                         </button>
                                                     </div>
                                                 </div>
