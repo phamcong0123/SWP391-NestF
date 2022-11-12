@@ -14,7 +14,6 @@ import java.util.Date;
  * @author DELL
  */
 public class IncomeDTO implements Serializable{
-    private int incomeID;
     private String selPhone;
     private Date date;
     private double total;
@@ -22,19 +21,10 @@ public class IncomeDTO implements Serializable{
     public IncomeDTO() {
     }
 
-    public IncomeDTO(int incomeID, String selPhone, Date date, double total) {
-        this.incomeID = incomeID;
+    public IncomeDTO(String selPhone, Date date, double total) {
         this.selPhone = selPhone;
         this.date = date;
         this.total = total;
-    }
-
-    public int getIncomeID() {
-        return incomeID;
-    }
-
-    public void setIncomeID(int incomeID) {
-        this.incomeID = incomeID;
     }
 
     public String getSelPhone() {
@@ -63,7 +53,7 @@ public class IncomeDTO implements Serializable{
 
     @Override
     public String toString() {
-        return "IncomeDTO{" + "incomeID=" + incomeID + ", selPhone=" + selPhone + ", date=" + date + ", total=" + total + '}';
+        return "IncomeDTO{ selPhone=" + selPhone + ", date=" + date + ", total=" + total + '}';
     }
     
 }

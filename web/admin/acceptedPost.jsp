@@ -361,7 +361,7 @@
                             <!--//////////////////////////////////////////////////////Kết thúc phần Chung/////////////////-->
                             <!-- Page Heading -->
                             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 class="h3 mb-0 text-gray-800">List posts</h1>
+                                <h1 class="h3 mb-0 text-gray-800">List Accepted Posts</h1>
                             </div>
 
                             <!-- Content Row -->
@@ -377,23 +377,24 @@
                                             <th>Status</th>
                                             <th>File Path</th>
                                             <th>Image</th>
-
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <c:forEach var="post" items="${sessionScope.LIST_POST}">
                                             <tr>
+                                                <jsp:useBean id="date" class="com.nestf.util.FormatPrinter"/> 
                                                 <td>${post.postID}</td>
                                                 <td>${post.seller.phone}</td>
                                                 <td>${post.title}</td>
-                                                <td>${post.dateTime}</td>
+                                                <td>${date.printDate(post.dateTime)}</td>
                                                 <td>${post.status}</td>
                                                 <td>${post.filePath}</td>
                                                 <td>${post.image}</td>
                                                 <td>
-                                                    <a href="viewPostDetail?postID=${product.productID}&productType=accepted" class="view" title="View" data-toggle="tooltip"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                    <a href="loadArticle?postID=${post.postID}" class="view" title="View" data-toggle="tooltip"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                                     <a href="editPostAction?postID=${product.productID}&productType=accepted" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
-                                                    <a href="deletePost?postID=${post.postID}" class="delete" title="Delete" data-toggle="tooltip"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                                    <a href="pendingPost?postID=${post.postID}" class="delete" title="Delete" data-toggle="tooltip"><i class="fa fa-times" aria-hidden="true"></i></a>
                                                 </td>
                                             </tr>
                                         </c:forEach>

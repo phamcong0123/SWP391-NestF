@@ -60,6 +60,18 @@ public class BillDTO implements Serializable {
         this.cancelReason = cancelReason;
         this.detail = detail;
     }
+    
+    public BillDTO(int billID, String cusPhone, String address, String transactionID, StatusDTO status, Date time, double total, List<BillDetailDTO> detail, String cancelReason) {
+        this.billID = billID;
+        this.cusPhone = cusPhone;
+        this.address = address;
+        this.transactionID = transactionID;
+        this.status = status;
+        this.time = time;
+        this.total = total;
+        this.detail = detail;
+        this.cancelReason = cancelReason;
+    }
    
     public void setBillID(int billID) {
         this.billID = billID;

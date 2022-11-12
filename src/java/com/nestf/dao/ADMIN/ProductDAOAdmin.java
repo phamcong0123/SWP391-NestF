@@ -27,15 +27,15 @@ public class ProductDAOAdmin {
             + "Where p.categoryID = c.categoryID\n"
             + "And p.productID = ?";
 
-    public static final String GET_PRO_DETAIL = "SELECT ps.selPhone, pro.name, price, quantity, cat.categoryID, cat.categoryName, discountPrice, productDes, image, pro.status, ac.name as selName\n"
-            + "FROM  tblProducts pro\n"
-            + "INNER JOIN tblCategory cat\n"
-            + "ON pro.categoryID = cat.categoryID\n"
-            + "INNER JOIN tblProductSeller ps\n"
-            + "ON pro.productID = ps.productID\n"
-            + "INNER JOIN tblAccount ac\n"
-            + "ON ac.phone = ps.selPhone\n"
-            + "AND pro.productID = ?";
+    public static final String GET_PRO_DETAIL = "SELECT ps.selPhone, pro.name, price, quantity, cat.categoryID, cat.categoryName, discountPrice, productDes, image, pro.status, ac.name as selName\n" +
+"            FROM  tblProducts pro\n" +
+"            INNER JOIN tblCategory cat\n" +
+"            ON pro.categoryID = cat.categoryID\n" +
+"            INNER JOIN tblProductSeller ps\n" +
+"            ON pro.productID = ps.productID AND ps.isActive = 1\n" +
+"            INNER JOIN tblAccount ac\n" +
+"            ON ac.phone = ps.selPhone\n" +
+"            AND pro.productID = ?";
 
     public static final String SET_STATUS_TRUE = "UPDATE tblProducts\n"
             + "SET status = 1\n"
@@ -73,13 +73,18 @@ public class ProductDAOAdmin {
             + "SET isActive = 0\n"
             + "WHERE productID = ? AND selPhone = ? AND isActive = 1";
 
-    public static final String GET_LIST_PRODUCT_OF_SELLER = "SELECT p.productID, p.name, c.categoryName, p.price, p.discountPrice, p.quantity \n"
-            + "FROM tblProducts p\n"
-            + "Inner Join tblCategory c\n"
-            + "ON p.categoryID = c.categoryID\n"
-            + "INNER JOIN tblProductSeller s\n"
-            + "ON p.productID = s.productID \n"
-            + "WHERE p.status = 1 AND s.isActive = 1 AND s.selPhone = ?";
+    public static final String GET_LIST_PRODUCT_OF_SELLER = "SELECT p.productID, p.name, c.categoryName, p.price, p.discountPrice, p.quantity, a.name as selName \n"
+            + "            FROM tblProducts p\n"
+            + "            Inner Join tblCategory c\n"
+            + "            ON p.categoryID = c.categoryID\n"
+            + "            INNER JOIN tblProductSeller s\n"
+            + "            ON p.productID = s.productID\n"
+            + "			INNER JOIN tblAccount a\n"
+            + "            ON a.phone = s.selPhone\n"
+            + "            WHERE p.status = 1 AND s.isActive = 1 AND s.selPhone = ?";
+
+    public static final String INSERT_NEW_PRODUCT_SELLER = "Insert Into tblProductSeller(productID, selPhone, isActive) "
+            + " Values(?,?,1)";
 
     public static final String REGEX = "-(ptth)";
     public static final String INSERT_REGEX = "-ptth";
@@ -264,10 +269,8 @@ public class ProductDAOAdmin {
             con = DBHelper.makeConnection();
 
             if (con != null) {
-                String sql = "Insert Into tblProductSeller(productID, selPhone, isActive) "
-                        + "Values(?,?,1) ";
 //          3. Create Statement Object
-                statement = con.prepareStatement(sql);
+                statement = con.prepareStatement(INSERT_NEW_PRODUCT_SELLER);
                 statement.setInt(1, dto.getProductID());
                 statement.setString(2, dto.getSelPhone());
 
@@ -458,7 +461,6 @@ public class ProductDAOAdmin {
         return false;
     }
 
-
     public static boolean acceptProduct(ProductDTO dto) throws SQLException, NamingException {
         Connection con = null;
         PreparedStatement statement = null;
@@ -551,7 +553,7 @@ public class ProductDAOAdmin {
         }
         return 0;
     }
-    
+
     public static List<ProductDTO> getListProductOfSeller(String phone) throws SQLException, NamingException {
         List<ProductDTO> list = new ArrayList<>();
         Connection conn = null;
@@ -569,8 +571,9 @@ public class ProductDAOAdmin {
                     String categoryName = rs.getString("categoryName");
                     float price = Float.parseFloat(rs.getString("price"));
                     float discountPrice = Float.parseFloat(rs.getString("discountPrice"));
-                    int quantity = Integer.parseInt(rs.getString("quantity"));                    
-                    list.add(new ProductDTO(productID, name, new CategoryDTO(categoryName), price, discountPrice, quantity));
+                    int quantity = Integer.parseInt(rs.getString("quantity"));
+                    String selName = rs.getString("selName");
+                    list.add(new ProductDTO(productID, name, new CategoryDTO(categoryName), price, discountPrice, quantity, selName));
                 }
             }
         } finally {
@@ -585,6 +588,46 @@ public class ProductDAOAdmin {
             }
         }
         return list;
+    }
+
+    public boolean changeSeller(ProductDTO dto, String oldSelPhone) throws NamingException, SQLException {
+        Connection con = null;
+        PreparedStatement statement = null;
+        if (dto == null) {
+            return false;
+        }
+
+        try {
+//            1. make connection
+            con = DBHelper.makeConnection();
+
+//            2. Create sql string 
+            if (con != null) {
+//                2.1 Gán isActive seller cũ = 0
+                statement = con.prepareStatement(DEACTIVE_PRODUCT_SELLER);
+                statement.setInt(1, dto.getProductID());
+                statement.setString(2, oldSelPhone);
+//          4. Execute Query
+                int affectRow = statement.executeUpdate();
+
+//          5. Process result
+                if (affectRow > 0) {
+//                    5.1 Gán isActive = 1 cho seller mới
+                    insertNEWProductSeller(dto);
+                    return true;
+                }
+
+            }// end if connection is not null
+
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return false;
     }
 
 }

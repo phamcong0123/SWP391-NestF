@@ -6,9 +6,13 @@
 package com.nestf.controller.AD.nonactive;
 
 import com.nestf.dao.ADMIN.PostDAOAdmin;
+import com.nestf.post.PostDAO;
+import com.nestf.post.PostDTO;
 import com.nestf.util.MyAppConstant;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +23,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -41,10 +46,15 @@ public class AcceptPostServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         ServletContext context = request.getServletContext();
         Properties siteMap = (Properties) context.getAttribute("SITEMAP");
-        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.ACCEPTED_POST_PAGE);
+        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.PENDING_POST_PAGE);
         try {
             PostDAOAdmin dao = new PostDAOAdmin();
             dao.acceptedPost(Integer.parseInt(request.getParameter("postID")));
+            HttpSession session = request.getSession();
+            List<PostDTO> listActivePost = PostDAOAdmin.getPostListActive();
+            session.setAttribute("LIST_POST", listActivePost);
+            List<PostDTO> listPending = PostDAOAdmin.getPostListNonActive();
+            session.setAttribute("LIST_PENDING_POST", listPending);
         } catch (Exception e) {
         } finally {
             request.getRequestDispatcher(url).forward(request, response);

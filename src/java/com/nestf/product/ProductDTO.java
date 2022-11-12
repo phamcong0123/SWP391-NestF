@@ -121,13 +121,14 @@ public class ProductDTO implements Serializable{
     }
     
 //  Admin 
-    public ProductDTO(int productID, String name, CategoryDTO category, float price, float discountPrice, int quantity) {
+    public ProductDTO(int productID, String name, CategoryDTO category, float price, float discountPrice, int quantity, String selName) {
         this.productID = productID;
         this.name = name;
         this.category = category;
         this.price = price;
         this.discountPrice = discountPrice;
         this.quantity = quantity;
+        this.selName = selName;
     }
 
     public String getSelName() {

@@ -22,6 +22,10 @@ import javax.naming.NamingException;
  * @author Admin
  */
 public class BillDetailDAO {
+    private static final String GET_LIST_BILL_DETAIL = "SELECT productID, quantity, price, total\n" +
+                                                        "FROM tblBillDetail\n" +
+                                                        "WHERE billID = ?";
+    
     public List<BillDetailDTO> getBillDetail(int billID) throws NamingException, SQLException {
         List<BillDetailDTO> list = null;        
         Connection conn = null;
@@ -30,8 +34,7 @@ public class BillDetailDAO {
         try {
             conn = DBHelper.makeConnection();
             if (conn != null) {
-                String query = "SELECT billID, productID, quantity, price, total FROM tblBillDetail WHERE billID = ?";
-                ptm = conn.prepareStatement(query);
+                ptm = conn.prepareStatement(GET_LIST_BILL_DETAIL);
                 ptm.setInt(1, billID);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
@@ -79,5 +82,7 @@ public class BillDetailDAO {
         }
         return check;
     }
+    
+    
     
 }

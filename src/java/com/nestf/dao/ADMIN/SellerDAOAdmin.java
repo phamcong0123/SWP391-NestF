@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.naming.NamingException;
+import static com.nestf.dao.ADMIN.CustomerDAOAdmin.BLOCK_USER;
 
 /**
  *
@@ -24,31 +25,43 @@ public class SellerDAOAdmin {
     public static final String GET_LIST = "SELECT phone, password, name, address, gender, point, role\n"
             + "FROM tblAccount\n";
 
-    public static final String GET_LIST_SELLER_ONLY = "SELECT account.phone, password, account.name, address, gender, point, count(ps.selPhone) as selQuantity\n"
+    public static final String GET_LIST_SELLER = "SELECT account.phone, password, account.name, address, gender, point, count(ps.selPhone) as selQuantity\n"
             + "            FROM tblProductSeller ps\n"
-            + "			RIGHT JOIN (SELECT p.productID\n"
-            + "						FROM tblProducts p\n"
-            + "						WHERE p.status = 1) as p\n"
-            + "			ON ps.productID = p.productID\n"
-            + "			FULL JOIN (SELECT acc.phone, password, name, address, gender, point\n"
-            + "						fROM tblAccount acc\n"
-            + "						WHERE acc.role = 'SE') as account\n"
-            + "            ON account.phone = ps.selPhone \n"
-            + "            Group by account.phone, password, name, address, gender, point";
+            + "            RIGHT JOIN (SELECT p.productID\n"
+            + "            			FROM tblProducts p\n"
+            + "            			WHERE p.status = 1) as p\n"
+            + "            			ON ps.productID = p.productID AND ps.isActive = 1\n"
+            + "						RIGHT JOIN (SELECT acc.phone, password, name, address, gender, point\n"
+            + "            						fROM tblAccount acc\n"
+            + "            						WHERE acc.role = 'SE') as account\n"
+            + "                       ON account.phone = ps.selPhone \n"
+            + "                       Group by account.phone, password, name, address, gender, point";
 
     public static final String GET_SELLER_GIVEN_NAME = "SELECT acc.phone, password, address, gender, point\n"
             + "FROM tblAccount acc\n"
             + "WHERE acc.role = 'SE' AND acc.name = ?";
 
-    public static final String GET_LIST_SELLER_INCOME = "Select a.name, a.phone, a.address, SUM(d.total) as total, a.status\n"
-            + "FROM tblBillDetail d\n"
-            + "Right join tblAccount a\n"
-            + "ON d.selPhone = a.phone \n"
-            + "WHERE a.role = 'SE'\n"
-            + "Group by  a.name, a.phone, a.address, a.status\n"
-            + "Order by total DESC";
+    public static final String GET_LIST_SELLER_INCOME = "SELECT account.phone, password, account.name, address, account.status, count(ps.selPhone) as selQuantity, bd.total\n"
+            + "            FROM tblProductSeller ps\n"
+            + "			RIGHT JOIN (SELECT p.productID\n"
+            + "						FROM tblProducts p\n"
+            + "						WHERE p.status = 1) as p\n"
+            + "			ON ps.productID = p.productID AND ps.isActive = 1\n"
+            + "			RIGHT JOIN (SELECT acc.phone, acc.status, password, name, address, gender, point\n"
+            + "						FROM tblAccount acc\n"
+            + "						WHERE acc.role = 'SE') as account\n"
+            + "            ON account.phone = ps.selPhone\n"
+            + "			LEFT JOIN (SELECT  distinct d.selPhone, MONTH(b.time) as monthtime, YEAR(b.time) as yearTime, SUM (d.total) as total\n"
+            + "						FROM tblBillDetail d\n"
+            + "						LEFT JOIN tblBill b\n"
+            + "						ON d.billID = b.billID\n"
+            + "						WHERE b.statusID = 4 \n"
+            + "						GROUP BY d.selPhone, b.time) as bd\n"
+            + "			ON bd.selPhone = account.phone AND bd.monthtime = ? AND bd.yearTime = ? \n"
+            + "            Group by account.phone, password, name, address,  account.status, bd.total\n"
+            + "			Order by bd.total desc";
 
-    public static List<AccountDTO> getListSellerOnly() throws SQLException, NamingException {
+    public static List<AccountDTO> getListSeller() throws SQLException, NamingException {
         List<AccountDTO> list = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -56,7 +69,7 @@ public class SellerDAOAdmin {
         try {
             conn = DBHelper.makeConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(GET_LIST_SELLER_ONLY);
+                ptm = conn.prepareStatement(GET_LIST_SELLER);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     String phone = rs.getString("phone");
@@ -83,7 +96,7 @@ public class SellerDAOAdmin {
         return list;
     }
 
-    public static List<AccountDTO> getListSellerIncome() throws SQLException, NamingException {
+    public static List<AccountDTO> getListSellerIncome(int month, int year) throws SQLException, NamingException {
         List<AccountDTO> list = new ArrayList<>();
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -92,14 +105,17 @@ public class SellerDAOAdmin {
             conn = DBHelper.makeConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(GET_LIST_SELLER_INCOME);
+                ptm.setInt(1, month);
+                ptm.setInt(2, year);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
                     String phone = rs.getString("phone");
                     String name = rs.getString("name");
                     String address = rs.getString("address");
-                    double total = rs.getDouble("total");
                     boolean status = rs.getBoolean("status");
-                    list.add(new AccountDTO(phone, name, address, total, status));
+                    int selQuantity = rs.getInt("selQuantity");
+                    double total = rs.getDouble("total");
+                    list.add(new AccountDTO(phone, name, address, status, selQuantity, total));
                 }
             }
         } finally {

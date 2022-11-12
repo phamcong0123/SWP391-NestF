@@ -98,7 +98,7 @@
                             <div id="banner-text" class="position-absolute">
                                 <h3>Nest-F</h3>
                                 <ul>
-                                    <li class="text-start ">• Sử dụng100% yến sào thiên nhiên</li>
+                                    <li class="text-start ">• Sử dụng 100% yến sào thiên nhiên</li>
                                     <li>• Không sử dụng hoá chất trong quá trình chế biến </li>
                                     <li>• Sản phẩm được chọn lọc kỹ lưỡng</li>
                                 </ul>
@@ -115,7 +115,7 @@
                             <div id="banner-text" class="position-absolute banner3">
                                 <h3>Nest-F</h3>
                                 <ul>
-                                    <li class="text-start ">• Sử dụng100% yến sào thiên nhiên</li>
+                                    <li class="text-start ">• Sử dụng 100% yến sào thiên nhiên</li>
                                     <li>• Không sử dụng hoá chất trong quá trình chế biến </li>
                                     <li>• Sản phẩm được chọn lọc kỹ lưỡng</li>
                                 </ul>

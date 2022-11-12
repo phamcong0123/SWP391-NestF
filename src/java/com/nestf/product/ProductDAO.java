@@ -477,4 +477,137 @@ public class ProductDAO {
         }
         return list;
     }
+    
+    private final String GET_SELLER_BEST_SELL = "SELECT TOP(2) pro.productID, proSel.selPhone, name, price, quantity, cat.categoryID, categoryName, discountPrice, productDes, image, detailDes, pro.status\n"
+            + "FROM (SELECT productID, COUNT(productID) as sellQuantity\n"
+            + "       FROM tblBillDetail\n"
+            + "       group by productID) as tab\n"
+            + "JOIN tblProducts pro\n"
+            + "ON pro.productID = tab.productID\n"
+            + "JOIN tblCategory cat\n"
+            + "ON pro.categoryID = cat.categoryID\n"
+            + "JOIN tblProductSeller proSel\n"
+            + "ON pro.productID = proSel.productID\n"
+            + "WHERE proSel.selPhone = ?\n"
+            + "ORDER BY sellQuantity DESC";
+
+    public List<ProductDTO> sellerBestSellList(String selPhone) throws SQLException {
+        List<ProductDTO> list = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_SELLER_BEST_SELL);
+                ptm.setString(1, selPhone);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int productID = Integer.parseInt(rs.getString("productID"));
+                    String name = rs.getString("name");
+                    double price = Double.parseDouble(rs.getString("price"));
+                    int quantity = Integer.parseInt(rs.getString("quantity"));
+                    int categoryID = Integer.parseInt(rs.getString("categoryID"));
+                    String category = rs.getString("categoryName");
+                    double discountPrice = Double.parseDouble(rs.getString("discountPrice"));
+                    String productDes = rs.getString("productDes");
+                    String image = rs.getString("image");
+                    boolean status = rs.getBoolean("status");
+                    String[] imageLink = image.split(REGEX);
+                    if (list == null) {
+                        list = new ArrayList<>();
+                    }
+                    list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, category), discountPrice, productDes, ".", status, imageLink));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
+    
+    private final String GET_SELLER_PRODUCT_LIST = "SELECT pro.productID, proSel.selPhone, name, price, quantity, cate.categoryID, categoryName, discountPrice, productDes, image, detailDes, pro.status\n" +
+                                                "FROM tblProducts pro\n" +
+                                                "JOIN tblProductSeller proSel\n" +
+                                                "ON pro.productID = proSel.productID\n" +
+                                                "JOIN tblCategory cate\n" +
+                                                "ON cate.categoryID = pro.categoryID\n" +
+                                                "WHERE selPhone = ?";
+    
+    public List<ProductDTO> getSellerProductList(String selPhone) throws SQLException {
+        List<ProductDTO> list = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_SELLER_PRODUCT_LIST);
+                ptm.setString(1, selPhone);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    int productID = Integer.parseInt(rs.getString("productID"));
+                    String name = rs.getString("name");
+                    double price = Double.parseDouble(rs.getString("price"));
+                    int quantity = Integer.parseInt(rs.getString("quantity"));
+                    int categoryID = Integer.parseInt(rs.getString("categoryID"));
+                    String category = rs.getString("categoryName");
+                    double discountPrice = Double.parseDouble(rs.getString("discountPrice"));
+                    String productDes = rs.getString("productDes");
+                    String image = rs.getString("image");
+                    boolean status = rs.getBoolean("status");
+                    String[] imageLink = image.split(REGEX);
+                    if (list == null) {
+                        list = new ArrayList<>();
+                    }
+                    list.add(new ProductDTO(productID, selPhone, name, price, quantity, new CategoryDTO(categoryID, category), discountPrice, productDes, ".", status, imageLink));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
+    
+    private final String UPDATE_QUANTITY = "UPDATE tblProducts\n" +
+                                            "SET quantity = ?\n" +
+                                            "WHERE productID = ?";
+    public void updateQuantity(int productID, int newQuantity) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(UPDATE_QUANTITY);
+                ptm.setInt(1, newQuantity);
+                ptm.setInt(2, productID);
+                ptm.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) ptm.close();
+            if (conn != null) conn.close();
+        }
+    }
 }

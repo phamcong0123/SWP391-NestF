@@ -194,4 +194,142 @@ public class BillDAO {
         }
         return check;
     }
+    
+    private static final String GET_LIST_ORDER = "SELECT bi.billID, cusPhone, bi.address, bi.transactionID, statusID, time, bi.total, cancelReason\n" +
+                                                "FROM tblBill bi\n" +
+                                                "JOIN tblBillDetail bilDet\n" +
+                                                "ON bi.billID = bilDet.billID\n" +
+                                                "JOIN tblProductSeller proSel\n" +
+                                                "ON proSel.productID = bilDet.productID\n" +
+                                                "WHERE proSel.selPhone = ? AND isActive = 1\n" +
+                                                "GROUP BY bi.billID, cusPhone, bi.address, bi.transactionID, statusID, time, bi.total, cancelReason\n" +
+                                                "ORDER BY statusID ASC, time DESC";
+    public List<BillDTO> getListOrder(String selPhone) throws SQLException {
+        List<BillDTO> list = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBHelper.makeConnection();
+            StatusDAO statusDAO = new StatusDAO();
+            BillDetailDAO billDetailDAO = new BillDetailDAO();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_LIST_ORDER);
+                ptm.setString(1, selPhone);
+                rs = ptm.executeQuery();
+                while (rs.next()) {                    
+                    int billID = rs.getInt("billID");
+                    String cusPhone = rs.getString("cusPhone");
+                    String address = rs.getString("address");
+                    String transactionID = rs.getString("transactionID");
+                    int statusID = rs.getInt("statusID");
+                    Date date = rs.getDate("time");
+                    double total = rs.getDouble("total");
+                    String reason = rs.getString("cancelReason");
+                    if (list == null) {
+                        list = new ArrayList<>();
+                    }
+                    List<BillDetailDTO> detailList = billDetailDAO.getBillDetail(billID);
+                    list.add(new BillDTO(billID, cusPhone, address, transactionID, statusDAO.getStatus(statusID), date, total, detailList, reason));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) rs.close();
+            if (ptm != null) ptm.close();
+            if (conn != null) conn.close();
+        }
+        return list;
+    }
+    
+    private final String UPDATE_STATUS = "UPDATE tblBill\n"
+                                        + "SET statusID = ?\n"
+                                        + "WHERE billID = ?";
+    public boolean updateBillStatus(int orderID, int statusID) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(UPDATE_STATUS);
+                ptm.setInt(1, statusID);
+                ptm.setInt(2, orderID);
+                check = ptm.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) ptm.close();
+            if (conn != null) conn.close();
+        }
+        return check;
+    }
+    
+    private final String CANCEL_ORDER = "UPDATE tblBill\n" +
+                                        "SET statusID = ?, cancelReason = ?\n" +
+                                        "WHERE billID = ?";
+    public boolean updateBillStatus(int orderID, int statusID, String reason) throws SQLException {
+        boolean check = false;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(CANCEL_ORDER);
+                ptm.setInt(1, statusID);
+                ptm.setString(2, reason);
+                ptm.setInt(3, orderID);
+                check = ptm.executeUpdate() > 0;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) ptm.close();
+            if (conn != null) conn.close();
+        }
+        return check;
+    }
+    
+    private final String GET_LIST_DELIVERY_ORDER = "SELECT billID, cusPhone, address, transactionID, statusID, time, total, cancelReason\n" +
+                                                    "FROM tblBill\n" +
+                                                    "WHERE statusID = 3";
+    public List<BillDTO> getListDeliveryOrder() throws SQLException {
+        List<BillDTO> list = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBHelper.makeConnection();
+            StatusDAO statusDAO = new StatusDAO();
+            BillDetailDAO billDetailDAO = new BillDetailDAO();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_LIST_DELIVERY_ORDER);
+                rs = ptm.executeQuery();
+                while (rs.next()) {                    
+                    int billID = rs.getInt("billID");
+                    String cusPhone = rs.getString("cusPhone");
+                    String address = rs.getString("address");
+                    String transactionID = rs.getString("transactionID");
+                    int statusID = rs.getInt("statusID");
+                    Date date = rs.getDate("time");
+                    double total = rs.getDouble("total");
+                    String reason = rs.getString("cancelReason");
+                    if (list == null) {
+                        list = new ArrayList<>();
+                    }
+                    List<BillDetailDTO> detailList = billDetailDAO.getBillDetail(billID);
+                    list.add(new BillDTO(billID, cusPhone, address, transactionID, statusDAO.getStatus(statusID), date, total, detailList, reason));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) rs.close();
+            if (ptm != null) ptm.close();
+            if (conn != null) conn.close();
+        }
+        return list;
+    }
 }

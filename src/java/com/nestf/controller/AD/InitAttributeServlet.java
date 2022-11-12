@@ -16,6 +16,8 @@ import com.nestf.dao.ADMIN.CustomerDAOAdmin;
 import com.nestf.post.PostDTO;
 import com.nestf.util.MyAppConstant;
 import java.io.IOException;
+import java.time.Month;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import javax.servlet.ServletContext;
@@ -54,7 +56,7 @@ public class InitAttributeServlet extends HttpServlet {
             HttpSession session = request.getSession();
             List<CategoryDTO> listCategory = CategoryDAO.getListCategory();
             session.setAttribute("LIST_CATEGORY", listCategory);
-            List<AccountDTO> listSeller = SellerDAOAdmin.getListSellerOnly();
+            List<AccountDTO> listSeller = SellerDAOAdmin.getListSeller();
             session.setAttribute("LIST_SELLER", listSeller);
             List<ProductDTO> listProduct = ProductDAOAdmin.getListActiveProduct();
             session.setAttribute("LIST_PRODUCT", listProduct);
@@ -65,9 +67,13 @@ public class InitAttributeServlet extends HttpServlet {
             List<AccountDTO> listBlockCustomer = CustomerDAOAdmin.getBlockCustomer();
             session.setAttribute("BLOCK_CUSTOMER", listBlockCustomer);
             
-            List<AccountDTO> manageSeller = SellerDAOAdmin.getListSellerIncome();
+            int month = java.time.LocalDateTime.now().getMonth().getValue(); 
+            int year = java.time.LocalDateTime.now().getYear(); 
+            String choosetime = "" + year + "-" + month;
+            List<AccountDTO> manageSeller = SellerDAOAdmin.getListSellerIncome(month, year);
             session.setAttribute("MANAGE_SELLER", manageSeller);
-            
+            session.setAttribute("MONTH", choosetime);
+           
             List<PostDTO> listActivePost = PostDAOAdmin.getPostListActive();
             session.setAttribute("LIST_POST", listActivePost);
             List<PostDTO> listPending = PostDAOAdmin.getPostListNonActive();
