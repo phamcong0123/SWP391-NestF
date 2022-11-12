@@ -80,7 +80,7 @@ public class ProductDAO {
             + "WHERE name LIKE ?";
 
     public static final String GET_BEST_SELL_LIST = "SELECT TOP(4) pro.productID, proSel.selPhone, name, price, quantity, cat.categoryID, categoryName, discountPrice, productDes, image, detailDes, pro.status\n"
-            + "FROM (SELECT productID, SUM(price) as sumPrice\n"
+            + "FROM (SELECT productID, count(productID) as sellQuantity\n"
             + "       FROM tblBillDetail\n"
             + "       group by productID) as tab\n"
             + "JOIN tblProducts pro\n"
@@ -89,7 +89,7 @@ public class ProductDAO {
             + "ON pro.categoryID = cat.categoryID\n"
             + "JOIN tblProductSeller proSel\n"
             + "ON pro.productID = proSel.productID\n"
-            + "ORDER BY sumPrice DESC";
+            + "ORDER BY sellQuantity DESC";
 
     public List<ProductDTO> getListProduct() throws SQLException {
         List<ProductDTO> list = null;
@@ -475,7 +475,7 @@ public class ProductDAO {
     }
     
     private final String GET_SELLER_BEST_SELL = "SELECT TOP(2) pro.productID, proSel.selPhone, name, price, quantity, cat.categoryID, categoryName, discountPrice, productDes, image, detailDes, pro.status\n"
-            + "FROM (SELECT productID, SUM(price) as sumPrice\n"
+            + "FROM (SELECT productID, COUNT(productID) as sellQuantity\n"
             + "       FROM tblBillDetail\n"
             + "       group by productID) as tab\n"
             + "JOIN tblProducts pro\n"
@@ -485,7 +485,7 @@ public class ProductDAO {
             + "JOIN tblProductSeller proSel\n"
             + "ON pro.productID = proSel.productID\n"
             + "WHERE proSel.selPhone = ?\n"
-            + "ORDER BY sumPrice DESC";
+            + "ORDER BY sellQuantity DESC";
 
     public List<ProductDTO> sellerBestSellList(String selPhone) throws SQLException {
         List<ProductDTO> list = null;
@@ -583,5 +583,27 @@ public class ProductDAO {
             }
         }
         return list;
+    }
+    
+    private final String UPDATE_QUANTITY = "UPDATE tblProducts\n" +
+                                            "SET quantity = ?\n" +
+                                            "WHERE productID = ?";
+    public void updateQuantity(int productID, int newQuantity) throws SQLException {
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(UPDATE_QUANTITY);
+                ptm.setInt(1, newQuantity);
+                ptm.setInt(2, productID);
+                ptm.executeUpdate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (ptm != null) ptm.close();
+            if (conn != null) conn.close();
+        }
     }
 }

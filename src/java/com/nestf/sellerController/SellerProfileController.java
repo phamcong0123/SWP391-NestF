@@ -6,12 +6,13 @@
 package com.nestf.sellerController;
 
 import com.nestf.account.AccountDTO;
-import com.nestf.bill.BillDAO;
-import com.nestf.billdetail.BillDetailDAO;
-import com.nestf.billdetail.BillDetailDTO;
+import com.nestf.income.IncomeDAO;
+import com.nestf.income.IncomeDTO;
 import com.nestf.product.ProductDAO;
+import com.nestf.product.ProductDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,49 +25,42 @@ import javax.servlet.http.HttpSession;
  *
  * @author NameIsDuy
  */
-@WebServlet(name = "ProcessOrderController", urlPatterns = {"/processOrder"})
-public class ProcessOrderController extends HttpServlet {
+@WebServlet(name = "SellerProfileController", urlPatterns = {"/sellerProfile"})
+public class SellerProfileController extends HttpServlet {
 
-    private final String ERROR = "allOrder";
-    private final String SUCCESS = "allOrder";
-
+    private final String ERROR = "sellerPage";
+    private final String SUCCESS = "seller/profile.jsp";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        
         String url = ERROR;
         try {
-            int orderId = Integer.parseInt(request.getParameter("orderID"));
-            int statusId = Integer.parseInt(request.getParameter("statusID"));
             HttpSession session = request.getSession();
             AccountDTO seller = (AccountDTO) session.getAttribute("USER");
-            String reason = request.getParameter("cancelReason");
-            if (reason != null) {
-                reason = "Người bán " + seller.getName() + " hủy đơn với lí do: " + reason;
+            ProductDAO dao = new ProductDAO();
+            IncomeDAO incomeDAO = new IncomeDAO();
+            List<ProductDTO> list = dao.getSellerProductList(seller.getPhone());
+            int productCount = 0;
+            for (ProductDTO pro : list) {
+                productCount++;
             }
-            boolean checkUpdate = false;
-            BillDAO dao = new BillDAO();
-            BillDetailDAO detailDAO = new BillDetailDAO();
-            ProductDAO proDAO = new ProductDAO();
-            if (reason == null) {
-                checkUpdate = dao.updateBillStatus(orderId, statusId);
-                if (statusId == 3) {
-                    List<BillDetailDTO> listDetail = detailDAO.getBillDetail(orderId);
-                    for (BillDetailDTO detail : listDetail) {
-                        int newQuantity = detail.getProduct().getQuantity() - detail.getQuantity();
-                        proDAO.updateQuantity(detail.getProduct().getProductID(), newQuantity);
-                    }
+            List<IncomeDTO> deliveredIncome = incomeDAO.getSellerIncome(seller.getPhone(), 4);
+            double deliveredTotal = 0;
+            int curMonth = new Date().getMonth();
+            for (IncomeDTO income : deliveredIncome) {
+                if (income.getDate().getMonth() == curMonth) {
+                    deliveredTotal += income.getTotal();
                 }
-            } else {
-                checkUpdate = dao.updateBillStatus(orderId, statusId, reason);
             }
-            if (checkUpdate) {
-                url = SUCCESS;
-            }
+            request.setAttribute("PRODUCT_COUNT", productCount);
+            request.setAttribute("INCOME_TOTAL", deliveredTotal);
+            url = SUCCESS;
         } catch (Exception e) {
-            log("Error at ProcessOrderController: " + e.getMessage());
+            log("Error at SellerProfileController: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher(url).include(request, response);
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

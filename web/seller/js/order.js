@@ -2,6 +2,7 @@ function removeAndAddClass() {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const type = urlParams.get('type');
+    const state = urlParams.get('state');
 
     if (type !== null) {
         if (type === "process" || type === "process2") {
@@ -9,16 +10,35 @@ function removeAndAddClass() {
                 processOrder();
             } else if (type === "process2") {
                 processOrder2();
+                if (state !== null) {
+                    window.createNotification({
+                        showDuration: 3000,
+                        theme: 'success'
+                    })({
+                        title: 'Thông báo',
+                        message: 'Xác nhận đơn hàng thành công!'
+                    });
+                }
             }
         }
         if (type === "status" || type === "status2") {
             if (type === "status") {
                 orderStatus();
+                if (state !== null) {
+                    window.createNotification({
+                        showDuration: 3000,
+                        theme: 'success'
+                    })({
+                        title: 'Thông báo',
+                        message: 'Đã xác nhận giao cho đơn vị vận chuyển!'
+                    });
+                }
             } else if (type === "status2") {
                 orderStatus3();
             }
         }
     }
+
     cleanUri();
 }
 

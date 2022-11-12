@@ -5,14 +5,10 @@
  */
 package com.nestf.sellerController;
 
+import com.nestf.account.AccountDAO;
 import com.nestf.account.AccountDTO;
-import com.nestf.bill.BillDAO;
-import com.nestf.billdetail.BillDetailDAO;
-import com.nestf.billdetail.BillDetailDTO;
-import com.nestf.product.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,49 +20,32 @@ import javax.servlet.http.HttpSession;
  *
  * @author NameIsDuy
  */
-@WebServlet(name = "ProcessOrderController", urlPatterns = {"/processOrder"})
-public class ProcessOrderController extends HttpServlet {
+@WebServlet(name = "SellerUpdateNameController", urlPatterns = {"/updateSellerName"})
+public class SellerUpdateNameController extends HttpServlet {
 
-    private final String ERROR = "allOrder";
-    private final String SUCCESS = "allOrder";
-
+    private final String ERROR = "profileSetting";
+    private final String SUCCESS = "sellerProfile";
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-
+        
         String url = ERROR;
         try {
-            int orderId = Integer.parseInt(request.getParameter("orderID"));
-            int statusId = Integer.parseInt(request.getParameter("statusID"));
             HttpSession session = request.getSession();
             AccountDTO seller = (AccountDTO) session.getAttribute("USER");
-            String reason = request.getParameter("cancelReason");
-            if (reason != null) {
-                reason = "Người bán " + seller.getName() + " hủy đơn với lí do: " + reason;
-            }
-            boolean checkUpdate = false;
-            BillDAO dao = new BillDAO();
-            BillDetailDAO detailDAO = new BillDetailDAO();
-            ProductDAO proDAO = new ProductDAO();
-            if (reason == null) {
-                checkUpdate = dao.updateBillStatus(orderId, statusId);
-                if (statusId == 3) {
-                    List<BillDetailDTO> listDetail = detailDAO.getBillDetail(orderId);
-                    for (BillDetailDTO detail : listDetail) {
-                        int newQuantity = detail.getProduct().getQuantity() - detail.getQuantity();
-                        proDAO.updateQuantity(detail.getProduct().getProductID(), newQuantity);
-                    }
-                }
-            } else {
-                checkUpdate = dao.updateBillStatus(orderId, statusId, reason);
-            }
-            if (checkUpdate) {
+            String newName = request.getParameter("newName");
+            AccountDAO sellerDAO = new AccountDAO();
+            boolean check = sellerDAO.updateName(seller.getPhone(), newName);
+            if (check) {
+                seller = sellerDAO.getUserByPhone(seller.getPhone());
+                session.setAttribute("USER", seller);
                 url = SUCCESS;
             }
         } catch (Exception e) {
-            log("Error at ProcessOrderController: " + e.getMessage());
+            log("Error at SellerUpdateNameController: " + e.getMessage());
         } finally {
-            request.getRequestDispatcher(url).include(request, response);
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

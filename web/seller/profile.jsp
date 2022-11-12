@@ -19,16 +19,22 @@
 
         <!-- Custom styles for this template-->
         <link href="seller/css/sb-seller-2.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="seller/styled-notifications-master/dist/notifications.css">
+
     </head>
-    <body id="page-top">
+    <body id="page-top" onload="checkState()">
 
         <!-- Page Wrapper -->
         <div id="wrapper">
+
+            <!-- Sidebar -->
             <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
                 <!-- Sidebar - Brand -->
-                <a href="#" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
-                                                                           height="38px"></a>
+                <a href="sellerPage" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
+                                                                      height="38px"></a>
                 <!-- Divider -->
                 <hr class="sidebar-divider my-0">
 
@@ -95,8 +101,9 @@
                 <div class="text-center d-none d-md-inline">
                     <button class="rounded-circle border-0" id="sidebarToggle"></button>
                 </div>
+
             </ul>
-            <!-- End of Sidebar -->
+            <!-- End Sidebar -->
 
             <!-- Content Wrapper -->
             <div id="content-wrapper" class="d-flex flex-column">
@@ -130,23 +137,6 @@
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">${sessionScope.USER.name}</span>
                                     <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                                 </a>
-                                <!-- Dropdown - User Information -->
-                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                     aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="sellerProfile">
-                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Hồ sơ
-                                    </a>
-                                    <a class="dropdown-item" href="profileSetting">
-                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Cài đặt
-                                    </a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="logOut">
-                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Đăng xuất
-                                    </a>
-                                </div>
                             </li>
 
                         </ul>
@@ -155,87 +145,41 @@
                     <!-- End of Topbar -->
 
                     <!-- Begin index content -->
-                    <div class="container col-lg-8 col-md-10">
-
-                        <div class="things-need-to-do-wrapper col-lg-12">
-                            <h4 class="things-title">
-                                Danh sách cần làm
-                            </h4>
-                            <h6 class="things-title">
-                                Những việc bạn sẽ phải làm
-                            </h6>
-                            <div class="things-to-do-content">
-                                <div class="things-to-do-detail col-3 p-4 text-center d-inline-block">
-                                    <a href="allOrder?type=process"><span class="status-counter">${requestScope.COUNT_1}</span><br>Chờ xác
-                                        nhận</a>
-                                </div>
-                                <div class="things-to-do-detail col-3 p-4 text-center d-inline-block">
-                                    <a href="allOrder?type=process2"><span class="status-counter">${requestScope.COUNT_2}</span><br>Chờ lấy
-                                        hàng</a>
-                                </div>
-                                <div class="things-to-do-detail col-3 p-4 text-center d-inline-block">
-                                    <a href="allOrder?type=status"><span class="status-counter">${requestScope.COUNT_3}</span><br>Đã xử
-                                        lý</a>
-                                </div>
-                                <div class="things-to-do-detail col-3 p-4 text-center d-inline-block">
-                                    <a href="allOrder?type=status2"><span class="status-counter">${requestScope.COUNT_4}</span><br>Đơn
-                                        hủy</a>
-                                </div>
-                                <div class="things-to-do-detail col-3 p-4 text-center d-inline-block">
-                                    <a href="productSeller?type=outOfStock"><span class="status-counter">${requestScope.COUNT_5}</span><br>Sản phẩm hết hàng</a>
-                                </div>
-                                <div class="things-to-do-detail col-3 p-4 text-center d-inline-block">
-                                    <a href="selIncome">Tài chính/Doanh thu</a>
-                                </div>
+                    <div class="container col-lg-10 row seller-profile-content">
+                        <c:if test="${sessionScope.USER != null}">
+                            <jsp:useBean id="printPriceFunc" scope="page" class="com.nestf.product.ProductDTO"/>
+                            <div class="logout-section">
+                                <a href="logOut">
+                                    <button class="logout-btn">
+                                        <span><i class="fa-solid fa-door-closed"></i></span>Đăng xuất
+                                    </button>
+                                </a>
                             </div>
-
-                        </div>
-
-                        <div class="bestsell-section-wrapper col-lg-12 p-2">
-                            <h4 class="bestsell-title">
-                                Sản phẩm bán nhiều
-                            </h4>
-
-                            <div class="bestsell-section-content">
-                                <c:if test="${requestScope.BEST_SELL_LIST != null}">
-                                    <jsp:useBean id="printPriceFunc" scope="page" class="com.nestf.product.ProductDTO"></jsp:useBean>
-                                    <c:forEach var="product" items="${requestScope.BEST_SELL_LIST}">
-                                        <c:set var="productImage" value="${product.imagelink}" />
-                                            <div class="bestsell-product-content position-relative">
-                                                <a href="proSelDetail?productID=${product.productID}">
-                                                    <img src="${productImage[0]}" alt="Image for ${product.name}" width="200px" height="200px">
-                                                <p class="product-title d-inline-block col-lg-8 position-absolute">
-                                                    ${product.name}<br><br>
-                                                    <c:if test="${product.discountPrice == 0}">
-                                                        <span class="new-price">
-                                                            <strong>${printPriceFunc.printPrice(product.price)}</strong>
-                                                        </span>
-                                                    </c:if>
-                                                    <c:if test="${product.discountPrice ne 0}">
-                                                        <span class="product-discount-price">
-                                                            <span class="old-price">${printPriceFunc.printPrice(product.price)}</span><br>
-                                                            <span class="new-price"><strong>${printPriceFunc.printPrice(product.discountPrice)}</strong></span>
-                                                        </span>
-                                                    </c:if>
-                                                </p>
-                                                
-                                                <button class="btn btn-dark position-absolute position-relative">
-                                                    Chi tiết
-                                                </button>
-                                            </a>
-                                        </div>
-                                    </c:forEach>
-                                </c:if>
+                            <div class="profile-image col-4 d-inline-block text-center">
+                                <img src="img/undraw_profile.svg" height="200px">
                             </div>
-                        </div>
-
+                            <div class="profile-detail col-6 d-inline-block" style="color: #000;">
+                                <h5>Người bán: <strong>${sessionScope.USER.name}</strong></h5>
+                                <hr>
+                                <a href="productSeller" class="float-right text-decoration-none text-black-50">Chi tiết</a>
+                                <h6>Số lượng sản phẩm quản lý: <strong>${requestScope.PRODUCT_COUNT}</strong></h6>
+                                <h6 class="pt-2">Số điện thoại: <strong>${sessionScope.USER.phone}</strong></h6>
+                                <a href="selIncome" class="float-right text-decoration-none text-black-50">Chi tiết</a>
+                                <h6 class="pt-2">Doanh thu tháng này: <strong>${printPriceFunc.printPrice(requestScope.INCOME_TOTAL)}</strong></h6>
+                                <hr>
+                                <a href="profileSetting" class="text-decoration-none text-black-50">Cập nhật tên hiển thị</a>
+                                <a href="profileSetting?type=changePassword" class="float-right text-decoration-none text-black-50">Đổi mật khẩu?</a>
+                            </div>
+                        </c:if>
                     </div>
                     <!-- End index content -->
-                </div>
-            </div>
-            <!-- End content wrapper -->
 
+                </div>
+                <!-- End Content -->
+            </div>
+            <!-- End Content Wrapper -->
         </div>
+        <!-- End Page Wrapper -->
 
         <!-- Bootstrap core JavaScript-->
         <script src="seller/sellerVendor/vendor/jquery/jquery.min.js"></script>
@@ -253,6 +197,37 @@
         <!-- Page level custom scripts -->
         <script src="seller/sellerVendor/js/demo/chart-area-demo.js"></script>
         <script src="seller/sellerVendor/js/demo/chart-pie-demo.js"></script>
-        
+
+        <script src="seller/styled-notifications-master/dist/notifications.js"></script>
+
+        <script type="text/javascript">
+
+            function checkState() {
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                const type = urlParams.get('newName');
+
+                if (type != null) {
+                    window.createNotification({
+                        showDuration: 3000,
+                        theme: 'success'
+                    })({
+                        title: 'Thông báo',
+                        message: 'Cập nhật tên thành công'
+                    });
+                }
+
+                cleanUri();
+            }
+
+            function cleanUri() {
+                var uri = window.location.toString();
+                if (uri.indexOf("?") > 0) {
+                    var clean = uri.substring(0, uri.indexOf("?"));
+                    window.history.replaceState({}, document.title, clean);
+                }
+            }
+        </script>
+
     </body>
 </html>
