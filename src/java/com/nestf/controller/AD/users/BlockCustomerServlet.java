@@ -60,8 +60,6 @@ public class BlockCustomerServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 List<AccountDTO> listCustomer = CustomerDAOAdmin.getAllCustomer();
                 session.setAttribute("LIST_CUSTOMER", listCustomer);
-                List<AccountDTO> listBlockCustomer = CustomerDAOAdmin.getBlockCustomer();
-                session.setAttribute("BLOCK_CUSTOMER", listBlockCustomer);
             }
 
         } catch (SQLException e) {

@@ -41,7 +41,7 @@
 
                     <!-- Sidebar - Brand -->
                     <a href="home" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
-                                                                         height="38px"></a>
+                                                                    height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
 
@@ -370,12 +370,8 @@
                                         <button class="btn btn-dark dropdown-toggle" type="button" data-toggle="dropdown">Filter
                                             <span class="caret"></span></button>
                                         <ul class="dropdown-menu px-3 bg-white text-gray-100">
-                                            <li class="my-2"><a href="customerFilter?btAction=all">Tất cả</a></li>
-                                            <li class="my-2"><a href="customerFilter?btAction=xacnhan">Chờ xác nhận</a></li>
-                                            <li class="my-2"><a href="customerFilter?btAction=layhang">Chờ lấy hàng</a></li>
-                                            <li class="my-2"><a href="customerFilter?btAction=danggiao">Đang giao</a></li>
-                                            <li class="my-2"><a href="customerFilter?btAction=dagiao">Đã giao</a></li>
-                                            <li class="my-2"><a href="customerFilter?btAction=dahuy">Đã hủy</a></li>
+                                            <li class="my-2"><a href="customerFilter?btAction=all">All</a></li>
+                                            <li class="my-2"><a href="customerFilter?btAction=blocked">Blocked</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -391,23 +387,39 @@
                                                 <th>Name</th>
                                                 <th>Phone</th>
                                                 <th>Address</th>
-                                                <th>Bill ID</th>
-                                                <th>Bill Status</th>
-                                                <th>Total(VND)</th>
-                                                <th>Cancel Reason</th>
+                                                <th>Number of Successful Purchases</th>
+                                                <th>Number of Cancel Purchases</th>
+                                                <td>Detail</td>
                                                 <th>Block</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <c:forEach var="customer" items="${sessionScope.LIST_CUSTOMER}">
+                                                <c:set var="successCounter" scope="page" value="0" />
+                                                <c:set var="cancelCounter" scope="page" value="0" />
                                                 <tr class="text-center">
                                                     <td>${customer.name}</td>
                                                     <td>${customer.phone}</td>
                                                     <td>${customer.address}</td>
-                                                    <td>${customer.billID}</td>
-                                                    <td>${customer.billStatus}</td>
-                                                    <td><f:formatNumber  maxIntegerDigits="7" minIntegerDigits="2" value="${customer.total}" var="formattedPrice" />${customer.total}</td>
-                                                    <td>${customer.cancelReason}</td>
+                                                    <td>
+                                                        <c:forEach var="success" items="${sessionScope.SUCCESS_ORDER_LIST}">
+                                                            <c:if test="${customer.phone eq success.phone}">
+                                                                <c:set var="successCounter" scope="page" value="${successCounter + 1}" />
+                                                            </c:if>
+                                                        </c:forEach>
+                                                        ${successCounter}
+                                                    </td>
+                                                    <td>
+                                                        <c:forEach var="cancel" items="${sessionScope.CANCEL_ORDER_LIST}">
+                                                            <c:if test="${customer.phone eq cancel.phone}">
+                                                                <c:set var="cancelCounter" scope="page" value="${cancelCounter + 1}" />
+                                                            </c:if>
+                                                        </c:forEach>
+                                                        ${cancelCounter}
+                                                    </td>
+                                                    <td>
+                                                        <a href="CustomerDetailServlet?phone=${customer.phone}" class="text-decoration-none text-dark">View</a>
+                                                    </td>
                                                     <td>
                                                         <c:if test="${customer.status}">
                                                             <a href="blockCustomerAction?phone=${customer.phone}&btAction=block" class="btn btn-danger">Block</a>
@@ -462,45 +474,46 @@
                             </c:if>
                             <br/>
 
-                            <!--BLock List -->
-                            <c:if test="${empty requestScope.SORT_CUSTOMER}">
-                                <c:if test="${not empty sessionScope.BLOCK_CUSTOMER}">
-                                    <h1 class="h3 mb-0 text-gray-800 col-9">Block customer</h1> 
-                                    <br>
+                            <!-- Detail List -->
+                            <c:if test="${requestScope.CUS_DETAIL_LIST ne null}">
+                                <h1 class="h3 mb-0 text-gray-800 col-9">Customer <b>#${param.phone}</b> Detail</h1> 
+                                <br>
 
-                                    <table class="table table-striped table-hover table-bordered">
-                                        <thead>
-                                            <tr class="text-center">
-                                                <th>Name</th>
-                                                <th>Phone</th>
-                                                <th>Address</th>
-                                                <th>Bill ID</th>
-                                                <th>Bill Status</th>
-                                                <th>Total(VND)</th>
-                                                <th>Cancel Reason</th>
-                                                <th>Block</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="customer" items="${sessionScope.LIST_CUSTOMER}">
-                                                <c:if test="${not customer.status}">
-                                                    <tr class="text-center">
-                                                        <td>${customer.name}</td>
-                                                        <td>${customer.phone}</td>
-                                                        <td>${customer.address}</td>
-                                                        <td>${customer.billID}</td>
-                                                        <td>${customer.billStatus}</td>
-                                                        <td><f:formatNumber  maxIntegerDigits="7" minIntegerDigits="2" value="${customer.total}" var="formattedPrice" />${customer.total}</td>
-                                                        <td>${customer.cancelReason}</td>
-                                                        <td>
-                                                            <a href="blockCustomerAction?phone=${customer.phone}&btAction=unblock" class="btn btn-dark">Unblock</a>
-                                                        </td>
-                                                    </tr>
-                                                </c:if>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
-                                </c:if>
+                                <table class="table table-striped table-hover table-bordered">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th>Name</th>
+                                            <th>Purchased Products</th>
+                                            <th>Status</th>
+                                            <th>Cancel Reason</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="customer" items="${requestScope.CUS_DETAIL_LIST}">
+                                            <c:if test="${customer.billStatus eq "Đã giao" || customer.billStatus eq "Đã hủy"}">
+                                                <tr class="text-center">
+                                                    <td>${customer.name}</td>
+                                                    <td class="text-left">
+                                                        <c:forEach var="product" items="${requestScope.BILL_DETAIL_LIST}">
+                                                            <c:if test="${product.billID eq customer.billID}">
+                                                                ${product.product.name} <br>
+                                                            </c:if>
+                                                        </c:forEach>
+                                                    </td>
+                                                    <td>
+                                                        <c:if test="${customer.billStatus eq "Đã giao"}">
+                                                            Succeed
+                                                        </c:if>
+                                                        <c:if test="${customer.billStatus eq "Đã hủy"}">
+                                                            Canceled
+                                                        </c:if>
+                                                    </td>
+                                                    <td>${customer.cancelReason}</td>
+                                                </tr>
+                                            </c:if>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
                             </c:if>
                         </div>
                     </div>

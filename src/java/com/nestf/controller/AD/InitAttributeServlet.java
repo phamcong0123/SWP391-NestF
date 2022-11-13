@@ -64,6 +64,11 @@ public class InitAttributeServlet extends HttpServlet {
             session.setAttribute("LIST_PENDING", listNonActicve);
             List<AccountDTO> listActiveCustomer = CustomerDAOAdmin.getAllCustomer();
             session.setAttribute("LIST_CUSTOMER", listActiveCustomer);
+            List<AccountDTO> listSuccessCusOrder = CustomerDAOAdmin.getSuccessList();
+            session.setAttribute("SUCCESS_ORDER_LIST", listSuccessCusOrder);
+            List<AccountDTO> listCancelOrder = CustomerDAOAdmin.getCancelList();
+            session.setAttribute("CANCEL_ORDER_LIST", listCancelOrder);
+            
             List<AccountDTO> listBlockCustomer = CustomerDAOAdmin.getBlockCustomer();
             session.setAttribute("BLOCK_CUSTOMER", listBlockCustomer);
             
