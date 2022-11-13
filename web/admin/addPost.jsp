@@ -43,7 +43,7 @@
                 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
                     <!-- Sidebar - Brand -->
-                    <a href="home" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
+                    <a href="dashboard" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
                                                                          height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
@@ -110,7 +110,7 @@
                     <hr class="sidebar-divider">
 
                     <!-- Nav Item - Pages Collapse Menu -->
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                            aria-expanded="true" aria-controls="collapsePages">
                             <i class="fas fa-fw fa-folder"></i>
@@ -131,18 +131,9 @@
 
                     <!-- Nav Item - Charts -->
                     <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVouchers"
-                           aria-expanded="true" aria-controls="collapseVouchers">
-                            <i class="fa fa-gift"></i>
+                        <a class="nav-link" href="manageVoucherPage">
+                            <i class="fa fa-gift" aria-hidden="true"></i>
                             <span>Voucher</span></a>
-                        <div id="collapseVouchers" class="collapse" aria-labelledby="headingProducts"
-                             data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">Manage:</h6>
-                                <a class="collapse-item fw-bold" href="voucher">All voucher types</a>
-                                <a class="collapse-item" href="updateVoucher?act=add">Add/Update voucher type</a>
-                            </div>
-                        </div>
                     </li>
 
                     <!-- Divider -->
@@ -380,73 +371,92 @@
                             <!-- Content Row -->
 
                             <div class="card-body ">
-                                <c:set var="productDetail" value="${requestScope['PRODUCT_DETAIL']}" scope="page"/>
-                                <jsp:useBean id="productFunc" class="com.nestf.product.ProductDTO"/>
-                                <c:set var="errors" value="${requestScope.PRODUCT_ERR}"/>
-                                <c:if test="${requestScope.PREVIEW_PRODUCT != null}">
+                                <c:set var="post" value="${requestScope['POST_DETAIL']}" scope="page"/>
+                                <c:set var="errors" value="${requestScope.POST_ERROR}"/>
+                                <c:if test="${requestScope.PREVIEW_POST != null}">
                                     <c:if test="${empty errors}">
-                                        <c:set var="temp" value="${requestScope['PREVIEW_PRODUCT']}" scope="page"/>
-                                        <font color="red">
-                                        Bạn vừa thêm post thành công! " ${temp.name} "
+                                        <c:set var="temp" value="${requestScope['PREVIEW_POST']}" scope="page"/>
+                                        <font color="green">
+                                        Bạn vừa thêm post thành công! " ${temp.title} "
                                         </font> <br/>
-                                        <% request.setAttribute("PREVIEW_PRODUCT", null); %>
-                                        <% request.setAttribute("PRODUCT_DETAIL", null); %>
+                                        <% request.setAttribute("PREVIEW_POST", null); %>
+                                        <% request.setAttribute("POST_DETAIL", null);%>
                                     </c:if>
                                 </c:if>
+                                <jsp:useBean id="postFunc" class="com.nestf.post.PostDTO"/>
+
                                 <br/>
                                 <form action="addNewPostAction" method="Post">
+
                                     <div class="row">
-                                        <div class="col-md-6 mb-4 pb-2">
-                                            <div class="form-outline">
-                                                <label class="form-label" for="">Product Description</label>
 
-                                                <textarea name="productdesc" cols="200" rows="20" id="productdesc" class="form-control form-control-lg">
-                                                    ${productDetail.productDes}
-                                                </textarea>
-                                                <c:if test="${not empty errors.productDes}">
-                                                    <font color="red">
-                                                    ${errors.productDes}
-                                                    </font> <br/>
-                                                </c:if>
-
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6 mb-4 pb-2">
-                                            <div class="form-outline">
-                                                <label class="form-label" for="">Image</label>
-
-                                                <textarea name="image" cols="200" rows="5" id="image" class="form-control form-control-lg">
-                                                    ${productDetail.image}
-                                                </textarea>
-                                                <c:if test="${not empty errors.image}">
-                                                    <font color="red">
-                                                    ${errors.image}
-                                                    </font> <br/>
-                                                </c:if>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
                                         <div class="col-md-6 mb-4">
-                                            <h6 class="mb-2 pb-1">Status: </h6>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status" id="checkFalse"
-                                                       value="false" checked />
-                                                <label class="form-check-label" for="checkFalse">False</label>
+                                            <div class="form-outline">
+                                                <label class="form-label" for="txtName">Title</label>
+
+                                                <input type="text" id="txtName" name="title" value="${post.title}" class="form-control form-control-lg" />
+                                                <c:if test="${not empty errors.title}">
+                                                    <font color="red">
+                                                    ${errors.title}
+                                                    </font> <br/>
+                                                </c:if>
+
                                             </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status" id="checkTrue"
-                                                       value="true" />
-                                                <label class="form-check-label" for="checkTrue">True</label>
-                                            </div>
-                                        </div>        
+                                        </div>
+
+                                        <!--                                        <div class="row">
+                                                                                    <div class="col-md-6 mb-4 pb-2">
+                                                                                        <h6 class="mb-2 pb-1">Status: </h6>
+                                                                                        <div class="form-check form-check-inline">
+                                                                                            <input class="form-check-input" type="radio" name="status" id="checkFalse"
+                                                                                                   value="false" checked />
+                                                                                            <label class="form-check-label" for="checkFalse">False</label>
+                                                                                        </div>
+                                                                                        <div class="form-check form-check-inline">
+                                                                                            <input class="form-check-input" type="radio" name="status" id="checkTrue"
+                                                                                                   value="true" />
+                                                                                            <label class="form-check-label" for="checkTrue">True</label>
+                                                                                        </div>
+                                                                                    </div>        
+                                                                                </div>-->
                                     </div>
 
-                                    <div class="mt-4 pt-2">
-                                        <input class="btn btn-primary btn-lg" type="submit" name="btAction" value="Preview" />
-                                        <input class="btn btn-danger btn-lg" type="submit" name="btAction" value="Submit" />
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4 pb-2">
+                                            <div class="form-outline">
+                                                <label class="form-label" for="">Post Content</label>
+
+                                                <textarea name="content" cols="200" rows="20" id="productdesc" class="form-control form-control-lg">
+                                                    ${post.content}
+                                                </textarea>
+                                                <c:if test="${not empty errors.content}">
+                                                    <font color="red">
+                                                    ${errors.content}
+                                                    </font> <br/>
+                                                </c:if>
+
+                                            </div>
+                                        </div>
+                                                <input type="hidden" name="adPhone" value="${ADMIN.getPhone()}"/>
+                                        <div class="col-md-6 mb-4 pb-2">
+                                            <div class="form-outline">
+                                                <label class="form-label" for="txtName">Thumbnail</label>
+                                                
+                                                <input type="text" id="txtName" name="thumbnail" value="${post.thumbnail}" class="form-control form-control-lg" />
+                                                <c:if test="${not empty errors.thumbnail}">
+                                                    <font color="red">
+                                                    ${errors.thumbnail}
+                                                    </font> <br/>
+                                                </c:if>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="mt-4 pt-2 text-center mb-4">
+                                        <a href="loadArticle?postID=${post.postID}" class="btn btn-primary btn-lg" >Preview</a>
+                                        <input class="btn btn-danger btn-lg" type="submit" name="action" value="Submit" />
                                     </div>
                                 </form>
                             </div>

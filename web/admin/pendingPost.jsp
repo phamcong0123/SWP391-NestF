@@ -391,17 +391,17 @@
 
                             <!-- Content Row -->
 
-                            <c:if test="${not empty sessionScope.LIST_PENDING_POST}">
+                                 <c:if test="${not empty sessionScope.LIST_PENDING_POST}">
                                 <table class="table table-striped table-hover table-bordered">
                                     <thead>
                                         <tr>
                                             <th>PostID</th>
                                             <th>ADPhone</th>
                                             <th>Title</th>
-                                            <th>Date Time</th>
+                                            <th>Post Date</th>
                                             <th>Status</th>
-                                            <th>File Path</th>
-                                            <th>Image</th>
+<!--                                            <th>Content</th>-->
+                                            <th>thumbnail</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -412,14 +412,14 @@
                                                 <td>${post.postID}</td>
                                                 <td>${post.seller.phone}</td>
                                                 <td>${post.title}</td>
-                                                <td>${date.printDate(post.dateTime)}</td>
+                                                <td>${date.printDate(post.postDate)}</td>
                                                 <td>${post.status}</td>
-                                                <td>${post.filePath}</td>
-                                                <td>${post.image}</td>
+<!--                                                <td>${post.content}</td>-->
+                                                <td>${post.thumbnail}</td>
                                                 <td>
-                                                    <a href="viewPostDetail?postID=${product.productID}&productType=accepted" class="view" title="View" data-toggle="tooltip"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                    <a href="loadArticle?postID=${post.postID}" class="view" title="View" data-toggle="tooltip"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                                     <a href="editPostAction?postID=${product.productID}&productType=accepted" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
-                                                    <a href="acceptPost?postID=${post.postID}" class="accept px-2" title="Accept" data-toggle="tooltip"><i class="fa fa-check" aria-hidden="true"></i></a>
+                                                    <a href="acceptPost?postID=${post.postID}" class="delete" title="Delete" data-toggle="tooltip"><i class="fa fa-times" aria-hidden="true"></i></a>
                                                 </td>
                                             </tr>
                                         </c:forEach>

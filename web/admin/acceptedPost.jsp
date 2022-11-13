@@ -39,7 +39,7 @@
                 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
                     <!-- Sidebar - Brand -->
-                    <a href="home" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
+                    <a href="dashboard" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
                                                                          height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
@@ -106,7 +106,7 @@
                     <hr class="sidebar-divider">
 
                     <!-- Nav Item - Pages Collapse Menu -->
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                            aria-expanded="true" aria-controls="collapsePages">
                             <i class="fas fa-fw fa-folder"></i>
@@ -127,18 +127,9 @@
 
                     <!-- Nav Item - Charts -->
                     <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVouchers"
-                           aria-expanded="true" aria-controls="collapseVouchers">
-                            <i class="fa fa-gift"></i>
+                        <a class="nav-link" href="manageVoucherPage">
+                            <i class="fa fa-gift" aria-hidden="true"></i>
                             <span>Voucher</span></a>
-                        <div id="collapseVouchers" class="collapse" aria-labelledby="headingProducts"
-                             data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">Manage:</h6>
-                                <a class="collapse-item fw-bold" href="voucher">All voucher types</a>
-                                <a class="collapse-item" href="updateVoucher?act=add">Add/Update voucher type</a>
-                            </div>
-                        </div>
                     </li>
 
                     <!-- Divider -->
@@ -382,10 +373,10 @@
                                             <th>PostID</th>
                                             <th>ADPhone</th>
                                             <th>Title</th>
-                                            <th>Date Time</th>
+                                            <th>Post Date</th>
                                             <th>Status</th>
-                                            <th>File Path</th>
-                                            <th>Image</th>
+<!--                                            <th>Content</th>-->
+                                            <th>thumbnail</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -396,10 +387,10 @@
                                                 <td>${post.postID}</td>
                                                 <td>${post.seller.phone}</td>
                                                 <td>${post.title}</td>
-                                                <td>${date.printDate(post.dateTime)}</td>
+                                                <td>${date.printDate(post.postDate)}</td>
                                                 <td>${post.status}</td>
-                                                <td>${post.filePath}</td>
-                                                <td>${post.image}</td>
+<!--                                                <td>${post.content}</td>-->
+                                                <td>${post.thumbnail}</td>
                                                 <td>
                                                     <a href="loadArticle?postID=${post.postID}" class="view" title="View" data-toggle="tooltip"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                                     <a href="editPostAction?postID=${product.productID}&productType=accepted" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
