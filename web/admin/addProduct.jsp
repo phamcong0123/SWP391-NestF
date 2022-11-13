@@ -51,8 +51,8 @@
                 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
                     <!-- Sidebar - Brand -->
-                    <a href="dashboard" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
-                                                                         height="38px"></a>
+                    <a href="home" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
+                                                                    height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
 
@@ -78,7 +78,7 @@
                     <hr class="sidebar-divider">
 
                     <!-- Nav Item - Products Collapse Menu -->
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProducts"
                            aria-expanded="true" aria-controls="collapseProducts">
                             <i class="fa fa-cube"></i>
@@ -380,6 +380,11 @@
 
                             <div class="card-body ">
                                 <c:set var="errors" value="${requestScope.PRODUCT_ERR}"/>
+                                <c:set var="productDetail" value="${requestScope['PRODUCT_DETAIL']}" scope="page"/>
+                                <c:if test="${not empty productDetail}">
+                                    <c:out value="${requestScope.productDetail}" />
+                                </c:if>
+                                
                                 <c:if test="${requestScope.SUBMIT_PRODUCT != null}">
                                     <c:if test="${empty errors}">
                                         <c:set var="temp" value="${requestScope['SUBMIT_PRODUCT']}" scope="page"/>
@@ -391,10 +396,10 @@
                                         <% request.setAttribute("SUBMIT_PRODUCT", null);%>
                                     </c:if>
                                 </c:if>
-                                <c:set var="productDetail" value="${requestScope['PRODUCT_DETAIL']}" scope="page"/>
+                                
                                 <jsp:useBean id="productFunc" class="com.nestf.product.ProductDTO"/>
                                 <br/>
-                                <form action="addNewProductAction" method="Post">
+                                <form action="addNewProductAction" method="Post" enctype="multipart/form-data" >
 
                                     <div class="row">
                                         <div class="col-md-6 mb-6 pb-2">
@@ -526,19 +531,29 @@
                                         <div class="col-md-8 mb-4 pb-2">
                                             <c:forEach var="image" items="${productDetail.imagelink}" varStatus="counter"> 
                                                 <div class="form-outline mb-4 block">
-                                                    <c:set var="index" value="${counter.count}" scope="page"/>
-                                                    <input type="text" id="image" name="image${counter.count}" value="${image}" class="form-control form-control-lg" placeholder="Nhập link ảnh" />
+                                                    <div class="row">
+                                                        <c:set var="index" value="${counter.count}" scope="page"/>
+                                                        <div class="col-lg-8">
+                                                            <input type="file" id="image" name="image${counter.count}" value="${image}" class="form-control form-control-lg" />
+                                                        </div>
+                                                        <div class="col-lg-4 ">
+                                                            <c:if test="${not empty image}">
+                                                                <img src="${image}" width="50px" height="50px">
+                                                            </c:if>
+                                                            
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </c:forEach>
                                             <c:forEach var = "num" begin = "${index}" end = "4">
                                                 <div class="form-outline mb-4 block">
-                                                    <input type="text" id="image" name="image${num+1}" value="" class="form-control form-control-lg" placeholder="Nhập link ảnh" />
+                                                    <input type="file" id="image" name="image${num+1}" value="" class="form-control form-control-lg"/>
                                                 </div>
                                             </c:forEach>
                                         </div>
-                                        <div id="load" class="col-md-2">
-                                            <div class=" btn btn-primary btn-lg">More</div>
-                                        </div>
+                                    </div>
+                                    <div id="load" class="col-12 text-center align-content-center">
+                                        <div class=" btn btn-primary btn-lg">More</div>
                                     </div>
 
                                     <!-- PREVIEW CONTENT -->

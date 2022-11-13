@@ -31,7 +31,7 @@
         <link href="./css/productdetail.css" rel="stylesheet">
 
         <style> 
-            .block {
+            .blocker {
                 display: none;
             }
         </style>
@@ -51,8 +51,8 @@
                 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
                     <!-- Sidebar - Brand -->
-                    <a href="dashboard" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
-                                                                         height="38px"></a>
+                    <a href="home" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
+                                                                    height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
 
@@ -78,7 +78,7 @@
                     <hr class="sidebar-divider">
 
                     <!-- Nav Item - Products Collapse Menu -->
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProducts"
                            aria-expanded="true" aria-controls="collapseProducts">
                             <i class="fa fa-cube"></i>
@@ -399,11 +399,11 @@
                                             Cập nhật sản phẩm "${temp.name}" thành công! 
                                             </font> <br/>
                                             <% request.setAttribute("PREVIEW_PRODUCT", null); %>
-                                            <% request.setAttribute("SAVE_PRODUCT", null); %>
+                                            <% request.setAttribute("SAVE_PRODUCT", null);%>
                                         </c:if>
                                     </c:if>
                                     <jsp:useBean id="productFunc" class="com.nestf.product.ProductDTO"/>
-                                    <form action="saveProductAction" method="Post">
+                                    <form action="saveProductAction" method="Post" enctype="multipart/form-data" >
                                         <c:set var="errors" value="${requestScope.PRODUCT_ERR}"/>
 
                                         <div class="row">
@@ -545,7 +545,7 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-2 mb-4">
+                                            <div class="col-lg-2 mb-4">
                                                 <div class="form-outline text-center">
                                                     <label class="form-label text-gray-800 h5 mt-2" for="">Image</label>
                                                 </div>
@@ -555,22 +555,33 @@
                                                     </font> <br/>
                                                 </c:if>
                                             </div>
-                                            <div class="col-md-8 mb-4 pb-2">
+                                            <div class="col-lg-10 mb-4 pb-2">
                                                 <c:forEach var="image" items="${productDetail.imagelink}" varStatus="counter"> 
-                                                    <div class="form-outline mb-4 block">
-                                                        <c:set var="index" value="${counter.count}" scope="page"/>
-                                                        <input type="text" id="image" name="image${counter.count}" value="${image}" class="form-control form-control-lg" placeholder="Nhập link ảnh" />
+                                                    <div class="form-outline mb-4 blocker">
+                                                        <div class="row">
+                                                            <c:set var="index" value="${counter.count}" scope="page"/>
+                                                            <div class="col-lg-8">
+                                                                <input type="file" id="image" name="image${counter.count}" value="${image}" class="form-control form-control-lg" />
+                                                            </div>
+                                                            <div class="col-lg-4 ">
+                                                                <c:if test="${not empty image}">
+                                                                    <img src="${image}" width="50px" height="50px">
+                                                                </c:if>
+                                                            </div>
+                                                        </div>
+
                                                     </div>
                                                 </c:forEach>
                                                 <c:forEach var = "num" begin = "${index}" end = "4">
-                                                    <div class="form-outline mb-4 block">
-                                                        <input type="text" id="image" name="image${num+1}" value="" class="form-control form-control-lg" placeholder="Nhập link ảnh" />
+                                                    <div class="form-outline mb-4 blocker">
+                                                        <input type="file" id="image" name="image${num+1}" value="" class="form-control form-control-lg" />
                                                     </div>
                                                 </c:forEach>
                                             </div>
-                                            <div id="load" class="col-md-2">
-                                                <div class=" btn btn-primary btn-lg">More</div>
-                                            </div>
+
+                                        </div>
+                                        <div id="load" class="col-12 text-center align-content-center">
+                                            <div class=" btn btn-primary btn-lg">More</div>
                                         </div>
 
                                         <!-- PREVIEW CONTENT -->
@@ -681,14 +692,14 @@
         <script src=”https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js”></script>
         <script>
             $(document).ready(function () {
-                $(".block").slice(0, 1).show();
-                if ($(".block:hidden").length != 0) {
+                $(".blocker").slice(0, 1).show();
+                if ($(".blocker:hidden").length != 0) {
                     $("#load").show();
                 }
                 $("#load").on("click", function (e) {
                     e.preventDefault();
-                    $(".block:hidden").slice(0, 1).slideDown();
-                    if ($(".block:hidden").length == 0) {
+                    $(".blocker:hidden").slice(0, 1).slideDown();
+                    if ($(".blocker:hidden").length == 0) {
                         $("#load").text("")
                                 .fadOut("slow");
                     }

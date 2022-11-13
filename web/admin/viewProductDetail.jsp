@@ -25,8 +25,6 @@
 
         <link href="./css/productdetail.css" rel="stylesheet">
         
-        <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>-->
-
     </head>
     <body id="page-top">
         <!--///////////////Bắt đầu phần Chung//////////////////////////////////////////////////////////-->
@@ -43,7 +41,7 @@
                 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
                     <!-- Sidebar - Brand -->
-                    <a href="dashboard" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
+                    <a href="home" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
                                                                          height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
@@ -70,7 +68,7 @@
                     <hr class="sidebar-divider">
 
                     <!-- Nav Item - Products Collapse Menu -->
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProducts"
                            aria-expanded="true" aria-controls="collapseProducts">
                             <i class="fa fa-cube"></i>

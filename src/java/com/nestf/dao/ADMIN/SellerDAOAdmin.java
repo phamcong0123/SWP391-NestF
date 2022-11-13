@@ -41,26 +41,26 @@ public class SellerDAOAdmin {
             + "FROM tblAccount acc\n"
             + "WHERE acc.role = 'SE' AND acc.name = ?";
 
-    public static final String GET_LIST_SELLER_INCOME = "SELECT account.phone, password, account.name, address, account.status, count(ps.selPhone) as selQuantity, bd.total\n"
-            + "            FROM tblProductSeller ps\n"
-            + "			RIGHT JOIN (SELECT p.productID\n"
-            + "						FROM tblProducts p\n"
-            + "						WHERE p.status = 1) as p\n"
-            + "			ON ps.productID = p.productID AND ps.isActive = 1\n"
-            + "			RIGHT JOIN (SELECT acc.phone, acc.status, password, name, address, gender, point\n"
-            + "						FROM tblAccount acc\n"
-            + "						WHERE acc.role = 'SE') as account\n"
-            + "            ON account.phone = ps.selPhone\n"
-            + "			LEFT JOIN (SELECT  distinct d.selPhone, MONTH(b.time) as monthtime, YEAR(b.time) as yearTime, SUM (d.total) as total\n"
-            + "						FROM tblBillDetail d\n"
-            + "						LEFT JOIN tblBill b\n"
-            + "						ON d.billID = b.billID\n"
-            + "						WHERE b.statusID = 4 \n"
-            + "						GROUP BY d.selPhone, b.time) as bd\n"
-            + "			ON bd.selPhone = account.phone AND bd.monthtime = ? AND bd.yearTime = ? \n"
-            + "            Group by account.phone, password, name, address,  account.status, bd.total\n"
-            + "			Order by bd.total desc";
-
+    public static final String GET_LIST_SELLER_INCOME = "SELECT  account.phone, password, account.name, address, account.status, count(ps.selPhone) as selQuantity, bd.total\n"
+            + "FROM tblProductSeller ps\n"
+            + "RIGHT JOIN (SELECT p.productID\n"
+            + "           FROM tblProducts p\n"
+            + "           WHERE p.status = 1) as p\n"
+            + "ON ps.productID = p.productID AND ps.isActive = 1\n"
+            + "RIGHT JOIN (SELECT acc.phone, acc.status, password, name, address, gender, point\n"
+            + "           FROM tblAccount acc\n"
+            + "           WHERE acc.role = 'SE') as account\n"
+            + "           ON account.phone = ps.selPhone\n"
+            + "LEFT JOIN (SELECT d.selPhone, MONTH(b.time) as monthtime, YEAR(b.time) as yearTime, SUM (d.total) as total\n"
+            + "          FROM tblBillDetail d\n"
+            + "          LEFT JOIN tblBill b\n"
+            + "          ON d.billID = b.billID\n"
+            + "          WHERE b.statusID = 4 AND MONTH(b.time) = ? AND YEAR(b.time) = ? \n"
+            + "          GROUP BY d.selPhone, MONTH(b.time), YEAR(b.time)) as bd\n"
+            + "ON bd.selPhone = account.phone\n"
+            + "Group by account.phone, password, name, address,  account.status, bd.total\n"
+            + "Order by bd.total desc";
+    
     public static List<AccountDTO> getListSeller() throws SQLException, NamingException {
         List<AccountDTO> list = new ArrayList<>();
         Connection conn = null;

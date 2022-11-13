@@ -77,6 +77,7 @@ public class ManagePSellerServlet extends HttpServlet {
             if (btAction.equals("show")) {
                 List<ProductDTO> listProduct = ProductDAOAdmin.getListProductOfSeller(phone);
                 request.setAttribute("PRODUCT_SELLER", listProduct);
+                request.setAttribute("SELLER_NAME", listProduct.get(0).getSelName());
             }
 
             if (!phone.isEmpty() && btAction.equals("block") && !result) {
