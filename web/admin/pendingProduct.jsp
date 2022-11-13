@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<jsp:useBean id="formatter" class="com.nestf.util.FormatPrinter"/>
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,7 +14,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="icon" href="img/logo.png" type="image/x-icon" />
         <title>Pending products</title>
-
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <!-- Custom fonts for this template-->
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
         <link
@@ -40,12 +41,12 @@
 
                     <!-- Sidebar - Brand -->
                     <a href="home" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
-                                                                         height="38px"></a>
+                                                                    height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
 
                     <!-- Nav Item - Dashboard -->
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="dashboard">
                             <i class="fas fa-fw fa-tachometer-alt"></i>
                             <span>Dashboard</span></a>
@@ -67,18 +68,18 @@
 
                     <!-- Nav Item - Products Collapse Menu -->
                     <li class="nav-item active">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProducts"
+                        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseProducts"
                            aria-expanded="true" aria-controls="collapseProducts">
                             <i class="fa fa-cube"></i>
                             <span>Product</span>
                         </a>
-                        <div id="collapseProducts" class="collapse" aria-labelledby="headingProducts"
+                        <div id="collapseProducts" class="collapse show" aria-labelledby="headingProducts"
                              data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">List product:</h6>
                                 <a class="collapse-item" href="addNewProductPage">Add new product</a>
                                 <a class="collapse-item" href="accpetedProductPage">Active products</a>
-                                <a class="collapse-item" href="pendingProductPage">Non-active products</a>
+                                <a class="collapse-item fw-bold" href="pendingProductPage">Non-active products</a>
                             </div>
                         </div>
                     </li>
@@ -127,9 +128,18 @@
 
                     <!-- Nav Item - Charts -->
                     <li class="nav-item">
-                        <a class="nav-link" href="manageVoucherPage">
-                            <i class="fa fa-gift" aria-hidden="true"></i>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVouchers"
+                           aria-expanded="true" aria-controls="collapseVouchers">
+                            <i class="fa fa-gift"></i>
                             <span>Voucher</span></a>
+                        <div id="collapseVouchers" class="collapse" aria-labelledby="headingProducts"
+                             data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <h6 class="collapse-header">Manage:</h6>
+                                <a class="collapse-item fw-bold" href="voucher">All voucher types</a>
+                                <a class="collapse-item" href="updateVoucher?act=add">Add/Update voucher type</a>
+                            </div>
+                        </div>
                     </li>
 
                     <!-- Divider -->
@@ -406,7 +416,7 @@
                                                         </font> <br/>
                                                     </c:if>
                                                 </td>
-                                                <td>${product.price}</td>
+                                                <td>${formatter.printMoney(product.price)}</td>
                                                 <td>${product.quantity}</td>
                                                 <td>
                                                     ${product.category.categoryName}
@@ -416,7 +426,7 @@
                                                         </font> <br/>
                                                     </c:if>
                                                 </td>
-                                                <td>${product.discountPrice}</td>
+                                                <td>${formatter.printMoney(product.discountPrice)}</td>
                                                 <td class="justify-content-center">
                                                     <a href="viewProductDetail?productID=${product.productID}&productType=pending" class="view px-2" title="View" data-toggle="tooltip"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                                     <a href="editProductAction?productID=${product.productID}&productType=pending" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-edit"></i></a>

@@ -97,14 +97,14 @@
                 <form class="form-horizontal" action="FilterController" method="POST">
                     <div class="m-auto" id="filter">
                         <h4 class="category-title d-inline-block">Phân loại</h4>
-                        <select class="form-controls category-option" name="categoryFilter">
+                        <select class="form-controls category-option" name="categoryFilter" onchange="filter(this)">
                             <option value="empty"></option>
                             <option value="yenTho" ${param.categoryFilter eq 'yenTho' ? 'selected' : ''}>Tổ yến thô</option>
                             <option value="yenTinhChe" ${param.categoryFilter eq 'yenTinhChe' ? 'selected' : ''}>Tổ yến tinh chế</option>
                             <option value="yenChungTuoi" ${param.categoryFilter eq 'yenChungTuoi' ? 'selected' : ''}>Yến chưng tươi</option>
                             <option value="yenChungSan" ${param.categoryFilter eq 'yenChungSan' ? 'selected' : ''}>Yến chưng sẵn</option>
                         </select>
-                        <select class="form-controls category-option" name="priceFilter">
+                        <select class="form-controls category-option" name="priceFilter" onchange="filter(this)">
                             <option value="empty"></option>
                             <option value="below1" ${param.priceFilter eq 'below1' ? 'selected' : ''}>Dưới 1.000.000 đ</option>
                             <option value="1to2" ${param.priceFilter eq '1to2' ? 'selected' : ''}>Từ 1.000.000 đ ~ 2.000.000 đ</option>
@@ -112,7 +112,6 @@
                             <option value="3to4" ${param.priceFilter eq '3to4' ? 'selected' : ''}>Từ 3.000.000 đ ~ 4.000.000 đ</option>
                             <option value="over4" ${param.priceFilter eq 'over4' ? 'selected' : ''}>Trên 4.000.000 đ</option>
                         </select>
-                        <button class="submit-btn" type="submit" name="Filter" value="Filter">Lọc</button>
                     </div>
                 </form>
 
@@ -231,6 +230,12 @@
                                                 }
                                             }
     </script>
+    <script>
+            function filter(e){
+                var form = $(e).closest('form');
+                form.submit();
+            }
+        </script>
     <script>
         function checkState(productCode) {
             if (productCode != null) {

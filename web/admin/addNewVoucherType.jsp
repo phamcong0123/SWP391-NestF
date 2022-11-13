@@ -8,11 +8,16 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
+    <c:if test="${param.act eq 'update' && empty requestScope.VOUCHER_INFO}">
+        <c:redirect url="LoadVoucherTypeInfo">
+            <c:param name="typeID" value="${param.typeID}"/>
+        </c:redirect>
+    </c:if>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="icon" href="img/logo.png" type="image/x-icon" />
-        <title>Profile</title>
+        <title>Add new voucher</title>
 
         <!-- Custom fonts for this template-->
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -21,17 +26,25 @@
             rel="stylesheet">
 
         <!-- Custom styles for this template-->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
+        <!--CKEditor-->
+        <%--<script type="text/javascript" src="<c:url value='https://cdn.ckeditor.com/4.7.0/full-all/ckeditor.js'/>"></script>--%>
+        <script type="text/javascript" src="<c:url value='https://cdn.ckeditor.com/4.7.0/standard/ckeditor.js'/>"></script>
+
+        <link href="./css/productdetail.css" rel="stylesheet">
+
+        <style> 
+            .block {
+                display: none;
+            }
+        </style>
     </head>
     <body id="page-top">
         <!--///////////////Bắt đầu phần Chung//////////////////////////////////////////////////////////-->
-        <c:if test="${empty sessionScope.ADMIN}">
-            <c:redirect url="loginPage"></c:redirect>
-        </c:if>
         <c:if test="${not empty sessionScope.ADMIN}">
             <c:set var="ADMIN" value="${sessionScope.ADMIN}" scope="session"/>
-            <c:set var="mapIncome" value="${sessionScope.INCOME}" scope="session"/>
             <!-- Page Wrapper -->
             <div id="wrapper">
 
@@ -39,13 +52,13 @@
                 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
                     <!-- Sidebar - Brand -->
-                    <a href="home" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
+                    <a href="dashboard" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
                                                                          height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
 
                     <!-- Nav Item - Dashboard -->
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="dashboard">
                             <i class="fas fa-fw fa-tachometer-alt"></i>
                             <span>Dashboard</span></a>
@@ -56,10 +69,10 @@
 
 
                     <!-- Nav Item - Charts -->
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="adminProfilePage">
                             <i class="fa fa-cog fa-chart-area"></i>
-                            <span>Edit Profile</span></a>
+                            <span>Edit profile</span></a>
                     </li>
 
                     <!-- Divider -->
@@ -127,18 +140,20 @@
 
                     <!-- Nav Item - Charts -->
                     <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVouchers"
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseVouchers"
                            aria-expanded="true" aria-controls="collapseVouchers">
                             <i class="fa fa-gift"></i>
                             <span>Voucher</span></a>
-                        <div id="collapseVouchers" class="collapse" aria-labelledby="headingProducts"
+                        <div id="collapseVouchers" class="collapse show" aria-labelledby="headingProducts"
                              data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">Manage:</h6>
-                                <a class="collapse-item fw-bold" href="voucher">All voucher types</a>
-                                <a class="collapse-item" href="updateVoucher?act=add">Add/Update voucher type</a>
+                                <a class="collapse-item" href="voucher">All voucher types</a>
+                                <a class="collapse-item fw-bold disabled" href="#">Add/Update voucher type</a>
                             </div>
                         </div>
+                    </li>
                     </li>
 
                     <!-- Divider -->
@@ -367,123 +382,116 @@
 
                         <!-- Begin Page Content -->
                         <div class="container-fluid">
-                            <!--//////////////////////////////////////////////////////Kết thúc phần Chung//////////////////////////////////////////////////////////-->
-
+                            <!--//////////////////////////////////////////////////////Kết thúc phần Chung/////////////////-->
                             <!-- Page Heading -->
-                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 class="h3 mb-0 text-gray-800">Profile</h1>
-                            </div>
-
-
+                            <div class="mx-3">
+                                <span class="h3 mb-0 text-gray-800">${empty requestScope.VOUCHER_INFO ? 'Add new voucher' : 'Update voucher'}</span>                              
+                            </div>                           
+                            <br>
                             <!-- Content Row -->
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="card mb-4">
-                                        <div class="card-body text-center">
-                                            <img src="img/undraw_profile.svg" alt="avatar"
-                                                 class="rounded-circle img-fluid" style="width: 150px;">
-                                            <h5 class="my-3">${ADMIN.getName()}</h5>
+                            <div class="card-body ">
+                                <form action="${not empty requestScope.VOUCHER_INFO ? 'updateVoucherType' : 'addNewVoucherTypeAction'}" method="Post">
+                                    <c:if test="${not empty requestScope.VOUCHER_INFO}">
+                                        <input type="hidden" name="typeID" value="${requestScope.VOUCHER_INFO.typeID}">
+                                    </c:if>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4 pb-2">
+                                            <label class="form-label">Title</label>
+                                            <input type="text" class="form-control form-control-lg" name="voucherName" value="${requestScope.VOUCHER_INFO.voucherName}">
+                                        </div>
+                                        <div class="col-md-6 mb-4 pb-2">
+                                            <label class="form-label">Sale value</label>
+                                            <input type="number" min="0" name="saleValue" class="form-control form-control-lg" value="${requestScope.VOUCHER_INFO.saleValue}">
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="col-lg-8">        
-                                    <div class="card mb-4">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-sm-3">
-                                                    <p class="mb-0">Full Name</p>
-                                                </div>
-                                                <div class="col-sm-9">
-                                                    ${ADMIN.getName()}
-                                                </div>
-                                            </div>
-                                            <hr>
-                                            <div class="row">
-                                                <div class="col-sm-3">
-                                                    <p class="mb-0">Password</p>
-                                                </div>
-                                                <div class="col-sm-9">
-                                                    ${ADMIN.getPassword()}
-                                                </div>
-                                            </div>
-                                            <hr>
-                                            <div class="row">
-                                                <div class="col-sm-3">
-                                                    <p class="mb-0">Phone</p>
-                                                </div>
-                                                <div class="col-sm-9">
-                                                    ${ADMIN.getPhone()}
-                                                </div>
-                                            </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4 pb-2">
+                                            <label class="form-label">Quantity</label>
+                                            <input type="number" min="0" name="quantity" class="form-control form-control-lg" value="${requestScope.VOUCHER_INFO.quantity}">
                                         </div>
+                                        <div class="col-md-6 mb-4 pb-2">
+                                            <label class="form-label">Point required</label>
+                                            <input type="number" min="0"  name="point" class="form-control form-control-lg" value="${requestScope.VOUCHER_INFO.point}">
+                                        </div>
+                                    </div>  
+                                    <c:set var="state" value="${requestScope.VOUCHER_INFO.status}"/>
+                                    <input type="radio" name="status" id="statusActive" ${(state eq true || empty requestScope.VOUCHER_INFO) ? 'checked' : ''}  value="true">
+                                    <label for="statusActive">Available</label><br>
+                                    <input type="radio" name="status" id="statusInactive" ${state eq false ? 'checked' : ''}  value="false">
+                                    <label for="statusInactive">Not available</label>                               
+                                    <div class="mt-4 pt-2 text-center mb-4">      
+                                        <c:if test="${not empty requestScope.VOUCHER_INFO}">
+                                            <a href="updateVoucher?act=add"><button type="button" class="btn btn-primary btn-lg">Go to Add</button></a>
+                                        </c:if>
+                                        <input class="btn btn-danger btn-lg" type="submit" value="Submit" />                                      
                                     </div>
-                                    <div class="d-flex justify-content-center mb-2">
-                                        <a href="editAdProfilePage" class="btn btn-outline-danger ms-1 mx-2">Edit</a>
-                                    </div>
-                                </div>
+                                </form>
                             </div>
-                            <!--End of Content Row -->
-
-
-
                         </div>
-                        <!-- End of Content Wrapper -->
-
                     </div>
-                    <!-- End of Page Wrapper -->
+                    <footer class="sticky-footer bg-white sticky-footer">
+                        <div class="container my-auto">
+                            <div class="copyright text-center my-auto">
+                                <span>Copyright &copy; NestF 2022</span>
+                            </div>
+                        </div>
+                    </footer>
+                    <!-- End of Footer -->
+                </div>
+                <br>
 
-                    <!-- Scroll to Top Button-->
-                    <a class="scroll-to-top rounded" href="#page-top">
-                        <i class="fas fa-angle-up"></i>
-                    </a>
+                <!-- End of Page Wrapper -->
 
-                    <!-- Logout Modal-->
-                    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">Select "Logout" below if you are ready to end your current session.
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                                    <a class="btn btn-dark" href="logoutServlet">Logout</a>
-                                </div>
+                <!-- Scroll to Top Button-->
+                <a class="scroll-to-top rounded" href="#page-top">
+                    <i class="fas fa-angle-up"></i>
+                </a>
+
+                <!-- Logout Modal-->
+                <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">Select "Logout" below if you are ready to end your current session.
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                <a class="btn btn-dark" href="logoutServlet">Logout</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <footer class="sticky-footer bg-white sticky-footer">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; NestF 2022</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
-            <!-- Bootstrap core JavaScript-->
-            <script src="vendor/jquery/jquery.min.js"></script>
-            <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        </div>      
+        <!-- Jquery -->
+        <script src="https://code.jquery.com/jquery-2.2.4.js" ></script>
 
-            <!-- Core plugin JavaScript-->
-            <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+        <!-- Bootstrap core JavaScript-->
+        <script src="vendor/jquery/jquery.min.js"></script>
+        <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-            <!-- Custom scripts for all pages-->
-            <script src="js/sb-admin-2.min.js"></script>
+        <!-- Core plugin JavaScript-->
+        <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
-            <!-- Page level plugins -->
-            <script src="vendor/chart.js/Chart.min.js"></script>
+        <!-- Custom scripts for all pages-->
+        <script src="js/sb-admin-2.min.js"></script>
 
-            <!-- Page level custom scripts -->
-            <script src="js/demo/chart-area-demo.js"></script>
-            <script src="js/demo/chart-pie-demo.js"></script>
-        </c:if>
-    </body>
+        <!-- Page level plugins -->
+        <script src="vendor/chart.js/Chart.min.js"></script>
+
+        <!-- Page level custom scripts -->
+        <script src="js/demo/chart-area-demo.js"></script>
+        <script src="js/demo/chart-pie-demo.js"></script>
+
+
+        <script src=”https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js”></script>
+        <script src=”https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js”></script>
+    </c:if>
+</body>
 </html>

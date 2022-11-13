@@ -24,8 +24,8 @@ import javax.naming.NamingException;
  */
 public class PostDAO {
 
-    private static String POST_LIST = "SELECT [postID],[adPhone],[title],[dateTime],[status],[filePath],[image] FROM [NestF].[dbo].[tblPost]";
-    private static String POST_LIST_ACTIVE = "SELECT [postID],[adPhone],[title],[dateTime],[status],[filePath],[image] FROM [NestF].[dbo].[tblPost] WHERE status=1 ORDER BY dateTime DESC ";
+    private static String POST_LIST = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost]";
+    private static String POST_LIST_ACTIVE = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE status=1 ORDER BY postDate DESC ";
 
     public List<PostDTO> postList() throws SQLException, NamingException {
         List<PostDTO> postList = new ArrayList();
@@ -43,11 +43,11 @@ public class PostDAO {
                     AccountDAO dao = new AccountDAO();
                     AccountDTO seller = dao.getUserByPhone(phone);
                     String title = rs.getString("title");
-                    Date date = new Date(rs.getTimestamp("dateTime").getTime());                   
+                    Date date = new Date(rs.getTimestamp("postDate").getTime());                   
                     boolean status = rs.getBoolean("status");
-                    String filePath = rs.getString("filePath");
-                    String image = rs.getString("image");
-                    postList.add(new PostDTO(postID, seller, title, date, status, filePath, image));
+                    String content = rs.getString("content");
+                    String thumbnail = rs.getString("thumbnail");
+                    postList.add(new PostDTO(postID, seller, title, date, status, content, thumbnail));
                 }
             }
         } finally {
@@ -64,7 +64,7 @@ public class PostDAO {
         return postList;
     }
 
-    private static String POST = "SELECT [postID],[adPhone],[title],[dateTime],[status],[filePath],[image] FROM [NestF].[dbo].[tblPost] WHERE [postID] = ?";
+    private static String POST = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE [postID] = ?";
 
     public PostDTO getPost(int postID) throws NamingException, SQLException {
         Connection conn = null;
@@ -82,11 +82,11 @@ public class PostDAO {
                     AccountDAO dao = new AccountDAO();
                     AccountDTO seller = dao.getUserByPhone(phone);
                     String title = rs.getString("title");
-                    Date date = new Date(rs.getTimestamp("dateTime").getTime());             
+                    Date date = new Date(rs.getTimestamp("postDate").getTime());             
                     boolean status = rs.getBoolean("status");
-                    String filePath = rs.getString("filePath");
-                    String image = rs.getString("image");
-                    post = new PostDTO(postID, seller, title, date, status, filePath, image);
+                    String content = rs.getString("content");
+                    String thumbnail = rs.getString("thumbnail");
+                    post = new PostDTO(postID, seller, title, date, status, content, thumbnail);
                 }
             }
         } finally {
@@ -121,11 +121,11 @@ public class PostDAO {
                     AccountDAO dao = new AccountDAO();
                     AccountDTO seller = dao.getUserByPhone(phone);
                     String title = rs.getString("title");
-                    Date date = new Date(rs.getTimestamp("dateTime").getTime());             
+                    Date date = new Date(rs.getTimestamp("postDate").getTime());             
                     boolean status = rs.getBoolean("status");
-                    String filePath = rs.getString("filePath");
-                    String image = rs.getString("image");
-                    PostDTO post = new PostDTO(postID, seller, title, date, status, filePath, image);
+                    String content = rs.getString("content");
+                    String thumbnail = rs.getString("thumbnail");
+                    PostDTO post = new PostDTO(postID, seller, title, date, status, content, thumbnail);
                     if (list == null) {
                         list = new ArrayList<>();
                     }

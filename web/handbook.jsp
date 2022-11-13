@@ -99,7 +99,7 @@
                             <c:param name="postID" value="${post.postID}"/>     
                         </c:url>
                         <a href="${postLink}" class="nav-link col mb-4" id="post">
-                            <img src="${post.image}" class="col-10"><br>
+                            <img src="${post.thumbnail}" class="col-10"><br>
                             <span class="mt-2 col-10 text-start d-inline-flex">${post.title}</span>
                         </a> 
                     </c:forEach>                    

@@ -94,12 +94,12 @@
                 <h2 class="pt-4 fw-bold ms-4">${requestScope.POST.title}</h2>
                 <div id="author" class="text-start ms-4">   
                     <jsp:useBean id="date" class="com.nestf.util.FormatPrinter"/> 
-                    <span class="text-muted">Ngày đăng : ${date.printDate(requestScope.POST.dateTime)}</span>
+                    <span class="text-muted">Ngày đăng : ${date.printDate(requestScope.POST.postDate)}</span>
                 </div><br>
                 <div id="content" class="pb-2 pe-4">            
-                    <c:import charEncoding="UTF-8" url="${requestScope.POST.filePath}"></c:import>
-                    </div>
+                    ${requestScope.POST.content}
                 </div>
+            </div>
             <c:if test = "${not empty requestScope.RECOMMEND_POST}">
                 <div id="other-article" class="bg-white d-inline-block mt-4 h-100 sticky-top">
                     <h2 class="text-center">Bài viết khác</h2>
@@ -109,7 +109,7 @@
                         </c:url>
                         <a href="${postLink}" class="nav-link text-decoration-none" id="article-link">
                             <div class="m-3 d-flex justify-content-start">
-                                <img src="${post.image}" class="d-inline-block col-6">
+                                <img src="${post.thumbnail}" class="d-inline-block col-6">
                                 <div class="d-inline-block text-start ms-2">
                                     <span>${post.title}</span>
                                 </div>            
@@ -123,7 +123,7 @@
         <button type="button" class="btn btn-floating btn-lg position-fixed rounded-circle text-light bottom-25" id="btn-back-to-top" style="left:2.5%">
             <i class="fas fa-arrow-up"></i>
         </button>     
-            <c:if test="${sessionScope.USER.role eq 'AD'}">
+        <c:if test="${sessionScope.USER.role eq 'AD'}">
             <a href="dashboard">
                 <button type="button" id="dashboardRedirect" class="btn btn-floating btn-lg rounded-circle text-light position-fixed d-block"  data-bs-toggle="tooltip" data-bs-placement="right" title="DASHBOARD" style="left:2.5%">
                     <i class="fa-solid fa-shop"></i>

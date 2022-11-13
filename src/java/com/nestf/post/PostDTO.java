@@ -18,22 +18,22 @@ public class PostDTO implements Serializable {
     private int postID;
     private AccountDTO seller;
     private String title;
-    private Date dateTime;
+    private Date postDate;
     private boolean status;
-    private String filePath;
-    private String image;
+    private String content;
+    private String thumbnail;
 
     public PostDTO() {
     }
 
-    public PostDTO(int postID, AccountDTO seller, String title, Date dateTime, boolean status, String filePath, String image) {
+    public PostDTO(int postID, AccountDTO seller, String title, Date postDate, boolean status, String content, String thumbnail) {
         this.postID = postID;
         this.seller = seller;
         this.title = title;
-        this.dateTime = dateTime;
+        this.postDate = postDate;
         this.status = status;
-        this.filePath = filePath;
-        this.image = image;
+        this.content = content;
+        this.thumbnail = thumbnail;
     }
 
     public int getPostID() {
@@ -48,20 +48,20 @@ public class PostDTO implements Serializable {
         return title;
     }
 
-    public Date getDateTime() {
-        return dateTime;
+    public Date getPostDate() {
+        return postDate;
     }
 
     public boolean isStatus() {
         return status;
     }
 
-    public String getFilePath() {
-        return filePath;
+    public String getContent() {
+        return content;
     }
 
-    public String getImage() {
-        return image;
+    public String getThumbnail() {
+        return thumbnail;
     }
 
     public void setPostID(int postID) {
@@ -74,20 +74,20 @@ public class PostDTO implements Serializable {
         this.title = title;
     }
 
-    public void setDateTime(Date dateTime) {
-        this.dateTime = dateTime;
+    public void setPostDate(Date postDate) {
+        this.postDate = postDate;
     }
 
     public void setStatus(boolean status) {
         this.status = status;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setThumbnail(String thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
 }

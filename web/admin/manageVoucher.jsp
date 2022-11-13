@@ -6,8 +6,9 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<jsp:useBean id="formatter" class="com.nestf.util.FormatPrinter"/>
 <!DOCTYPE html>
-<html>
+<html>    
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -40,7 +41,6 @@
         <!--///////////////Bắt đầu phần Chung//////////////////////////////////////////////////////////-->
         <c:if test="${not empty sessionScope.ADMIN}">
             <c:set var="ADMIN" value="${sessionScope.ADMIN}" scope="session"/>
-            <c:set var="mapIncome" value="${sessionScope.INCOME}" scope="session"/>
             <!-- Page Wrapper -->
             <div id="wrapper">
 
@@ -136,9 +136,18 @@
 
                     <!-- Nav Item - Charts -->
                     <li class="nav-item active">
-                        <a class="nav-link disabled" href="manageVoucherPage">
-                            <i class="fa fa-gift" aria-hidden="true"></i>
+                        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseVouchers"
+                           aria-expanded="true" aria-controls="collapseVouchers">
+                            <i class="fa fa-gift"></i>
                             <span>Voucher</span></a>
+                        <div id="collapseVouchers" class="collapse show" aria-labelledby="headingProducts"
+                             data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <h6 class="collapse-header">Manage:</h6>
+                                <a class="collapse-item fw-bold disabled" href="#">All voucher types</a>
+                                <a class="collapse-item" href="updateVoucher?act=add">Add/Update voucher type</a>
+                            </div>
+                        </div>
                     </li>
 
                     <!-- Divider -->
@@ -369,220 +378,60 @@
                         <div class="container-fluid">
                             <!--//////////////////////////////////////////////////////Kết thúc phần Chung/////////////////-->
                             <!-- Page Heading -->
-                            <div class="mx-3">
-                                <span class="h3 mb-0 text-gray-800">Add new product</span>
+                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                <h1 class="h3 mb-0 text-gray-800">All voucher types</h1>
                             </div>
 
                             <!-- Content Row -->
 
-                            <div class="card-body ">
-                                <c:set var="errors" value="${requestScope.PRODUCT_ERR}"/>
-                                <c:if test="${requestScope.SUBMIT_PRODUCT != null}">
-                                    <c:if test="${empty errors}">
-                                        <c:set var="temp" value="${requestScope['SUBMIT_PRODUCT']}" scope="page"/>
-                                        <font color="green">
-                                        Bạn vừa thêm sản phẩm thành công! " ${temp.name} "
-                                        </font> <br/>
-                                        <% request.setAttribute("PREVIEW_PRODUCT", null); %>
-                                        <% request.setAttribute("PRODUCT_DETAIL", null);%>
-                                        <% request.setAttribute("SUBMIT_PRODUCT", null);%>
-                                    </c:if>
-                                </c:if>
-                                <c:set var="productDetail" value="${requestScope['PRODUCT_DETAIL']}" scope="page"/>
-                                <jsp:useBean id="productFunc" class="com.nestf.product.ProductDTO"/>
-                                <br/>
-                                <form action="addNewProductAction" method="Post">
-
-                                    <div class="row">
-                                        <div class="col-md-6 mb-6 pb-2">
-                                            <c:set var="listCategory" value="${sessionScope.LIST_CATEGORY}"/>
-                                            <label class="form-label">Category Name</label>
-
-                                            <input class="form-control form-control-lg" type="text" value="${productDetail.category.categoryName}" name="categoryName" list="categorylist"/>
-                                            <datalist id="categorylist">
-                                                <label class="form-label select-label">Choose option:</label>
-                                                <option disabled>Choose option</option>
-                                                <c:forEach var="dto" items="${listCategory}">
-                                                    <option value="${dto.categoryName}">${dto.categoryName}</option>
-                                                </c:forEach>
-                                            </datalist>
-                                            <c:if test="${not empty errors.category}">
-                                                <font color="red">
-                                                ${errors.category}
-                                                </font> <br/>
-                                            </c:if>
-                                        </div>
-
-                                        <div class="col-md-6 mb-4 pb-2">
-                                            <c:set var="listSeller" value="${sessionScope.LIST_SELLER}"/>
-                                            <label class="form-label">Seller</label>
-
-                                            <input class="form-control form-control-lg" type="text" value="${productDetail.selName}" name="selName" list="sellerlist"/>
-                                            <datalist id="sellerlist">
-                                                <label class="form-label select-label">Choose option:</label>
-                                                <option disabled>Choose option</option>
-                                                <c:forEach var="dto" items="${listSeller}">
-                                                    <option class="" value="${dto.name}">Number of product: ${dto.selQuantity}</option>
-                                                </c:forEach>
-                                            </datalist>
-                                            <c:if test="${not empty errors.sellerID}">
-                                                <font color="red">
-                                                ${errors.sellerID}
-                                                </font> <br/>
-                                            </c:if>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4">
-                                            <div class="form-outline">
-                                                <label class="form-label" for="txtName">Name</label>
-
-                                                <input type="text" id="txtName" name="txtName" value="${productDetail.name}" class="form-control form-control-lg" />
-                                                <c:if test="${not empty errors.name}">
-                                                    <font color="red">
-                                                    ${errors.name}
-                                                    </font> <br/>
-                                                </c:if>
-
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6 mb-4">
-                                            <div class="form-outline">
-                                                <label class="form-label" for="quantity">Quantity</label>
-                                                <input type="number" min="0" max="100" value="${productDetail.quantity}"  class="form-control form-control-lg" id="quantity" name="quantity" />
-                                                <c:if test="${not empty errors.quantity}">
-                                                    <font color="red">
-                                                    ${errors.quantity}
-                                                    </font> <br/>
-                                                </c:if>
-                                            </div>
-                                        </div>
-                                    </div>            
-
-                                    <div class="row">
-                                        <div class="col-md-6 mb-4">
-
-                                            <div class="form-outline">
-                                                <label class="form-label" for="numprice">Original Price</label>
-
-                                                <input type="number" min="0" id="numprice"  name="numprice" value="${productDetail.price}" class="form-control form-control-lg" />
-                                                <c:if test="${not empty errors.price}">
-                                                    <font color="red">
-                                                    ${errors.price}
-                                                    </font> <br/>
-                                                </c:if>
-
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6 mb-4">
-                                            <div class="form-outline">
-                                                <label class="form-label" for="disPrice">New Price</label>
-
-                                                <input type="number" id="disPrice" name="disPrice" value="${productDetail.discountPrice}" min="0" class="form-control form-control-lg" />
-                                                <c:if test="${not empty errors.discountPrice}">
-                                                    <font color="red">
-                                                    ${errors.discountPrice}
-                                                    </font> <br/>
-                                                </c:if>
-
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-4 pb-2">
-                                        <div class="form-outline col-12">
-                                            <label class="form-label" for="">Product Description</label>
-                                            <textarea name="productdesc" cols="200" rows="50" id="productdesc"  class="form-control form-control-lg">
-                                                ${productDetail.productDes}
-                                            </textarea>
-                                            <c:if test="${not empty errors.productDes}">
-                                                <font color="red">
-                                                ${errors.productDes}
-                                                </font> <br/>
-                                            </c:if>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-2 mb-4">
-                                            <div class="form-outline text-center">
-                                                <label class="form-label text-gray-800 h5 mt-2" for="">Image</label>
-                                                <br/>
-                                                <c:if test="${not empty errors.image}">
-                                                    <font color="red">
-                                                    ${errors.image}
-                                                    </font> <br/>
-                                                </c:if>
-                                            </div>
-
-                                        </div>
-                                        <div class="col-md-8 mb-4 pb-2">
-                                            <c:forEach var="image" items="${productDetail.imagelink}" varStatus="counter"> 
-                                                <div class="form-outline mb-4 block">
-                                                    <c:set var="index" value="${counter.count}" scope="page"/>
-                                                    <input type="text" id="image" name="image${counter.count}" value="${image}" class="form-control form-control-lg" placeholder="Nhập link ảnh" />
-                                                </div>
-                                            </c:forEach>
-                                            <c:forEach var = "num" begin = "${index}" end = "4">
-                                                <div class="form-outline mb-4 block">
-                                                    <input type="text" id="image" name="image${num+1}" value="" class="form-control form-control-lg" placeholder="Nhập link ảnh" />
-                                                </div>
-                                            </c:forEach>
-                                        </div>
-                                        <div id="load" class="col-md-2">
-                                            <div class=" btn btn-primary btn-lg">More</div>
-                                        </div>
-                                    </div>
-
-                                    <!-- PREVIEW CONTENT -->
-                                    <div id="white-board" class="bg-white rounded-0">
-                                        <c:if test="${requestScope.PREVIEW_PRODUCT != null}">
-                                            <c:set var="productDetail" value="${requestScope['PREVIEW_PRODUCT']}" scope="page"/>
-                                            <div class="row container-fluid m-0 mt-3">
-
-                                                <div class="d-inline-block col-4 mt-3 text-center">
-                                                    <div class="imgBox"><img src="${productDetail.imagelink[0]}" class="rounded" height="395px" width="395px"></div>
-                                                    <ul class="thumb list-unstyled d-flex row text-center mt-3">
-                                                        <c:forEach var="image" items="${productDetail.imagelink}" varStatus="counter">
-                                                            <li class="col">
-                                                                <a href="${image}" target="imgBox"><img src="${image}"  width="50px"></a>
-                                                            </li>
-                                                        </c:forEach>
-                                                    </ul>
-                                                </div>
-                                                <div class="col-7 mt-3 ml-5">
-                                                    <div class="d-inline-block">
-                                                        <div class="text-center">
-                                                            <h2 class="text-center">${productDetail.name}</h2>
-                                                            <c:if test="${productDetail.discountPrice != 0}">
-                                                                <h3 class="text-center">${productFunc.printPrice(productDetail.discountPrice)}  <span class="text-decoration-line-through">${productFunc.printPrice(productDetail.price)}</span></h3>
-                                                                </c:if>
-                                                                <c:if test="${productDetail.discountPrice == 0}">
-                                                                <h3 class="text-center">${productFunc.printPrice(productDetail.price)}</h3>
-                                                            </c:if>
-                                                        </div>
-                                                        <div>
-                                                            ${productDetail.productDes}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </c:if>
-                                    </div>
-                                    <!--END OF PREVIEW CONTENT -->
-
-                                    <div class="mt-4 pt-2 text-center mb-4">
-                                        <input class="btn btn-primary btn-lg" type="submit" name="btAction" value="Preview" />
-                                        <input class="btn btn-danger btn-lg" type="submit" name="btAction" value="Submit" />
-                                    </div>
-                                </form>
-                            </div>
+                            <c:if test="${not empty sessionScope.LIST_PRODUCT}">
+                                <table class="table table-striped table-hover table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>No.</th>
+                                            <th>Title</th>
+                                            <th>Sale value</th>
+                                            <th>Current quantity</th>
+                                            <th>Point required</th>
+                                            <th>Status</th>
+                                            <th>Act</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="voucher" items="${requestScope.VOUCHER}" varStatus="counter">
+                                            <tr>
+                                                <td>${counter.count}</td>
+                                                <td>${voucher.voucherName}</td>
+                                                <td>${formatter.printMoney(voucher.saleValue)}</td>
+                                                <td>${voucher.quantity}</td>
+                                                <td>${voucher.point}</td> 
+                                                <td>${voucher.status ? 'Available' : 'Not available'}</td>
+                                                <td>                                                 
+                                                    <a href="updateVoucher?act=update&typeID=${voucher.typeID}" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-edit"></i>
+                                                    </a> 
+                                                    <c:if test="${!voucher.status}">
+                                                        <a href="updateVoucherStatus?typeID=${voucher.typeID}" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-check"></i>
+                                                        </a> 
+                                                    </c:if>
+                                                    <c:if test="${voucher.status}">
+                                                        <a href="updateVoucherStatus?typeID=${voucher.typeID}" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-times"></i>
+                                                        </a> 
+                                                    </c:if>                 
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </c:if>
                         </div>
                     </div>
+                    <footer class="sticky-footer bg-white sticky-footer">
+                        <div class="container my-auto">
+                            <div class="copyright text-center my-auto">
+                                <span>Copyright &copy; NestF 2022</span>
+                            </div>
+                        </div>
+                    </footer>
                 </div>
                 <br>
 
@@ -614,14 +463,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <footer class="sticky-footer bg-white sticky-footer">
-            <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; NestF 2022</span>
-                </div>
-            </div>
-        </footer>
+        </div>        
         <!-- End of Footer -->
         <!-- Jquery -->
         <script src="https://code.jquery.com/jquery-2.2.4.js" ></script>
@@ -646,44 +488,6 @@
 
         <script src=”https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js”></script>
         <script src=”https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js”></script>
-        <script>
-            $(document).ready(function () {
-                $(".block").slice(0, 1).show();
-                if ($(".block:hidden").length != 0) {
-                    $("#load").show();
-                }
-                $("#load").on("click", function (e) {
-                    e.preventDefault();
-                    $(".block:hidden").slice(0, 1).slideDown();
-                    if ($(".block:hidden").length == 0) {
-                        $("#load").text("")
-                                .fadOut("slow");
-                    }
-                });
-            })
-        </script>
-
-        <script type="text/javascript">
-            $(document).ready(function () {
-                $('.thumb a').click(function (e) {
-                    e.preventDefault();
-                    $('.imgBox img').attr("src", $(this).attr("href"));
-                })
-            });
-        </script>
-
-        <script>
-            CKEDITOR.config.pasteFromWordPromptCleanup = true;
-            CKEDITOR.config.pasteFromWordRemoveFontStyles = false;
-            CKEDITOR.config.pasteFromWordRemoveStyles = false;
-            CKEDITOR.config.language = "vi";
-            CKEDITOR.config.htmlEncodeOutput = false;
-            CKEDITOR.config.ProcessHTMLEntities = false;
-            CKEDITOR.config.entities = false;
-            CKEDITOR.config.entities_latin = false;
-            CKEDITOR.config.ForceSimpleAmpersand = true;
-            CKEDITOR.replace('productdesc');
-        </script>
     </c:if>
 </body>
 </html>

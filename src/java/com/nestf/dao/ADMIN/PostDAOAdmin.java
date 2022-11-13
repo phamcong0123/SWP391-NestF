@@ -26,8 +26,8 @@ import javax.naming.NamingException;
  */
 public class PostDAOAdmin {
 
-    private static final String POST_LIST_ACTIVE = "SELECT [postID],[adPhone],[title],[dateTime],[status],[filePath],[image] FROM [NestF].[dbo].[tblPost] WHERE status=1 ORDER BY dateTime DESC ";
-    private static final String POST_LIST_NONACTIVE = "SELECT [postID],[adPhone],[title],[dateTime],[status],[filePath],[image] FROM [NestF].[dbo].[tblPost] WHERE status=0 ORDER BY dateTime DESC ";
+    private static final String POST_LIST_ACTIVE = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE status=1 ORDER BY postDate DESC ";
+    private static final String POST_LIST_NONACTIVE = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE status=0 ORDER BY postDate DESC ";
     public static final String SET_STATUS_TRUE = "UPDATE tblPost\n"
             + "SET status = 1\n"
             + "WHERE postID = ?";
@@ -35,7 +35,7 @@ public class PostDAOAdmin {
     public static final String SET_STATUS_FALSE = "UPDATE tblPost\n"
             + "SET status = 0\n"
             + "WHERE postID = ?";
-    private static final String ADD_POST = "INSERT INTO tblPost (adPhone, title, dateTime, status, filePath , image) "
+    private static final String ADD_POST = "INSERT INTO tblPost (adPhone, title, postDate, status, content , thumbnail) "
             + " VALUES(?,?,?,?,?,?)";
     private static final String CHECK_DUPLICATE_POSTID = "SELECT postID from tblPost WHERE postID = ?";
 
@@ -55,11 +55,11 @@ public class PostDAOAdmin {
                     AccountDAO dao = new AccountDAO();
                     AccountDTO seller = dao.getUserByPhone(phone);
                     String title = rs.getString("title");
-                    Date date = new Date(rs.getTimestamp("dateTime").getTime());
+                    Date date = new Date(rs.getTimestamp("postDate").getTime());
                     boolean status = rs.getBoolean("status");
-                    String filePath = rs.getString("filePath");
-                    String image = rs.getString("image");
-                    list.add(new PostDTO(postID, seller, title, date, status, filePath, image));
+                    String content = rs.getString("content");
+                    String thumbnail = rs.getString("thumbnail");
+                    list.add(new PostDTO(postID, seller, title, date, status, content, thumbnail));
                 }
             }
         } finally {
@@ -92,11 +92,11 @@ public class PostDAOAdmin {
                     AccountDAO dao = new AccountDAO();
                     AccountDTO seller = dao.getUserByPhone(phone);
                     String title = rs.getString("title");
-                    Date date = new Date(rs.getTimestamp("dateTime").getTime());
+                    Date date = new Date(rs.getTimestamp("postDate").getTime());
                     boolean status = rs.getBoolean("status");
-                    String filePath = rs.getString("filePath");
-                    String image = rs.getString("image");
-                    post = new PostDTO(postID, seller, title, date, status, filePath, image);
+                    String content = rs.getString("content");
+                    String thumbnail = rs.getString("thumbnail");
+                    post = new PostDTO(postID, seller, title, date, status, content, thumbnail);
                 }
             }
         } finally {
@@ -261,11 +261,11 @@ public class PostDAOAdmin {
                     AccountDAO dao = new AccountDAO();
                     AccountDTO seller = dao.getUserByPhone(phone);
                     String title = rs.getString("title");
-                    Date date = new Date(rs.getTimestamp("dateTime").getTime());
+                    Date date = new Date(rs.getTimestamp("postDate").getTime());
                     boolean status = rs.getBoolean("status");
-                    String filePath = rs.getString("filePath");
-                    String image = rs.getString("image");
-                    list.add(new PostDTO(postID, seller, title, date, status, filePath, image));
+                    String content = rs.getString("content");
+                    String thumbnail = rs.getString("thumbnail");
+                    list.add(new PostDTO(postID, seller, title, date, status, content, thumbnail));
                 }
             }
         } finally {
@@ -299,10 +299,10 @@ public class PostDAOAdmin {
                 ptm.setInt(1, dto.getPostID());
                 ptm.setString(2, dto.getSeller().getPhone());
                 ptm.setString(3, dto.getTitle());
-                ptm.setDate(4, (Date) dto.getDateTime());
+                ptm.setDate(4, (Date) dto.getPostDate());
                 ptm.setBoolean(5, dto.isStatus());
-                ptm.setString(6, dto.getFilePath());
-                ptm.setString(7, dto.getImage());
+                ptm.setString(6, dto.getContent());
+                ptm.setString(7, dto.getThumbnail());
 
 //          4. Execute Query
                 int affectRow = ptm.executeUpdate();
@@ -343,18 +343,18 @@ public class PostDAOAdmin {
                         + "ON a.adPhone=p.phone"
                         + "WHERE a.phone = ? \n"
                         + "AND p.title = ?\n"
-                        + "AND p.dateTime = ? \n"
+                        + "AND p.postDate = ? \n"
                         + "AND p.status = ? \n"
-                        + "AND p.filePath = ?\n"
-                        + "AND p.image = ? \n";
+                        + "AND p.content = ?\n"
+                        + "AND p.thumbnail = ? \n";
 
                 statement = con.prepareStatement(GET_PRODUCTID_IN_DB);
                 statement.setString(1, dto.getSeller().getPhone());
                 statement.setString(2, dto.getTitle());
-                statement.setDate(3, (java.sql.Date) dto.getDateTime());
+                statement.setDate(3, (java.sql.Date) dto.getPostDate());
                 statement.setBoolean(4, dto.isStatus());
-                statement.setString(5, dto.getFilePath());
-                statement.setString(6, dto.getImage());
+                statement.setString(5, dto.getContent());
+                statement.setString(6, dto.getThumbnail());
 //          4. Execute Query
                 rs = statement.executeQuery();
 

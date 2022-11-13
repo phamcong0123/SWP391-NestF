@@ -17,6 +17,7 @@
 
         <!-- Custom fonts for this template-->
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
             rel="stylesheet">
@@ -46,7 +47,7 @@
                     <hr class="sidebar-divider my-0">
 
                     <!-- Nav Item - Dashboard -->
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="dashboard">
                             <i class="fas fa-fw fa-tachometer-alt"></i>
                             <span>Dashboard</span></a>
@@ -89,16 +90,16 @@
 
                     <!-- Nav Item - Pages Collapse Menu -->
                     <li class="nav-item active">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo"
                            aria-expanded="true" aria-controls="collapseTwo">
                             <i class="fa fa-users"></i>
                             <span>User</span>
                         </a>
-                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">Manage :</h6>
                                 <a class="collapse-item" href="manageSellerPage">Sellers</a>
-                                <a class="collapse-item" href="manageCustomerPage">Customers</a>
+                                <a class="collapse-item fw-bold" href="manageCustomerPage">Customers</a>
                             </div>
                         </div>
                     </li>
@@ -128,9 +129,18 @@
 
                     <!-- Nav Item - Charts -->
                     <li class="nav-item">
-                        <a class="nav-link" href="manageVoucherPage">
-                            <i class="fa fa-gift" aria-hidden="true"></i>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVouchers"
+                           aria-expanded="true" aria-controls="collapseVouchers">
+                            <i class="fa fa-gift"></i>
                             <span>Voucher</span></a>
+                        <div id="collapseVouchers" class="collapse" aria-labelledby="headingProducts"
+                             data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <h6 class="collapse-header">Manage:</h6>
+                                <a class="collapse-item fw-bold" href="voucher">All voucher types</a>
+                                <a class="collapse-item" href="updateVoucher?act=add">Add/Update voucher type</a>
+                            </div>
+                        </div>
                     </li>
 
                     <!-- Divider -->

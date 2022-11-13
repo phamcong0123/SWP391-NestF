@@ -19,6 +19,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -37,17 +38,20 @@ public class LoadVoucherServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private static final String VOUCHER_PAGE = "voucher.jsp";
+    private static final String MANAGE_VOUCHER = "admin/manageVoucher.jsp";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         String url = VOUCHER_PAGE;
         try {
-            /* TODO output your page here. You may use following sample code. */
+            /* TODO output your page here. You may use following sample code. */           
             VoucherTypeDAO dao = new VoucherTypeDAO();
             dao.loadVoucher();
             List<VoucherTypeDTO> list = dao.getList();
             request.setAttribute("VOUCHER", list);
+            HttpSession session = request.getSession(false);
+            if (session.getAttribute("ADMIN") != null) url = MANAGE_VOUCHER;
         } catch (NamingException ex) {
             Logger.getLogger(LoadVoucherServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {

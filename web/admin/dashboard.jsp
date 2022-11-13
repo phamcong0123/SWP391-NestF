@@ -51,7 +51,6 @@
 //            list.add(map);
 //            dataPoints = gsonObj.toJson(list);
 //        }
-
         while (resultSet.next()) {
             int month = Integer.parseInt(resultSet.getString("xVal"));
             switch (month) {
@@ -100,9 +99,12 @@
             list.add(map);
             dataPoints = gsonObj.toJson(list);
         }
-        
-        
-        ResultSet resultSet2 = statement.executeQuery("Select s.status, SUM(b.billID) as total FROM tblBill b INNER JOIN tblStatus s ON b.billID = s.statusID WHERE s.statusID = 1 OR s.statusID = 2 OR s.statusID = 3 GROUP BY  s.status");
+
+        ResultSet resultSet2 = statement.executeQuery("SELECT s.statusID, s.status, Count(b.billID) as total \n"
+                + "FROM tblBill b\n"
+                + "INNER JOIN tblStatus s\n"
+                + "ON b.statusID = s.statusID AND s.statusID <> 4 AND s.statusID <> 5\n"
+                + "GROUP BY s.statusID, s.status");
 //        ResultSetMetaData rsmd2 = resultSet2.getMetaData();
 
         while (resultSet2.next()) {
@@ -303,9 +305,18 @@
 
                     <!-- Nav Item - Charts -->
                     <li class="nav-item">
-                        <a class="nav-link" href="manageVoucherPage">
-                            <i class="fa fa-gift" aria-hidden="true"></i>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVouchers"
+                           aria-expanded="true" aria-controls="collapseVouchers">
+                            <i class="fa fa-gift"></i>
                             <span>Voucher</span></a>
+                        <div id="collapseVouchers" class="collapse" aria-labelledby="headingProducts"
+                             data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <h6 class="collapse-header">Manage:</h6>
+                                <a class="collapse-item fw-bold" href="voucher">All voucher types</a>
+                                <a class="collapse-item" href="updateVoucher?act=add">Add/Update voucher type</a>
+                            </div>
+                        </div>
                     </li>
 
                     <!-- Divider -->
@@ -636,7 +647,7 @@
 
                                 <div class="col-xl-8 col-lg-7">
                                     <div class="card shadow mb-2">
-                                        
+
                                         <div class="card-body pb-5">
                                             <div class="chart-area">
                                                 <div id="chartContainer" style="height: 350px; width: 100%; align-content: center"></div>
@@ -648,7 +659,7 @@
                                 <!-- Pie Chart -->
                                 <div class="col-xl-4 col-lg-5">
                                     <div class="card shadow mb-2 ">
-                                       
+
                                         <div class="card-body pb-5">
                                             <div class="chart-area">
                                                 <div id="chartContainer2" style="height: 350px; width: 100%;"></div>
