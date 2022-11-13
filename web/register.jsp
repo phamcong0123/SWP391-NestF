@@ -69,26 +69,27 @@
                         <span class="d-inline-block m-3">Địa chỉ</span>
                     </div>
                     <div class="col-8">
-                        <input type="text" name="name" required minlength="6" maxlength="30" placeholder="6 - 30 ký tự" class="m-3"><br>
+                        <input type="text" id="name" name="name" oninput="validateForm()" minlength="6" maxlength="30" placeholder="6 - 30 ký tự" class="m-3 me-0">
+                        <i id="name-tooltip" style="display:none;" class="fa-solid fa-circle-exclamation text-danger" data-bs-custom-class="error-tooltip" data-bs-toggle="tooltip" data-bs-placement="right" title=""></i><br>
                         <div id="gender" class="m-3">
                             <input type="radio" id="male" checked="" name="gender" value="1">
                             <label for="male">Nam&emsp;</label>
                             <input type="radio" id="female" name="gender" value="0">
                             <label for="female">Nữ</label>
                         </div>
-                        <input type="number" name="phone" value="${requestScope.PHONE}" required oninput="checkLength(this)" maxlength="10" placeholder="10 chữ số" class="m-3 me-0">
-                        <c:if test="${not empty requestScope.ERROR}">
-                            <i id="error-tooltip" class="fa-solid fa-circle-exclamation text-danger" data-bs-custom-class="error-tooltip" data-bs-toggle="tooltip" data-bs-placement="right" title="${requestScope.ERROR}"></i>
-                        </c:if><br>                       
-                        <input type="password" class="m-3" name="password" required minlength="6" maxlength="20" id="password" placeholder="6 - 20 ký tự" oninput="checkSimilar()"><br>
-                        <input type="password" class="m-3 me-0" name="confirm" required minlength="6" maxlength="20" id="confirm" oninput="checkSimilar()">
+                        <input type="number" name="phone" value="${requestScope.PHONE}" required oninput="validateForm()" maxlength="10" placeholder="10 chữ số" class="m-3 me-0">
+                        <i id="error-tooltip" style="display:none;" class="fa-solid fa-circle-exclamation text-danger" data-bs-custom-class="error-tooltip" data-bs-toggle="tooltip" data-bs-placement="right" title="${requestScope.ERROR}"></i><br>                       
+                        <input type="password" class="m-3 me-0" name="password" minlength="6" maxlength="20" id="password" placeholder="6 - 20 ký tự" oninput="validateForm()">
+                        <i id="password-tooltip" style="display:none;" class="fa-solid fa-circle-exclamation text-danger" data-bs-custom-class="error-tooltip" data-bs-toggle="tooltip" data-bs-placement="right" title="Mật khẩu quá ngắn"></i><br>
+                        <input type="password" class="m-3 me-0" name="confirm" minlength="6" maxlength="20" id="confirm" oninput="validateForm()">
                         <i id="similar-tooltip" style="display:none;" class="fa-solid fa-circle-exclamation text-danger" data-bs-custom-class="error-tooltip" data-bs-toggle="tooltip" data-bs-placement="right" title="Không trùng khớp với mật khẩu"></i><br>
-                        <input type="text" class="m-3" name="address" required="" minlength="20" maxlength="70" placeholder="20 - 70 ký tự"><br>
+                        <input type="text" class="m-3 me-0" name="address" oninput="validateForm()" minlength="20" maxlength="70" placeholder="20 - 70 ký tự">
+                        <i id="address-tooltip" style="display:none;" class="fa-solid fa-circle-exclamation text-danger" data-bs-custom-class="error-tooltip" data-bs-toggle="tooltip" data-bs-placement="right" title=""></i><br><br>
                     </div>
                 </div>   
 
                 <a href="home"><input type="button" value="HUỶ" id="link-button"></a>
-                <input type="submit" value="ĐĂNG KÝ" id="color-button" name="submitButton">
+                <input type="submit" disabled value="ĐĂNG KÝ" id="color-button" name="submitButton">
             </form>
         </div>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/js/bootstrap.bundle.min.js" integrity="sha512-BOsvKbLb0dB1IVplOL9ptU1EYA+LuCKEluZWRUYG73hxqNBU85JBIBhPGwhQl7O633KtkjMv8lvxZcWP+N3V3w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

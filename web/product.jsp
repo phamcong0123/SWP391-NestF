@@ -49,7 +49,7 @@
                             <div id="dropDownMenu" class="d-inline-block position-relative">
                                 <i class="fas fa-user me-2"></i>${sessionScope.USER.name}
                                 <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
-                                         <c:if test="${not empty sessionScope.USER}">                          
+                                    <c:if test="${not empty sessionScope.USER}">                          
                                         <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>      
                                     </c:if>                         
                                     <c:if test="${sessionScope.USER.role eq 'SE'}">            
@@ -124,17 +124,28 @@
                     </div>
                 </c:if>           
             </div>
+
             <div id="number-toggle" class="text-center col-7">
-                <div class="input-group d-inline-block">
-                    <form action="addToCart">
-                        <input type="hidden" id="productID" name="productID" value="${productDetail.productID}"/>
-                        <img src="img/plus.svg" data-field="quantity" class="button-plus d-inline-block">
-                        <input required id="number-input" type="number" step="1" value="1" min="1" max="${productDetail.quantity}" onblur="minCheck(this), maxCheck(this)" name="quantity" class="quantity-field text-center p-0">
-                        <img src="img/minus.svg" data-field="quantity" class="button-minus d-inline-block"><br>
-                        <button type="submit" id="buy-button" class="col-3 me-2 border rounded" value="true" name="buynow">Mua ngay</button>
-                        <button type="button" id="buy-button" class="col-3 ms-2 bg-white text-black border border-dark rounded" onclick="checkState(${not empty sessionScope.USER ? productDetail.productID : ''}, this)"><img src="img/cart.svg" class="me-2">Thêm vào giỏ</button>
-                    </form>
-                </div>
+                <c:if test="${productDetail.status eq true}">
+                    <c:if test="${productDetail.quantity ne 0}">
+                        <div class="input-group d-inline-block">
+                            <form action="addToCart">
+                                <input type="hidden" id="productID" name="productID" value="${productDetail.productID}"/>
+                                <img src="img/plus.svg" data-field="quantity" class="button-plus d-inline-block">
+                                <input required id="number-input" type="number" step="1" value="1" min="1" max="${productDetail.quantity}" onblur="minCheck(this), maxCheck(this)" name="quantity" class="quantity-field text-center p-0">
+                                <img src="img/minus.svg" data-field="quantity" class="button-minus d-inline-block"><br>
+                                <button type="submit" id="buy-button" class="col-3 me-2 border rounded" value="true" name="buynow">Mua ngay</button>
+                                <button type="button" id="buy-button" class="col-3 ms-2 bg-white text-black border border-dark rounded" onclick="checkState(${not empty sessionScope.USER ? productDetail.productID : ''}, this)"><img src="img/cart.svg" class="me-2">Thêm vào giỏ</button>
+                            </form>
+                        </div>
+                    </c:if>
+                    <c:if test="${productDetail.quantity eq 0}">
+                        <h1 class="text-danger text-center">HẾT HÀNG</h1>
+                    </c:if>
+                </c:if>
+                <c:if test="${productDetail.status eq false}">
+                    <h1 class="text-danger text-center">NGỪNG KINH DOANH</h1>
+                </c:if>     
             </div>
             <br>
             <div class="container-fluid">
@@ -162,8 +173,13 @@
                                     </c:if>
                                 </a>
                                 <div class="buynow-btn mt-2">
-                                    <button class="btn btn-dark" onclick="checkState(${not empty sessionScope.USER ? otherProduct.productID : ''})">
-                                        <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
+                                    <button class="btn btn-dark" ${otherProduct.quantity eq 0 ? 'disabled' : ''} onclick="checkState(${not empty sessionScope.USER ? otherProduct.productID : ''})">
+                                        <c:if test="${otherProduct.quantity eq 0}">
+                                            <i class="fa-solid fa-cart-xmark"></i> Hết hàng
+                                        </c:if>
+                                        <c:if test="${otherProduct.quantity ne 0}">
+                                            <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
+                                        </c:if>
                                     </button>
                                 </div>
 

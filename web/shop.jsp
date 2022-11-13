@@ -54,7 +54,7 @@
                                 <div id="dropDownMenu" class="d-inline-block position-relative">
                                     <i class="fas fa-user me-2"></i>${sessionScope.USER.name}
                                     <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
-                                             <c:if test="${not empty sessionScope.USER}">                                   
+                                        <c:if test="${not empty sessionScope.USER}">                                   
                                             <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>    
                                         </c:if>                                    
                                         <c:if test="${sessionScope.USER.role eq 'SE'}">         
@@ -151,8 +151,13 @@
                                                 </a>
                                             </div>
                                             <div class="buynow-btn">
-                                                <button class="btn btn-dark" onclick="checkState(${not empty sessionScope.USER ? product.productID : ''})">
-                                                    <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
+                                                <button class="btn btn-dark" ${product.quantity eq 0 ? 'disabled' : ''} onclick="checkState(${not empty sessionScope.USER ? product.productID : ''})">
+                                                    <c:if test="${product.quantity eq 0}">
+                                                        <i class="fa-solid fa-cart-xmark"></i> Hết hàng
+                                                    </c:if>
+                                                    <c:if test="${product.quantity ne 0}">
+                                                        <i class="fa-solid fa-cart-shopping"></i> Thêm vào giỏ
+                                                    </c:if>
                                                 </button>
                                             </div>
                                         </div>

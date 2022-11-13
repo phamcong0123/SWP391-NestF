@@ -192,8 +192,8 @@
                     </div>
                 </div>
                 <div id="order-history" class="tab-pane fade" role="tabpanel" aria-labelledby="history-tab">
-                    <div id="whiteboard2" class="col-9 bg-white">                       
-                        <ul id="options" class="row row-cols-5 nav nav-tabs border-0 p-3" role="tablist">
+                    <div id="whiteboard2" class="col-8 bg-white">                       
+                        <ul id="options" class="row row-cols-4 nav nav-tabs border-0 p-3" role="tablist">
                             <li class="nav-item m-0" role="presentation">
                                 <button id="preparing-tab" data-bs-target="#preparing" data-bs-toggle="tab" aria-selected="true" role="tab"  aria-controls="preparing" aria-current="page" class="nav-link active container-fluid text-black bg-transparent border-0">Đang chuẩn bị</button>
                             </li>
@@ -205,9 +205,6 @@
                             </li>
                             <li class="nav-item m-0" role="presentation">
                                 <button id="canceled-tab" data-bs-target="#canceled" data-bs-toggle="tab" aria-selected="false" role="tab" aria-controls="canceled" aria-current="page" class="nav-link container-fluid text-black bg-transparent border-0">Đã huỷ</button>
-                            </li>
-                            <li class="nav-item m-0" role="presentation">
-                                <button id="returned-tab" data-bs-target="#returned" data-bs-toggle="tab" aria-selected="false" role="tab" aria-controls="returned" aria-current="page" class="nav-link container-fluid text-black bg-transparent border-0">Trả hàng/Hoàn tiền</button>
                             </li>
                         </ul>
                         <div class="tab-content">                          
@@ -268,8 +265,8 @@
                                                               <label for="reason4">Tìm thấy giá rẻ hơn ở nơi khác</label><br>
                                                             <input type="radio" id="reason5" name="cancelReason" value=""/>
                                                               <label for="reason5">Đổi ý, không muốn mua nữa</label><br>
-                                                            <input type="radio" id="reason6" name="cancelReason" value=""/>
-                                                              <label for="reason6"><input type="text" class="p-0" placeholder="Lý do khác..."/></label>
+                                                            <input type="radio" id="reason6" name="cancelReason" onselect="insertReason()"/>
+                                                              <label for="reason6">Khác</label>
                                                         </div>
                                                     </div>
                                                     <div class="modal-footer">
@@ -389,41 +386,7 @@
                                         <h4 class="text-muted mt-3 pb-4">Không có lịch sử giao dịch.</h4>
                                     </div>
                                 </c:if>
-                            </div>
-                            <div id="returned" class="tab-pane fade pb-3" role="tabpanel" aria-labelledby="returned-tab">                             
-                                <c:if test = "${not empty requestScope.RETURNED}">
-                                    <c:set var="completedList" value="${requestScope.RETURNED}"/>
-                                    <c:forEach items="${completedList}" var = "completedBill">
-                                        <div id = "cart-item" class="row col-11 m-auto text-start mb-3 position-relative">
-                                            <h3 class="m-2 mb-0 d-inline-block">Đơn hàng <strong>#NESTF${completedBill.billID}</strong></h3>
-                                            <h5 class="text-danger m-2">${completedBill.status.status}</h5>
-                                            <span class="ms-2 mb-2">Ngày đặt hàng: <b>${formatPrinter.printDate(completedBill.time)}</b></span>
-                                            <span class="ms-2 mb-4">Địa chỉ nhận hàng : <b>${completedBill.address}</b></span>
-                                            <c:forEach items = "${completedBill.detail}" var = "billDetail">
-                                                <div class="rounded col-11 m-auto mb-3 border border-dark">
-                                                    <div class="row container-fluid m-0">
-                                                        <div class="d-inline-block col-2 text-start">
-                                                            <img src="${billDetail.product.imagelink[0]}" class="rounded col-9">
-                                                        </div>     
-                                                        <div class="d-inline-block col-8 text-start ms-2 mt-2">
-                                                            <h4 class="fw-bold">${billDetail.product.name}</h4>
-                                                            <p class="mt-1 mb-0">Số lượng : <span class="fw-bold">${billDetail.quantity}</span></p>
-                                                            <p>Giá : <span class="fw-bold">${formatPrinter.printMoney(billDetail.price)}</span></p> 
-                                                        </div>                                              
-                                                    </div>
-                                                </div>
-                                            </c:forEach>                                          
-                                            <h4 class="text-end">Thành tiền: <b>${formatPrinter.printMoney(completedBill.total)}</b></h4>                                                       
-                                        </div>
-                                    </c:forEach>
-                                </c:if>
-                                <c:if test="${empty requestScope.RETURNED}">
-                                    <div class="mt-5">
-                                        <img src="img/emptyCart.png">
-                                        <h4 class="text-muted mt-3 pb-4">Không có lịch sử giao dịch.</h4>
-                                    </div>
-                                </c:if>
-                            </div>
+                            </div>                           
                         </div>                     
                     </div>
                 </div>

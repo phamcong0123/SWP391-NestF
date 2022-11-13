@@ -15,17 +15,17 @@ public class VoucherTypeDTO implements Serializable{
     
     private int typeID;
     private String voucherName;
-    private Long saleMargin;
+    private Double saleValue;
     private int quantity;
     private int point;
 
     public VoucherTypeDTO() {
     }
 
-    public VoucherTypeDTO(int typeID, String voucherName, Long saleMargin, int quantity, int point) {
+    public VoucherTypeDTO(int typeID, String voucherName, Double saleValue, int quantity, int point) {
         this.typeID = typeID;
         this.voucherName = voucherName;
-        this.saleMargin = saleMargin;
+        this.saleValue = saleValue;
         this.quantity = quantity;
         this.point = point;
     }
@@ -38,8 +38,8 @@ public class VoucherTypeDTO implements Serializable{
         this.voucherName = voucherName;
     }
 
-    public void setSaleMargin(Long saleMargin) {
-        this.saleMargin = saleMargin;
+    public void setSaleMargin(Double saleValue) {
+        this.saleValue = saleValue;
     }
 
     public void setQuantity(int quantity) {
@@ -58,8 +58,8 @@ public class VoucherTypeDTO implements Serializable{
         return voucherName;
     }
 
-    public Long getSaleMargin() {
-        return saleMargin;
+    public Double getSaleMargin() {
+        return saleValue;
     }
 
     public int getQuantity() {

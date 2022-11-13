@@ -40,7 +40,8 @@ public class HomePageController extends HttpServlet {
             request.setAttribute("OTHER_PRODUCT_LIST", otherProList);
             url = SUCCESS;
         } catch (Exception e) {
-            log("Error at HomePageController: " + e.getMessage());
+           // log("Error at HomePageController: " + e.getMessage());
+           e.printStackTrace();
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }

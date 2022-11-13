@@ -40,10 +40,10 @@ public class VoucherTypeDAO {
                 while (rs.next()) {
                     int typeID = rs.getInt("typeID");
                     String voucherName = rs.getString("voucherName");
-                    Long saleMargin = rs.getLong("saleMargin");
+                    Double saleValue = rs.getDouble("saleValue");
                     int quantity = rs.getInt("quantity");
                     int point = rs.getInt("point");
-                    VoucherTypeDTO dto = new VoucherTypeDTO(typeID, voucherName, saleMargin, quantity, point);
+                    VoucherTypeDTO dto = new VoucherTypeDTO(typeID, voucherName, saleValue, quantity, point);
                     if (list == null) {
                         list = new ArrayList<>();
                     }
@@ -76,10 +76,10 @@ public class VoucherTypeDAO {
                 rs = ptm.executeQuery();
                 if (rs.next()) {
                     String voucherName = rs.getString("voucherName");
-                    Long saleMargin = rs.getLong("saleMargin");
+                    Double saleValue = rs.getDouble("saleValue");
                     int quantity = rs.getInt("quantity");
                     int point = rs.getInt("point");
-                    VoucherTypeDTO dto = new VoucherTypeDTO(typeID, voucherName, saleMargin, quantity, point);
+                    VoucherTypeDTO dto = new VoucherTypeDTO(typeID, voucherName, saleValue, quantity, point);
                     return dto;
                 }
             }

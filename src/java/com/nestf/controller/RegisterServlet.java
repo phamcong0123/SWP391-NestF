@@ -33,25 +33,20 @@ public class RegisterServlet extends HttpServlet {
         String url = REGISTER_PAGE;
         try {
             String phone = request.getParameter("phone").trim();
-            if (phone.length() < 10) {
-                request.setAttribute("ERROR", "Số điện thoại phải dài 10 chữ số");
+            String password = request.getParameter("password");
+            String name = request.getParameter("name");
+            String address = request.getParameter("address");
+            boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
+            int point = 0;
+            String role = "US";
+            AccountDAO dao = new AccountDAO();
+            if (dao.getUserByPhone(phone) != null) {
+                request.setAttribute("ERROR", "Số điện thoại đã có người đăng ký");
                 request.setAttribute("PHONE", phone);
             } else {
-                String password = request.getParameter("password");
-                String name = request.getParameter("name");
-                String address = request.getParameter("address");
-                boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
-                int point = 0;
-                String role = "US";
-                AccountDAO dao = new AccountDAO();
-                if (dao.getUserByPhone(phone) != null) {
-                    request.setAttribute("ERROR", "Số điện thoại đã có người đăng ký");
-                    request.setAttribute("PHONE", phone);
-                } else {
-                    AccountDTO acc = new AccountDTO(phone, password, name, address, gender, point, role);
-                    dao.insert(acc);
-                    url = LOGIN_PAGE;
-                }
+                AccountDTO acc = new AccountDTO(phone, password, name, address, gender, point, role);
+                dao.insert(acc);
+                url = LOGIN_PAGE;
             }
         } catch (Exception e) {
             log("Error at RegisterServlet: " + e.toString());

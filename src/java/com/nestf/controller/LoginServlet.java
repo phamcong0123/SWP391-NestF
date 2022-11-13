@@ -46,7 +46,7 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
         ServletContext context = request.getServletContext();
         Properties siteMap = (Properties) context.getAttribute("SITEMAP");
         String url = LOGIN_PAGE;
@@ -56,20 +56,22 @@ public class LoginServlet extends HttpServlet {
             AccountDAO dao = new AccountDAO();
             AccountDTO user = dao.checkLogin(phone, password);
             if (user != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("USER", user);
-                switch (user.getRole()) {
-                    case "US":
-                        url = LOAD_USER_CART;
-                        break;
-                    case "AD":
-                        session.setAttribute("ADMIN", user);
-                        url = (String) siteMap.get(MyAppConstant.AdminFeatures.INIT_ATTRIBUTE_ACTION);
-                        break;
-                    case "SE":
-                        url = SELLER_PAGE;
-                        break;
-                }
+                if (user.isStatus()) {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("USER", user);
+                    switch (user.getRole()) {
+                        case "US":
+                            url = LOAD_USER_CART;
+                            break;
+                        case "AD":
+                            session.setAttribute("ADMIN", user);
+                            url = (String) siteMap.get(MyAppConstant.AdminFeatures.INIT_ATTRIBUTE_ACTION);
+                            break;
+                        case "SE":
+                            url = SELLER_PAGE;
+                            break;
+                    }
+                } else request.setAttribute("ERROR", "Số điện thoại này đã bị chặn");
             } else {
                 request.setAttribute("ERROR", "Sai mật khẩu hoặc số điện thoại!");
             }

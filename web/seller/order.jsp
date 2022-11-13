@@ -21,6 +21,8 @@
         <!-- Custom styles for this template-->
         <link href="seller/css/sb-seller-2.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+        <link rel="stylesheet" href="seller/styled-notifications-master/dist/notifications.css">
+
     </head>
     <body id="page-top" onload="removeAndAddClass()">
         <jsp:useBean id="printPriceFunc" scope="page" class="com.nestf.product.ProductDTO"></jsp:useBean>
@@ -33,7 +35,7 @@
 
                     <!-- Sidebar - Brand -->
                     <a href="sellerPage" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
-                                                                                height="38px"></a>
+                                                                          height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
 
@@ -134,202 +136,58 @@
                             <!-- Topbar Navbar -->
                             <ul class="navbar-nav ml-auto">
 
-                                <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                                <li class="nav-item dropdown no-arrow d-sm-none">
-                                    <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-search fa-fw"></i>
-                                    </a>
-                                    <!-- Dropdown - Messages -->
-                                    <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                         aria-labelledby="searchDropdown">
-                                        <form class="form-inline mr-auto w-100 navbar-search">
-                                            <div class="input-group">
-                                                <input type="text" class="form-control bg-light border-0 small"
-                                                       placeholder="Search for..." aria-label="Search"
-                                                       aria-describedby="basic-addon2">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-dark" type="button">
-                                                        <i class="fas fa-search fa-sm"></i>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </li>
-
-                                <!-- Nav Item - Alerts -->
-                                <li class="nav-item dropdown no-arrow mx-1">
-                                    <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-bell fa-fw"></i>
-                                        <!-- Counter - Alerts -->
-                                        <span class="badge badge-danger badge-counter">3+</span>
-                                    </a>
-                                    <!-- Dropdown - Alerts -->
-                                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                         aria-labelledby="alertsDropdown">
-                                        <h6 class="dropdown-header">
-                                            Alerts Center
-                                        </h6>
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="mr-3">
-                                                <div class="icon-circle bg-dark">
-                                                    <i class="fas fa-file-alt text-white"></i>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div class="small text-gray-500">December 12, 2019</div>
-                                                <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                                            </div>
-                                        </a>
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="mr-3">
-                                                <div class="icon-circle bg-success">
-                                                    <i class="fas fa-donate text-white"></i>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div class="small text-gray-500">December 7, 2019</div>
-                                                $290.29 has been deposited into your account!
-                                            </div>
-                                        </a>
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="mr-3">
-                                                <div class="icon-circle bg-warning">
-                                                    <i class="fas fa-exclamation-triangle text-white"></i>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div class="small text-gray-500">December 2, 2019</div>
-                                                Spending Alert: We've noticed unusually high spending for your account.
-                                            </div>
-                                        </a>
-                                        <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-                                    </div>
-                                </li>
-
-                                <!-- Nav Item - Messages -->
-                                <li class="nav-item dropdown no-arrow mx-1">
-                                    <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-envelope fa-fw"></i>
-                                        <!-- Counter - Messages -->
-                                        <span class="badge badge-danger badge-counter">7</span>
-                                    </a>
-                                    <!-- Dropdown - Messages -->
-                                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                         aria-labelledby="messagesDropdown">
-                                        <h6 class="dropdown-header">
-                                            Message Center
-                                        </h6>
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="dropdown-list-image mr-3">
-                                                <img class="rounded-circle" src="img/undraw_profile_1.svg" alt="...">
-                                                <div class="status-indicator bg-success"></div>
-                                            </div>
-                                            <div class="font-weight-bold">
-                                                <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                                    problem I've been having.</div>
-                                                <div class="small text-gray-500">Emily Fowler · 58m</div>
-                                            </div>
-                                        </a>
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="dropdown-list-image mr-3">
-                                                <img class="rounded-circle" src="img/undraw_profile_2.svg" alt="...">
-                                                <div class="status-indicator"></div>
-                                            </div>
-                                            <div>
-                                                <div class="text-truncate">I have the photos that you ordered last month, how
-                                                    would you like them sent to you?</div>
-                                                <div class="small text-gray-500">Jae Chun · 1d</div>
-                                            </div>
-                                        </a>
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="dropdown-list-image mr-3">
-                                                <img class="rounded-circle" src="img/undraw_profile_3.svg" alt="...">
-                                                <div class="status-indicator bg-warning"></div>
-                                            </div>
-                                            <div>
-                                                <div class="text-truncate">Last month's report looks great, I am very happy with
-                                                    the progress so far, keep up the good work!</div>
-                                                <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                            </div>
-                                        </a>
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="dropdown-list-image mr-3">
-                                                <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                                     alt="...">
-                                                <div class="status-indicator bg-success"></div>
-                                            </div>
-                                            <div>
-                                                <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                                    told me that people say this to all dogs, even if they aren't good...</div>
-                                                <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                                            </div>
-                                        </a>
-                                        <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
-                                    </div>
-                                </li>
-
-                                <div class="topbar-divider d-none d-sm-block"></div>
-
                                 <!-- Nav Item - User Information -->
                                 <li class="nav-item dropdown no-arrow">
                                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">Seller 1</span>
-                                        <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
+                                        <span class="mr-2 d-none d-lg-inline text-gray-600 small">${sessionScope.USER.name}</span>
+                                    <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
+                                </a>
+                                <!-- Dropdown - User Information -->
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                     aria-labelledby="userDropdown">
+                                    <a class="dropdown-item" href="sellerProfile">
+                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Hồ sơ
                                     </a>
-                                    <!-- Dropdown - User Information -->
-                                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                         aria-labelledby="userDropdown">
-                                        <a class="dropdown-item" href="#">
-                                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Profile
-                                        </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Settings
-                                        </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Activity Log
-                                        </a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Logout
-                                        </a>
-                                    </div>
-                                </li>
+                                    <a class="dropdown-item" href="profileSetting">
+                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Cài đặt
+                                    </a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="logOut">
+                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        Đăng xuất
+                                    </a>
+                                </div>
+                            </li>
 
-                            </ul>
+                        </ul>
 
-                        </nav>
-                        <!-- End of Topbar -->
+                    </nav>
+                    <!-- End of Topbar -->
 
-                        <!-- Begin index content -->
-                        <div class="container col-lg-10 order-container">
+                    <!-- Begin index content -->
+                    <div class="container col-lg-10 order-container">
 
-                            <ul class="nav nav-tabs justify-content-between" id="myTab" role="tablist">
+                        <ul class="nav nav-tabs justify-content-between" id="myTab" role="tablist">
 
-                                <!-- Tất cả -->
-                                <li class="nav-item order-header" role="presentation">
-                                    <button class="nav-link active order-btn" id="allorder-tab" data-toggle="tab"
-                                            data-target="#allorder-tab-pane" type="button" role="tab"
-                                            aria-controls="allorder-tab-pane" aria-selected="true" onclick="allOrder()">
-                                        Tất cả
-                                    </button>
-                                </li>
+                            <!-- Tất cả -->
+                            <li class="nav-item order-header" role="presentation">
+                                <button class="nav-link active order-btn" id="allorder-tab" data-toggle="tab"
+                                        data-target="#allorder-tab-pane" type="button" role="tab"
+                                        aria-controls="allorder-tab-pane" aria-selected="true" onclick="allOrder()">
+                                    Tất cả
+                                </button>
+                            </li>
 
-                                <!-- Chờ xác nhận -->
-                                <li class="nav-item order-header" role="presentation">
-                                    <button class="nav-link order-btn" id="wait-confirm-tab" data-toggle="tab"
-                                            data-target="#wait-confirm-tab-pane" type="button" role="tab"
-                                            aria-controls="wait-confirm-tab-pane" aria-selected="true" onclick="processOrder()">
-                                        Chờ xác nhận
-                                        <span class="badge badge-danger badge-counter"><c:if test="${requestScope.COUNTER_1 != 0}">
+                            <!-- Chờ xác nhận -->
+                            <li class="nav-item order-header" role="presentation">
+                                <button class="nav-link order-btn" id="wait-confirm-tab" data-toggle="tab"
+                                        data-target="#wait-confirm-tab-pane" type="button" role="tab"
+                                        aria-controls="wait-confirm-tab-pane" aria-selected="true" onclick="processOrder()">
+                                    Chờ xác nhận
+                                    <span class="badge badge-danger badge-counter"><c:if test="${requestScope.COUNTER_1 != 0}">
                                             ${requestScope.COUNTER_1}
                                         </c:if> </span>
                                 </button>
@@ -394,11 +252,19 @@
                                         </div>
                                     </form>
                                     <div class="order-date col-6 d-inline-block float-right">
-                                        <div class="order-date-range input-group" id="day-order">
+                                        <div class="order-date-range input-group">
                                             <label for="day-order" class="pt-2 pr-2">Ngày đặt hàng</label>
-                                            <input type="date" class="form-control" name="firstDay" aria-label="firstDay">
-                                            <span class="input-group-text border-0">-</span>
-                                            <input type="date" class="form-control" name="secondDay" aria-label="secondDay">
+                                            <input type="date" class="form-control" name="firstDay"
+                                                   id="all-order-start-date" aria-label="firstDay"
+                                                   onchange="setMinDate('all-order-start-date', 'all-order-end-date', 'all-order-date-span', 'all-order-clear-btn')" />
+                                            <span class="input-group-text border-0" id="all-order-date-span" hidden>-</span>
+                                            <input type="date" class="form-control" name="secondDay" id="all-order-end-date"
+                                                   aria-label="secondDay"
+                                                   onchange="filterDate('all-order-start-date', 'all-order-end-date')" hidden>
+                                            <button class="border-0 pl-3 text-dark" id="all-order-clear-btn" hidden
+                                                    onclick="clearDate('all-order-start-date', 'all-order-end-date', 'all-order-date-span', 'all-order-clear-btn')">
+                                                <i class="fa-solid fa-circle-xmark"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -410,6 +276,7 @@
                                         <c:forEach var="order" varStatus="counter" items="${requestScope.ORDER_LIST}">
                                             <div class="all-order-content">
                                                 <p class="order-id">Mã đơn: #<strong>NESTF${order.billID}</strong></p>
+                                                <p hidden><fmt:formatDate value="${order.time}" pattern="yyyy-MM-dd"/></p>
 
                                                 <c:if test="${order.status.statusID == 1 || order.status.statusID == 2}">
                                                     <div class="information-btn">
@@ -533,6 +400,8 @@
                                                                             <button type="submit" class="btn btn-secondary">Xác nhận</button>
                                                                             <input type="hidden" name="orderID" value="${order.billID}"/>
                                                                             <input type="hidden" name="statusID" value="${order.status.statusID + 1}"/>
+                                                                            <input type="hidden" name="type" value="process2"/>
+                                                                            <input type="hidden" name="state" value="success"/>
                                                                         </form>
                                                                         <button type="button" class="btn btn-light border-dark" data-dismiss="modal">Hủy bỏ</button>
                                                                     </div>
@@ -568,10 +437,10 @@
                                                                         <br>
                                                                         Lí do:
                                                                         <form action="processOrder" class="d-inline-block ml-5">
-                                                                            <input type="text" name="cancelReason" id="reasonInput"
-                                                                                   placeholder="Lí do hủy đơn..." onkeyup="removeLabel()"
+                                                                            <input type="text" name="cancelReason" id="reasonInput1"
+                                                                                   placeholder="Lí do hủy đơn..." onkeyup="removeLabel('reasonInput1', 'labelRequired1')"
                                                                                    oninvalid="checkEmptyReason(this)" required/>
-                                                                            <label id="labelRequired" style="color: #f00;">*</label>
+                                                                            <label id="labelRequired1" style="color: #f00;">*</label>
                                                                             <input type="hidden" name="orderID" value="${order.billID}"/>
                                                                             <input type="hidden" name="statusID" value="5"/>
                                                                     </div>
@@ -618,6 +487,8 @@
                                                                                 nhận</button>
                                                                             <input type="hidden" name="orderID" value="${order.billID}"/>
                                                                             <input type="hidden" name="statusID" value="${order.status.statusID + 1}"/>
+                                                                            <input type="hidden" name="type" value="status"/>
+                                                                            <input type="hidden" name="state" value="success"/>
                                                                         </form>
                                                                         <button type="button" class="btn btn-light border-dark"
                                                                                 data-dismiss="modal">Hủy bỏ</button>
@@ -726,9 +597,17 @@
                                     <div class="order-date col-6 d-inline-block float-right">
                                         <div class="order-date-range input-group" id="day-order">
                                             <label for="day-order" class="pt-2 pr-2">Ngày đặt hàng</label>
-                                            <input type="date" class="form-control" name="firstDay" aria-label="firstDay">
-                                            <span class="input-group-text border-0">-</span>
-                                            <input type="date" class="form-control" name="secondDay" aria-label="secondDay">
+                                            <input type="date" class="form-control" name="firstDay"
+                                                   id="wait-confirm-start-date" aria-label="firstDay"
+                                                   onchange="setMinDate('wait-confirm-start-date', 'wait-confirm-end-date', 'wait-confirm-date-span', 'wait-confirm-clear-btn')" />
+                                            <span class="input-group-text border-0" id="wait-confirm-date-span" hidden>-</span>
+                                            <input type="date" class="form-control" name="secondDay" id="wait-confirm-end-date"
+                                                   aria-label="secondDay"
+                                                   onchange="filterDate('wait-confirm-start-date', 'wait-confirm-end-date')" hidden>
+                                            <button class="border-0 pl-3 text-dark" id="wait-confirm-clear-btn" hidden
+                                                    onclick="clearDate('wait-confirm-start-date', 'wait-confirm-end-date', 'wait-confirm-date-span', 'wait-confirm-clear-btn')">
+                                                <i class="fa-solid fa-circle-xmark"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -743,6 +622,7 @@
                                                 <c:set var="contains" value="true"></c:set>
                                                     <div class="all-order-content">
                                                         <p class="order-id">Mã đơn: #<strong>NESTF${order.billID}</strong></p>
+                                                    <p hidden><fmt:formatDate value="${order.time}" pattern="yyyy-MM-dd"/></p>
 
                                                     <div class="information-btn">
                                                         <i class="fa-solid fa-circle-info" data-toggle="modal"
@@ -860,10 +740,12 @@
                                                                         Xác nhận đơn hàng <strong>#NESTF${order.billID}</strong>?
                                                                     </div>
                                                                     <div class="modal-footer">
-                                                                        <form action="processOrder">
+                                                                        <form id="confirm-order-form" action="processOrder">
                                                                             <button type="submit" class="btn btn-secondary">Xác nhận</button>
-                                                                            <input type="hidden" name="orderID" value="${order.billID}"/>
-                                                                            <input type="hidden" name="statusID" value="${order.status.statusID + 1}"/>
+                                                                            <input type="hidden" name="orderID" id="waitConfirmOrderID" value="${order.billID}"/>
+                                                                            <input type="hidden" name="statusID" id="waitConfirmStatusID" value="${order.status.statusID + 1}"/>
+                                                                            <input type="hidden" name="type" value="process2"/>
+                                                                            <input type="hidden" name="state" value="success"/>
                                                                         </form>
                                                                         <button type="button" class="btn btn-light border-dark" data-dismiss="modal">Hủy bỏ</button>
                                                                     </div>
@@ -898,10 +780,10 @@
                                                                         <br>
                                                                         Lí do:
                                                                         <form action="processOrder" class="d-inline-block ml-5">
-                                                                            <input type="text" name="cancelReason" id="reasonInput"
-                                                                                   placeholder="Lí do hủy đơn..." onkeyup="removeLabel()"
+                                                                            <input type="text" name="cancelReason" id="reasonInput2"
+                                                                                   placeholder="Lí do hủy đơn..." onkeyup="removeLabel('reasonInput2', 'labelRequired2')"
                                                                                    oninvalid="checkEmptyReason(this)" required/>
-                                                                            <label id="labelRequired" style="color: #f00;">*</label>
+                                                                            <label id="labelRequired2" style="color: #f00;">*</label>
                                                                             <input type="hidden" name="orderID" value="${order.billID}"/>
                                                                             <input type="hidden" name="statusID" value="5"/>
                                                                     </div>
@@ -951,9 +833,17 @@
                                     <div class="order-date col-6 d-inline-block float-right">
                                         <div class="order-date-range input-group" id="day-order">
                                             <label for="day-order" class="pt-2 pr-2">Ngày đặt hàng</label>
-                                            <input type="date" class="form-control" name="firstDay" aria-label="firstDay">
-                                            <span class="input-group-text border-0">-</span>
-                                            <input type="date" class="form-control" name="secondDay" aria-label="secondDay">
+                                            <input type="date" class="form-control" name="firstDay"
+                                                   id="wait-delivery-start-date" aria-label="firstDay"
+                                                   onchange="setMinDate('wait-delivery-start-date', 'wait-delivery-end-date', 'wait-delivery-date-span', 'wait-delivery-clear-btn')" />
+                                            <span class="input-group-text border-0" id="wait-delivery-date-span" hidden>-</span>
+                                            <input type="date" class="form-control" name="secondDay" id="wait-delivery-end-date"
+                                                   aria-label="secondDay"
+                                                   onchange="filterDate('wait-delivery-start-date', 'wait-delivery-end-date')" hidden>
+                                            <button class="border-0 pl-3 text-dark" id="wait-delivery-clear-btn" hidden
+                                                    onclick="clearDate('wait-delivery-start-date', 'wait-delivery-end-date', 'wait-delivery-date-span', 'wait-delivery-clear-btn')">
+                                                <i class="fa-solid fa-circle-xmark"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -968,6 +858,7 @@
                                                 <c:set var="contains" value="true"></c:set>
                                                     <div class="all-order-content">
                                                         <p class="order-id">Mã đơn: #<strong>NESTF${order.billID}</strong></p>
+                                                    <p hidden><fmt:formatDate value="${order.time}" pattern="yyyy-MM-dd"/></p>
 
                                                     <div class="information-btn">
                                                         <i class="fa-solid fa-circle-info" data-toggle="modal"
@@ -1091,6 +982,8 @@
                                                                                 nhận</button>
                                                                             <input type="hidden" name="orderID" value="${order.billID}"/>
                                                                             <input type="hidden" name="statusID" value="${order.status.statusID + 1}"/>
+                                                                            <input type="hidden" name="type" value="status"/>
+                                                                            <input type="hidden" name="state" value="success"/>
                                                                         </form>
                                                                         <button type="button" class="btn btn-light border-dark"
                                                                                 data-dismiss="modal">Hủy bỏ</button>
@@ -1130,11 +1023,19 @@
                                         </div>
                                     </form>
                                     <div class="order-date col-6 d-inline-block float-right">
-                                        <div class="order-date-range input-group" id="day-order">
+                                        <div class="order-date-range input-group">
                                             <label for="day-order" class="pt-2 pr-2">Ngày đặt hàng</label>
-                                            <input type="date" class="form-control" name="firstDay" aria-label="firstDay">
-                                            <span class="input-group-text border-0">-</span>
-                                            <input type="date" class="form-control" name="secondDay" aria-label="secondDay">
+                                            <input type="date" class="form-control" name="firstDay"
+                                                   id="on-delivery-start-date" aria-label="firstDay"
+                                                   onchange="setMinDate('on-delivery-start-date', 'on-delivery-end-date', 'on-delivery-date-span', 'on-delivery-clear-btn')" />
+                                            <span class="input-group-text border-0" id="on-delivery-date-span" hidden>-</span>
+                                            <input type="date" class="form-control" name="secondDay" id="on-delivery-end-date"
+                                                   aria-label="secondDay"
+                                                   onchange="filterDate('on-delivery-start-date', 'on-delivery-end-date')" hidden>
+                                            <button class="border-0 pl-3 text-dark" id="on-delivery-clear-btn" hidden
+                                                    onclick="clearDate('on-delivery-start-date', 'on-delivery-end-date', 'on-delivery-date-span', 'on-delivery-clear-btn')">
+                                                <i class="fa-solid fa-circle-xmark"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -1149,6 +1050,7 @@
                                                 <c:set var="contains" value="true"></c:set>
                                                     <div class="all-order-content">
                                                         <p class="order-id">Mã đơn: #<strong>NESTF${order.billID}</strong></p>
+                                                    <p hidden><fmt:formatDate value="${order.time}" pattern="yyyy-MM-dd"/></p>
                                                     <table class="table table-content">
                                                         <thead class="orders-table-header">
                                                         <th colspan="2" scope="col">Sản phẩm</th>
@@ -1272,9 +1174,17 @@
                                     <div class="order-date col-6 d-inline-block float-right">
                                         <div class="order-date-range input-group" id="day-order">
                                             <label for="day-order" class="pt-2 pr-2">Ngày đặt hàng</label>
-                                            <input type="date" class="form-control" name="firstDay" aria-label="firstDay">
-                                            <span class="input-group-text border-0">-</span>
-                                            <input type="date" class="form-control" name="secondDay" aria-label="secondDay">
+                                            <input type="date" class="form-control" name="firstDay"
+                                                   id="delivered-start-date" aria-label="firstDay"
+                                                   onchange="setMinDate('delivered-start-date', 'delivered-end-date', 'delivered-date-span', 'delivered-clear-btn')" />
+                                            <span class="input-group-text border-0" id="delivered-date-span" hidden>-</span>
+                                            <input type="date" class="form-control" name="secondDay" id="delivered-end-date"
+                                                   aria-label="secondDay"
+                                                   onchange="filterDate('delivered-start-date', 'delivered-end-date')" hidden>
+                                            <button class="border-0 pl-3 text-dark" id="delivered-clear-btn" hidden
+                                                    onclick="clearDate('delivered-start-date', 'delivered-end-date', 'delivered-date-span', 'delivered-clear-btn')">
+                                                <i class="fa-solid fa-circle-xmark"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -1289,6 +1199,8 @@
                                                 <c:set var="contains" value="true"></c:set>
                                                     <div class="all-order-content">
                                                         <p class="order-id">Mã đơn: #<strong>NESTF${order.billID}</strong></p>
+                                                    <p hidden><fmt:formatDate value="${order.time}" pattern="yyyy-MM-dd"/></p>
+
                                                     <table class="table table-content">
                                                         <thead class="orders-table-header">
                                                         <th colspan="2" scope="col">Sản phẩm</th>
@@ -1412,9 +1324,17 @@
                                     <div class="order-date col-6 d-inline-block float-right">
                                         <div class="order-date-range input-group" id="day-order">
                                             <label for="day-order" class="pt-2 pr-2">Ngày đặt hàng</label>
-                                            <input type="date" class="form-control" name="firstDay" aria-label="firstDay">
-                                            <span class="input-group-text border-0">-</span>
-                                            <input type="date" class="form-control" name="secondDay" aria-label="secondDay">
+                                            <input type="date" class="form-control" name="firstDay"
+                                                   id="cancel-order-start-date" aria-label="firstDay"
+                                                   onchange="setMinDate('cancel-order-start-date', 'cancel-order-end-date', 'cancel-order-date-span', 'cancel-order-clear-btn')" />
+                                            <span class="input-group-text border-0" id="cancel-order-date-span" hidden>-</span>
+                                            <input type="date" class="form-control" name="secondDay" id="cancel-order-end-date"
+                                                   aria-label="secondDay"
+                                                   onchange="filterDate('cancel-order-start-date', 'cancel-order-end-date')" hidden>
+                                            <button class="border-0 pl-3 text-dark" id="cancel-order-clear-btn" hidden
+                                                    onclick="clearDate('cancel-order-start-date', 'cancel-order-end-date', 'cancel-order-date-span', 'cancel-order-clear-btn')">
+                                                <i class="fa-solid fa-circle-xmark"></i>
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -1429,6 +1349,8 @@
                                                 <c:set var="contains" value="true"></c:set>
                                                     <div class="all-order-content">
                                                         <p class="order-id">Mã đơn: #<strong>NESTF${order.billID}</strong></p>
+                                                    <p hidden><fmt:formatDate value="${order.time}" pattern="yyyy-MM-dd"/></p>
+
                                                     <table class="table table-content">
                                                         <thead class="orders-table-header">
                                                         <th colspan="2" scope="col">Sản phẩm</th>
@@ -1568,8 +1490,9 @@
         <script src="seller/sellerVendor/js/demo/chart-area-demo.js"></script>
         <script src="seller/sellerVendor/js/demo/chart-pie-demo.js"></script>
 
-        <script src = seller/js/order.js>
+        <script src="seller/styled-notifications-master/dist/notifications.js"></script>
 
-        </script>
+        <script src = seller/js/order.js></script>
+
     </body>
 </html>

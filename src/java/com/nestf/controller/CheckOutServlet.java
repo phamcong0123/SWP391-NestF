@@ -54,15 +54,15 @@ public class CheckOutServlet extends HttpServlet {
             if (cart != null) {
                 CartDAO cartDAO = new CartDAO();
                 Double total = cartDAO.getCartTotal(cart);
-                Long saleMargin = 0L;
+                Double saleValue = 0.0;
                 if (request.getParameter("voucher-use").length() > 0) {
                     int voucherID = Integer.parseInt(request.getParameter("voucher-use"));
                     VoucherDAO dao = new VoucherDAO();
                     VoucherDTO voucherUse = dao.getVoucherByID(voucherID);
-                    saleMargin = voucherUse.getVoucherType().getSaleMargin();
+                    saleValue = voucherUse.getVoucherType().getSaleMargin();
                     request.setAttribute("VOUCHER_USE", voucherUse);
                 }
-                total -= saleMargin;
+                total -= saleValue;
                 if (total < 0) {
                     total = 0.0;
                 }

@@ -82,8 +82,10 @@ public class BuyVoucherServlet extends HttpServlet {
             }
         } catch (NamingException ex) {
             Logger.getLogger(BuyVoucherServlet.class.getName()).log(Level.SEVERE, null, ex);
+            url = ERROR;
         } catch (SQLException ex) {
             Logger.getLogger(BuyVoucherServlet.class.getName()).log(Level.SEVERE, null, ex);
+            url = ERROR;
         } finally {
             response.sendRedirect(url);
         }
