@@ -24,7 +24,7 @@
         <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
         <link href="./css/productdetail.css" rel="stylesheet">
-        
+
     </head>
     <body id="page-top">
         <!--///////////////Bắt đầu phần Chung//////////////////////////////////////////////////////////-->
@@ -42,7 +42,7 @@
 
                     <!-- Sidebar - Brand -->
                     <a href="home" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
-                                                                         height="38px"></a>
+                                                                    height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
 
@@ -129,9 +129,18 @@
 
                     <!-- Nav Item - Charts -->
                     <li class="nav-item">
-                        <a class="nav-link" href="manageVoucherPage">
-                            <i class="fa fa-gift" aria-hidden="true"></i>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVouchers"
+                           aria-expanded="true" aria-controls="collapseVouchers">
+                            <i class="fa fa-gift"></i>
                             <span>Voucher</span></a>
+                        <div id="collapseVouchers" class="collapse" aria-labelledby="headingProducts"
+                             data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <h6 class="collapse-header">Manage:</h6>
+                                <a class="collapse-item fw-bold" href="voucher">All voucher types</a>
+                                <a class="collapse-item" href="updateVoucher?act=add">Add/Update voucher type</a>
+                            </div>
+                        </div>
                     </li>
 
                     <!-- Divider -->
@@ -466,7 +475,7 @@
             <!-- End of Footer -->
             <!-- Jquery -->
             <script src="https://code.jquery.com/jquery-2.2.4.js" ></script>
-            
+
             <!-- Bootstrap core JavaScript-->
             <script src="vendor/jquery/jquery.min.js"></script>
             <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -482,7 +491,7 @@
             <script src="https://code.jquery.com/jquery-2.2.4.js" ></script>
             <!-- Page level custom scripts -->
             <script src="js/demo/chart-area-demo.js"></script>
-            
+
             <script type="text/javascript">
                 $(document).ready(function () {
                     $('.thumb a').click(function (e) {
