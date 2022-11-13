@@ -6,6 +6,121 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%@page import="java.text.DateFormat"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page language="java"%>
+<%@ page import="java.util.*,java.sql.*" %>
+<%@ page import="com.google.gson.Gson"%>
+<%@ page import="com.google.gson.JsonObject"%>
+
+<%
+    Gson gsonObj = new Gson();
+    Map<Object, Object> map = null;
+    Map<Object, Object> map2 = null;
+    List<Map<Object, Object>> list = new ArrayList<Map<Object, Object>>();
+    List<Map<Object, Object>> list2 = new ArrayList<Map<Object, Object>>();
+    String dataPoints = null;
+    String dataPoints2 = null;
+    try {
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        Connection connection = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=NestF;instanceName=SQLEXPRESS", "sa", "123");
+        Statement statement = connection.createStatement();
+        String xVal, yVal;
+
+        ResultSet resultSet = statement.executeQuery("SELECT MONTH(b.time) as xVal,  SUM(b.total) as total FROM tblBill b JOIN tblStatus s ON b.statusID = s.statusID WHERE b.statusID = 4 GROUP BY  MONTH(b.time)");
+//        ResultSet resultSet = statement.executeQuery("SELECT CAST (b.time as date) as xVal,  SUM(b.total) as total FROM tblBill b JOIN tblStatus s ON b.statusID = s.statusID WHERE b.statusID = 4 GROUP BY CAST (b.time as date) Order by CAST (b.time as date)");
+//        ResultSet resultSet = statement.executeQuery("Select b.billID as xVal, b.total FROM tblBill b where b.statusID = 4 ");
+//        ResultSetMetaData rsmd = resultSet.getMetaData();
+
+//        while (resultSet.next()) {
+//            xVal = resultSet.getString("xVal");
+//            yVal = resultSet.getString("total");
+//            map = new HashMap<Object, Object>();
+//            map.put("x", Integer.parseInt(xVal));
+//            map.put("y", Float.parseFloat(yVal));
+//            list.add(map);
+//            dataPoints = gsonObj.toJson(list);
+//        }
+//        while (resultSet.next()) {
+//            xVal = resultSet.getString("xVal");
+//            yVal = resultSet.getString("total");
+//            map = new HashMap<Object, Object>();
+//            map.put("label", xVal);
+//            map.put("y", Float.parseFloat(yVal));
+//            list.add(map);
+//            dataPoints = gsonObj.toJson(list);
+//        }
+
+        while (resultSet.next()) {
+            int month = Integer.parseInt(resultSet.getString("xVal"));
+            switch (month) {
+                case 1:
+                    xVal = "Jan";
+                    break;
+                case 2:
+                    xVal = "Feb";
+                    break;
+                case 3:
+                    xVal = "Mar";
+                    break;
+                case 4:
+                    xVal = "Apr";
+                    break;
+                case 5:
+                    xVal = "May";
+                    break;
+                case 6:
+                    xVal = "Jun";
+                    break;
+                case 7:
+                    xVal = "Jul";
+                    break;
+                case 8:
+                    xVal = "Aug";
+                    break;
+                case 9:
+                    xVal = "Sep";
+                    break;
+                case 10:
+                    xVal = "Oct";
+                    break;
+                case 11:
+                    xVal = "Nov";
+                    break;
+                default:
+                    xVal = "Dec";
+                    break;
+            }
+
+            yVal = resultSet.getString("total");
+            map = new HashMap<Object, Object>();
+            map.put("label", xVal);
+            map.put("y", Float.parseFloat(yVal));
+            list.add(map);
+            dataPoints = gsonObj.toJson(list);
+        }
+        
+        
+        ResultSet resultSet2 = statement.executeQuery("Select s.status, SUM(b.billID) as total FROM tblBill b INNER JOIN tblStatus s ON b.billID = s.statusID WHERE s.statusID = 1 OR s.statusID = 2 OR s.statusID = 3 GROUP BY  s.status");
+//        ResultSetMetaData rsmd2 = resultSet2.getMetaData();
+
+        while (resultSet2.next()) {
+            xVal = resultSet2.getString("status");
+            yVal = resultSet2.getString("total");
+            map2 = new HashMap<Object, Object>();
+            map2.put("label", xVal);
+            map2.put("y", Integer.parseInt(yVal));
+            list2.add(map2);
+            dataPoints2 = gsonObj.toJson(list2);
+        }
+        connection.close();
+    } catch (SQLException e) {
+        out.println("<div  style='width: 50%; margin-left: auto; margin-right: auto; margin-top: 100px;'>Could not connect to the database. Please check if you have mySQL Connector installed on the machine - if not, try installing the same.</div>");
+        dataPoints = null;
+        dataPoints2 = null;
+    }
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -23,6 +138,67 @@
         <!-- Custom styles for this template-->
         <link href="css/sb-admin-2.min.css" rel="stylesheet">
 
+        <style>
+            .canvasjs-chart-credit{
+                display: none !important;
+            }
+
+        </style>
+
+        <script type="text/javascript">
+            window.onload = function () {
+
+            <% if (dataPoints
+                        != null) { %>
+                var chart = new CanvasJS.Chart("chartContainer", {
+                    animationEnabled: true,
+                    exportFileName: "RevenueNestF",
+                    exportEnabled: true,
+                    title: {
+                        text: "Revenue of NestF"
+                    },
+                    axisX: {
+                        title: "Month",
+                        gridThickness: 2,
+                        interval: 1,
+                        labelAngle: -20
+                    },
+                    axisY: {
+                        title: "Revenue"
+                    },
+                    data: [{
+                            type: "spline",
+                            dataPoints: <%out.print(dataPoints);%>
+                        }]
+                });
+                chart.render();
+            <% }%>
+
+//            Pie Chart
+            <% if (dataPoints2
+                        != null) { %>
+                var chart2 = new CanvasJS.Chart("chartContainer2", {
+                    theme: "light2",
+                    animationEnabled: true,
+                    exportFileName: "Bill Status",
+                    exportEnabled: true,
+                    title: {
+                        text: "Bill Status"
+                    },
+                    data: [{
+                            type: "pie",
+                            showInLegend: false,
+                            legendText: "{label}",
+                            toolTipContent: "{label}: <strong>{y}%</strong>",
+                            indexLabel: "{label} {y}%",
+                            dataPoints: <%out.print(dataPoints2);%>
+                        }]
+                });
+                chart2.render();
+            <% }%>
+            }
+        </script>
+
     </head>
     <body id="page-top">
         <c:if test="${empty sessionScope.ADMIN}">
@@ -39,8 +215,8 @@
                 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
                     <!-- Sidebar - Brand -->
-                    <a href="dashboard" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
-                                                                         height="38px"></a>
+                    <a href="home" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
+                                                                    height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
 
@@ -364,8 +540,6 @@
                             <!-- Page Heading -->
                             <div class="d-sm-flex align-items-center justify-content-between mb-4">
                                 <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                                <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-dark shadow-sm"><i
-                                        class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                             </div>
 
                             <!-- Content Row -->
@@ -458,33 +632,14 @@
                             <!-- Content Row -->
 
                             <div class="row">
-                                <!-- Area Chart -->
+                                <!-- Spline Chart -->
 
                                 <div class="col-xl-8 col-lg-7">
-                                    <div class="card shadow mb-4">
-                                        <!-- Card Header - Dropdown -->
-                                        <div
-                                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h6 class="m-0 font-weight-bold text-dark">Earnings Overview</h6>
-                                            <div class="dropdown no-arrow">
-                                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                                     aria-labelledby="dropdownMenuLink">
-                                                    <div class="dropdown-header">Dropdown Header:</div>
-                                                    <a class="dropdown-item" href="#">Action</a>
-                                                    <a class="dropdown-item" href="#">Another action</a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="#">Something else here</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Card Body -->
-                                        <div class="card-body">
+                                    <div class="card shadow mb-2">
+                                        
+                                        <div class="card-body pb-5">
                                             <div class="chart-area">
-                                                <canvas id="myAreaChart"></canvas>
+                                                <div id="chartContainer" style="height: 350px; width: 100%; align-content: center"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -492,41 +647,11 @@
 
                                 <!-- Pie Chart -->
                                 <div class="col-xl-4 col-lg-5">
-                                    <div class="card shadow mb-4">
-                                        <!-- Card Header - Dropdown -->
-                                        <div
-                                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                            <h6 class="m-0 font-weight-bold text-dark">Revenue Sources</h6>
-                                            <div class="dropdown no-arrow">
-                                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                                </a>
-                                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                                     aria-labelledby="dropdownMenuLink">
-                                                    <div class="dropdown-header">Dropdown Header:</div>
-                                                    <a class="dropdown-item" href="#">Action</a>
-                                                    <a class="dropdown-item" href="#">Another action</a>
-                                                    <div class="dropdown-divider"></div>
-                                                    <a class="dropdown-item" href="#">Something else here</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- Card Body -->
-                                        <div class="card-body">
-                                            <div class="chart-pie pt-4 pb-2">
-                                                <canvas id="myPieChart"></canvas>
-                                            </div>
-                                            <div class="mt-4 text-center small">
-                                                <span class="mr-2">
-                                                    <i class="fas fa-circle text-dark"></i> Direct
-                                                </span>
-                                                <span class="mr-2">
-                                                    <i class="fas fa-circle text-success"></i> Social
-                                                </span>
-                                                <span class="mr-2">
-                                                    <i class="fas fa-circle text-info"></i> Referral
-                                                </span>
+                                    <div class="card shadow mb-2 ">
+                                       
+                                        <div class="card-body pb-5">
+                                            <div class="chart-area">
+                                                <div id="chartContainer2" style="height: 350px; width: 100%;"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -534,310 +659,101 @@
                             </div>
 
                             <!-- Content Row -->
-                            <div class="row">
+                            <!--                            <div class="row">
+                            
+                                                             Content Column 
+                                                            <div class="col-lg-6 mb-4">
+                            
+                                                                 Project Card Example 
+                                                                <div class="card shadow mb-4">
+                                                                    <div class="card-header py-3">
+                                                                        <h6 class="m-0 font-weight-bold text-dark">Best Product</h6>
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <h4 class="small font-weight-bold">Server Migration <span
+                                                                                class="float-right">20%</span></h4>
+                                                                        <div class="progress mb-4">
+                                                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
+                                                                                 aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                                                                        </div>
+                                                                        <h4 class="small font-weight-bold">Sales Tracking <span
+                                                                                class="float-right">40%</span></h4>
+                                                                        <div class="progress mb-4">
+                                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
+                                                                                 aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                                                        </div>
+                                                                        <h4 class="small font-weight-bold">Customer Database <span
+                                                                                class="float-right">60%</span></h4>
+                                                                        <div class="progress mb-4">
+                                                                            <div class="progress-bar" role="progressbar" style="width: 60%"
+                                                                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                                        </div>
+                                                                        <h4 class="small font-weight-bold">Payout Details <span
+                                                                                class="float-right">80%</span></h4>
+                                                                        <div class="progress mb-4">
+                                                                            <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
+                                                                                 aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                                                        </div>
+                                                                        <h4 class="small font-weight-bold">Account Setup <span
+                                                                                class="float-right">Complete!</span></h4>
+                                                                        <div class="progress">
+                                                                            <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
+                                                                                 aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                            
+                                                            <div class="col-lg-6 mb-4">
+                            
+                                                                 Best Sellers 
+                                                                <div class="card shadow mb-4">
+                                                                    <div class="card-header py-3">
+                                                                        <h6 class="m-0 font-weight-bold text-dark">Best Sellers</h6>
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <h4 class="small font-weight-bold">Server Migration <span
+                                                                                class="float-right">20%</span></h4>
+                                                                        <div class="progress mb-4">
+                                                                            <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
+                                                                                 aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
+                                                                        </div>
+                                                                        <h4 class="small font-weight-bold">Sales Tracking <span
+                                                                                class="float-right">40%</span></h4>
+                                                                        <div class="progress mb-4">
+                                                                            <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
+                                                                                 aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
+                                                                        </div>
+                                                                        <h4 class="small font-weight-bold">Customer Database <span
+                                                                                class="float-right">60%</span></h4>
+                                                                        <div class="progress mb-4">
+                                                                            <div class="progress-bar" role="progressbar" style="width: 60%"
+                                                                                 aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                                        </div>
+                                                                        <h4 class="small font-weight-bold">Payout Details <span
+                                                                                class="float-right">80%</span></h4>
+                                                                        <div class="progress mb-4">
+                                                                            <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
+                                                                                 aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                                                        </div>
+                                                                        <h4 class="small font-weight-bold">Account Setup <span
+                                                                                class="float-right">Complete!</span></h4>
+                                                                        <div class="progress">
+                                                                            <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
+                                                                                 aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                            
+                            
+                                                            </div>
+                                                             /.container-fluid 
+                            
+                                                        </div>-->
 
-                                <!-- Content Column -->
-                                <div class="col-lg-6 mb-4">
-
-                                    <!-- Project Card Example -->
-                                    <div class="card shadow mb-4">
-                                        <div class="card-header py-3">
-                                            <h6 class="m-0 font-weight-bold text-dark">Best Product</h6>
-                                        </div>
-                                        <div class="card-body">
-                                            <h4 class="small font-weight-bold">Server Migration <span
-                                                    class="float-right">20%</span></h4>
-                                            <div class="progress mb-4">
-                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
-                                                     aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <h4 class="small font-weight-bold">Sales Tracking <span
-                                                    class="float-right">40%</span></h4>
-                                            <div class="progress mb-4">
-                                                <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
-                                                     aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <h4 class="small font-weight-bold">Customer Database <span
-                                                    class="float-right">60%</span></h4>
-                                            <div class="progress mb-4">
-                                                <div class="progress-bar" role="progressbar" style="width: 60%"
-                                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <h4 class="small font-weight-bold">Payout Details <span
-                                                    class="float-right">80%</span></h4>
-                                            <div class="progress mb-4">
-                                                <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
-                                                     aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <h4 class="small font-weight-bold">Account Setup <span
-                                                    class="float-right">Complete!</span></h4>
-                                            <div class="progress">
-                                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                                                     aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-6 mb-4">
-
-                                    <!-- Best Sellers -->
-                                    <div class="card shadow mb-4">
-                                        <div class="card-header py-3">
-                                            <h6 class="m-0 font-weight-bold text-dark">Best Sellers</h6>
-                                        </div>
-                                        <div class="card-body">
-                                            <h4 class="small font-weight-bold">Server Migration <span
-                                                    class="float-right">20%</span></h4>
-                                            <div class="progress mb-4">
-                                                <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
-                                                     aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <h4 class="small font-weight-bold">Sales Tracking <span
-                                                    class="float-right">40%</span></h4>
-                                            <div class="progress mb-4">
-                                                <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
-                                                     aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <h4 class="small font-weight-bold">Customer Database <span
-                                                    class="float-right">60%</span></h4>
-                                            <div class="progress mb-4">
-                                                <div class="progress-bar" role="progressbar" style="width: 60%"
-                                                     aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <h4 class="small font-weight-bold">Payout Details <span
-                                                    class="float-right">80%</span></h4>
-                                            <div class="progress mb-4">
-                                                <div class="progress-bar bg-info" role="progressbar" style="width: 80%"
-                                                     aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <h4 class="small font-weight-bold">Account Setup <span
-                                                    class="float-right">Complete!</span></h4>
-                                            <div class="progress">
-                                                <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                                                     aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                </div>
-                                <!-- /.container-fluid -->
-
-                            </div>
-
-                            <!-- Manage Product -->
-
-                            <div class="card shadow mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="table-responsive">
-
-                                        <div id="dataTable_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-6">
-                                                    <div class="dataTables_length" id="dataTable_length"><label>Show <select
-                                                                name="dataTable_length" aria-controls="dataTable"
-                                                                class="custom-select custom-select-sm form-control form-control-sm">
-                                                                <option value="10">10</option>
-                                                                <option value="25">25</option>
-                                                                <option value="50">50</option>
-                                                                <option value="100">100</option>
-                                                            </select> entries</label></div>
-                                                </div>
-                                                <div class="col-sm-12 col-md-6">
-                                                    <div id="dataTable_filter" class="dataTables_filter">
-                                                        <label>Search:<input type="search" class="form-control form-control-sm"
-                                                                             placeholder="" aria-controls="dataTable"></label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <table class="table table-bordered dataTable" id="dataTable" width="100%"
-                                                           cellspacing="0" role="grid" aria-describedby="dataTable_info"
-                                                           style="width: 100%;">
-                                                        <thead>
-                                                            <tr role="row">
-                                                                <th class="sorting sorting_asc" tabindex="0"
-                                                                    aria-controls="dataTable" rowspan="1" colspan="1"
-                                                                    aria-sort="ascending"
-                                                                    aria-label="Name: activate to sort column descending"
-                                                                    style="width: 163.625px;">Name</th>
-                                                                <th class="sorting" tabindex="0" aria-controls="dataTable"
-                                                                    rowspan="1" colspan="1"
-                                                                    aria-label="Position: activate to sort column ascending"
-                                                                    style="width: 268.727px;">Position</th>
-                                                                <th class="sorting" tabindex="0" aria-controls="dataTable"
-                                                                    rowspan="1" colspan="1"
-                                                                    aria-label="Office: activate to sort column ascending"
-                                                                    style="width: 116.386px;">Office</th>
-                                                                <th class="sorting" tabindex="0" aria-controls="dataTable"
-                                                                    rowspan="1" colspan="1"
-                                                                    aria-label="Age: activate to sort column ascending"
-                                                                    style="width: 51.5568px;">Age</th>
-                                                                <th class="sorting" tabindex="0" aria-controls="dataTable"
-                                                                    rowspan="1" colspan="1"
-                                                                    aria-label="Start date: activate to sort column ascending"
-                                                                    style="width: 109.761px;">Start date</th>
-                                                                <th class="sorting" tabindex="0" aria-controls="dataTable"
-                                                                    rowspan="1" colspan="1"
-                                                                    aria-label="Salary: activate to sort column ascending"
-                                                                    style="width: 98.0341px;">Salary</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tfoot>
-                                                            <tr>
-                                                                <th rowspan="1" colspan="1">Name</th>
-                                                                <th rowspan="1" colspan="1">Position</th>
-                                                                <th rowspan="1" colspan="1">Office</th>
-                                                                <th rowspan="1" colspan="1">Age</th>
-                                                                <th rowspan="1" colspan="1">Start date</th>
-                                                                <th rowspan="1" colspan="1">Salary</th>
-                                                            </tr>
-                                                        </tfoot>
-                                                        <tbody>
-                                                            <tr class="odd">
-                                                                <td class="sorting_1">Airi Satou</td>
-                                                                <td>Accountant</td>
-                                                                <td>Tokyo</td>
-                                                                <td>33</td>
-                                                                <td>2008/11/28</td>
-                                                                <td>$162,700</td>
-                                                            </tr>
-                                                            <tr class="even">
-                                                                <td class="sorting_1">Angelica Ramos</td>
-                                                                <td>Chief Executive Officer (CEO)</td>
-                                                                <td>London</td>
-                                                                <td>47</td>
-                                                                <td>2009/10/09</td>
-                                                                <td>$1,200,000</td>
-                                                            </tr>
-                                                            <tr class="odd">
-                                                                <td class="sorting_1">Ashton Cox</td>
-                                                                <td>Junior Technical Author</td>
-                                                                <td>San Francisco</td>
-                                                                <td>66</td>
-                                                                <td>2009/01/12</td>
-                                                                <td>$86,000</td>
-                                                            </tr>
-                                                            <tr class="even">
-                                                                <td class="sorting_1">Bradley Greer</td>
-                                                                <td>Software Engineer</td>
-                                                                <td>London</td>
-                                                                <td>41</td>
-                                                                <td>2012/10/13</td>
-                                                                <td>$132,000</td>
-                                                            </tr>
-                                                            <tr class="odd">
-                                                                <td class="sorting_1">Brenden Wagner</td>
-                                                                <td>Software Engineer</td>
-                                                                <td>San Francisco</td>
-                                                                <td>28</td>
-                                                                <td>2011/06/07</td>
-                                                                <td>$206,850</td>
-                                                            </tr>
-                                                            <tr class="even">
-                                                                <td class="sorting_1">Brielle Williamson</td>
-                                                                <td>Integration Specialist</td>
-                                                                <td>New York</td>
-                                                                <td>61</td>
-                                                                <td>2012/12/02</td>
-                                                                <td>$372,000</td>
-                                                            </tr>
-                                                            <tr class="odd">
-                                                                <td class="sorting_1">Bruno Nash</td>
-                                                                <td>Software Engineer</td>
-                                                                <td>London</td>
-                                                                <td>38</td>
-                                                                <td>2011/05/03</td>
-                                                                <td>$163,500</td>
-                                                            </tr>
-                                                            <tr class="even">
-                                                                <td class="sorting_1">Caesar Vance</td>
-                                                                <td>Pre-Sales Support</td>
-                                                                <td>New York</td>
-                                                                <td>21</td>
-                                                                <td>2011/12/12</td>
-                                                                <td>$106,450</td>
-                                                            </tr>
-                                                            <tr class="odd">
-                                                                <td class="sorting_1">Cara Stevens</td>
-                                                                <td>Sales Assistant</td>
-                                                                <td>New York</td>
-                                                                <td>46</td>
-                                                                <td>2011/12/06</td>
-                                                                <td>$145,600</td>
-                                                            </tr>
-                                                            <tr class="even">
-                                                                <td class="sorting_1">Cedric Kelly</td>
-                                                                <td>Senior Javascript Developer</td>
-                                                                <td>Edinburgh</td>
-                                                                <td>22</td>
-                                                                <td>2012/03/29</td>
-                                                                <td>$433,060</td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-sm-12 col-md-5">
-                                                    <div class="dataTables_info" id="dataTable_info" role="status"
-                                                         aria-live="polite">Showing 1 to 10 of 57 entries</div>
-                                                </div>
-                                                <div class="col-sm-12 col-md-7">
-                                                    <div class="dataTables_paginate paging_simple_numbers"
-                                                         id="dataTable_paginate">
-                                                        <ul class="pagination">
-                                                            <li class="paginate_button page-item previous disabled"
-                                                                id="dataTable_previous"><a href="#" aria-controls="dataTable"
-                                                                                       data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
-                                                            </li>
-                                                            <li class="paginate_button page-item active"><a href="#"
-                                                                                                            aria-controls="dataTable" data-dt-idx="1" tabindex="0"
-                                                                                                            class="page-link">1</a></li>
-                                                            <li class="paginate_button page-item "><a href="#"
-                                                                                                      aria-controls="dataTable" data-dt-idx="2" tabindex="0"
-                                                                                                      class="page-link">2</a></li>
-                                                            <li class="paginate_button page-item "><a href="#"
-                                                                                                      aria-controls="dataTable" data-dt-idx="3" tabindex="0"
-                                                                                                      class="page-link">3</a></li>
-                                                            <li class="paginate_button page-item "><a href="#"
-                                                                                                      aria-controls="dataTable" data-dt-idx="4" tabindex="0"
-                                                                                                      class="page-link">4</a></li>
-                                                            <li class="paginate_button page-item "><a href="#"
-                                                                                                      aria-controls="dataTable" data-dt-idx="5" tabindex="0"
-                                                                                                      class="page-link">5</a></li>
-                                                            <li class="paginate_button page-item "><a href="#"
-                                                                                                      aria-controls="dataTable" data-dt-idx="6" tabindex="0"
-                                                                                                      class="page-link">6</a></li>
-                                                            <li class="paginate_button page-item next" id="dataTable_next">
-                                                                <a href="#" aria-controls="dataTable" data-dt-idx="7"
-                                                                   tabindex="0" class="page-link">Next</a>
-                                                            </li>
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- End of manage Product -->
                             <!-- End of Main Content -->
 
-                            <!-- Footer -->
-                            <footer class="sticky-footer bg-white">
-                                <div class="container my-auto">
-                                    <div class="copyright text-center my-auto">
-                                        <span>Copyright &copy; NestF 2022</span>
-                                    </div>
-                                </div>
-                            </footer>
-                            <!-- End of Footer -->
+
 
                         </div>
                         <!-- End of Content Wrapper -->
@@ -872,7 +788,15 @@
                     </div>
                 </div>
             </div>
-
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; NestF 2022</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->                           
             <!-- Bootstrap core JavaScript-->
             <script src="vendor/jquery/jquery.min.js"></script>
             <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -889,6 +813,8 @@
             <!-- Page level custom scripts -->
             <script src="js/demo/chart-area-demo.js"></script>
             <script src="js/demo/chart-pie-demo.js"></script>
+
+            <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
         </c:if>
     </body>
 </html>

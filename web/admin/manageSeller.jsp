@@ -6,8 +6,52 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix = "f" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<jsp:useBean id="money" class="com.nestf.util.FormatPrinter"></jsp:useBean>
 
+<%@page language="java"%>
+<%@ page import="java.util.*,java.sql.*" %>
+<%@ page import="com.google.gson.Gson"%>
+<%@ page import="com.google.gson.JsonObject"%>
+
+<%
+    Gson gsonObj = new Gson();
+    Map<Object, Object> map2 = null;
+    List<Map<Object, Object>> list2 = new ArrayList<Map<Object, Object>>();
+    String dataPoints2 = null;
+    try {
+        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+        Connection connection = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=NestF;instanceName=SQLEXPRESS", "sa", "123");
+        Statement statement = connection.createStatement();
+        String xVal, yVal;
+
+        ResultSet resultSet2 = statement.executeQuery("SELECT account.name as xVal, count(ps.selPhone) as total\n"
+                + "FROM tblProductSeller ps\n"
+                + "RIGHT JOIN (SELECT p.productID\n"
+                + "           FROM tblProducts p\n"
+                + "           WHERE p.status = 1) as p\n"
+                + "           ON ps.productID = p.productID AND ps.isActive = 1\n"
+                + "		RIGHT JOIN (SELECT acc.phone, name\n"
+                + "            	fROM tblAccount acc\n"
+                + "            	WHERE acc.role = 'SE') as account\n"
+                + "         ON account.phone = ps.selPhone \n"
+                + "Group by account.phone, name");
+//        ResultSetMetaData rsmd2 = resultSet2.getMetaData();
+
+        while (resultSet2.next()) {
+            xVal = resultSet2.getString("xVal");
+            yVal = resultSet2.getString("total");
+            map2 = new HashMap<Object, Object>();
+            map2.put("label", xVal);
+            map2.put("y", Integer.parseInt(yVal));
+            list2.add(map2);
+            dataPoints2 = gsonObj.toJson(list2);
+        }
+        connection.close();
+    } catch (SQLException e) {
+        out.println("<div  style='width: 50%; margin-left: auto; margin-right: auto; margin-top: 100px;'>Could not connect to the database. Please check if you have SQLServer Connector installed on the machine - if not, try installing the same.</div>");
+        dataPoints2 = null;
+    }
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -26,6 +70,40 @@
         <link href="css/sb-admin-2.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
         <link rel="stylesheet" href="admin/css/register.css">
+
+        <style>
+            .canvasjs-chart-credit{
+                display: none !important;
+            }
+
+        </style>
+
+        <script type="text/javascript">
+            window.onload = function () {
+//            Pie Chart
+            <% if (dataPoints2
+                        != null) { %>
+                var chart2 = new CanvasJS.Chart("chartContainer2", {
+                    theme: "light2",
+                    animationEnabled: true,
+                    exportFileName: "Pob",
+                    exportEnabled: true,
+                    title: {
+                        text: "Product of Seller"
+                    },
+                    data: [{
+                            type: "doughnut",
+//                            showInLegend: true,
+                            legendText: "{label}",
+                            toolTipContent: "{label}: <strong>{y}%</strong>",
+                            indexLabel: "{label} {y}",
+                            dataPoints: <%out.print(dataPoints2);%>
+                        }]
+                });
+                chart2.render();
+            <% }%>
+            }
+        </script>
     </head>
     <body id="page-top">
         <!--///////////////Bắt đầu phần Chung//////////////////////////////////////////////////////////-->
@@ -42,8 +120,8 @@
                 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
                     <!-- Sidebar - Brand -->
-                    <a href="dashboard" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
-                                                                         height="38px"></a>
+                    <a href="home" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
+                                                                    height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
 
@@ -90,7 +168,7 @@
                     <hr class="sidebar-divider">
 
                     <!-- Nav Item - Pages Collapse Menu -->
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                            aria-expanded="true" aria-controls="collapseTwo">
                             <i class="fa fa-users"></i>
@@ -376,10 +454,9 @@
                                 <div class="col-4">
                                     <c:if test="${not empty sessionScope.MONTH}">
                                         <c:set var="MONTH" value="${sessionScope.MONTH}"/>
-                                        <form action="checkSellerMonthly" class="row">
+                                        <form name="form1" action="checkSellerMonthly" class="row">
                                             <div class="col-2 font-weight-bold">Time :</div>
-                                            <input class="col-5 mr-2" value="${MONTH}" min="2022-09" type="month" name="choosetime">
-                                            <input type="submit" value="Check" class="btn btn-dark col-3">
+                                            <input class="col-5 mr-2" value="${MONTH}" min="2022-01" type="month" name="choosetime" onchange="javascript:document.form1.submit();">
                                         </form>
                                     </c:if>
                                 </div>
@@ -434,88 +511,105 @@
                             </div>
 
                             <!-- Content Row -->
-                            <c:if test="${not empty sessionScope.MANAGE_SELLER}">
-                                <table class="table table-striped table-hover table-bordered">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th>Name</th>
-                                            <th>Phone</th>
-                                            <th>Address</th>
-                                            <th>Number of product</th>
-                                            <th>Revenue</th>
-                                            <th>Block</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach var="seller" items="${sessionScope.MANAGE_SELLER}">
-                                            <tr class="text-center">
-                                                <td><a class="text-decoration-none" href="managePSeller?phone=${seller.phone}&type=show">${seller.name}</a></td>
-                                                <td>${seller.phone}</td>
-                                                <td>${seller.address}</td>
-                                                <td><a class="text-decoration-none" href="managePSeller?phone=${seller.phone}&type=show">${seller.selQuantity}</td>
-                                                <td>${seller.total}</td>
-                                                <td>
-                                                    <c:if test="${seller.status}">
-                                                        <a href="managePSeller?phone=${seller.phone}&product=${seller.selQuantity}&type=block" class="btn btn-danger">Block</a>
-                                                    </c:if>
+                            <div class="row">
+                                <div class="col-8 row">
+                                    <div class="col-12">
+                                        <c:if test="${not empty sessionScope.MANAGE_SELLER}">
+                                            <table class="table table-striped table-hover table-bordered">
+                                                <thead>
+                                                    <tr class="text-center">
+                                                        <th>Name</th>
+                                                        <th>Phone</th>
+                                                        <th>Number of product</th>
+                                                        <th>Revenue</th>
+                                                        <th>Block</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <c:forEach var="seller" items="${sessionScope.MANAGE_SELLER}">
+                                                        <tr class="text-center">
+                                                            <td><a class="text-decoration-none" href="managePSeller?phone=${seller.phone}&type=show">${seller.name}</a></td>
+                                                            <td>${seller.phone}</td>
+                                                            <td><a class="text-decoration-none" href="managePSeller?phone=${seller.phone}&type=show">${seller.selQuantity}</td>
+                                                            <td>${money.printMoney(seller.total)}</td>
+                                                            <td>
+                                                                <c:if test="${seller.status}">
+                                                                    <a href="managePSeller?phone=${seller.phone}&product=${seller.selQuantity}&type=block" class="btn btn-danger">Block</a>
+                                                                </c:if>
 
-                                                    <c:if test="${not seller.status}">
-                                                        <a href="managePSeller?phone=${seller.phone}&type=unblock" class="btn btn-dark">Unblock</a>
-                                                    </c:if>
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
-                            </c:if>
+                                                                <c:if test="${not seller.status}">
+                                                                    <a href="managePSeller?phone=${seller.phone}&type=unblock" class="btn btn-dark">Unblock</a>
+                                                                </c:if>
+                                                            </td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </tbody>
+                                            </table>
+                                        </c:if>
+                                    </div>
+                                    <div class="col-12"><br/></div>
+                                    <div class="col-12">
+                                        <c:if test="${not empty requestScope.PRODUCT_SELLER}">
+                                            <c:set var="selName" value="${requestScope.SELLER_NAME}"/>
+                                            <h5>Sản phẩm của ${selName}</h5>
+                                            <table class="table table-striped table-hover table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <!--<th class="text-center">ID</th>-->
+                                                        <th class="text-center">Name</th>
+                                                        <!--<th class="text-center">Price</th>-->
+                                                        <!--<th class="text-center">Quantity</th>-->
+                                                        <th class="text-center">Category</th>
+                                                        <!--<th class="text-center">Discount</th>-->
+                                                        <th class="text-center">Change Seller</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <c:forEach var="product" items="${requestScope.PRODUCT_SELLER}">
+                                                        <tr>
+                                                            <%-- <td>${product.productID}</td>--%>
+                                                            <td>${product.name}</td>
+                                                            <%-- <td>${product.price}</td>--%>
+                                                            <%-- <td>${product.quantity}</td>--%>
+                                                            <td>${product.category.categoryName}</td>
+                                                            <%-- <td>${product.discountPrice}</td>--%>
+                                                            <td>
+                                                                <c:set var="listSeller" value="${sessionScope.LIST_SELLER}"/>
+                                                                <form action="changeSeller">
+                                                                    <div  class="row">
+                                                                        <input type="hidden" value="${product.selName}" name="selNameOld"/>
+                                                                        <input class="form-control form-control-sm col-7 ml-2 mr-1" type="text" value="${product.selName}" name="selNameNew" list="sellerlist"/>
+                                                                        <input type="hidden" value="${product.productID}" name="productID"/>
 
-                            <c:if test="${not empty requestScope.PRODUCT_SELLER}">
-                                <table class="table table-striped table-hover table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">ID</th>
-                                            <th class="text-center">Name</th>
-                                            <th class="text-center">Price</th>
-                                            <th class="text-center">Quantity</th>
-                                            <th class="text-center">Category</th>
-                                            <th class="text-center">Discount</th>
-                                            <th class="text-center">Change Seller</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach var="product" items="${requestScope.PRODUCT_SELLER}">
-                                            <tr>
-                                                <td>${product.productID}</td>
-                                                <td>${product.name}</td>
-                                                <td>${product.price}</td>
-                                                <td>${product.quantity}</td>
-                                                <td>${product.category.categoryName}</td>
-                                                <td>${product.discountPrice}</td>
-                                                <td>
-                                                    <c:set var="listSeller" value="${sessionScope.LIST_SELLER}"/>
-                                                    <form action="changeSeller">
-                                                        <div  class="row">
-                                                            <input type="hidden" value="${product.selName}" name="selNameOld"/>
-                                                            <input class="form-control form-control-sm col-7 mx-3" type="text" value="${product.selName}" name="selNameNew" list="sellerlist"/>
-                                                            <input type="hidden" value="${product.productID}" name="productID"/>
+                                                                        <datalist id="sellerlist">
+                                                                            <label class="form-label select-label">Choose option:</label>
+                                                                            <option disabled>Choose option</option>
+                                                                            <c:forEach var="dto" items="${listSeller}">
+                                                                                <option class="" value="${dto.name}">Number of product: ${dto.selQuantity}</option>
+                                                                            </c:forEach>
+                                                                        </datalist>
+                                                                        <input class="btn btn-dark col-4 mr-1" type="submit" name="btAction" value="Change" />
+                                                                    </div>
+                                                                </form>
 
-                                                            <datalist id="sellerlist">
-                                                                <label class="form-label select-label">Choose option:</label>
-                                                                <option disabled>Choose option</option>
-                                                                <c:forEach var="dto" items="${listSeller}">
-                                                                    <option class="" value="${dto.name}">Number of product: ${dto.selQuantity}</option>
-                                                                </c:forEach>
-                                                            </datalist>
-                                                            <input class="btn btn-dark col-3" type="submit" name="btAction" value="Change" />
-                                                        </div>
-                                                    </form>
-
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
-                            </c:if>
+                                                            </td>
+                                                        </tr>
+                                                    </c:forEach>
+                                                </tbody>
+                                            </table>
+                                        </c:if>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="card shadow mb-2 ">
+                                        <div class="card-body pb-5">
+                                            <div class="chart-area">
+                                                <div id="chartContainer2" style="height: 350px; width: 100%;"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <!--End of Content Row -->
                         </div>
                         <!-- End of Content Wrapper -->
@@ -586,6 +680,8 @@
                                                 document.getElementById("container-register").style.display = "none";
                                             }
             </script>
+            <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
         </c:if>
     </body>
 </html>

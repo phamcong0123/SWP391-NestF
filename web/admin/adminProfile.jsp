@@ -39,7 +39,7 @@
                 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
                     <!-- Sidebar - Brand -->
-                    <a href="dashboard" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
+                    <a href="home" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
                                                                          height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
@@ -56,7 +56,7 @@
 
 
                     <!-- Nav Item - Charts -->
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="adminProfilePage">
                             <i class="fa fa-cog fa-chart-area"></i>
                             <span>Edit Profile</span></a>
