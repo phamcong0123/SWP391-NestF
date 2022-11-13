@@ -90,7 +90,7 @@
             </nav>
         </div>
         <div class="col-11 m-auto p-4">
-            <img class="w-50" src ="img/code400.jpg"/>
+            <img class="col-8" src ="img/error.svg"/>
         </div>                        
         <c:if test="${sessionScope.USER.role eq 'AD'}">
             <a href="dashboard">

@@ -37,13 +37,13 @@ public class LoadArticleServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     private static final String ARTICLE_PAGE = "article.jsp";
-    private static final String HANDBOOK_PAGE = "handbook.jsp";
+    private static final String ERROR_PAGE = "error.jsp";
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         int postID = Integer.parseInt(request.getParameter("postID"));
-        String url = HANDBOOK_PAGE;
+        String url = ERROR_PAGE;
         try {
             /* TODO output your page here. You may use following sample code. */
             PostDAO dao = new PostDAO();

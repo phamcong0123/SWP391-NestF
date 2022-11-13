@@ -75,7 +75,7 @@
                         <div id="dropDownMenu" class="d-inline-block position-relative">
                             <i class="fas fa-user me-2"></i>${sessionScope.USER.name}
                             <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
-                                     <c:if test="${not empty sessionScope.USER}">                                      
+                                <c:if test="${not empty sessionScope.USER}">                                      
                                     <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>         
                                 </c:if>                                        <c:if test="${sessionScope.USER.role eq 'SE'}">              
                                     <a href="dashboard" class="nav-link mb-2 text-decoration-none p-2" id="item">Quản lý đơn hàng</a>       
@@ -152,16 +152,18 @@
             <div class="row row-cols-4 col-11 m-auto">
                 <c:if test="${not empty requestScope.VOUCHER}">
                     <c:forEach items="${requestScope.VOUCHER}" var="voucher">
-                        <div id="item" class="d-inline-block col mb-3 p-2">
-                            <img src="img/voucher.png">
-                            <h6 class="mt-4">${fn:toUpperCase(voucher.voucherName)}</h6>
-                            <span>Số lượng còn : <span class="fw-bold">${voucher.quantity}</span></span><br>
-                            <span>Điểm yêu cầu : <span class="fw-bold">${voucher.point}</span></span><br>
-                                <c:url var="buyLink" value="buyVoucher">
-                                    <c:param name="typeID" value="${voucher.typeID}"/>
-                                </c:url>
-                            <a href="${buyLink}"><button id="buy-button" class="col-6">Mua ngay</button></a>
-                        </div>
+                        <c:if test = "${voucher.status}">
+                            <div id="item" class="d-inline-block col mb-3 p-2">
+                                <img src="img/voucher.png">
+                                <h6 class="mt-4">${fn:toUpperCase(voucher.voucherName)}</h6>
+                                <span>Số lượng còn : <span class="fw-bold">${voucher.quantity}</span></span><br>
+                                <span>Điểm yêu cầu : <span class="fw-bold">${voucher.point}</span></span><br>
+                                    <c:url var="buyLink" value="buyVoucher">
+                                        <c:param name="typeID" value="${voucher.typeID}"/>
+                                    </c:url>
+                                <a href="${buyLink}"><button id="buy-button" class="col-6">Mua ngay</button></a>
+                            </div>
+                        </c:if>
                     </c:forEach>
                 </c:if>
                 <c:if test="${ empty requestScope.VOUCHER}">

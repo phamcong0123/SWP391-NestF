@@ -109,7 +109,7 @@
                                                                 <p>Hết hạn vào ${voucher.expiredDate}</p>
                                                                 <button type="button" id="buy-button" class="col-6" data-bs-dismiss="modal" onclick="pickVoucher(this)" value="${voucher.voucherType.voucherName}">
                                                                     Sử dụng <input type="hidden" value="${voucher.voucherID}">
-                                                                    <input type="hidden" value="${voucher.voucherType.saleMargin}">
+                                                                    <input type="hidden" value="${voucher.voucherType.saleValue}">
                                                                 </button>
                                                             </div>
                                                         </c:forEach>

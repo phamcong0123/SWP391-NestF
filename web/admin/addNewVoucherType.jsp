@@ -6,14 +6,18 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<jsp:useBean id="formatter" class="com.nestf.util.FormatPrinter"/>
 <!DOCTYPE html>
-<html>    
+<html>
+    <c:if test="${param.act eq 'update' && empty requestScope.VOUCHER_INFO}">
+        <c:redirect url="LoadVoucherTypeInfo">
+            <c:param name="typeID" value="${param.typeID}"/>
+        </c:redirect>
+    </c:if>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="icon" href="img/logo.png" type="image/x-icon" />
-        <title>Manage Voucher</title>
+        <title>Add new voucher</title>
 
         <!-- Custom fonts for this template-->
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -54,7 +58,7 @@
                     <hr class="sidebar-divider my-0">
 
                     <!-- Nav Item - Dashboard -->
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="dashboard">
                             <i class="fas fa-fw fa-tachometer-alt"></i>
                             <span>Dashboard</span></a>
@@ -135,6 +139,7 @@
                     <hr class="sidebar-divider">
 
                     <!-- Nav Item - Charts -->
+                    <li class="nav-item">
                     <li class="nav-item active">
                         <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseVouchers"
                            aria-expanded="true" aria-controls="collapseVouchers">
@@ -144,10 +149,11 @@
                              data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">Manage:</h6>
-                                <a class="collapse-item fw-bold disabled" href="#">All voucher types</a>
-                                <a class="collapse-item" href="updateVoucher?act=add">Add/Update voucher type</a>
+                                <a class="collapse-item" href="voucher">All voucher types</a>
+                                <a class="collapse-item fw-bold disabled" href="#">Add/Update voucher type</a>
                             </div>
                         </div>
+                    </li>
                     </li>
 
                     <!-- Divider -->
@@ -378,51 +384,49 @@
                         <div class="container-fluid">
                             <!--//////////////////////////////////////////////////////Kết thúc phần Chung/////////////////-->
                             <!-- Page Heading -->
-                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 class="h3 mb-0 text-gray-800">All voucher types</h1>
-                            </div>
-
+                            <div class="mx-3">
+                                <span class="h3 mb-0 text-gray-800">${empty requestScope.VOUCHER_INFO ? 'Add new voucher' : 'Update voucher'}</span>                              
+                            </div>                           
+                            <br>
                             <!-- Content Row -->
-
-                            <c:if test="${not empty sessionScope.LIST_PRODUCT}">
-                                <table class="table table-striped table-hover table-bordered">
-                                    <thead>
-                                        <tr>
-                                            <th>No.</th>
-                                            <th>Title</th>
-                                            <th>Sale value</th>
-                                            <th>Current quantity</th>
-                                            <th>Point required</th>
-                                            <th>Status</th>
-                                            <th>Act</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach var="voucher" items="${requestScope.VOUCHER}" varStatus="counter">
-                                            <tr>
-                                                <td>${counter.count}</td>
-                                                <td>${voucher.voucherName}</td>
-                                                <td>${formatter.printMoney(voucher.saleValue)}</td>
-                                                <td>${voucher.quantity}</td>
-                                                <td>${voucher.point}</td> 
-                                                <td>${voucher.status ? 'Available' : 'Not available'}</td>
-                                                <td>                                                 
-                                                    <a href="updateVoucher?act=update&typeID=${voucher.typeID}" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-edit"></i>
-                                                    </a> 
-                                                    <c:if test="${!voucher.status}">
-                                                        <a href="updateVoucherStatus?typeID=${voucher.typeID}" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-check"></i>
-                                                        </a> 
-                                                    </c:if>
-                                                    <c:if test="${voucher.status}">
-                                                        <a href="updateVoucherStatus?typeID=${voucher.typeID}" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-times"></i>
-                                                        </a> 
-                                                    </c:if>                 
-                                                </td>
-                                            </tr>
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
-                            </c:if>
+                            <div class="card-body ">
+                                <form action="${not empty requestScope.VOUCHER_INFO ? 'updateVoucherType' : 'addNewVoucherTypeAction'}" method="Post">
+                                    <c:if test="${not empty requestScope.VOUCHER_INFO}">
+                                        <input type="hidden" name="typeID" value="${requestScope.VOUCHER_INFO.typeID}">
+                                    </c:if>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4 pb-2">
+                                            <label class="form-label">Title</label>
+                                            <input type="text" class="form-control form-control-lg" name="voucherName" value="${requestScope.VOUCHER_INFO.voucherName}">
+                                        </div>
+                                        <div class="col-md-6 mb-4 pb-2">
+                                            <label class="form-label">Sale value</label>
+                                            <input type="number" min="0" name="saleValue" class="form-control form-control-lg" value="${requestScope.VOUCHER_INFO.saleValue}">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4 pb-2">
+                                            <label class="form-label">Quantity</label>
+                                            <input type="number" min="0" name="quantity" class="form-control form-control-lg" value="${requestScope.VOUCHER_INFO.quantity}">
+                                        </div>
+                                        <div class="col-md-6 mb-4 pb-2">
+                                            <label class="form-label">Point required</label>
+                                            <input type="number" min="0"  name="point" class="form-control form-control-lg" value="${requestScope.VOUCHER_INFO.point}">
+                                        </div>
+                                    </div>  
+                                    <c:set var="state" value="${requestScope.VOUCHER_INFO.status}"/>
+                                    <input type="radio" name="status" id="statusActive" ${(state eq true || empty requestScope.VOUCHER_INFO) ? 'checked' : ''}  value="true">
+                                    <label for="statusActive">Available</label><br>
+                                    <input type="radio" name="status" id="statusInactive" ${state eq false ? 'checked' : ''}  value="false">
+                                    <label for="statusInactive">Not available</label>                               
+                                    <div class="mt-4 pt-2 text-center mb-4">      
+                                        <c:if test="${not empty requestScope.VOUCHER_INFO}">
+                                            <a href="updateVoucher?act=add"><button type="button" class="btn btn-primary btn-lg">Go to Add</button></a>
+                                        </c:if>
+                                        <input class="btn btn-danger btn-lg" type="submit" value="Submit" />                                      
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                     <footer class="sticky-footer bg-white sticky-footer">
@@ -432,6 +436,7 @@
                             </div>
                         </div>
                     </footer>
+                    <!-- End of Footer -->
                 </div>
                 <br>
 
@@ -463,8 +468,7 @@
                     </div>
                 </div>
             </div>
-        </div>        
-        <!-- End of Footer -->
+        </div>      
         <!-- Jquery -->
         <script src="https://code.jquery.com/jquery-2.2.4.js" ></script>
 

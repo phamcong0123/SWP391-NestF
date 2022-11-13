@@ -3,17 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nestf.controller;
+package com.nestf.controller.AD.active;
 
-import com.nestf.cart.CartDAO;
-import com.nestf.cart.CartItemDTO;
-import com.nestf.voucher.VoucherDAO;
-import com.nestf.voucher.VoucherDTO;
 import com.nestf.vouchertype.VoucherTypeDAO;
+import com.nestf.vouchertype.VoucherTypeDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
@@ -28,8 +24,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author Admin
  */
-@WebServlet(name = "CheckOutServlet", urlPatterns = {"/CheckOutServlet"})
-public class CheckOutServlet extends HttpServlet {
+@WebServlet(name = "ChangeVoucherTypeStatusServlet", urlPatterns = {"/ChangeVoucherTypeStatusServlet"})
+public class ChangeVoucherTypeStatusServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -40,42 +36,33 @@ public class CheckOutServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    private static final String CHECK_OUT_PAGE = "checkout.jsp";
     private static final String ERROR = "error.jsp";
+    private static final String MANAGE_VOUCHER = "LoadVoucherServlet";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = CHECK_OUT_PAGE;
+        String url = ERROR;
         try {
             /* TODO output your page here. You may use following sample code. */
             HttpSession session = request.getSession(false);
-            List<CartItemDTO> cart = (List<CartItemDTO>) session.getAttribute("CART");
-            if (cart != null) {
-                CartDAO cartDAO = new CartDAO();
-                Double total = cartDAO.getCartTotal(cart);
-                Double saleValue = 0.0;
-                if (request.getParameter("voucher-use").length() > 0) {
-                    int voucherID = Integer.parseInt(request.getParameter("voucher-use"));
-                    VoucherDAO dao = new VoucherDAO();
-                    VoucherDTO voucherUse = dao.getVoucherByID(voucherID);
-                    saleValue = voucherUse.getVoucherType().getSaleValue();
-                    request.setAttribute("VOUCHER_USE", voucherUse);
+            if (session.getAttribute("ADMIN") != null) {
+                int typeID = Integer.parseInt(request.getParameter("typeID"));
+                VoucherTypeDAO dao = new VoucherTypeDAO();
+                VoucherTypeDTO voucherType = dao.getVoucher(typeID);
+                if (voucherType != null) {
+                    voucherType.setStatus(!voucherType.isStatus());
+                    if (dao.updateVoucherType(voucherType)) {
+                        url = MANAGE_VOUCHER;
+                    }
                 }
-                total -= saleValue;
-                if (total < 0) {
-                    total = 0.0;
-                }
-                request.setAttribute("TOTAL", total);
             }
         } catch (SQLException ex) {
-            Logger.getLogger(CheckOutServlet.class.getName()).log(Level.SEVERE, null, ex);
-            url = ERROR;
+            Logger.getLogger(ChangeVoucherTypeStatusServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NamingException ex) {
-            Logger.getLogger(CheckOutServlet.class.getName()).log(Level.SEVERE, null, ex);
-            url = ERROR;
+            Logger.getLogger(ChangeVoucherTypeStatusServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
-            request.getRequestDispatcher(url).forward(request, response);
+            response.sendRedirect(url);
         }
     }
 

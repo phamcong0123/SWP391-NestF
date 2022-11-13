@@ -98,14 +98,14 @@
                     <form class="form-horizontal" action="FilterController" method="POST">
                         <div class="m-auto" id="filter">
                             <h4 class="category-title d-inline-block">Phân loại</h4>
-                            <select class="form-controls category-option" name="categoryFilter">
+                            <select class="form-controls category-option" name="categoryFilter" onchange="filter(this)">
                                 <option value="empty"></option>
                                 <option value="yenTho">Tổ yến thô</option>
                                 <option value="yenTinhChe">Tổ yến tinh chế</option>
                                 <option value="yenChungTuoi">Yến chưng tươi</option>
                                 <option value="yenChungSan">Yến chưng sẵn</option>
                             </select>
-                            <select class="form-controls category-option" name="priceFilter">
+                            <select class="form-controls category-option" name="priceFilter" onchange="filter(this)">
                                 <option value="empty"></option>
                                 <option value="below1">Dưới 1.000.000 đ</option>
                                 <option value="1to2">Từ 1.000.000 đ ~ 2.000.000 đ</option>
@@ -113,7 +113,6 @@
                                 <option value="3to4">Từ 3.000.000 đ ~ 4.000.000 đ</option>
                                 <option value="over4">Trên 4.000.000 đ</option>
                             </select>
-                            <button class="submit-btn" type="submit" name="Filter" value="Filter">Lọc</button>
                         </div>
                     </form>
 
@@ -212,6 +211,12 @@
         </section>
         <script src="js/util.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+        <script>
+            function filter(e){
+                var form = $(e).closest('form');
+                form.submit();
+            }
+        </script>
         <script>
                                                     let loadMoreBtn = document.querySelector('#load-more');
                                                     let currentItem = 8;
