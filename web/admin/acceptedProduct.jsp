@@ -13,7 +13,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="icon" href="img/logo.png" type="image/x-icon" />
         <title>Accepted Product</title>
-
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
         <!-- Custom fonts for this template-->
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
         <link
@@ -40,12 +40,12 @@
 
                     <!-- Sidebar - Brand -->
                     <a href="home" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
-                                                                         height="38px"></a>
+                                                                    height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
 
                     <!-- Nav Item - Dashboard -->
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="dashboard">
                             <i class="fas fa-fw fa-tachometer-alt"></i>
                             <span>Dashboard</span></a>
@@ -67,17 +67,17 @@
 
                     <!-- Nav Item - Products Collapse Menu -->
                     <li class="nav-item active">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProducts"
+                        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseProducts"
                            aria-expanded="true" aria-controls="collapseProducts">
                             <i class="fa fa-cube"></i>
                             <span>Products</span>
                         </a>
-                        <div id="collapseProducts" class="collapse" aria-labelledby="headingProducts"
+                        <div id="collapseProducts" class="collapse show" aria-labelledby="headingProducts"
                              data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <h6 class="collapse-header">List products:</h6>
                                 <a class="collapse-item" href="addNewProductPage">Add new products</a>
-                                <a class="collapse-item" href="accpetedProductPage">Active products</a>
+                                <a class="collapse-item fw-bold" href="accpetedProductPage">Active products</a>
                                 <a class="collapse-item" href="pendingProductPage">Non-active products</a>
                             </div>
                         </div>
