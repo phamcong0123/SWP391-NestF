@@ -349,50 +349,17 @@
                                 <div class="col-2 ">
                                     <div class="float-right start-btn">
                                         <input type="checkbox" id="show">
-                                        <input type="button" class="show-btn btn btn-dark" onclick="openForm()" value="Add new seller"></input>
+                                        <input type="button" class="show-btn btn btn-dark" data-toggle="modal" data-target="#registerModal" value="Add new seller"></input>
                                     </div>
                                 </div>
                             </div>
                             <div id="container-register" style="display: none">
-                                <input type="button" class="close-btn" title="close" onclick="closeForm()" value="X"></input>
+                                <input type="button" class="close-btn" title="close" onclick="closeForm()" value="X" ></input>
                                 <div class="text">
                                     Create new seller
                                 </div>
-                                <form action="AddNewSeller">
-                                    <div class="data">
-                                        <label>Full Name</label>
-                                        <input type="text" required  name="name" required minlength="6" maxlength="30" placeholder="6 - 30 ký tự">
-                                    </div>
-                                    <div class="data sencondchild">
-                                        <label>Gender</label>
-                                        <span class="gender" style="white-space: nowrap;">
-                                            <input type="radio" id="male" checked="" name="gender" value="1">
-                                            <label for="male">Nam&emsp;</label>
-                                            <input type="radio" id="female" name="gender" value="0">
-                                            <label for="female">Nữ</label>
-                                        </span>
-                                    </div>
-                                    <div class="data">
-                                        <label>Phone number</label>
-                                        <input type="number"  name="phone" required minlength="10" maxlength="11" placeholder="10 - 11 chữ số">
-                                    </div>
-                                    <div class="data">
-                                        <label>Password</label>
-                                        <input type="password" required minlength="6" maxlength="20" id="password" placeholder="6 - 20 ký tự">
-                                    </div>
-                                    <div class="data">
-                                        <label>Confirm Password</label>
-                                        <input type="password" name="confirm" required minlength="6" maxlength="20" id="confirm" onblur="validate();">
-                                    </div>
-                                    <div class="data">
-                                        <label>Address</label>
-                                        <input type="text" name="address" required minlength="10" maxlength="70" placeholder="20 - 70 ký tự">
-                                    </div>
-                                    <div class="btn btn-dark">
-                                        <div class="inner"></div>
-                                        <button type="submit">Create</button>
-                                    </div>
-                                </form>
+
+
                             </div>
 
                             <!-- Content Row -->
@@ -507,6 +474,8 @@
                         <i class="fas fa-angle-up"></i>
                     </a>
 
+
+
                     <!-- Logout Modal-->
                     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                          aria-hidden="true">
@@ -527,15 +496,73 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-<!--            <footer class="sticky-footer bg-white sticky-footer">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; NestF 2022</span>
+
+                    <div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <form action="AddNewSeller">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+
+                                    <div class="modal-body">
+
+
+                                        <div class="data">
+                                            <label>Full Name</label>
+                                            <input type="text" required  name="name" required minlength="6" maxlength="30" placeholder="6 - 30 ký tự">
+                                        </div>
+                                        <div class="data sencondchild">
+                                            <label>Gender</label>
+                                            <span class="gender" style="white-space: nowrap;">
+                                                <input type="radio" id="male" checked="" name="gender" value="1">
+                                                <label for="male">Nam&emsp;</label>
+                                                <input type="radio" id="female" name="gender" value="0">
+                                                <label for="female">Nữ</label>
+                                            </span>
+                                        </div>
+                                        <div class="data">
+                                            <label>Phone number</label>
+                                            <input type="number"  name="phone" required minlength="10" maxlength="11" placeholder="10 - 11 chữ số">
+                                        </div>
+                                        <div class="data">
+                                            <label>Password</label>
+                                            <input type="password" name="password" required minlength="6" maxlength="20" id="password" placeholder="6 - 20 ký tự">
+                                        </div>
+                                        <div class="data">
+                                            <label>Confirm Password</label>
+                                            <input type="password" name="confirm" required minlength="6" maxlength="20" id="confirm" onblur="validate();">
+                                        </div>
+                                        <div class="data">
+                                            <label>Address</label>
+                                            <input type="text" name="address" required minlength="10" maxlength="70" placeholder="20 - 70 ký tự">
+                                        </div>
+
+
+
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                        <button class="btn btn-dark" type="submit">Create</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </footer>-->
+            </div>
+            <!--            <footer class="sticky-footer bg-white sticky-footer">
+                            <div class="container my-auto">
+                                <div class="copyright text-center my-auto">
+                                    <span>Copyright &copy; NestF 2022</span>
+                                </div>
+                            </div>
+                        </footer>-->
             <!-- End of Footer -->
             <!-- Bootstrap core JavaScript-->
             <script src="vendor/jquery/jquery.min.js"></script>
