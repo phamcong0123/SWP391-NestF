@@ -36,6 +36,32 @@ public class PostDTO implements Serializable {
         this.thumbnail = thumbnail;
     }
 
+    public PostDTO(int postID, AccountDTO seller, String title, boolean status, String content, String thumbnail) {
+        this.postID = postID;
+        this.seller = seller;
+        this.title = title;
+        this.status = status;
+        this.content = content;
+        this.thumbnail = thumbnail;
+    }
+
+    public PostDTO(AccountDTO seller, String title, Date postDate, boolean status, String content, String thumbnail) {
+        this.seller = seller;
+        this.title = title;
+        this.postDate = postDate;
+        this.status = status;
+        this.content = content;
+        this.thumbnail = thumbnail;
+    }
+
+    public PostDTO(AccountDTO seller, String title, boolean status, String content, String thumbnail) {
+        this.seller = seller;
+        this.title = title;
+        this.status = status;
+        this.content = content;
+        this.thumbnail = thumbnail;
+    }
+
     public int getPostID() {
         return postID;
     }

@@ -43,7 +43,7 @@
                 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
                     <!-- Sidebar - Brand -->
-                    <a href="home" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
+                    <a href="dashboard" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
                                                                          height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
@@ -110,7 +110,7 @@
                     <hr class="sidebar-divider">
 
                     <!-- Nav Item - Pages Collapse Menu -->
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                            aria-expanded="true" aria-controls="collapsePages">
                             <i class="fas fa-fw fa-folder"></i>
@@ -131,18 +131,9 @@
 
                     <!-- Nav Item - Charts -->
                     <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVouchers"
-                           aria-expanded="true" aria-controls="collapseVouchers">
-                            <i class="fa fa-gift"></i>
+                        <a class="nav-link" href="manageVoucherPage">
+                            <i class="fa fa-gift" aria-hidden="true"></i>
                             <span>Voucher</span></a>
-                        <div id="collapseVouchers" class="collapse" aria-labelledby="headingProducts"
-                             data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">Manage:</h6>
-                                <a class="collapse-item fw-bold" href="voucher">All voucher types</a>
-                                <a class="collapse-item" href="updateVoucher?act=add">Add/Update voucher type</a>
-                            </div>
-                        </div>
                     </li>
 
                     <!-- Divider -->
@@ -220,122 +211,6 @@
                                     </div>
                                 </li>
 
-                                <!-- Nav Item - Alerts -->
-                                <li class="nav-item dropdown no-arrow mx-1">
-                                    <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-bell fa-fw"></i>
-                                        <!-- Counter - Alerts -->
-                                        <span class="badge badge-danger badge-counter">3+</span>
-                                    </a>
-                                    <!-- Dropdown - Alerts -->
-                                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                         aria-labelledby="alertsDropdown">
-                                        <h6 class="dropdown-header">
-                                            Alerts Center
-                                        </h6>
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="mr-3">
-                                                <div class="icon-circle bg-dark">
-                                                    <i class="fas fa-file-alt text-white"></i>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div class="small text-gray-500">December 12, 2019</div>
-                                                <span class="font-weight-bold">A new monthly report is ready to download!</span>
-                                            </div>
-                                        </a>
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="mr-3">
-                                                <div class="icon-circle bg-success">
-                                                    <i class="fas fa-donate text-white"></i>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div class="small text-gray-500">December 7, 2019</div>
-                                                $290.29 has been deposited into your account!
-                                            </div>
-                                        </a>
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="mr-3">
-                                                <div class="icon-circle bg-warning">
-                                                    <i class="fas fa-exclamation-triangle text-white"></i>
-                                                </div>
-                                            </div>
-                                            <div>
-                                                <div class="small text-gray-500">December 2, 2019</div>
-                                                Spending Alert: We've noticed unusually high spending for your account.
-                                            </div>
-                                        </a>
-                                        <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-                                    </div>
-                                </li>
-
-                                <!-- Nav Item - Messages -->
-                                <li class="nav-item dropdown no-arrow mx-1">
-                                    <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-envelope fa-fw"></i>
-                                        <!-- Counter - Messages -->
-                                        <span class="badge badge-danger badge-counter">7</span>
-                                    </a>
-                                    <!-- Dropdown - Messages -->
-                                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                         aria-labelledby="messagesDropdown">
-                                        <h6 class="dropdown-header">
-                                            Message Center
-                                        </h6>
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="dropdown-list-image mr-3">
-                                                <img class="rounded-circle" src="img/undraw_profile_1.svg" alt="...">
-                                                <div class="status-indicator bg-success"></div>
-                                            </div>
-                                            <div class="font-weight-bold">
-                                                <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                                    problem I've been having.</div>
-                                                <div class="small text-gray-500">Emily Fowler · 58m</div>
-                                            </div>
-                                        </a>
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="dropdown-list-image mr-3">
-                                                <img class="rounded-circle" src="img/undraw_profile_2.svg" alt="...">
-                                                <div class="status-indicator"></div>
-                                            </div>
-                                            <div>
-                                                <div class="text-truncate">I have the photos that you ordered last month, how
-                                                    would you like them sent to you?</div>
-                                                <div class="small text-gray-500">Jae Chun · 1d</div>
-                                            </div>
-                                        </a>
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="dropdown-list-image mr-3">
-                                                <img class="rounded-circle" src="img/undraw_profile_3.svg" alt="...">
-                                                <div class="status-indicator bg-warning"></div>
-                                            </div>
-                                            <div>
-                                                <div class="text-truncate">Last month's report looks great, I am very happy with
-                                                    the progress so far, keep up the good work!</div>
-                                                <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                            </div>
-                                        </a>
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="dropdown-list-image mr-3">
-                                                <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                                     alt="...">
-                                                <div class="status-indicator bg-success"></div>
-                                            </div>
-                                            <div>
-                                                <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                                    told me that people say this to all dogs, even if they aren't good...</div>
-                                                <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                                            </div>
-                                        </a>
-                                        <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
-                                    </div>
-                                </li>
-
-                                <div class="topbar-divider d-none d-sm-block"></div>
-
                                 <!-- Nav Item - User Information -->
                                 <li class="nav-item dropdown no-arrow">
                                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
@@ -349,14 +224,6 @@
                                         <a class="dropdown-item" href="adminProfile.jsp">
                                             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                             Profile
-                                        </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Settings
-                                        </a>
-                                        <a class="dropdown-item" href="#">
-                                            <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                            Activity Log
                                         </a>
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -380,73 +247,92 @@
                             <!-- Content Row -->
 
                             <div class="card-body ">
-                                <c:set var="productDetail" value="${requestScope['PRODUCT_DETAIL']}" scope="page"/>
-                                <jsp:useBean id="productFunc" class="com.nestf.product.ProductDTO"/>
-                                <c:set var="errors" value="${requestScope.PRODUCT_ERR}"/>
-                                <c:if test="${requestScope.PREVIEW_PRODUCT != null}">
+                                <c:set var="post" value="${requestScope['POST_DETAIL']}" scope="page"/>
+                                <c:set var="errors" value="${requestScope.POST_ERROR}"/>
+                                <c:if test="${requestScope.PREVIEW_POST != null}">
                                     <c:if test="${empty errors}">
-                                        <c:set var="temp" value="${requestScope['PREVIEW_PRODUCT']}" scope="page"/>
-                                        <font color="red">
-                                        Bạn vừa thêm post thành công! " ${temp.name} "
+                                        <c:set var="temp" value="${requestScope['PREVIEW_POST']}" scope="page"/>
+                                        <font color="green">
+                                        Bạn vừa thêm post thành công! " ${temp.title} "
                                         </font> <br/>
-                                        <% request.setAttribute("PREVIEW_PRODUCT", null); %>
-                                        <% request.setAttribute("PRODUCT_DETAIL", null); %>
+                                        <% request.setAttribute("PREVIEW_POST", null); %>
+                                        <% request.setAttribute("POST_DETAIL", null);%>
                                     </c:if>
                                 </c:if>
+                                <jsp:useBean id="postFunc" class="com.nestf.post.PostDTO"/>
+
                                 <br/>
                                 <form action="addNewPostAction" method="Post">
+
                                     <div class="row">
-                                        <div class="col-md-6 mb-4 pb-2">
-                                            <div class="form-outline">
-                                                <label class="form-label" for="">Product Description</label>
 
-                                                <textarea name="productdesc" cols="200" rows="20" id="productdesc" class="form-control form-control-lg">
-                                                    ${productDetail.productDes}
-                                                </textarea>
-                                                <c:if test="${not empty errors.productDes}">
-                                                    <font color="red">
-                                                    ${errors.productDes}
-                                                    </font> <br/>
-                                                </c:if>
-
-                                            </div>
-                                        </div>
-
-                                        <div class="col-md-6 mb-4 pb-2">
-                                            <div class="form-outline">
-                                                <label class="form-label" for="">Image</label>
-
-                                                <textarea name="image" cols="200" rows="5" id="image" class="form-control form-control-lg">
-                                                    ${productDetail.image}
-                                                </textarea>
-                                                <c:if test="${not empty errors.image}">
-                                                    <font color="red">
-                                                    ${errors.image}
-                                                    </font> <br/>
-                                                </c:if>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
                                         <div class="col-md-6 mb-4">
-                                            <h6 class="mb-2 pb-1">Status: </h6>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status" id="checkFalse"
-                                                       value="false" checked />
-                                                <label class="form-check-label" for="checkFalse">False</label>
+                                            <div class="form-outline">
+                                                <label class="form-label" for="txtName">Title</label>
+
+                                                <input type="text" id="txtName" name="title" value="${post.title}" class="form-control form-control-lg" />
+                                                <c:if test="${not empty errors.title}">
+                                                    <font color="red">
+                                                    ${errors.title}
+                                                    </font> <br/>
+                                                </c:if>
+
                                             </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="status" id="checkTrue"
-                                                       value="true" />
-                                                <label class="form-check-label" for="checkTrue">True</label>
-                                            </div>
-                                        </div>        
+                                        </div>
+
+                                        <!--                                        <div class="row">
+                                                                                    <div class="col-md-6 mb-4 pb-2">
+                                                                                        <h6 class="mb-2 pb-1">Status: </h6>
+                                                                                        <div class="form-check form-check-inline">
+                                                                                            <input class="form-check-input" type="radio" name="status" id="checkFalse"
+                                                                                                   value="false" checked />
+                                                                                            <label class="form-check-label" for="checkFalse">False</label>
+                                                                                        </div>
+                                                                                        <div class="form-check form-check-inline">
+                                                                                            <input class="form-check-input" type="radio" name="status" id="checkTrue"
+                                                                                                   value="true" />
+                                                                                            <label class="form-check-label" for="checkTrue">True</label>
+                                                                                        </div>
+                                                                                    </div>        
+                                                                                </div>-->
                                     </div>
 
-                                    <div class="mt-4 pt-2">
-                                        <input class="btn btn-primary btn-lg" type="submit" name="btAction" value="Preview" />
-                                        <input class="btn btn-danger btn-lg" type="submit" name="btAction" value="Submit" />
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4 pb-2">
+                                            <div class="form-outline">
+                                                <label class="form-label" for="">Post Content</label>
+
+                                                <textarea name="content" cols="200" rows="20" id="productdesc" class="form-control form-control-lg">
+                                                    ${post.content}
+                                                </textarea>
+                                                <c:if test="${not empty errors.content}">
+                                                    <font color="red">
+                                                    ${errors.content}
+                                                    </font> <br/>
+                                                </c:if>
+
+                                            </div>
+                                        </div>
+                                                <input type="hidden" name="adPhone" value="${ADMIN.getPhone()}"/>
+                                        <div class="col-md-6 mb-4 pb-2">
+                                            <div class="form-outline">
+                                                <label class="form-label" for="txtName">Thumbnail</label>
+                                                
+                                                <input type="text" id="txtName" name="thumbnail" value="${post.thumbnail}" class="form-control form-control-lg" />
+                                                <c:if test="${not empty errors.thumbnail}">
+                                                    <font color="red">
+                                                    ${errors.thumbnail}
+                                                    </font> <br/>
+                                                </c:if>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="mt-4 pt-2 text-center mb-4">
+                                        <a href="loadArticle?postID=${post.postID}" class="btn btn-primary btn-lg" >Preview</a>
+                                        <input class="btn btn-danger btn-lg" type="submit" name="action" value="Submit" />
                                     </div>
                                 </form>
                             </div>
@@ -483,13 +369,13 @@
                     </div>
                 </div>
             </div>
-            <footer class="sticky-footer bg-white sticky-footer">
+<!--            <footer class="sticky-footer bg-white sticky-footer">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
                         <span>Copyright &copy; NestF 2022</span>
                     </div>
                 </div>
-            </footer>
+            </footer>-->
             <!-- End of Footer -->
             <!-- Bootstrap core JavaScript-->
             <script src="vendor/jquery/jquery.min.js"></script>

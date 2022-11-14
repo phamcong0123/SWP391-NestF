@@ -12,7 +12,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="icon" href="img/logo.png" type="image/x-icon" />
-        <title>Profile</title>
+        <title>Update post</title>
 
         <!-- Custom fonts for this template-->
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -22,6 +22,10 @@
 
         <!-- Custom styles for this template-->
         <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+        <!--CKEditor-->
+        <%--<script type="text/javascript" src="<c:url value='https://cdn.ckeditor.com/4.7.0/full-all/ckeditor.js'/>"></script>--%>
+        <script type="text/javascript" src="<c:url value='https://cdn.ckeditor.com/4.7.0/standard/ckeditor.js'/>"></script>
 
     </head>
     <body id="page-top">
@@ -39,13 +43,13 @@
                 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
                     <!-- Sidebar - Brand -->
-                    <a href="home" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
+                    <a href="dashboard" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
                                                                          height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
 
                     <!-- Nav Item - Dashboard -->
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link" href="dashboard">
                             <i class="fas fa-fw fa-tachometer-alt"></i>
                             <span>Dashboard</span></a>
@@ -56,10 +60,10 @@
 
 
                     <!-- Nav Item - Charts -->
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link" href="adminProfilePage">
                             <i class="fa fa-cog fa-chart-area"></i>
-                            <span>Edit Profile</span></a>
+                            <span>Edit profile</span></a>
                     </li>
 
                     <!-- Divider -->
@@ -70,15 +74,15 @@
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProducts"
                            aria-expanded="true" aria-controls="collapseProducts">
                             <i class="fa fa-cube"></i>
-                            <span>Product</span>
+                            <span>Products</span>
                         </a>
                         <div id="collapseProducts" class="collapse" aria-labelledby="headingProducts"
                              data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">List product:</h6>
-                                <a class="collapse-item" href="addNewProductPage">Add new product</a>
-                                <a class="collapse-item" href="accpetedProductPage">Active products</a>
-                                <a class="collapse-item" href="pendingProductPage">Non-active products</a>
+                                <h6 class="collapse-header">List products:</h6>
+                                <a class="collapse-item" href="addNewProductPage">Add new products</a>
+                                <a class="collapse-item" href="accpetedProductPage">Active Product</a>
+                                <a class="collapse-item" href="pendingProductPage">Non-Active Product</a>
                             </div>
                         </div>
                     </li>
@@ -95,9 +99,9 @@
                         </a>
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">Manage: </h6>
-                                <a class="collapse-item" href="manageSellerPage">Seller</a>
-                                <a class="collapse-item" href="manageCustomerPage">Customer</a>
+                                <h6 class="collapse-header">Manage :</h6>
+                                <a class="collapse-item" href="manageSellerPage">Sellers</a>
+                                <a class="collapse-item" href="manageCustomerPage">Customers</a>
                             </div>
                         </div>
                     </li>
@@ -110,7 +114,7 @@
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                            aria-expanded="true" aria-controls="collapsePages">
                             <i class="fas fa-fw fa-folder"></i>
-                            <span>Post</span>
+                            <span>Posts</span>
                         </a>
                         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
@@ -127,18 +131,9 @@
 
                     <!-- Nav Item - Charts -->
                     <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVouchers"
-                           aria-expanded="true" aria-controls="collapseVouchers">
-                            <i class="fa fa-gift"></i>
+                        <a class="nav-link" href="manageVoucherPage">
+                            <i class="fa fa-gift" aria-hidden="true"></i>
                             <span>Voucher</span></a>
-                        <div id="collapseVouchers" class="collapse" aria-labelledby="headingProducts"
-                             data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">Manage:</h6>
-                                <a class="collapse-item fw-bold" href="voucher">All voucher types</a>
-                                <a class="collapse-item" href="updateVoucher?act=add">Add/Update voucher type</a>
-                            </div>
-                        </div>
                     </li>
 
                     <!-- Divider -->
@@ -243,103 +238,108 @@
 
                         <!-- Begin Page Content -->
                         <div class="container-fluid">
-                            <!--//////////////////////////////////////////////////////Kết thúc phần Chung//////////////////////////////////////////////////////////-->
-
+                            <!--//////////////////////////////////////////////////////Kết thúc phần Chung/////////////////-->
                             <!-- Page Heading -->
                             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 class="h3 mb-0 text-gray-800">Profile</h1>
+                                <h1 class="h3 mb-0 text-gray-800">Update post</h1>
                             </div>
-
 
                             <!-- Content Row -->
-                            <div class="row">
-                                <div class="col-lg-4">
-                                    <div class="card mb-4">
-                                        <div class="card-body text-center">
-                                            <img src="img/undraw_profile.svg" alt="avatar"
-                                                 class="rounded-circle img-fluid" style="width: 150px;">
-                                            <h5 class="my-3">${ADMIN.getName()}</h5>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="col-lg-8">        
-                                    <form action="UpdateProfileAction" method="POST">
-                                        <c:set var="errors" value="${requestScope.CREATE_ERR}"/>
-                                        <div class="card mb-4">
-                                            <div class="card-body">
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <p class="mb-0">Full Name</p>
-                                                    </div>
-                                                    <div class="col-sm-9">
-                                                        <input type="text" class="text-muted mb-0" name="txtFullname" value="${ADMIN.getName()}"/>
-                                                    </div>
-                                                    <c:if test="${not empty errors.nameError}">
-                                                        <font color="red">
-                                                        ${errors.nameError}
-                                                        </font> <br/>
-                                                    </c:if>
-                                                </div>
-                                                <hr>
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <p class="mb-0">Password</p>
-                                                    </div>
-                                                    <div class="col-sm-9">
-                                                        <input type="password" class="text-muted mb-0" name="txtPassword" value="${ADMIN.getPassword()}"/>
-                                                    </div>
-                                                    <c:if test="${not empty errors.passwordError}">
-                                                        <font color="red">
-                                                        ${errors.passwordError}
-                                                        </font> <br/>
-                                                    </c:if>
-                                                </div>
-                                                <hr>
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <p class="mb-0">Confirm Password</p>
-                                                    </div>
-                                                    <div class="col-sm-9">
-                                                        <input type="password" class="text-muted mb-0" name="confirmPassword" value="${ADMIN.getPassword()}"/>
-                                                    </div>
-                                                    <c:if test="${not empty errors.passwordError}">
-                                                        <font color="red">
-                                                        ${errors.passwordError}
-                                                        </font> <br/>
-                                                    </c:if>
-                                                </div>
-                                                <hr>
-                                                <div class="row">
-                                                    <div class="col-sm-3">
-                                                        <p class="mb-0">Phone</p>
-                                                    </div>
-                                                    <div class="col-sm-9">
-                                                        <input type="text" class="text-muted mb-0" name="txtPhone" value="${ADMIN.getPhone()}"/>
-                                                    </div>
-                                                    <c:if test="${not empty errors.phoneError}">
-                                                        <font color="red">
-                                                        ${errors.phoneError}
-                                                        </font> <br/>
-                                                    </c:if>
-                                                </div>
+                            <div class="card-body ">
+                                <c:set var="post" value="${requestScope['POST_DETAIL']}" scope="page"/>
+                                <c:set var="errors" value="${requestScope.POST_ERROR}"/>
+                                <c:if test="${requestScope.PREVIEW_POST != null}">
+                                    <c:if test="${empty errors}">
+                                        <c:set var="temp" value="${requestScope['PREVIEW_POST']}" scope="page"/>
+                                        <font color="green">
+                                        Bạn vừa cập nhật post thành công! " ${temp.title} "
+                                        </font> <br/>
+                                        <% request.setAttribute("PREVIEW_POST", null); %>
+                                        <% request.setAttribute("POST_DETAIL", null);%>
+                                    </c:if>
+                                </c:if>
+                                <jsp:useBean id="postFunc" class="com.nestf.post.PostDTO"/>
+
+                                <br/>
+                                <form action="savePostAction" method="Post">
+
+                                    <div class="row">
+
+                                        <div class="col-md-6 mb-4">
+                                            <div class="form-outline">
+                                                <label class="form-label" for="txtName">Title</label>
+
+                                                <input type="text" id="txtName" name="title" value="${post.title}" class="form-control form-control-lg" />
+                                                <c:if test="${not empty errors.title}">
+                                                    <font color="red">
+                                                    ${errors.title}
+                                                    </font> <br/>
+                                                </c:if>
+
                                             </div>
                                         </div>
-                                        <div class="d-flex justify-content-center mb-2">
-                                            <input type="submit" class="btn btn-outline-danger ms-1 mx-2" value="Save" name="UpdateProfile" />
-                                            <a href="editAdProfilePage"  class="btn btn-outline-primary ms-1 mx-2">Reset</a>
+
+                                        <!--                                        <div class="row">
+                                                                                    <div class="col-md-6 mb-4 pb-2">
+                                                                                        <h6 class="mb-2 pb-1">Status: </h6>
+                                                                                        <div class="form-check form-check-inline">
+                                                                                            <input class="form-check-input" type="radio" name="status" id="checkFalse"
+                                                                                                   value="false" checked />
+                                                                                            <label class="form-check-label" for="checkFalse">False</label>
+                                                                                        </div>
+                                                                                        <div class="form-check form-check-inline">
+                                                                                            <input class="form-check-input" type="radio" name="status" id="checkTrue"
+                                                                                                   value="true" />
+                                                                                            <label class="form-check-label" for="checkTrue">True</label>
+                                                                                        </div>
+                                                                                    </div>        
+                                                                                </div>-->
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4 pb-2">
+                                            <div class="form-outline">
+                                                <label class="form-label" for="">Post Content</label>
+
+                                                <textarea name="content" cols="200" rows="20" id="productdesc" class="form-control form-control-lg">
+                                                    ${post.content}
+                                                </textarea>
+                                                <c:if test="${not empty errors.content}">
+                                                    <font color="red">
+                                                    ${errors.content}
+                                                    </font> <br/>
+                                                </c:if>
+
+                                            </div>
                                         </div>
-                                    </form>
-                                </div>
+                                                <input type="hidden" name="adPhone" value="${ADMIN.getPhone()}"/>
+                                        <div class="col-md-6 mb-4 pb-2">
+                                            <div class="form-outline">
+                                                <label class="form-label" for="txtName">Thumbnail</label>
+                                                
+                                                <input type="text" id="txtName" name="thumbnail" value="${post.thumbnail}" class="form-control form-control-lg" />
+                                                <c:if test="${not empty errors.thumbnail}">
+                                                    <font color="red">
+                                                    ${errors.thumbnail}
+                                                    </font> <br/>
+                                                </c:if>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="mt-4 pt-2 text-center mb-4">
+                                        <a href="loadArticle?postID=${post.postID}" class="btn btn-primary btn-lg" >Preview</a>
+                                        <input class="btn btn-danger btn-lg" type="submit" name="action" value="Submit" />
+                                    </div>
+                                </form>
                             </div>
-                            <!--End of Content Row -->
-
-
-
                         </div>
-                        <!-- End of Content Wrapper -->
-
                     </div>
+                    <br>
+
                     <!-- End of Page Wrapper -->
 
                     <!-- Scroll to Top Button-->
@@ -369,13 +369,13 @@
                     </div>
                 </div>
             </div>
-<!--            <footer class="sticky-footer bg-white sticky-footer">
+            <footer class="sticky-footer bg-white sticky-footer">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
                         <span>Copyright &copy; NestF 2022</span>
                     </div>
                 </div>
-            </footer>-->
+            </footer>
             <!-- End of Footer -->
             <!-- Bootstrap core JavaScript-->
             <script src="vendor/jquery/jquery.min.js"></script>
@@ -393,6 +393,20 @@
             <!-- Page level custom scripts -->
             <script src="js/demo/chart-area-demo.js"></script>
             <script src="js/demo/chart-pie-demo.js"></script>
+
+            <script>
+                CKEDITOR.config.pasteFromWordPromptCleanup = true;
+                CKEDITOR.config.pasteFromWordRemoveFontStyles = false;
+                CKEDITOR.config.pasteFromWordRemoveStyles = false;
+                CKEDITOR.config.language = "vi";
+                CKEDITOR.config.htmlEncodeOutput = false;
+                CKEDITOR.config.ProcessHTMLEntities = false;
+                CKEDITOR.config.entities = false;
+                CKEDITOR.config.entities_latin = false;
+                CKEDITOR.config.ForceSimpleAmpersand = true;
+                CKEDITOR.replace('productdesc');
+                CKEDITOR.replace('image');
+            </script>
         </c:if>
     </body>
 </html>

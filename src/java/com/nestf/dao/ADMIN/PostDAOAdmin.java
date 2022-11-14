@@ -26,6 +26,7 @@ import javax.naming.NamingException;
  */
 public class PostDAOAdmin {
 
+    private static final String POST_LIST = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE status=1 OR status =0 ORDER BY postDate DESC ";
     private static final String POST_LIST_ACTIVE = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE status=1 ORDER BY postDate DESC ";
     private static final String POST_LIST_NONACTIVE = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE status=0 ORDER BY postDate DESC ";
     public static final String SET_STATUS_TRUE = "UPDATE tblPost\n"
@@ -38,6 +39,9 @@ public class PostDAOAdmin {
     private static final String ADD_POST = "INSERT INTO tblPost (adPhone, title, postDate, status, content , thumbnail) "
             + " VALUES(?,?,?,?,?,?)";
     private static final String CHECK_DUPLICATE_POSTID = "SELECT postID from tblPost WHERE postID = ?";
+    public static final String UPDATE_POST = "UPDATE tblPost\n"
+            + "SET title = ? , content = ? , thumbnail = ?\n"
+            + "WHERE postID = ? ";
 
     public static List<PostDTO> getPostListActive() throws SQLException, NamingException {
         List<PostDTO> list = new ArrayList();
@@ -85,6 +89,43 @@ public class PostDAOAdmin {
             conn = DBHelper.makeConnection();
             if (conn != null) {
                 ptm = conn.prepareStatement(POST_LIST_ACTIVE);
+                ptm.setInt(1, postID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String phone = rs.getString("adPhone");
+                    AccountDAO dao = new AccountDAO();
+                    AccountDTO seller = dao.getUserByPhone(phone);
+                    String title = rs.getString("title");
+                    Date date = new Date(rs.getTimestamp("postDate").getTime());
+                    boolean status = rs.getBoolean("status");
+                    String content = rs.getString("content");
+                    String thumbnail = rs.getString("thumbnail");
+                    post = new PostDTO(postID, seller, title, date, status, content, thumbnail);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return post;
+    }
+
+    public static PostDTO getPostListByID(int postID) throws SQLException, NamingException {
+        PostDTO post = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(POST_LIST);
                 ptm.setInt(1, postID);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
@@ -296,13 +337,13 @@ public class PostDAOAdmin {
             if (con != null) {
 //          3. Create Statement Object
                 ptm = con.prepareStatement(ADD_POST);
-                ptm.setInt(1, dto.getPostID());
-                ptm.setString(2, dto.getSeller().getPhone());
-                ptm.setString(3, dto.getTitle());
-                ptm.setDate(4, (Date) dto.getPostDate());
-                ptm.setBoolean(5, dto.isStatus());
-                ptm.setString(6, dto.getContent());
-                ptm.setString(7, dto.getThumbnail());
+
+                ptm.setString(1, dto.getSeller().getPhone());
+                ptm.setString(2, dto.getTitle());
+                ptm.setDate(3, Date.valueOf(LocalDate.now()));
+                ptm.setBoolean(4, dto.isStatus());
+                ptm.setString(5, dto.getContent());
+                ptm.setString(6, dto.getThumbnail());
 
 //          4. Execute Query
                 int affectRow = ptm.executeUpdate();
@@ -351,7 +392,7 @@ public class PostDAOAdmin {
                 statement = con.prepareStatement(GET_PRODUCTID_IN_DB);
                 statement.setString(1, dto.getSeller().getPhone());
                 statement.setString(2, dto.getTitle());
-                statement.setDate(3, (java.sql.Date) dto.getPostDate());
+                statement.setDate(3, Date.valueOf(LocalDate.now()));
                 statement.setBoolean(4, dto.isStatus());
                 statement.setString(5, dto.getContent());
                 statement.setString(6, dto.getThumbnail());
@@ -405,5 +446,44 @@ public class PostDAOAdmin {
 
         }
         return result;
+    }
+
+    public PostDTO updatePost(PostDTO dto) throws NamingException, SQLException {
+        Connection con = null;
+        PreparedStatement statement = null;
+       
+
+        try {
+//            1. make connection
+            con = DBHelper.makeConnection();
+
+//            2. Create sql string 
+            if (con != null) {
+////                 public static final String UPDATE_POST = "UPDATE tblPost\n"
+//            + "SET title = ? , content = ? , thumbnail = ?\n"
+//            + "WHERE postID = ? ";
+                statement = con.prepareStatement(UPDATE_POST);
+                statement.setString(1, dto.getTitle());
+                statement.setString(2, dto.getContent());
+                statement.setString(3, dto.getThumbnail());
+                statement.setInt(4, dto.getPostID());
+
+//          4. Execute Query
+                int affectRow = statement.executeUpdate();
+
+//          5. Process result
+          
+
+            }// end if connection is not null
+
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return null;
     }
 }
