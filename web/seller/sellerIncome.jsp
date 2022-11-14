@@ -32,7 +32,7 @@
 
                 <!-- Sidebar - Brand -->
                 <a href="sellerPage" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
-                                                                           height="38px"></a>
+                                                                      height="38px"></a>
                 <!-- Divider -->
                 <hr class="sidebar-divider my-0">
 
@@ -194,7 +194,7 @@
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link income-btn" id="delivered-income-tab" data-toggle="tab"
                                             data-target="#delivered-income-tab-pane" type="button" role="tab" aria-controls="delivered-income-tab-pane"
-                                            aria-selected="true"onclick="filterChart('delivered-monthly', 'delivered-income-table')">
+                                            aria-selected="true" onclick="filterChart('delivered-monthly', 'delivered-income-table')">
                                         Đã giao
                                     </button>
                                 </li>
@@ -213,7 +213,7 @@
                                             <jsp:useBean id="date" class="java.util.Date" />
                                             <fmt:formatDate var="curMonth" value="${date}" pattern="MM" />
                                             <c:forEach var="month" items="${requestScope.LIST_MONTH}">
-                                                <option value="${month}" <c:if test="${month eq curMonth}">selected="select"</c:if>>Tháng ${month}</option>
+                                                <option value="<c:if test="${month < 10}">0</c:if>${month}" <c:if test="${month eq curMonth}">selected="select"</c:if>>Tháng ${month}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -341,7 +341,7 @@
                                         <select name="monthly" id="delivered-monthly" value=""
                                                 onchange="filterChart('delivered-monthly', 'delivered-income-table')">
                                             <c:forEach var="month" items="${requestScope.LIST_MONTH}">
-                                                <option value="${month}" <c:if test="${month eq curMonth}">selected="select"</c:if>>Tháng ${month}</option>
+                                                <option value="<c:if test="${month < 10}">0</c:if>${month}" <c:if test="${month eq curMonth}">selected="select"</c:if>>Tháng ${month}</option>
                                             </c:forEach>
                                         </select>
                                     </div>
@@ -408,8 +408,7 @@
                                                                                                         <c:set var="productImage" value="${productBill.product.imagelink}"></c:set>
                                                                                                             <tr>
                                                                                                                 <td>
-                                                                                                                    <img src="${productImage[0]}"
-                                                                                                                     alt="Image for ${productBill.product.name}">
+                                                                                                                    <img src="${productImage[0]}" alt="Image for ${productBill.product.name}" >
                                                                                                             </td>
                                                                                                             <td>
                                                                                                                 <p>${productBill.product.name}

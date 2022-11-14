@@ -3,64 +3,62 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nestf.controller.AD;
+package com.nestf.controller.AD.users;
 
-import com.nestf.account.AccountDAO;
 import com.nestf.account.AccountDTO;
-import com.nestf.dao.ADMIN.SellerDAOAdmin;
+import com.nestf.billdetail.BillDetailDAO;
+import com.nestf.billdetail.BillDetailDTO;
+import com.nestf.dao.ADMIN.CustomerDAOAdmin;
+import com.nestf.util.MyAppConstant;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+import javax.naming.NamingException;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import static org.joda.time.DateTimeFieldType.year;
 
 /**
  *
- * @author Admin
+ * @author NameIsDuy
  */
-@WebServlet(name = "AddNewSeller", urlPatterns = {"/AddNewSeller"})
-public class AddNewSeller extends HttpServlet {
-
-    private static final String SUCCESS = "manageSellerPage";
-    private static final String ERROR = "manageSellerPage";
+@WebServlet(name = "CustomerDetailServlet", urlPatterns = {"/CustomerDetailServlet"})
+public class CustomerDetailServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR;
-        try {
-            String phone = request.getParameter("phone").trim();
-            String password = request.getParameter("password");
-            String name = request.getParameter("name");
-            String address = request.getParameter("address");
-            boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
-            int point = 0;
-            String role = "SE";
-            AccountDAO dao = new AccountDAO();
-            AccountDTO acc = new AccountDTO(phone, password, name, address, gender, point, role);
-            if (dao.getUserByPhone(phone) != null) {
-                request.setAttribute("ERROR", "Số điện thoại đã có người đăng ký");
-                request.getRequestDispatcher(url).forward(request, response);
-            } else {
-                dao.insert(acc);
-                int month = java.time.LocalDateTime.now().getMonth().getValue();
-                int year = java.time.LocalDateTime.now().getYear();
-                String choosetime = "" + year + "-" + month;
-                List<AccountDTO> manageSeller = SellerDAOAdmin.getListSellerIncome(month, year);
-                HttpSession session = request.getSession();
-                session.setAttribute("MANAGE_SELLER", manageSeller);
-                session.setAttribute("MONTH", choosetime);
-                url = SUCCESS;
-                response.sendRedirect(url);
-            }
 
-        } catch (Exception e) {
-            log("Error at RegisterServlet: " + e.toString());
+        ServletContext context = request.getServletContext();
+        Properties siteMap = (Properties) context.getAttribute("SITEMAP");
+        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.MANAGE_CUSTOMER_PAGE);
+        try {
+            String cusPhone = request.getParameter("phone");
+            List<AccountDTO> listDetail = CustomerDAOAdmin.getDetailList(cusPhone);
+            BillDetailDAO billDAO = new BillDetailDAO();
+            List<BillDetailDTO> listBillDetail = null;
+            List<BillDetailDTO> listCusBillDetail = new ArrayList<>();
+            for (AccountDTO acc : listDetail) {
+                if (acc.getBillStatus().equals("Đã giao") || acc.getBillStatus().equals("Đã hủy")) {
+                    listBillDetail = billDAO.getBillDetail(acc.getBillID());
+                    listCusBillDetail.addAll(listBillDetail);
+                }
+            }
+            if (listDetail != null) {
+                request.setAttribute("BILL_DETAIL_LIST", listCusBillDetail);
+                request.setAttribute("CUS_DETAIL_LIST", listDetail);
+            }
+        } catch (SQLException e) {
+            log("Error at BlockCustomerServlet_SQL: " + e.getMessage());
+        } catch (NamingException e) {
+            log("Error at BlockCustomerServlet_Naming: " + e.getMessage());
+        } finally {
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

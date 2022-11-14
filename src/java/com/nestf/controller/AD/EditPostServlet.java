@@ -3,16 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nestf.controller.AD.users;
+package com.nestf.controller.AD;
 
-import com.nestf.account.AccountDTO;
-import com.nestf.dao.ADMIN.CustomerDAOAdmin;
+import com.nestf.dao.ADMIN.PostDAOAdmin;
+import com.nestf.post.PostDTO;
 import com.nestf.util.MyAppConstant;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.NamingException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -24,10 +25,10 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author ADMIN
+ * @author toanm
  */
-@WebServlet(name = "CustomerFilterServlet", urlPatterns = {"/CustomerFilterServlet"})
-public class CustomerFilterServlet extends HttpServlet {
+@WebServlet(name = "EditPostServlet", urlPatterns = {"/EditPostServlet"})
+public class EditPostServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,52 +40,25 @@ public class CustomerFilterServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException, NamingException {
         response.setContentType("text/html;charset=UTF-8");
-        response.setCharacterEncoding("utf-8");
+        request.setCharacterEncoding("utf-8");
         ServletContext context = request.getServletContext();
         Properties siteMap = (Properties) context.getAttribute("SITEMAP");
-        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.MANAGE_CUSTOMER_PAGE);
-        String btAction = request.getParameter("btAction");
-
-        boolean result = false;
-        try {
-            HttpSession session = request.getSession();
-            List<AccountDTO> listCustomer = null;
-            if (btAction.equals("all")) {
-                listCustomer = CustomerDAOAdmin.getAllCustomer();
-                session.setAttribute("LIST_CUSTOMER", listCustomer);
-            } else if (btAction.equals("blocked")) {
-                listCustomer = CustomerDAOAdmin.getBlockCustomer();
-                session.setAttribute("LIST_CUSTOMER", listCustomer);
+        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.EDIT_POST_PAGE);
+        
+        try{
+            int postID = Integer.parseInt(request.getParameter("postID"));
+            PostDTO post = PostDAOAdmin.getPostListActiveByID(postID);
+            if (post != null) {
+                request.setAttribute("POST_DETAIL", post);
+                url = (String) siteMap.get(MyAppConstant.AdminFeatures.EDIT_POST_PAGE);
             }
-//            if (btAction.equals("xacnhan")) {
-//                listCustomer = CustomerDAOAdmin.getConfirmBill(1);
-//                request.setAttribute("SORT_CUSTOMER", listCustomer);
-//            }
-//            if (btAction.equals("layhang")) {
-//                listCustomer = CustomerDAOAdmin.getConfirmBill(2);
-//                request.setAttribute("SORT_CUSTOMER", listCustomer);
-//            }
-//            if (btAction.equals("danggiao")) {
-//                listCustomer = CustomerDAOAdmin.getConfirmBill(3);
-//                request.setAttribute("SORT_CUSTOMER", listCustomer);
-//            }
-//            if (btAction.equals("dagiao")) {
-//                listCustomer = CustomerDAOAdmin.getConfirmBill(4);
-//                request.setAttribute("SORT_CUSTOMER", listCustomer);
-//            }
-//            if (btAction.equals("dahuy")) {
-//                listCustomer = CustomerDAOAdmin.getConfirmBill(5);
-//                request.setAttribute("SORT_CUSTOMER", listCustomer);
-//            }
-
-
         } catch (SQLException e) {
-            log("Error at CustomerFilterServlet_SQL: " + e.getMessage());
+            log("Error at ViewProductDetailServlet: " + e.getMessage());
         } catch (NamingException e) {
-            log("Error at CustomerFilterServlet_Naming: " + e.getMessage());
-        } finally {
+            log("Error at ViewProductDetailServlet: " + e.getMessage());
+        } finally{
             request.getRequestDispatcher(url).forward(request, response);
         }
     }
@@ -101,7 +75,13 @@ public class CustomerFilterServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(EditPostServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NamingException ex) {
+            Logger.getLogger(EditPostServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -115,7 +95,13 @@ public class CustomerFilterServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(EditPostServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NamingException ex) {
+            Logger.getLogger(EditPostServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

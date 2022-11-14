@@ -397,8 +397,13 @@
                                                     if (selectValue !== 0)
                                                         select.selectedIndex = 0;
 
-                                                    if (input.length === 0)
-                                                        count = ${numOfProducts};
+                                                    if (input.length === 0) {
+                                                        if (txtCount === 'product-count') {
+                                                            count = ${numOfProducts};
+                                                        } else {
+                                                            count = ${numOfOutOfStocks};
+                                                        }
+                                                    }
                                                     document.getElementById(txtCount).innerHTML = count + " Sản phẩm";
                                                 }
         </script>

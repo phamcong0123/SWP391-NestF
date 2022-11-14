@@ -31,6 +31,12 @@ function allProduct() {
 
     var allProductTabPane = document.getElementById('all-product-tab-pane');
     allProductTabPane.classList.add('active', 'show');
+
+    document.getElementById('categoryOutOfStockOption').selectedIndex = 0;
+    filterCateFunc('categoryOption', 'out-of-stock-count');
+    
+    document.getElementById('txtOutOfStockSearch').value = '';
+    searchFunc('txtOutOfStockSearch', 'out-of-stock-count');
 }
 
 function outOfStock() {
@@ -44,6 +50,12 @@ function outOfStock() {
 
     var outOfStockTabPane = document.getElementById('out-of-stock-tab-pane');
     outOfStockTabPane.classList.add('active', 'show');
+
+    document.getElementById('categoryOption').selectedIndex = 0;
+    filterCateFunc('categoryOption', 'product-count');
+
+    document.getElementById('txtProductSearch').value = '';
+    searchFunc('txtProductSearch', 'product-count');
 }
 
 function removeActiveAndShow() {

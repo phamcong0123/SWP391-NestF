@@ -187,9 +187,12 @@
                                         data-target="#wait-confirm-tab-pane" type="button" role="tab"
                                         aria-controls="wait-confirm-tab-pane" aria-selected="true" onclick="processOrder()">
                                     Chờ xác nhận
-                                    <span class="badge badge-danger badge-counter"><c:if test="${requestScope.COUNTER_1 != 0}">
+
+                                    <c:if test="${requestScope.COUNTER_1 != 0}">
+                                        <span class="badge badge-danger badge-counter">
                                             ${requestScope.COUNTER_1}
-                                        </c:if> </span>
+                                        </span>
+                                    </c:if> 
                                 </button>
                             </li>
 
@@ -199,9 +202,9 @@
                                         data-target="#wait-delivery-tab-pane" type="button" role="tab"
                                         aria-controls="wait-delivery-tab-pane" aria-selected="true" onclick="processOrder2()">
                                     Chờ lấy hàng
-                                    <span class="badge badge-danger badge-counter"><c:if test="${requestScope.COUNTER_2 != 0}">
-                                            ${requestScope.COUNTER_2}
-                                        </c:if></span>
+                                    <c:if test="${requestScope.COUNTER_2 != 0}">
+                                        <span class="badge badge-danger badge-counter">${requestScope.COUNTER_2}</span>
+                                    </c:if>
                                 </button>
                             </li>
 
