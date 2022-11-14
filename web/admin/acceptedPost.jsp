@@ -393,7 +393,7 @@
                                                 <td>${post.thumbnail}</td>
                                                 <td>
                                                     <a href="loadArticle?postID=${post.postID}" class="view" title="View" data-toggle="tooltip"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                                                    <a href="editPostAction?postID=${product.productID}&productType=accepted" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
+                                                    <a href="editPostAction?postID=${post.postID}" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
                                                     <a href="pendingPost?postID=${post.postID}" class="delete" title="Delete" data-toggle="tooltip"><i class="fa fa-times" aria-hidden="true"></i></a>
                                                 </td>
                                             </tr>

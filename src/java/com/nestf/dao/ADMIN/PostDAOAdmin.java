@@ -39,6 +39,9 @@ public class PostDAOAdmin {
     private static final String ADD_POST = "INSERT INTO tblPost (adPhone, title, postDate, status, content , thumbnail) "
             + " VALUES(?,?,?,?,?,?)";
     private static final String CHECK_DUPLICATE_POSTID = "SELECT postID from tblPost WHERE postID = ?";
+    public static final String UPDATE_POST = "UPDATE tblPost\n"
+            + "SET title = ? , content = ? , thumbnail = ?\n"
+            + "WHERE postID = ? ";
 
     public static List<PostDTO> getPostListActive() throws SQLException, NamingException {
         List<PostDTO> list = new ArrayList();
@@ -443,5 +446,44 @@ public class PostDAOAdmin {
 
         }
         return result;
+    }
+
+    public PostDTO updatePost(PostDTO dto) throws NamingException, SQLException {
+        Connection con = null;
+        PreparedStatement statement = null;
+       
+
+        try {
+//            1. make connection
+            con = DBHelper.makeConnection();
+
+//            2. Create sql string 
+            if (con != null) {
+////                 public static final String UPDATE_POST = "UPDATE tblPost\n"
+//            + "SET title = ? , content = ? , thumbnail = ?\n"
+//            + "WHERE postID = ? ";
+                statement = con.prepareStatement(UPDATE_POST);
+                statement.setString(1, dto.getTitle());
+                statement.setString(2, dto.getContent());
+                statement.setString(3, dto.getThumbnail());
+                statement.setInt(4, dto.getPostID());
+
+//          4. Execute Query
+                int affectRow = statement.executeUpdate();
+
+//          5. Process result
+          
+
+            }// end if connection is not null
+
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
+            if (con != null) {
+                con.close();
+            }
+        }
+        return null;
     }
 }

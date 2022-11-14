@@ -5,16 +5,22 @@
  */
 package com.nestf.controller.AD;
 
+import com.nestf.account.AccountDAO;
+import com.nestf.account.AccountDTO;
 import com.nestf.dao.ADMIN.PostDAOAdmin;
+import com.nestf.dao.ADMIN.ProductDAOAdmin;
+import com.nestf.error.ADMIN.PostError;
 import com.nestf.post.PostDTO;
 import com.nestf.util.MyAppConstant;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,8 +33,8 @@ import javax.servlet.http.HttpSession;
  *
  * @author toanm
  */
-@WebServlet(name = "EditPostServlet", urlPatterns = {"/EditPostServlet"})
-public class EditPostServlet extends HttpServlet {
+@WebServlet(name = "SavePostServlet", urlPatterns = {"/SavePostServlet"})
+public class SavePostServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -41,25 +47,63 @@ public class EditPostServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException, NamingException {
-        response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("utf-8");
         ServletContext context = request.getServletContext();
         Properties siteMap = (Properties) context.getAttribute("SITEMAP");
         String url = (String) siteMap.get(MyAppConstant.AdminFeatures.EDIT_POST_PAGE);
-        
-        try{
-            int postID = Integer.parseInt(request.getParameter("postID"));
-            PostDTO post = PostDAOAdmin.getPostListActiveByID(postID);
-            if (post != null) {
-                request.setAttribute("POST_DETAIL", post);
-                url = (String) siteMap.get(MyAppConstant.AdminFeatures.EDIT_POST_PAGE);
+        String phone = request.getParameter("adPhone");
+        AccountDAO dao = new AccountDAO();
+        AccountDTO admin = dao.getUserByPhone(phone);
+        String title = request.getParameter("title");
+        boolean status = true;
+        String content = request.getParameter("content");
+        String thumbnail = request.getParameter("thumbnail");
+        PostError error = new PostError();
+        boolean foundErr = false;
+
+        try {
+            if (title.isEmpty()) {
+                error.setTitle("Nhập tiêu đề bài viết!");
+                foundErr = true;
             }
-        } catch (SQLException e) {
-            log("Error at ViewProductDetailServlet: " + e.getMessage());
-        } catch (NamingException e) {
-            log("Error at ViewProductDetailServlet: " + e.getMessage());
-        } finally{
-            request.getRequestDispatcher(url).forward(request, response);
+            if (content.isEmpty()) {
+                error.setContent("Nhập nội dung bài viết!");
+                foundErr = true;
+            }
+            if (thumbnail.isEmpty()) {
+                error.setThumbnail("Nhập đường dẫn ảnh của bài viết!");
+                foundErr = true;
+            }
+            PostDTO dto = new PostDTO(admin, title, status, content, thumbnail);
+            request.setAttribute("POST_DETAIL", dto);
+            if (foundErr) {
+                request.setAttribute("POST_ERROR", error);
+                url = (String) siteMap.get(MyAppConstant.AdminFeatures.EDIT_POST_PAGE);
+            } else {
+                HttpSession session = request.getSession();
+                if (dto != null) {
+                    request.setAttribute("PREVIEW_POST", dto);
+                    PostDAOAdmin daoA = new PostDAOAdmin();
+                    PostDTO post = (PostDTO) request.getAttribute("POST_DETAIL");
+                    post = daoA.updatePost(dto);
+                    if (post != null) {
+                        request.setAttribute("POST_DETAIL", post);
+                    }
+                    List<PostDTO> listActivePost = PostDAOAdmin.getPostListActive();
+                    session.setAttribute("LIST_POST", listActivePost);
+                    List<PostDTO> listPending = PostDAOAdmin.getPostListNonActive();
+                    session.setAttribute("LIST_PENDING_POST", listPending);
+
+                }
+            }
+        } catch (NamingException ex) {
+            log("AddNewPostServlet _ Naming " + ex.getMessage());
+        } catch (SQLException ex) {
+            log("AddNewPostServlet _ SQL " + ex.getMessage());
+        } finally {
+
+            RequestDispatcher rd = request.getRequestDispatcher(url);
+            rd.forward(request, response);
         }
     }
 
@@ -78,9 +122,9 @@ public class EditPostServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(EditPostServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SavePostServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NamingException ex) {
-            Logger.getLogger(EditPostServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SavePostServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -98,9 +142,9 @@ public class EditPostServlet extends HttpServlet {
         try {
             processRequest(request, response);
         } catch (SQLException ex) {
-            Logger.getLogger(EditPostServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SavePostServlet.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NamingException ex) {
-            Logger.getLogger(EditPostServlet.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SavePostServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
