@@ -135,7 +135,7 @@
                                 <input required id="number-input" type="number" step="1" value="1" min="1" max="${productDetail.quantity}" onblur="minCheck(this), maxCheck(this)" name="quantity" class="quantity-field text-center p-0">
                                 <img src="img/minus.svg" data-field="quantity" class="button-minus d-inline-block"><br>
                                 <button type="submit" id="buy-button" class="col-3 me-2 border rounded" value="true" name="buynow">Mua ngay</button>
-                                <button type="button" id="buy-button" class="col-3 ms-2 bg-white text-black border border-dark rounded" onclick="checkState(${not empty sessionScope.USER ? productDetail.productID : ''}, this)"><img src="img/cart.svg" class="me-2">Thêm vào giỏ</button>
+                                <button type="button" id="buy-button" class="col-3 ms-2 bg-white text-black border border-dark rounded" onclick="checkState(${not empty sessionScope.USER ? productDetail.productID : 'null'}, this)"><img src="img/cart.svg" class="me-2">Thêm vào giỏ</button>
                             </form>
                         </div>
                     </c:if>

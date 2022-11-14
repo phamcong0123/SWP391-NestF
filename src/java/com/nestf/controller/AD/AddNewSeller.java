@@ -7,13 +7,17 @@ package com.nestf.controller.AD;
 
 import com.nestf.account.AccountDAO;
 import com.nestf.account.AccountDTO;
+import com.nestf.dao.ADMIN.SellerDAOAdmin;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import static org.joda.time.DateTimeFieldType.year;
 
 /**
  *
@@ -23,7 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 public class AddNewSeller extends HttpServlet {
 
     private static final String SUCCESS = "manageSellerPage";
-    private static final String ERROR= "manageSellerPage";
+    private static final String ERROR = "manageSellerPage";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -44,6 +48,13 @@ public class AddNewSeller extends HttpServlet {
                 request.getRequestDispatcher(url).forward(request, response);
             } else {
                 dao.insert(acc);
+                int month = java.time.LocalDateTime.now().getMonth().getValue();
+                int year = java.time.LocalDateTime.now().getYear();
+                String choosetime = "" + year + "-" + month;
+                List<AccountDTO> manageSeller = SellerDAOAdmin.getListSellerIncome(month, year);
+                HttpSession session = request.getSession();
+                session.setAttribute("MANAGE_SELLER", manageSeller);
+                session.setAttribute("MONTH", choosetime);
                 url = SUCCESS;
                 response.sendRedirect(url);
             }
