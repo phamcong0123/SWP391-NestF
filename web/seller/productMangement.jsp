@@ -195,7 +195,7 @@
                                         <div class="input-group">
                                             <span class="input-group-text search-title">Tên sản phẩm</span>
                                             <input type="text" name="txtProductName" id="txtProductSearch" placeholder="Nhập tên sản phẩm..."
-                                                   class="form-control input-search-form" onkeyup="searchFunc('txtProductSearch', 'product-count')">
+                                                   class="form-control input-search-form" onkeyup="searchFunc('txtProductSearch', 'product-count', 'product-detail-1')">
                                             <span class="input-group-text search-product-icon"><i
                                                     class="fa fa-search"></i></span>
                                         </div>
@@ -204,7 +204,7 @@
                                     <form action="#" class="d-inline-block float-right">
                                         <div class="input-group">
                                             <span class="input-group-text search-title">Danh mục</span>
-                                            <select id="categoryOption" onchange="filterCateFunc('categoryOption', 'product-count')"
+                                            <select id="categoryOption" onchange="filterCateFunc('categoryOption', 'product-count', 'product-detail-1')"
                                                     style="border: none; padding: 0 1rem;">
                                                 <option value="0">-- Danh mục --</option>
                                                 <c:if test="${requestScope.CATEGORY_LIST != null}">
@@ -234,7 +234,7 @@
                                             <c:forEach var="product" varStatus="counter" items="${requestScope.SELLER_PRODUCT_LIST}">
                                                 <c:set var="productImage" scope="page" value="${product.imagelink}"></c:set>
 
-                                                    <div class="product-detail col-lg-3">
+                                                    <div class="product-detail-1 col-lg-3">
                                                         <a href="proSelDetail?productID=${product.productID}">
                                                         <img src="${productImage[0]}" alt="Image for ${product.name}">
                                                         <p>${product.name}</p>
@@ -275,7 +275,7 @@
                                         <div class="input-group">
                                             <span class="input-group-text search-title">Tên sản phẩm</span>
                                             <input type="text" name="txtProductName" id="txtOutOfStockSearch" placeholder="Nhập tên sản phẩm..."
-                                                   class="form-control input-search-form" onkeyup="searchFunc('txtOutOfStockSearch', 'out-of-stock-count')">
+                                                   class="form-control input-search-form" onkeyup="searchFunc('txtOutOfStockSearch', 'out-of-stock-count', 'product-detail-2')">
                                             <span class="input-group-text search-product-icon"><i
                                                     class="fa fa-search"></i></span>
                                         </div>
@@ -284,7 +284,7 @@
                                     <form action="#" class="d-inline-block float-right">
                                         <div class="input-group">
                                             <span class="input-group-text search-title">Danh mục</span>
-                                            <select id="categoryOutOfStockOption" onchange="filterCateFunc('categoryOutOfStockOption', 'out-of-stock-count')"
+                                            <select id="categoryOutOfStockOption" onchange="filterCateFunc('categoryOutOfStockOption', 'out-of-stock-count', 'product-detail-2')"
                                                     style="border: none; padding: 0 1rem;">
                                                 <option value="0">-- Danh mục --</option>
                                                 <c:if test="${requestScope.CATEGORY_LIST != null}">
@@ -311,7 +311,7 @@
                                         <c:forEach var="product" varStatus="counter" items="${requestScope.LIST_OUT_OF_STOCK}">
                                             <c:set var="productImage" scope="page" value="${product.imagelink}"></c:set>
 
-                                                <div class="product-detail col-lg-3">
+                                                <div class="product-detail-2 col-lg-3">
                                                     <a href="proSelDetail?productID=${product.productID}">
                                                     <img src="${productImage[0]}" alt="Image for ${product.name}">
                                                     <p>${product.name}</p>
@@ -374,15 +374,16 @@
         <script src="seller/js/productManagement.js"></script>
 
         <script type="text/javascript">
-                                                function searchFunc(txtSearch, txtCount) {
+                                                function searchFunc(txtSearch, txtCount, productDetail) {
                                                     var input, filter, p, txtValue;
                                                     var count = 0;
                                                     input = document.getElementById(txtSearch);
                                                     var select = document.getElementById('categoryOption');
+                                                    var selectOutOfStock = document.getElementById('categoryOutOfStockOption');
                                                     var selectValue = select.value;
                                                     input = stringToSlug(input.value);
                                                     filter = input.toUpperCase();
-                                                    var content = document.getElementsByClassName('product-detail');
+                                                    var content = document.getElementsByClassName(productDetail);
                                                     for (var i = 0; i < content.length; i++) {
                                                         p = content[i].getElementsByTagName('p')[0];
                                                         txtValue = stringToSlug(p.textContent) || stringToSlug(p.innerText);
@@ -396,8 +397,43 @@
 
                                                     if (selectValue !== 0)
                                                         select.selectedIndex = 0;
+                                                    if (selectOutOfStock.value !== 0) {
+                                                        selectOutOfStock.selectedIndex = 0;
+                                                    }
 
                                                     if (input.length === 0) {
+                                                        if (txtCount === 'product-count') {
+                                                            count = ${numOfProducts};
+                                                        } else {
+                                                            count = ${numOfOutOfStocks};
+                                                        }
+                                                    }
+                                                    document.getElementById(txtCount).innerHTML = count + " Sản phẩm";
+                                                }
+
+
+                                                function filterCateFunc(txtFilter, txtCount, productDetail) {
+                                                    var select, p, txtValue;
+                                                    select = document.getElementById(txtFilter);
+                                                    var value = select.value;
+                                                    var text = select.options[select.selectedIndex].text;
+                                                    var content = document.getElementsByClassName(productDetail);
+                                                    var count = 0;
+                                                    for (var i = 0; i < content.length; i++) {
+                                                        p = content[i].getElementsByTagName('p')[1];
+                                                        txtValue = p.textContent || p.innerText;
+                                                        if (txtValue === text) {
+                                                            count++;
+                                                            content[i].style.display = "";
+                                                        } else {
+                                                            content[i].style.display = "none";
+                                                        }
+                                                    }
+
+                                                    if (value == 0) {
+                                                        for (var i = 0; i < content.length; i++) {
+                                                            content[i].style.display = "";
+                                                        }
                                                         if (txtCount === 'product-count') {
                                                             count = ${numOfProducts};
                                                         } else {

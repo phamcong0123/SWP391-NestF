@@ -46,19 +46,17 @@ public class EditPostServlet extends HttpServlet {
         ServletContext context = request.getServletContext();
         Properties siteMap = (Properties) context.getAttribute("SITEMAP");
         String url = (String) siteMap.get(MyAppConstant.AdminFeatures.EDIT_POST_PAGE);
-        
-        try{
+
+        try {
             int postID = Integer.parseInt(request.getParameter("postID"));
             PostDTO post = PostDAOAdmin.getPostListActiveByID(postID);
             if (post != null) {
                 request.setAttribute("POST_DETAIL", post);
                 url = (String) siteMap.get(MyAppConstant.AdminFeatures.EDIT_POST_PAGE);
             }
-        } catch (SQLException e) {
-            log("Error at ViewProductDetailServlet: " + e.getMessage());
-        } catch (NamingException e) {
-            log("Error at ViewProductDetailServlet: " + e.getMessage());
-        } finally{
+        } catch (SQLException | NamingException e) {
+            log("Error at EditPostServlet: " + e.getMessage());
+        } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
     }

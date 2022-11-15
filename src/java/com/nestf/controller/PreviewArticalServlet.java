@@ -3,64 +3,63 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nestf.controller.AD;
+package com.nestf.controller;
 
-import com.nestf.account.AccountDAO;
-import com.nestf.account.AccountDTO;
-import com.nestf.dao.ADMIN.SellerDAOAdmin;
+import com.nestf.post.PostDAO;
+import com.nestf.post.PostDTO;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import static org.joda.time.DateTimeFieldType.year;
 
 /**
  *
- * @author Admin
+ * @author toanm
  */
-@WebServlet(name = "AddNewSeller", urlPatterns = {"/AddNewSeller"})
-public class AddNewSeller extends HttpServlet {
+@WebServlet(name = "PreviewArticalServlet", urlPatterns = {"/PreviewArticalServlet"})
+public class PreviewArticalServlet extends HttpServlet {
 
-    private static final String SUCCESS = "manageSellerPage";
-    private static final String ERROR = "manageSellerPage";
-
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */private static final String ARTICLE_PAGE = "article.jsp";
+    private static final String ERROR_PAGE = "error.jsp";
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        String url = ERROR;
+           int postID = Integer.parseInt(request.getParameter("postID"));
+        String url = ERROR_PAGE;
         try {
-            String phone = request.getParameter("phone").trim();
-            String password = request.getParameter("password");
-            String name = request.getParameter("name");
-            String address = request.getParameter("address");
-            boolean gender = Boolean.parseBoolean(request.getParameter("gender"));
-            int point = 0;
-            String role = "SE";
-            AccountDAO dao = new AccountDAO();
-            AccountDTO acc = new AccountDTO(phone, password, name, address, gender, point, role);
-            if (dao.getUserByPhone(phone) != null) {
-                request.setAttribute("ERROR", "Số điện thoại đã có người đăng ký");
-                request.getRequestDispatcher(url).forward(request, response);
-            } else {
-                dao.insert(acc);
-                int month = java.time.LocalDateTime.now().getMonth().getValue();
-                int year = java.time.LocalDateTime.now().getYear();
-                String choosetime = "" + year + "-" + month;
-                List<AccountDTO> manageSeller = SellerDAOAdmin.getListSellerIncome(month, year);
-                HttpSession session = request.getSession();
-                session.setAttribute("MANAGE_SELLER", manageSeller);
-                session.setAttribute("MONTH", choosetime);
-                url = SUCCESS;
-                response.sendRedirect(url);
+            /* TODO output your page here. You may use following sample code. */
+            PostDAO dao = new PostDAO();
+            PostDTO post = dao.getPostListAll(postID);
+            if (post != null) {
+                request.setAttribute("POST", post);
+                url = ARTICLE_PAGE;
+                List<PostDTO> recommendList = dao.getRandomRecommendPost(postID);
+                if (recommendList != null) {
+                    request.setAttribute("RECOMMEND_POST", recommendList);
+                }
             }
-
-        } catch (Exception e) {
-            log("Error at RegisterServlet: " + e.toString());
+        } catch (NamingException ex) {
+            Logger.getLogger(LoadArticleServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(LoadArticleServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            request.getRequestDispatcher(url).forward(request, response);
         }
     }
 

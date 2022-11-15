@@ -26,8 +26,10 @@ import javax.naming.NamingException;
  */
 public class PostDAOAdmin {
 
-    private static final String POST_LIST = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE status=1 OR status =0 ORDER BY postDate DESC ";
+    private static final String POST_LIST = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] ORDER BY postDate DESC ";
     private static final String POST_LIST_ACTIVE = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE status=1 ORDER BY postDate DESC ";
+    private static final String POST_LIST_ACTIVE_BY_ID = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE postID=? ORDER BY postDate DESC ";
+
     private static final String POST_LIST_NONACTIVE = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE status=0 ORDER BY postDate DESC ";
     public static final String SET_STATUS_TRUE = "UPDATE tblPost\n"
             + "SET status = 1\n"
@@ -36,8 +38,8 @@ public class PostDAOAdmin {
     public static final String SET_STATUS_FALSE = "UPDATE tblPost\n"
             + "SET status = 0\n"
             + "WHERE postID = ?";
-    private static final String ADD_POST = "INSERT INTO tblPost (adPhone, title, postDate, status, content , thumbnail) "
-            + " VALUES(?,?,?,?,?,?)";
+    private static final String ADD_POST = "INSERT INTO tblPost (adPhone, title, postDate, status, content , thumbnail)\n"
+            + " VALUES(?,?,CURRENT_TIMESTAMP,?,?,?)";
     private static final String CHECK_DUPLICATE_POSTID = "SELECT postID from tblPost WHERE postID = ?";
     public static final String UPDATE_POST = "UPDATE tblPost\n"
             + "SET title = ? , content = ? , thumbnail = ?\n"
@@ -80,6 +82,43 @@ public class PostDAOAdmin {
         return list;
     }
 
+    public static List<PostDTO> getPostListAll() throws SQLException, NamingException {
+        List<PostDTO> list = new ArrayList();
+        Connection conn = null;
+        Statement stm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                stm = conn.createStatement();
+                rs = stm.executeQuery(POST_LIST);
+                while (rs.next()) {
+                    int postID = rs.getInt("postID");
+                    String phone = rs.getString("adPhone");
+                    AccountDAO dao = new AccountDAO();
+                    AccountDTO seller = dao.getUserByPhone(phone);
+                    String title = rs.getString("title");
+                    Date date = new Date(rs.getTimestamp("postDate").getTime());
+                    boolean status = rs.getBoolean("status");
+                    String content = rs.getString("content");
+                    String thumbnail = rs.getString("thumbnail");
+                    list.add(new PostDTO(postID, seller, title, date, status, content, thumbnail));
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stm != null) {
+                stm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return list;
+    }
+
     public static PostDTO getPostListActiveByID(int postID) throws SQLException, NamingException {
         PostDTO post = null;
         Connection conn = null;
@@ -88,7 +127,7 @@ public class PostDAOAdmin {
         try {
             conn = DBHelper.makeConnection();
             if (conn != null) {
-                ptm = conn.prepareStatement(POST_LIST_ACTIVE);
+                ptm = conn.prepareStatement(POST_LIST_ACTIVE_BY_ID);
                 ptm.setInt(1, postID);
                 rs = ptm.executeQuery();
                 while (rs.next()) {
@@ -116,7 +155,42 @@ public class PostDAOAdmin {
         }
         return post;
     }
-
+public static PostDTO getPostListNonActiveByID(int postID) throws SQLException, NamingException {
+        PostDTO post = null;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(POST_LIST_NONACTIVE);
+                ptm.setInt(1, postID);
+                rs = ptm.executeQuery();
+                while (rs.next()) {
+                    String phone = rs.getString("adPhone");
+                    AccountDAO dao = new AccountDAO();
+                    AccountDTO seller = dao.getUserByPhone(phone);
+                    String title = rs.getString("title");
+                    Date date = new Date(rs.getTimestamp("postDate").getTime());
+                    boolean status = rs.getBoolean("status");
+                    String content = rs.getString("content");
+                    String thumbnail = rs.getString("thumbnail");
+                    post = new PostDTO(postID, seller, title, date, status, content, thumbnail);
+                }
+            }
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return post;
+    }
     public static PostDTO getPostListByID(int postID) throws SQLException, NamingException {
         PostDTO post = null;
         Connection conn = null;
@@ -340,10 +414,9 @@ public class PostDAOAdmin {
 
                 ptm.setString(1, dto.getSeller().getPhone());
                 ptm.setString(2, dto.getTitle());
-                ptm.setDate(3, Date.valueOf(LocalDate.now()));
-                ptm.setBoolean(4, dto.isStatus());
-                ptm.setString(5, dto.getContent());
-                ptm.setString(6, dto.getThumbnail());
+                ptm.setBoolean(3, dto.isStatus());
+                ptm.setString(4, dto.getContent());
+                ptm.setString(5, dto.getThumbnail());
 
 //          4. Execute Query
                 int affectRow = ptm.executeUpdate();
@@ -380,8 +453,8 @@ public class PostDAOAdmin {
             if (con != null) {
                 String GET_PRODUCTID_IN_DB = "SELECT postID\n"
                         + "FROM tblPost p\n"
-                        + "INNER JOIN tblAccount a"
-                        + "ON a.adPhone=p.phone"
+                        + "INNER JOIN tblAccount a\n"
+                        + "ON a.phone=p.adPhone\n"
                         + "WHERE a.phone = ? \n"
                         + "AND p.title = ?\n"
                         + "AND p.postDate = ? \n"
@@ -448,11 +521,13 @@ public class PostDAOAdmin {
         return result;
     }
 
-    public PostDTO updatePost(PostDTO dto) throws NamingException, SQLException {
+    public boolean updatePost(PostDTO dto) throws NamingException, SQLException {
+
         Connection con = null;
         PreparedStatement statement = null;
-       
-
+        if (dto == null) {
+            return false;
+        }
         try {
 //            1. make connection
             con = DBHelper.makeConnection();
@@ -470,10 +545,10 @@ public class PostDAOAdmin {
 
 //          4. Execute Query
                 int affectRow = statement.executeUpdate();
-
+                if (affectRow > 0) {
+                    return true;
+                }
 //          5. Process result
-          
-
             }// end if connection is not null
 
         } finally {
@@ -484,6 +559,6 @@ public class PostDAOAdmin {
                 con.close();
             }
         }
-        return null;
+        return false;
     }
 }

@@ -11,6 +11,7 @@ import com.nestf.dao.ADMIN.PostDAOAdmin;
 import com.nestf.dao.ADMIN.ProductDAOAdmin;
 import com.nestf.error.ADMIN.PostError;
 import com.nestf.post.PostDTO;
+import com.nestf.product.ProductDTO;
 import com.nestf.util.MyAppConstant;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -51,16 +52,18 @@ public class SavePostServlet extends HttpServlet {
         ServletContext context = request.getServletContext();
         Properties siteMap = (Properties) context.getAttribute("SITEMAP");
         String url = (String) siteMap.get(MyAppConstant.AdminFeatures.EDIT_POST_PAGE);
-        String phone = request.getParameter("adPhone");
-        AccountDAO dao = new AccountDAO();
-        AccountDTO admin = dao.getUserByPhone(phone);
+        int postID = !request.getParameter("postID").isEmpty() ? Integer.parseInt(request.getParameter("postID")) : 0;
         String title = request.getParameter("title");
-        boolean status = true;
+        boolean status = Boolean.parseBoolean(request.getParameter("status"));
         String content = request.getParameter("content");
         String thumbnail = request.getParameter("thumbnail");
         PostError error = new PostError();
         boolean foundErr = false;
-
+        if (status) {
+            request.setAttribute("RETURN_PAGE", "accepted");
+        } else {
+            request.setAttribute("RETURN_PAGE", "pending");
+        }
         try {
             if (title.isEmpty()) {
                 error.setTitle("Nhập tiêu đề bài viết!");
@@ -74,7 +77,7 @@ public class SavePostServlet extends HttpServlet {
                 error.setThumbnail("Nhập đường dẫn ảnh của bài viết!");
                 foundErr = true;
             }
-            PostDTO dto = new PostDTO(admin, title, status, content, thumbnail);
+            PostDTO dto = new PostDTO(postID, title, status, content, thumbnail);
             request.setAttribute("POST_DETAIL", dto);
             if (foundErr) {
                 request.setAttribute("POST_ERROR", error);
@@ -83,18 +86,30 @@ public class SavePostServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 if (dto != null) {
                     request.setAttribute("PREVIEW_POST", dto);
-                    PostDAOAdmin daoA = new PostDAOAdmin();
-                    PostDTO post = (PostDTO) request.getAttribute("POST_DETAIL");
-                    post = daoA.updatePost(dto);
+                }
+                PostDAOAdmin daoA = new PostDAOAdmin();
+
+                status = daoA.updatePost(dto);
+                if (status) {
+                    PostDTO post = PostDAOAdmin.getPostListActiveByID(postID);
                     if (post != null) {
                         request.setAttribute("POST_DETAIL", post);
                     }
                     List<PostDTO> listActivePost = PostDAOAdmin.getPostListActive();
                     session.setAttribute("LIST_POST", listActivePost);
-                    List<PostDTO> listPending = PostDAOAdmin.getPostListNonActive();
-                    session.setAttribute("LIST_PENDING_POST", listPending);
-
+                } else {
+                    PostDTO post = (PostDTO) PostDAOAdmin.getPostListNonActiveByID(postID);
+                    if (post != null) {
+                        request.setAttribute("POST_DETAIL", post);
+                    }
+                    List<PostDTO> listPendingPost = PostDAOAdmin.getPostListNonActive();
+                    session.setAttribute("LIST_PENDING_POST", listPendingPost);
                 }
+
+                List<PostDTO> listActivePost = PostDAOAdmin.getPostListActive();
+                session.setAttribute("LIST_POST", listActivePost);
+                List<PostDTO> listPendingPost = PostDAOAdmin.getPostListNonActive();
+                session.setAttribute("LIST_PENDING_POST", listPendingPost);
             }
         } catch (NamingException ex) {
             log("AddNewPostServlet _ Naming " + ex.getMessage());

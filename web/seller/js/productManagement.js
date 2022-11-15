@@ -31,6 +31,12 @@ function allProduct() {
 
     var allProductTabPane = document.getElementById('all-product-tab-pane');
     allProductTabPane.classList.add('active', 'show');
+
+    document.getElementById('categoryOutOfStockOption').selectedIndex = 0;
+    filterCateFunc('categoryOption', 'out-of-stock-count');
+    
+    document.getElementById('txtOutOfStockSearch').value = '';
+    searchFunc('txtOutOfStockSearch', 'out-of-stock-count', 'product-detail-2');
 }
 
 function outOfStock() {
@@ -44,6 +50,12 @@ function outOfStock() {
 
     var outOfStockTabPane = document.getElementById('out-of-stock-tab-pane');
     outOfStockTabPane.classList.add('active', 'show');
+
+    document.getElementById('categoryOption').selectedIndex = 0;
+    filterCateFunc('categoryOption', 'product-count');
+
+    document.getElementById('txtProductSearch').value = '';
+    searchFunc('txtProductSearch', 'product-count', 'product-detail-1');
 }
 
 function removeActiveAndShow() {
@@ -87,31 +99,4 @@ function stringToSlug(str) {
     str = str.toLowerCase().trim().replace(/[^a-z0-9\-]/g, '-').replace(/-+/g, '-');
 
     return str;
-}
-
-function filterCateFunc(txtFilter, txtCount) {
-    var select, p, txtValue;
-    select = document.getElementById(txtFilter);
-    var value = select.value;
-    var text = select.options[select.selectedIndex].text;
-    var content = document.getElementsByClassName('product-detail');
-    var count = 0;
-    for (var i = 0; i < content.length; i++) {
-        p = content[i].getElementsByTagName('p')[1];
-        txtValue = p.textContent || p.innerText;
-        if (txtValue === text) {
-            count++;
-            content[i].style.display = "";
-        } else {
-            content[i].style.display = "none";
-        }
-    }
-
-    if (value == 0) {
-        for (var i = 0; i < content.length; i++) {
-            content[i].style.display = "";
-            count++;
-        }
-    }
-    document.getElementById(txtCount).innerHTML = count + " Sản phẩm";
 }

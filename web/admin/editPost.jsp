@@ -1,7 +1,7 @@
 <%-- 
-    Document   : dashboard
-    Created on : Oct 9, 2022, 10:17:17 PM
-    Author     : DELL
+Document   : dashboard
+Created on : Oct 9, 2022, 10:17:17 PM
+Author     : DELL
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -263,45 +263,36 @@
 
                                 <br/>
                                 <form action="savePostAction" method="Post">
-
                                     <div class="row">
-
                                         <div class="col-md-6 mb-4">
                                             <div class="form-outline">
                                                 <label class="form-label" for="txtName">Title</label>
-
                                                 <input type="text" id="txtName" name="title" value="${post.title}" class="form-control form-control-lg" />
                                                 <c:if test="${not empty errors.title}">
                                                     <font color="red">
                                                     ${errors.title}
                                                     </font> <br/>
                                                 </c:if>
-
                                             </div>
                                         </div>
-
-                                        <!--                                        <div class="row">
-                                                                                    <div class="col-md-6 mb-4 pb-2">
-                                                                                        <h6 class="mb-2 pb-1">Status: </h6>
-                                                                                        <div class="form-check form-check-inline">
-                                                                                            <input class="form-check-input" type="radio" name="status" id="checkFalse"
-                                                                                                   value="false" checked />
-                                                                                            <label class="form-check-label" for="checkFalse">False</label>
-                                                                                        </div>
-                                                                                        <div class="form-check form-check-inline">
-                                                                                            <input class="form-check-input" type="radio" name="status" id="checkTrue"
-                                                                                                   value="true" />
-                                                                                            <label class="form-check-label" for="checkTrue">True</label>
-                                                                                        </div>
-                                                                                    </div>        
-                                                                                </div>-->
-                                    </div>
-
-                                    <div class="row">
                                         <div class="col-md-6 mb-4 pb-2">
                                             <div class="form-outline">
+                                                <label class="form-label" for="txtName">Thumbnail</label>
+                                                <input type="text" id="txtName" name="thumbnail" value="${post.thumbnail}" class="form-control form-control-lg" />
+                                                <c:if test="${not empty errors.thumbnail}">
+                                                    <font color="red">
+                                                    ${errors.thumbnail}
+                                                    </font> <br/>
+                                                </c:if>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="col-md-6">
+                                        </div>
+                                        <div class=" mb-4 pb-2">
+                                            <div class="form-outline">
                                                 <label class="form-label" for="">Post Content</label>
-
                                                 <textarea name="content" cols="200" rows="20" id="productdesc" class="form-control form-control-lg">
                                                     ${post.content}
                                                 </textarea>
@@ -310,28 +301,18 @@
                                                     ${errors.content}
                                                     </font> <br/>
                                                 </c:if>
-
                                             </div>
-                                        </div>
-                                                <input type="hidden" name="adPhone" value="${ADMIN.getPhone()}"/>
-                                        <div class="col-md-6 mb-4 pb-2">
-                                            <div class="form-outline">
-                                                <label class="form-label" for="txtName">Thumbnail</label>
-                                                
-                                                <input type="text" id="txtName" name="thumbnail" value="${post.thumbnail}" class="form-control form-control-lg" />
-                                                <c:if test="${not empty errors.thumbnail}">
-                                                    <font color="red">
-                                                    ${errors.thumbnail}
-                                                    </font> <br/>
-                                                </c:if>
 
-                                            </div>
                                         </div>
+                                        <input type="hidden" name="adPhone" value="${ADMIN.getPhone()}"/>
+                                        <input type="hidden" name="postID" value="${post.postID}"/>
                                     </div>
 
 
+
+
                                     <div class="mt-4 pt-2 text-center mb-4">
-                                        <a href="loadArticle?postID=${post.postID}" class="btn btn-primary btn-lg" >Preview</a>
+                                        <a href="previewAction?postID=${post.postID}" class="btn btn-primary btn-lg" >Preview</a>
                                         <input class="btn btn-danger btn-lg" type="submit" name="action" value="Submit" />
                                     </div>
                                 </form>

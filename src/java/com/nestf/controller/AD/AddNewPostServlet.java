@@ -83,23 +83,20 @@ public class AddNewPostServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 if (dto != null) {
                     request.setAttribute("PREVIEW_POST", dto);
-                    PostDAOAdmin daoA = new PostDAOAdmin();
-                    PostDTO post = (PostDTO) request.getAttribute("POST_DETAIL");
-                    post = daoA.insertPost(dto);
-                    if (post != null) {
-                        request.setAttribute("POST_DETAIL", post);
-                    }
-                    List<PostDTO> listActivePost = PostDAOAdmin.getPostListActive();
-                    session.setAttribute("LIST_POST", listActivePost);
-                    List<PostDTO> listPending = PostDAOAdmin.getPostListNonActive();
-                    session.setAttribute("LIST_PENDING_POST", listPending);
-
                 }
+                PostDAOAdmin daoA = new PostDAOAdmin();
+                PostDTO post = daoA.insertPost(dto);
+                if (post != null) {
+                    request.setAttribute("POST_DETAIL", post);
+                }
+                List<PostDTO> listActivePost = PostDAOAdmin.getPostListActive();
+                session.setAttribute("LIST_POST", listActivePost);
+                List<PostDTO> listPending = PostDAOAdmin.getPostListNonActive();
+                session.setAttribute("LIST_PENDING_POST", listPending);
             }
         } catch (NamingException ex) {
-            log("AddNewPostServlet _ Naming " + ex.getMessage());
         } catch (SQLException ex) {
-            log("AddNewPostServlet _ SQL " + ex.getMessage());
+            log("Error at AddNewPostServlet_SQL: " + ex.getMessage());
         } finally {
 
             RequestDispatcher rd = request.getRequestDispatcher(url);
