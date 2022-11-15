@@ -247,7 +247,7 @@
                             <!-- Content Row -->
 
                             <div class="card-body ">
-                                <c:set var="post" value="${requestScope['POST_DETAIL']}" scope="page"/>
+                                
                                 <c:set var="errors" value="${requestScope.POST_ERROR}"/>
                                 <c:if test="${requestScope.PREVIEW_POST != null}">
                                     <c:if test="${empty errors}">
@@ -260,9 +260,9 @@
                                     </c:if>
                                 </c:if>
                                 <jsp:useBean id="postFunc" class="com.nestf.post.PostDTO"/>
-
+                                <c:set var="post" value="${requestScope['POST_DETAIL']}" scope="page"/>
                                 <br/>
-                                <form action="addNewPostAction" method="Post">
+                                <form action="addNewPostAction" method="Post" enctype="multipart/form-data" >
 
                                     <div class="row">
 
@@ -283,7 +283,7 @@
                                             <div class="form-outline">
                                                 <label class="form-label" for="txtName">Thumbnail</label>
 
-                                                <input type="text" id="txtName" name="thumbnail" value="${post.thumbnail}" class="form-control form-control-lg" />
+                                                <input type="file" id="txtName" name="thumbnail" value="${post.thumbnail}" class="form-control form-control-lg" />
                                                 <c:if test="${not empty errors.thumbnail}">
                                                     <font color="red">
                                                     ${errors.thumbnail}

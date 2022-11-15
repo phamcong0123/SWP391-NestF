@@ -421,7 +421,6 @@
                                                             <c:if test="${not empty image}">
                                                                 <img src="${image}" width="50px" height="50px">
                                                             </c:if>
-                                                            
                                                         </div>
                                                     </div>
                                                 </div>

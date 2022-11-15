@@ -260,9 +260,8 @@ Author     : DELL
                                     </c:if>
                                 </c:if>
                                 <jsp:useBean id="postFunc" class="com.nestf.post.PostDTO"/>
-
                                 <br/>
-                                <form action="savePostAction" method="Post">
+                                <form action="savePostAction" method="Post" enctype="multipart/form-data">
                                     <div class="row">
                                         <div class="col-md-6 mb-4">
                                             <div class="form-outline">
@@ -278,19 +277,27 @@ Author     : DELL
                                         <div class="col-md-6 mb-4 pb-2">
                                             <div class="form-outline">
                                                 <label class="form-label" for="txtName">Thumbnail</label>
-                                                <input type="text" id="txtName" name="thumbnail" value="${post.thumbnail}" class="form-control form-control-lg" />
-                                                <c:if test="${not empty errors.thumbnail}">
-                                                    <font color="red">
-                                                    ${errors.thumbnail}
-                                                    </font> <br/>
-                                                </c:if>
+                                                <div class="row">
+                                                    <div class="col-lg-10">
+                                                        <input type="file" id="txtName" name="thumbnail" value="${post.thumbnail}" class="form-control form-control-lg" />
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <c:if test="${not empty post.thumbnail}">
+                                                            <img src="${post.thumbnail}" width="50px" height="50px">
+                                                        </c:if>
+                                                    </div>
+
+                                                    <c:if test="${not empty errors.thumbnail}">
+                                                        <font color="red">
+                                                        ${errors.thumbnail}
+                                                        </font> <br/>
+                                                    </c:if>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div>
-                                        <div class="col-md-6">
-                                        </div>
-                                        <div class=" mb-4 pb-2">
+                                    <div class="row">
+                                        <div class=" mb-4 pb-2 col-12">
                                             <div class="form-outline">
                                                 <label class="form-label" for="">Post Content</label>
                                                 <textarea name="content" cols="200" rows="20" id="productdesc" class="form-control form-control-lg">
@@ -302,15 +309,10 @@ Author     : DELL
                                                     </font> <br/>
                                                 </c:if>
                                             </div>
-
                                         </div>
                                         <input type="hidden" name="adPhone" value="${ADMIN.getPhone()}"/>
-                                        <input type="hidden" name="postID" value="${post.postID}"/>
+                                        <input type="hidden" name="postID" value="${post.postID}"/>                                        
                                     </div>
-
-
-
-
                                     <div class="mt-4 pt-2 text-center mb-4">
                                         <a href="previewAction?postID=${post.postID}" class="btn btn-primary btn-lg" >Preview</a>
                                         <input class="btn btn-danger btn-lg" type="submit" name="action" value="Submit" />
@@ -318,45 +320,46 @@ Author     : DELL
                                 </form>
                             </div>
                         </div>
-                    </div>
-                    <br>
 
-                    <!-- End of Page Wrapper -->
+                        <br>
 
-                    <!-- Scroll to Top Button-->
-                    <a class="scroll-to-top rounded" href="#page-top">
-                        <i class="fas fa-angle-up"></i>
-                    </a>
+                        <!-- End of Page Wrapper -->
 
-                    <!-- Logout Modal-->
-                    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                         aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">×</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">Select "Logout" below if you are ready to end your current session.
-                                </div>
-                                <div class="modal-footer">
-                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                                    <a class="btn btn-dark" href="logoutServlet">Logout</a>
+                        <!-- Scroll to Top Button-->
+                        <a class="scroll-to-top rounded" href="#page-top">
+                            <i class="fas fa-angle-up"></i>
+                        </a>
+
+                        <!-- Logout Modal-->
+                        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">×</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                        <a class="btn btn-dark" href="logoutServlet">Logout</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <footer class="sticky-footer bg-white sticky-footer">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; NestF 2022</span>
-                    </div>
-                </div>
-            </footer>
+            <!--            <footer class="sticky-footer bg-white sticky-footer">
+                            <div class="container my-auto">
+                                <div class="copyright text-center my-auto">
+                                    <span>Copyright &copy; NestF 2022</span>
+                                </div>
+                            </div>
+                        </footer>-->
             <!-- End of Footer -->
             <!-- Bootstrap core JavaScript-->
             <script src="vendor/jquery/jquery.min.js"></script>
