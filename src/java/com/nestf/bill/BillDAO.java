@@ -172,7 +172,8 @@ public class BillDAO {
         return check;
     }
     private final String CANCEL = "UPDATE tblBill SET cancelReason = ? WHERE billID = ?";
-    public boolean addCancelReason(int billID, String cancelReason) throws NamingException, SQLException{
+
+    public boolean addCancelReason(int billID, String cancelReason) throws NamingException, SQLException {
         boolean check = false;
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -194,16 +195,17 @@ public class BillDAO {
         }
         return check;
     }
-    
-    private static final String GET_LIST_ORDER = "SELECT bi.billID, cusPhone, bi.address, bi.transactionID, statusID, time, bi.total, cancelReason\n" +
-                                                "FROM tblBill bi\n" +
-                                                "JOIN tblBillDetail bilDet\n" +
-                                                "ON bi.billID = bilDet.billID\n" +
-                                                "JOIN tblProductSeller proSel\n" +
-                                                "ON proSel.productID = bilDet.productID\n" +
-                                                "WHERE proSel.selPhone = ? AND isActive = 1\n" +
-                                                "GROUP BY bi.billID, cusPhone, bi.address, bi.transactionID, statusID, time, bi.total, cancelReason\n" +
-                                                "ORDER BY statusID ASC, time DESC";
+
+    private static final String GET_LIST_ORDER = "SELECT bi.billID, cusPhone, bi.address, bi.transactionID, statusID, time, bi.total, cancelReason\n"
+            + "FROM tblBill bi\n"
+            + "JOIN tblBillDetail bilDet\n"
+            + "ON bi.billID = bilDet.billID\n"
+            + "JOIN tblProductSeller proSel\n"
+            + "ON proSel.productID = bilDet.productID\n"
+            + "WHERE proSel.selPhone = ? AND isActive = 1\n"
+            + "GROUP BY bi.billID, cusPhone, bi.address, bi.transactionID, statusID, time, bi.total, cancelReason\n"
+            + "ORDER BY statusID ASC, time DESC";
+
     public List<BillDTO> getListOrder(String selPhone) throws SQLException {
         List<BillDTO> list = null;
         Connection conn = null;
@@ -217,7 +219,7 @@ public class BillDAO {
                 ptm = conn.prepareStatement(GET_LIST_ORDER);
                 ptm.setString(1, selPhone);
                 rs = ptm.executeQuery();
-                while (rs.next()) {                    
+                while (rs.next()) {
                     int billID = rs.getInt("billID");
                     String cusPhone = rs.getString("cusPhone");
                     String address = rs.getString("address");
@@ -236,16 +238,23 @@ public class BillDAO {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) rs.close();
-            if (ptm != null) ptm.close();
-            if (conn != null) conn.close();
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
         }
         return list;
     }
-    
+
     private final String UPDATE_STATUS = "UPDATE tblBill\n"
-                                        + "SET statusID = ?\n"
-                                        + "WHERE billID = ?";
+            + "SET statusID = ?\n"
+            + "WHERE billID = ?";
+
     public boolean updateBillStatus(int orderID, int statusID) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -261,15 +270,20 @@ public class BillDAO {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (ptm != null) ptm.close();
-            if (conn != null) conn.close();
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
         }
         return check;
     }
-    
-    private final String CANCEL_ORDER = "UPDATE tblBill\n" +
-                                        "SET statusID = ?, cancelReason = ?\n" +
-                                        "WHERE billID = ?";
+
+    private final String CANCEL_ORDER = "UPDATE tblBill\n"
+            + "SET statusID = ?, cancelReason = ?\n"
+            + "WHERE billID = ?";
+
     public boolean updateBillStatus(int orderID, int statusID, String reason) throws SQLException {
         boolean check = false;
         Connection conn = null;
@@ -286,15 +300,20 @@ public class BillDAO {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (ptm != null) ptm.close();
-            if (conn != null) conn.close();
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
         }
         return check;
     }
-    
-    private final String GET_LIST_DELIVERY_ORDER = "SELECT billID, cusPhone, address, transactionID, statusID, time, total, cancelReason\n" +
-                                                    "FROM tblBill\n" +
-                                                    "WHERE statusID = 3";
+
+    private final String GET_LIST_DELIVERY_ORDER = "SELECT billID, cusPhone, address, transactionID, statusID, time, total, cancelReason\n"
+            + "FROM tblBill\n"
+            + "WHERE statusID = 3";
+
     public List<BillDTO> getListDeliveryOrder() throws SQLException {
         List<BillDTO> list = null;
         Connection conn = null;
@@ -307,7 +326,7 @@ public class BillDAO {
             if (conn != null) {
                 ptm = conn.prepareStatement(GET_LIST_DELIVERY_ORDER);
                 rs = ptm.executeQuery();
-                while (rs.next()) {                    
+                while (rs.next()) {
                     int billID = rs.getInt("billID");
                     String cusPhone = rs.getString("cusPhone");
                     String address = rs.getString("address");
@@ -326,10 +345,180 @@ public class BillDAO {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (rs != null) rs.close();
-            if (ptm != null) ptm.close();
-            if (conn != null) conn.close();
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
         }
         return list;
+    }
+    private final String GET_TODAY_REVENUE = "SELECT sum(total) as revenue\n"
+            + "FROM [NestF].[dbo].[tblBill]\n"
+            + "WHERE CAST(tblBill.[time] as date) = CAST(GETDATE() as date)";
+
+    public double getTodayRevenue() throws SQLException {
+        double revenue = 0;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_TODAY_REVENUE);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    revenue = rs.getDouble("revenue");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return revenue;
+    }
+    private final String GET_THIS_YEAR_REVENUE = "SELECT sum(total) as revenue\n"
+            + "FROM [NestF].[dbo].[tblBill]\n"
+            + "where YEAR(tblBill.[time]) = YEAR(GETDATE())";
+
+    public double getThisYearRevenue() throws SQLException {
+        double revenue = 0;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_THIS_YEAR_REVENUE);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    revenue = rs.getDouble("revenue");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return revenue;
+    }
+    private final String GET_NUM_OF_BILLS_TODAY = "SELECT count(billID) as billCount\n"
+            + "FROM [NestF].[dbo].[tblBill]\n"
+            + "where CAST(tblBill.time as date) = CAST(GETDATE() as date)";
+
+    public int getTodayNumOfBills() throws SQLException {
+        int count = 0;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_NUM_OF_BILLS_TODAY);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    count = rs.getInt("billCount");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return count;
+    }
+    private final String GET_NUM_OF_PENDING_BILLS_TODAY = "SELECT count(billID) as billCount\n"
+            + "FROM [NestF].[dbo].[tblBill]\n"
+            + "where CAST(tblBill.time as date) = CAST(GETDATE() as date) and statusID between 1 and 2";
+
+    public int getTodayNumOfPendingBills() throws SQLException {
+        int count = 0;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_NUM_OF_PENDING_BILLS_TODAY);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    count = rs.getInt("billCount");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return count;
+    }
+    private final String GET_NUM_OF_PENDING_BILLS  = "SELECT count(billID) as billCount\n"
+                                            + "FROM [NestF].[dbo].[tblBill]\n"
+                                            + "where statusID between 1 and 2";
+    public int getNumOfPendingBills() throws SQLException {
+        int count = 0;
+        Connection conn = null;
+        PreparedStatement ptm = null;
+        ResultSet rs = null;
+        try {
+            conn = DBHelper.makeConnection();
+            if (conn != null) {
+                ptm = conn.prepareStatement(GET_NUM_OF_PENDING_BILLS);
+                rs = ptm.executeQuery();
+                if (rs.next()) {
+                    count = rs.getInt("billCount");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ptm != null) {
+                ptm.close();
+            }
+            if (conn != null) {
+                conn.close();
+            }
+        }
+        return count;
     }
 }

@@ -13,7 +13,7 @@
 <%@ page import="java.util.*,java.sql.*" %>
 <%@ page import="com.google.gson.Gson"%>
 <%@ page import="com.google.gson.JsonObject"%>
-
+<jsp:useBean id="formatter" class="com.nestf.util.FormatPrinter"/>
 <%
     Gson gsonObj = new Gson();
     Map<Object, Object> map = null;
@@ -440,7 +440,7 @@
                                                 <div class="col mr-2">
                                                     <div class="text-xs font-weight-bold text-dark text-uppercase mb-1">
                                                         Earnings (Today)</div>
-                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">${formatter.printMoney(requestScope.TODAY_REVENUE)}</div>
                                                 </div>
                                                 <div class="col-auto">
                                                     <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -458,7 +458,7 @@
                                                 <div class="col mr-2">
                                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                         Earnings (Annual)</div>
-                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">${formatter.printMoney(requestScope.YEAR_REVENUE)}</div>
                                                 </div>
                                                 <div class="col-auto">
                                                     <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -474,17 +474,32 @@
                                         <div class="card-body">
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col mr-2">
-                                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
+                                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Order Processed (Today)
                                                     </div>
                                                     <div class="row no-gutters align-items-center">
+                                                        <c:set var="percentage" value="${requestScope.TODAY_BILLS eq 0 ? 100 : (1-(requestScope.TODAY_PENDINGS/requestScope.TODAY_BILLS))*100}"/>
                                                         <div class="col-auto">
-                                                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">${percentage}%</div>
                                                         </div>
                                                         <div class="col">
                                                             <div class="progress progress-sm mr-2">
-                                                                <div class="progress-bar bg-info" role="progressbar"
-                                                                     style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                                     aria-valuemax="100"></div>
+                                                                <div class="d-inline-block progress-bar bg-info" role="progressbar"
+                                                                     style="width: ${percentage}%" aria-valuenow="${percentage}" aria-valuemin="0"
+                                                                     aria-valuemax="100">                                                                   
+                                                                </div>                                                               
+                                                            </div>
+                                                            <div class="position-absolute text-dark bg-light border border-dark rounded p-2" id="billProcessingBarInfo">
+                                                                <b>Today</b>
+                                                                <div class="row">
+                                                                    <div class="col-10">
+                                                                    No. orders:<br>
+                                                                    Not processed:
+                                                                </div>
+                                                                <div class="col-1">
+                                                                    ${requestScope.TODAY_BILLS}<br>
+                                                                    ${requestScope.TODAY_PENDING}
+                                                                </div>
+                                                                </div>                                                              
                                                             </div>
                                                         </div>
                                                     </div>
@@ -504,8 +519,8 @@
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col mr-2">
                                                     <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                        Pending Products</div>
-                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                                        No. Pending Orders (All time) </div>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">${requestScope.PENDING_BILLS}</div>
                                                 </div>
                                                 <div class="col-auto">
                                                     <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -676,13 +691,13 @@
                 </div>
             </div>
             <!-- Footer -->
-<!--            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; NestF 2022</span>
-                    </div>
-                </div>
-            </footer>-->
+            <!--            <footer class="sticky-footer bg-white">
+                            <div class="container my-auto">
+                                <div class="copyright text-center my-auto">
+                                    <span>Copyright &copy; NestF 2022</span>
+                                </div>
+                            </div>
+                        </footer>-->
             <!-- End of Footer -->                           
             <!-- Bootstrap core JavaScript-->
             <script src="vendor/jquery/jquery.min.js"></script>

@@ -38,7 +38,7 @@ public class MyAppConstant implements Serializable {
     //    Admin
     public static class AdminFeatures {
 
-        public static final String DASHBORAD_PAGE = "dashboard";
+        public static final String DASHBORAD_PAGE = "dashboardPage";
         public static final String INIT_ATTRIBUTE_ACTION = "initAttributeAction";
         public static final String PROFILE_PAGE = "adminProfilePage";
         public static final String EDIT_PROFILE_PAGE = "editAdProfilePage";
@@ -48,6 +48,7 @@ public class MyAppConstant implements Serializable {
         public static final String VIEW_PRODUCT_PAGE = "viewProductDetailPage";
         public static final String EDIT_PRODUCT_PAGE = "editProductPage";
         public static final String PENDING_PRODUCT_PAGE = "pendingProductPage";
+        public static final String REVENUE_BILLCOUNT = "dashboard";
 
 //        User
         public static final String MANAGE_CUSTOMER_PAGE = "manageCustomerPage";

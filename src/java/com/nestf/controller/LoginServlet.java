@@ -40,7 +40,6 @@ public class LoginServlet extends HttpServlet {
     //        String url = (String) siteMap.get(MyAppConstant.LoginFeatures.LOGIN_ACTION);
     private static final String LOGIN_PAGE = "login.jsp";
     private static final String LOAD_USER_CART = "LoadCartServlet";
-    private static final String DASHBOARD = "dashboard.jsp";
     private static final String SELLER_PAGE = "sellerPage";
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)

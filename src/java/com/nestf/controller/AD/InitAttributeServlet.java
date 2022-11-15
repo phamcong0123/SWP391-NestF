@@ -50,7 +50,7 @@ public class InitAttributeServlet extends HttpServlet {
         ServletContext context = request.getServletContext();
 
         Properties siteMap = (Properties) context.getAttribute("SITEMAP");
-        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.DASHBORAD_PAGE);
+        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.REVENUE_BILLCOUNT);
 
         try {
             HttpSession session = request.getSession();
