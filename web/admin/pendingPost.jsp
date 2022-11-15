@@ -39,7 +39,7 @@
                 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
                     <!-- Sidebar - Brand -->
-                    <a href="home" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
+                    <a href="dashboard" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
                                                                          height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
@@ -59,7 +59,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="adminProfilePage">
                             <i class="fa fa-cog fa-chart-area"></i>
-                            <span>Edit Profile</span></a>
+                            <span>Edit profile</span></a>
                     </li>
 
                     <!-- Divider -->
@@ -70,13 +70,13 @@
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProducts"
                            aria-expanded="true" aria-controls="collapseProducts">
                             <i class="fa fa-cube"></i>
-                            <span>Product</span>
+                            <span>Products</span>
                         </a>
                         <div id="collapseProducts" class="collapse" aria-labelledby="headingProducts"
                              data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">List product:</h6>
-                                <a class="collapse-item" href="addNewProductPage">Add new product</a>
+                                <h6 class="collapse-header">List products:</h6>
+                                <a class="collapse-item" href="addNewProductPage">Add new products</a>
                                 <a class="collapse-item" href="accpetedProductPage">Active products</a>
                                 <a class="collapse-item" href="pendingProductPage">Non-active products</a>
                             </div>
@@ -91,13 +91,13 @@
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                            aria-expanded="true" aria-controls="collapseTwo">
                             <i class="fa fa-users"></i>
-                            <span>Users</span>
+                            <span>User</span>
                         </a>
                         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">Manage: </h6>
-                                <a class="collapse-item" href="manageSellerPage">Seller</a>
-                                <a class="collapse-item" href="manageCustomerPage">Customer</a>
+                                <h6 class="collapse-header">Manage :</h6>
+                                <a class="collapse-item" href="manageSellerPage">Sellers</a>
+                                <a class="collapse-item" href="manageCustomerPage">Customers</a>
                             </div>
                         </div>
                     </li>
@@ -106,7 +106,7 @@
                     <hr class="sidebar-divider">
 
                     <!-- Nav Item - Pages Collapse Menu -->
-                    <li class="nav-item active">
+                    <li class="nav-item">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                            aria-expanded="true" aria-controls="collapsePages">
                             <i class="fas fa-fw fa-folder"></i>
@@ -127,18 +127,9 @@
 
                     <!-- Nav Item - Charts -->
                     <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVouchers"
-                           aria-expanded="true" aria-controls="collapseVouchers">
-                            <i class="fa fa-gift"></i>
+                        <a class="nav-link" href="manageVoucherPage">
+                            <i class="fa fa-gift" aria-hidden="true"></i>
                             <span>Voucher</span></a>
-                        <div id="collapseVouchers" class="collapse" aria-labelledby="headingProducts"
-                             data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-                                <h6 class="collapse-header">Manage:</h6>
-                                <a class="collapse-item fw-bold" href="voucher">All voucher types</a>
-                                <a class="collapse-item" href="updateVoucher?act=add">Add/Update voucher type</a>
-                            </div>
-                        </div>
                     </li>
 
                     <!-- Divider -->
@@ -245,29 +236,13 @@
                         <div class="container-fluid">
                             <!--//////////////////////////////////////////////////////Kết thúc phần Chung/////////////////-->
                             <!-- Page Heading -->
-                            <div class="mb-4">
-                                <div class="row">
-                                    <div class="col-9">
-                                        <h1 class="h3 mb-0 text-gray-800">List Pending Posts</h1>
-                                    </div>
-                                    <div class="col-3 ">
-                                        <div class="dropdown float-right">
-                                            <button class="btn btn-dark dropdown-toggle" type="button" data-toggle="dropdown">Filter
-                                                <span class="caret"></span></button>
-                                            <ul class="dropdown-menu px-3 bg-white text-gray-100">
-                                                <li><a href="pendingProductAction">All</a></li>
-                                                <li><a href="pendingProductAction?btAction=noseller">No seller</a></li>
-                                                <li><a href="pendingProductAction?btAction=others">Others</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-
+                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                <h1 class="h3 mb-0 text-gray-800">List Active Posts</h1>
                             </div>
 
                             <!-- Content Row -->
 
-                                 <c:if test="${not empty sessionScope.LIST_PENDING_POST}">
+                            <c:if test="${not empty sessionScope.LIST_PENDING_POST}">
                                 <table class="table table-striped table-hover table-bordered">
                                     <thead>
                                         <tr>
@@ -276,7 +251,7 @@
                                             <th>Title</th>
                                             <th>Post Date</th>
                                             <th>Status</th>
-<!--                                            <th>Content</th>-->
+                                            <!--<th>Content</th>-->
                                             <th>thumbnail</th>
                                             <th>Action</th>
                                         </tr>
@@ -284,18 +259,17 @@
                                     <tbody>
                                         <c:forEach var="post" items="${sessionScope.LIST_PENDING_POST}">
                                             <tr>
-                                                <jsp:useBean id="date" class="com.nestf.util.FormatPrinter"/> 
                                                 <td>${post.postID}</td>
                                                 <td>${post.seller.phone}</td>
                                                 <td>${post.title}</td>
-                                                <td>${date.printDate(post.postDate)}</td>
+                                                <td>${post.postDate}</td>
                                                 <td>${post.status}</td>
 <!--                                                <td>${post.content}</td>-->
                                                 <td>${post.thumbnail}</td>
                                                 <td>
-                                                    <a href="loadArticle?postID=${post.postID}" class="view" title="View" data-toggle="tooltip"><i class="fa fa-eye" aria-hidden="true"></i></a>
-                                                    <a href="editPostAction?postID=${product.productID}&productType=accepted" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
-                                                    <a href="acceptPost?postID=${post.postID}" class="delete" title="Delete" data-toggle="tooltip"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                                    <a href="viewArtical?postID=${post.postID}" class="view" title="View" data-toggle="tooltip"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                    <a href="editPostAction?postID=${post.postID}" class="Edit" title="Edit" data-toggle="tooltip"><i class="fas fa-edit"></i></a>
+                                                    <a href="acceptPost?postID=${post.postID}" class="delete" title="Confirm" data-toggle="tooltip"><i class="fa fa-check" aria-hidden="true"></i></a>
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -335,13 +309,13 @@
                     </div>
                 </div>
             </div>
-<!--            <footer class="sticky-footer bg-white sticky-footer">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; NestF 2022</span>
-                    </div>
-                </div>
-            </footer>-->
+            <!--            <footer class="sticky-footer bg-white sticky-footer">
+                            <div class="container my-auto">
+                                <div class="copyright text-center my-auto">
+                                    <span>Copyright &copy; NestF 2022</span>
+                                </div>
+                            </div>
+                        </footer>-->
             <!-- End of Footer -->
             <!-- Bootstrap core JavaScript-->
             <script src="vendor/jquery/jquery.min.js"></script>

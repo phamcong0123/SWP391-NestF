@@ -3,32 +3,29 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.nestf.controller.AD;
+package com.nestf.controller;
 
-import com.nestf.dao.ADMIN.PostDAOAdmin;
+import com.nestf.post.PostDAO;
 import com.nestf.post.PostDTO;
-import com.nestf.util.MyAppConstant;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.Properties;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author toanm
  */
-@WebServlet(name = "EditPostServlet", urlPatterns = {"/EditPostServlet"})
-public class EditPostServlet extends HttpServlet {
+@WebServlet(name = "ViewArticalServlet", urlPatterns = {"/ViewArticalServlet"})
+public class ViewArticalServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,23 +36,30 @@ public class EditPostServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException, NamingException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("utf-8");
-        ServletContext context = request.getServletContext();
-        Properties siteMap = (Properties) context.getAttribute("SITEMAP");
-        String url = (String) siteMap.get(MyAppConstant.AdminFeatures.EDIT_POST_PAGE);
+    private static final String ARTICLE_PAGE = "article.jsp";
+    private static final String ERROR_PAGE = "error.jsp";
 
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        int postID = Integer.parseInt(request.getParameter("postID"));
+        String url = ERROR_PAGE;
         try {
-            int postID = Integer.parseInt(request.getParameter("postID"));
-            PostDTO post = PostDAOAdmin.getPostListActiveByID(postID);
+            /* TODO output your page here. You may use following sample code. */
+            PostDAO dao = new PostDAO();
+            PostDTO post = dao.getPostNonactive(postID);
             if (post != null) {
-                request.setAttribute("POST_DETAIL", post);
-                url = (String) siteMap.get(MyAppConstant.AdminFeatures.EDIT_POST_PAGE);
+                request.setAttribute("POST", post);
+                url = ARTICLE_PAGE;
+                List<PostDTO> recommendList = dao.getRandomRecommendPost(postID);
+                if (recommendList != null) {
+                    request.setAttribute("RECOMMEND_POST", recommendList);
+                }
             }
-        } catch (SQLException | NamingException e) {
-            log("Error at EditPostServlet: " + e.getMessage());
+        } catch (NamingException ex) {
+            Logger.getLogger(LoadArticleServlet.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(LoadArticleServlet.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             request.getRequestDispatcher(url).forward(request, response);
         }
@@ -73,13 +77,7 @@ public class EditPostServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(EditPostServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NamingException ex) {
-            Logger.getLogger(EditPostServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -93,13 +91,7 @@ public class EditPostServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(EditPostServlet.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NamingException ex) {
-            Logger.getLogger(EditPostServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
