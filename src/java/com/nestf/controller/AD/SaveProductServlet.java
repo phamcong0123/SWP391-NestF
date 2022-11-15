@@ -16,6 +16,7 @@ import com.nestf.productseller.ProductSellerDAO;
 import com.nestf.util.MyAppConstant;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
@@ -366,40 +367,62 @@ public class SaveProductServlet extends HttpServlet {
                         Path path = Paths.get(fileValue);
                         String storePath = servletContext.getRealPath("/img");
                         File uploadFile = new File(storePath + "/" + path.getFileName());
-                        item.write(uploadFile);
-                        System.out.println(storePath + "/" + path.getFileName());
+                        Path checkPath = Paths.get(storePath + "/" + path.getFileName());
+                        boolean exists = Files.exists(checkPath);
+                        if (!exists) {
+                            item.write(uploadFile);
+                        }
+                        System.out.println(storePath + "\\" + path.getFileName());
                     }
                 }
             }
-            
-             category = CategoryDAO.getCategoryID(categoryName);
+
+            category = CategoryDAO.getCategoryID(categoryName);
 //            TH thêm mới category
             if (category == null) {
                 category = new CategoryDTO(categoryName);
             }
-
+            HttpSession session = request.getSession();
             ProductDTO productDetail = ProductDAOAdmin.getProductDetail(productID);
-            String[] oldImageLink = productDetail.getImagelink();
+            String[] oldImageLink = (String[]) session.getAttribute("IMAGE_LINK2");
+            if(oldImageLink == null){
+                oldImageLink = productDetail.getImagelink();
+            }            
+            
             // Lưu tên ảnh
             String urlImage = "img/";
             String[] imageLink = {image1, image2, image3, image4, image5};
-            
-            for(int i =0; i < 5 ; i++){
-                if(imageLink[i] == null || imageLink[i].isEmpty() || imageLink[i].equals("")){
-                    imageLink[i] = oldImageLink[i];
+
+            for (int i = 0; i < 5;) {
+                if (imageLink[i] == null || imageLink[i].isEmpty()) {
+                    if (oldImageLink != null) {
+                        if (i >= oldImageLink.length) {
+                            i++;
+                        }
+                        for (; i < oldImageLink.length;) {
+                            if (oldImageLink[i] != null && !oldImageLink[i].isEmpty()) {
+                                imageLink[i] = oldImageLink[i];
+                            }
+                            i++;
+                            break;
+                        }
+                    } else {
+                        i++;
+                    }
                 } else {
                     imageLink[i] = urlImage + imageLink[i];
+                    i++;
                 }
             }
 
             ProductDTO dto = new ProductDTO(productID, selPhone, name, price, quantity, category, discountPrice, productDes, detailDes, status, imageLink, selName);
             request.setAttribute("PRODUCT_DETAIL", dto);
+            session.setAttribute("IMAGE_LINK2", imageLink);
 
             if (foundErr) {
                 request.setAttribute("PRODUCT_ERR", error);
                 url = (String) siteMap.get(MyAppConstant.AdminFeatures.EDIT_PRODUCT_PAGE);
             } else {
-                HttpSession session = request.getSession();
 //                0. Tạo Productdto tạm thời chứa các entity 
                 if (dto != null) {
                     request.setAttribute("PREVIEW_PRODUCT", dto);
@@ -433,8 +456,8 @@ public class SaveProductServlet extends HttpServlet {
 //                3. Update lai product detail
 
                     if (productDetail != null) {
-                        request.setAttribute("PRODUCT_DETAIL", productDetail);
-                        request.setAttribute("SAVE_PRODUCT", productDetail);
+                        request.setAttribute("PRODUCT_DETAIL", dto);
+                        request.setAttribute("SAVE_PRODUCT", dto);
                     }
 
 //                4. Add product to pending or accepted 
@@ -452,6 +475,8 @@ public class SaveProductServlet extends HttpServlet {
 
                     List<CategoryDTO> listCategory = CategoryDAO.getListCategory();
                     session.setAttribute("LIST_CATEGORY", listCategory);
+                    
+                    session.removeAttribute("IMAGE_LINK2");
                 }
             }
         } catch (SQLException e) {

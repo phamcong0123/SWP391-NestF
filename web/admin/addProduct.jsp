@@ -265,10 +265,6 @@
 
                             <div class="card-body ">
                                 <c:set var="errors" value="${requestScope.PRODUCT_ERR}"/>
-                                <c:set var="productDetail" value="${requestScope['PRODUCT_DETAIL']}" scope="page"/>
-                                <c:if test="${not empty productDetail}">
-                                    <c:out value="${requestScope.productDetail}" />
-                                </c:if>
                                 
                                 <c:if test="${requestScope.SUBMIT_PRODUCT != null}">
                                     <c:if test="${empty errors}">
@@ -281,7 +277,7 @@
                                         <% request.setAttribute("SUBMIT_PRODUCT", null);%>
                                     </c:if>
                                 </c:if>
-                                
+                                <c:set var="productDetail" value="${requestScope['PRODUCT_DETAIL']}" scope="page"/>
                                 <jsp:useBean id="productFunc" class="com.nestf.product.ProductDTO"/>
                                 <br/>
                                 <form action="addNewProductAction" method="Post" enctype="multipart/form-data" >
@@ -345,7 +341,7 @@
                                         <div class="col-md-6 mb-4">
                                             <div class="form-outline">
                                                 <label class="form-label" for="quantity">Quantity</label>
-                                                <input type="number" min="0" max="100" value="${productDetail.quantity}"  class="form-control form-control-lg" id="quantity" name="quantity" />
+                                                <input type="number" min="0" max="1000" value="${productDetail.quantity}"  class="form-control form-control-lg" id="quantity" name="quantity" />
                                                 <c:if test="${not empty errors.quantity}">
                                                     <font color="red">
                                                     ${errors.quantity}
@@ -432,8 +428,12 @@
                                             </c:forEach>
                                             <c:forEach var = "num" begin = "${index}" end = "4">
                                                 <div class="form-outline mb-4 block">
-                                                    <input type="file" id="image" name="image${num+1}" value="" class="form-control form-control-lg"/>
-                                                </div>
+                                                        <div class="row">
+                                                            <div class="col-lg-8">
+                                                                <input type="file" id="image" name="image${num+1}" value="" class="form-control form-control-lg" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                             </c:forEach>
                                         </div>
                                     </div>

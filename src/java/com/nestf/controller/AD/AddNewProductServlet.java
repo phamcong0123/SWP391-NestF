@@ -15,6 +15,7 @@ import com.nestf.product.ProductDTO;
 import com.nestf.util.MyAppConstant;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
@@ -348,27 +349,41 @@ public class AddNewProductServlet extends HttpServlet {
                         Path path = Paths.get(fileValue);
                         String storePath = servletContext.getRealPath("/img");
                         File uploadFile = new File(storePath + "/" + path.getFileName());
-                        item.write(uploadFile);
-                        System.out.println(storePath + "/" + path.getFileName());
+                        Path checkPath = Paths.get(storePath + "/" + path.getFileName());
+                        boolean exists = Files.exists(checkPath);
+                        if (!exists) {
+                            item.write(uploadFile);
+                        }
+                        System.out.println(storePath + "\\" + path.getFileName());
                     }
                 }
             }
             HttpSession session = request.getSession();
             String[] oldImageLink = (String[]) session.getAttribute("IMAGE_LINK");
-            
+
             // Lưu tên ảnh
             String urlImage = "img/";
             String[] imageLink = {image1, image2, image3, image4, image5};
 
-            for (int i = 0; i < 5; i++) {
-                if (imageLink[i] == null || imageLink[i].isEmpty() || imageLink[i].equals("")) {
-                    if (oldImageLink == null) {
-                        continue;
+            for (int i = 0; i < 5;) {
+                if (imageLink[i] == null || imageLink[i].isEmpty()) {
+                    if (oldImageLink != null) {
+                        if (i >= oldImageLink.length) {
+                            i++;
+                        }
+                        for (; i < oldImageLink.length;) {
+                            if (oldImageLink[i] != null && !oldImageLink[i].isEmpty()) {
+                                imageLink[i] = oldImageLink[i];
+                            }
+                            i++;
+                            break;
+                        }
                     } else {
-                        imageLink[i] = oldImageLink[i];
+                        i++;
                     }
                 } else {
                     imageLink[i] = urlImage + imageLink[i];
+                    i++;
                 }
             }
             int count = 0;
@@ -389,7 +404,7 @@ public class AddNewProductServlet extends HttpServlet {
                 request.setAttribute("PRODUCT_ERR", error);
                 url = (String) siteMap.get(MyAppConstant.AdminFeatures.ADD_PRODUCT_PAGE);
             } else {
-                
+
 //                1. Tạo Productdto tạm thời chứa các entity 
                 if (dto != null) {
                     request.setAttribute("PREVIEW_PRODUCT", dto);
@@ -415,8 +430,8 @@ public class AddNewProductServlet extends HttpServlet {
                     ProductDTO productDetail = (ProductDTO) request.getAttribute("PRODUCT_DETAIL");
                     productDetail = dao.insertProduct(dto);
                     if (productDetail != null) {
-                        request.setAttribute("PRODUCT_DETAIL", productDetail);
-                        request.setAttribute("SUBMIT_PRODUCT", productDetail);
+                        request.setAttribute("PRODUCT_DETAIL", dto);
+                        request.setAttribute("SUBMIT_PRODUCT", dto);
                     }
 
 //                4. Add product to pending or accepted 

@@ -459,7 +459,11 @@
                                                 </c:forEach>
                                                 <c:forEach var = "num" begin = "${index}" end = "4">
                                                     <div class="form-outline mb-4 blocker">
-                                                        <input type="file" id="image" name="image${num+1}" value="" class="form-control form-control-lg" />
+                                                        <div class="row">
+                                                            <div class="col-lg-8">
+                                                                <input type="file" id="image" name="image${num+1}" value="" class="form-control form-control-lg" />
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </c:forEach>
                                             </div>
