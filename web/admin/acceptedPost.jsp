@@ -259,10 +259,11 @@
                                     <tbody>
                                         <c:forEach var="post" items="${sessionScope.LIST_POST}">
                                             <tr>
+                                                <jsp:useBean id="date" class="com.nestf.util.FormatPrinter"/> 
                                                 <td>${post.postID}</td>
                                                 <td>${post.seller.phone}</td>
                                                 <td>${post.title}</td>
-                                                <td>${post.postDate}</td>
+                                                <td>${date.printDate(post.postDate)}</td>
                                                 <td>${post.status}</td>
 <!--                                                <td>${post.content}</td>-->
                                                 <td>${post.thumbnail}</td>

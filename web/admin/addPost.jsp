@@ -316,9 +316,6 @@
 
 
                                     <div class="mt-4 pt-2 text-center mb-4">
-                                        <c:if test="${not empty post.postID}">
-                                            <a href="loadArticle?postID=${post.postID}" class="btn btn-primary btn-lg" >Preview</a>
-                                        </c:if>
                                         <input class="btn btn-danger btn-lg" type="submit" name="action" value="Submit" />
                                     </div>
                                 </form>

@@ -25,7 +25,7 @@ import javax.naming.NamingException;
 public class PostDAO {
 
     private static String POST_LIST = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] Where status =1";
-    private static String POST_LIST_ALL = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] ";
+    private static String POST_LIST_ALL = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE [postID] = ? ";
     private static String POST_LIST_ACTIVE = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE status=1 ORDER BY postDate DESC ";
 
     public List<PostDTO> postList() throws SQLException, NamingException {

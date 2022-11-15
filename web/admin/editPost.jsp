@@ -312,7 +312,7 @@ Author     : DELL
 
 
                                     <div class="mt-4 pt-2 text-center mb-4">
-                                        <a href="viewArtical?postID=${post.postID}" class="btn btn-primary btn-lg" >Preview</a>
+                                        <a href="previewAction?postID=${post.postID}" class="btn btn-primary btn-lg" >Preview</a>
                                         <input class="btn btn-danger btn-lg" type="submit" name="action" value="Submit" />
                                     </div>
                                 </form>
