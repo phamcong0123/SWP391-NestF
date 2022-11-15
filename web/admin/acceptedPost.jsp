@@ -237,7 +237,7 @@
                             <!--//////////////////////////////////////////////////////Kết thúc phần Chung/////////////////-->
                             <!-- Page Heading -->
                             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 class="h3 mb-0 text-gray-800">List Accepted Posts</h1>
+                                <h1 class="h3 mb-0 text-gray-800">List Active Posts</h1>
                             </div>
 
                             <!-- Content Row -->
@@ -251,7 +251,7 @@
                                             <th>Title</th>
                                             <th>Post Date</th>
                                             <th>Status</th>
-<!--                                            <th>Content</th>-->
+                                            <!--                                            <th>Content</th>-->
                                             <th>thumbnail</th>
                                             <th>Action</th>
                                         </tr>
@@ -259,11 +259,10 @@
                                     <tbody>
                                         <c:forEach var="post" items="${sessionScope.LIST_POST}">
                                             <tr>
-                                                <jsp:useBean id="date" class="com.nestf.util.FormatPrinter"/> 
                                                 <td>${post.postID}</td>
                                                 <td>${post.seller.phone}</td>
                                                 <td>${post.title}</td>
-                                                <td>${date.printDate(post.postDate)}</td>
+                                                <td>${post.postDate}</td>
                                                 <td>${post.status}</td>
 <!--                                                <td>${post.content}</td>-->
                                                 <td>${post.thumbnail}</td>
@@ -310,13 +309,13 @@
                     </div>
                 </div>
             </div>
-<!--            <footer class="sticky-footer bg-white sticky-footer">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; NestF 2022</span>
-                    </div>
-                </div>
-            </footer>-->
+            <!--            <footer class="sticky-footer bg-white sticky-footer">
+                            <div class="container my-auto">
+                                <div class="copyright text-center my-auto">
+                                    <span>Copyright &copy; NestF 2022</span>
+                                </div>
+                            </div>
+                        </footer>-->
             <!-- End of Footer -->
             <!-- Bootstrap core JavaScript-->
             <script src="vendor/jquery/jquery.min.js"></script>
