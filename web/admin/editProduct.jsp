@@ -348,7 +348,7 @@
                                                 <div class="col-md-6 d-flex align-items-center">
                                                     <div class="form-outline datepicker w-100">
                                                         <label for="quantity" class="form-label">Quantity</label>
-                                                        <input type="number" min="0" max="100" value="${productDetail.quantity}" class="form-control form-control-lg" id="quantity" name="quantity" />
+                                                        <input type="number" min="0" max="1000" value="${productDetail.quantity}" class="form-control form-control-lg" id="quantity" name="quantity" />
                                                     </div>
                                                 </div>
 
