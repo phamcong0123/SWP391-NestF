@@ -24,9 +24,11 @@ import javax.naming.NamingException;
  */
 public class PostDAO {
 
-    private static String POST_LIST = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] Where status =1";
-    private static String POST_LIST_ALL = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] ";
+    private static String POST_LIST = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] Where status =1 ORDER BY postDate DESC";
+    private static String POST_LIST_ALL = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE [postID] = ? ORDER BY postDate DESC ";
     private static String POST_LIST_ACTIVE = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE status=1 ORDER BY postDate DESC ";
+    private static String POST = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE [postID] = ? AND Status=1 ORDER BY postDate DESC";
+    private static String POST_NON = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE [postID] = ? AND Status=0 ORDER BY postDate DESC";
 
     public List<PostDTO> postList() throws SQLException, NamingException {
         List<PostDTO> postList = new ArrayList();
@@ -65,8 +67,6 @@ public class PostDAO {
         return postList;
     }
 
-    private static String POST = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE [postID] = ? AND Status=1";
-
     public PostDTO getPost(int postID) throws NamingException, SQLException {
         Connection conn = null;
         PreparedStatement ptm = null;
@@ -103,7 +103,6 @@ public class PostDAO {
         }
         return post;
     }
-    private static String POST_NON = "SELECT [postID],[adPhone],[title],[postDate],[status],[content],[thumbnail] FROM [NestF].[dbo].[tblPost] WHERE [postID] = ? AND Status=0";
 
     public PostDTO getPostNonactive(int postID) throws NamingException, SQLException {
         Connection conn = null;

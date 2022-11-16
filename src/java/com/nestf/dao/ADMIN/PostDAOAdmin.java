@@ -39,7 +39,7 @@ public class PostDAOAdmin {
             + "SET status = 0\n"
             + "WHERE postID = ?";
     private static final String ADD_POST = "INSERT INTO tblPost (adPhone, title, postDate, status, content , thumbnail)\n"
-            + " VALUES(?,?,?,?,?,?)";
+            + " VALUES(?,?,CURRENT_TIMESTAMP,?,?,?)";
     private static final String CHECK_DUPLICATE_POSTID = "SELECT postID from tblPost WHERE postID = ?";
     public static final String UPDATE_POST = "UPDATE tblPost\n"
             + "SET title = ? , content = ? , thumbnail = ?\n"
@@ -414,10 +414,9 @@ public static PostDTO getPostListNonActiveByID(int postID) throws SQLException, 
 
                 ptm.setString(1, dto.getSeller().getPhone());
                 ptm.setString(2, dto.getTitle());
-                ptm.setDate(3, Date.valueOf(LocalDate.now()));
-                ptm.setBoolean(4, dto.isStatus());
-                ptm.setString(5, dto.getContent());
-                ptm.setString(6, dto.getThumbnail());
+                ptm.setBoolean(3, dto.isStatus());
+                ptm.setString(4, dto.getContent());
+                ptm.setString(5, dto.getThumbnail());
 
 //          4. Execute Query
                 int affectRow = ptm.executeUpdate();

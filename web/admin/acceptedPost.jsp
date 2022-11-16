@@ -39,7 +39,7 @@
                 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
                     <!-- Sidebar - Brand -->
-                    <a href="dashboard" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
+                    <a href="home" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
                                                                          height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
@@ -106,7 +106,7 @@
                     <hr class="sidebar-divider">
 
                     <!-- Nav Item - Pages Collapse Menu -->
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                            aria-expanded="true" aria-controls="collapsePages">
                             <i class="fas fa-fw fa-folder"></i>
@@ -127,9 +127,18 @@
 
                     <!-- Nav Item - Charts -->
                     <li class="nav-item">
-                        <a class="nav-link" href="manageVoucherPage">
-                            <i class="fa fa-gift" aria-hidden="true"></i>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVouchers"
+                           aria-expanded="true" aria-controls="collapseVouchers">
+                            <i class="fa fa-gift"></i>
                             <span>Voucher</span></a>
+                        <div id="collapseVouchers" class="collapse" aria-labelledby="headingProducts"
+                             data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <h6 class="collapse-header">Manage:</h6>
+                                <a class="collapse-item fw-bold" href="voucher">All voucher types</a>
+                                <a class="collapse-item" href="updateVoucher?act=add">Add/Update voucher type</a>
+                            </div>
+                        </div>
                     </li>
 
                     <!-- Divider -->
@@ -237,7 +246,7 @@
                             <!--//////////////////////////////////////////////////////Kết thúc phần Chung/////////////////-->
                             <!-- Page Heading -->
                             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                <h1 class="h3 mb-0 text-gray-800">List Active Posts</h1>
+                                <h1 class="h3 mb-0 text-gray-800">List active posts</h1>
                             </div>
 
                             <!-- Content Row -->
@@ -259,10 +268,11 @@
                                     <tbody>
                                         <c:forEach var="post" items="${sessionScope.LIST_POST}">
                                             <tr>
+                                                <jsp:useBean id="date" class="com.nestf.util.FormatPrinter"/> 
                                                 <td>${post.postID}</td>
                                                 <td>${post.seller.phone}</td>
                                                 <td>${post.title}</td>
-                                                <td>${post.postDate}</td>
+                                                <td>${date.printDate(post.postDate)}</td>
                                                 <td>${post.status}</td>
 <!--                                                <td>${post.content}</td>-->
                                                 <td>${post.thumbnail}</td>

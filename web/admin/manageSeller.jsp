@@ -403,52 +403,72 @@
                                     <div class="col-12">
                                         <c:if test="${not empty requestScope.PRODUCT_SELLER}">
                                             <c:set var="selName" value="${requestScope.SELLER_NAME}"/>
-                                            <h5>Sản phẩm của ${selName}</h5>
-                                            <table class="table table-striped table-hover table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <!--<th class="text-center">ID</th>-->
-                                                        <th class="text-center">Name</th>
-                                                        <!--<th class="text-center">Price</th>-->
-                                                        <!--<th class="text-center">Quantity</th>-->
-                                                        <th class="text-center">Category</th>
-                                                        <!--<th class="text-center">Discount</th>-->
-                                                        <th class="text-center">Change Seller</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <c:forEach var="product" items="${requestScope.PRODUCT_SELLER}">
-                                                        <tr>
-                                                            <%-- <td>${product.productID}</td>--%>
-                                                            <td>${product.name}</td>
-                                                            <%-- <td>${product.price}</td>--%>
-                                                            <%-- <td>${product.quantity}</td>--%>
-                                                            <td>${product.category.categoryName}</td>
-                                                            <%-- <td>${product.discountPrice}</td>--%>
-                                                            <td>
-                                                                <c:set var="listSeller" value="${sessionScope.LIST_SELLER}"/>
-                                                                <form action="changeSeller">
-                                                                    <div  class="row">
-                                                                        <input type="hidden" value="${product.selName}" name="selNameOld"/>
-                                                                        <input class="form-control form-control-sm col-7 ml-2 mr-1" type="text" value="${product.selName}" name="selNameNew" list="sellerlist"/>
-                                                                        <input type="hidden" value="${product.productID}" name="productID"/>
+                                            <div class="modal fade" id="productModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                                 aria-hidden="true">
+                                                <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="exampleModalLabel">Sản phẩm của ${selName}</h5>
+                                                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">×</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <table class="table table-striped table-hover table-bordered">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <!--<th class="text-center">ID</th>-->
+                                                                        <th class="text-center">Name</th>
+                                                                        <!--<th class="text-center">Price</th>-->
+                                                                        <!--<th class="text-center">Quantity</th>-->
+                                                                        <th class="text-center">Category</th>
+                                                                        <!--<th class="text-center">Discount</th>-->
+                                                                        <th class="text-center">Change Seller</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <c:forEach var="product" items="${requestScope.PRODUCT_SELLER}">
+                                                                        <tr>
+                                                                            <%-- <td>${product.productID}</td>--%>
+                                                                            <td>${product.name}</td>
+                                                                            <%-- <td>${product.price}</td>--%>
+                                                                            <%-- <td>${product.quantity}</td>--%>
+                                                                            <td>${product.category.categoryName}</td>
+                                                                            <%-- <td>${product.discountPrice}</td>--%>
+                                                                            <td>
+                                                                                <c:set var="listSeller" value="${sessionScope.LIST_SELLER}"/>
+                                                                                <form action="changeSeller">
+                                                                                    <div  class="row">
+                                                                                        <input type="hidden" value="${product.selName}" name="selNameOld"/>
+                                                                                        <input class="form-control form-control-sm col-7 ml-2 mr-1" type="text" value="${product.selName}" name="selNameNew" list="sellerlist"/>
+                                                                                        <input type="hidden" value="${product.productID}" name="productID"/>
 
-                                                                        <datalist id="sellerlist">
-                                                                            <label class="form-label select-label">Choose option:</label>
-                                                                            <option disabled>Choose option</option>
-                                                                            <c:forEach var="dto" items="${listSeller}">
-                                                                                <option class="" value="${dto.name}">Number of product: ${dto.selQuantity}</option>
-                                                                            </c:forEach>
-                                                                        </datalist>
-                                                                        <input class="btn btn-dark col-4 mr-1" type="submit" name="btAction" value="Change" />
-                                                                    </div>
-                                                                </form>
+                                                                                        <datalist id="sellerlist">
+                                                                                            <label class="form-label select-label">Choose option:</label>
+                                                                                            <option disabled>Choose option</option>
+                                                                                            <c:forEach var="dto" items="${listSeller}">
+                                                                                                <option class="" value="${dto.name}">Number of product: ${dto.selQuantity}</option>
+                                                                                            </c:forEach>
+                                                                                        </datalist>
+                                                                                        <input class="btn btn-dark col-4 mr-1" type="submit" name="btAction" value="Change" />
+                                                                                    </div>
+                                                                                </form>
 
-                                                            </td>
-                                                        </tr>
-                                                    </c:forEach>
-                                                </tbody>
-                                            </table>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </c:forEach>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type=button" class="d-none" data-toggle="modal" data-target="#productModal" id="triggerProductModal">
+                                                Logout
+                                            </button>                                           
                                         </c:if>
                                     </div>
                                 </div>
@@ -584,13 +604,16 @@
             <script src="./js/nestf.js"></script>
 
             <script>
-                                            function openForm() {
-                                                document.getElementById("container-register").style.display = "block";
-                                            }
+                                                function openForm() {
+                                                    document.getElementById("container-register").style.display = "block";
+                                                }
 
-                                            function closeForm() {
-                                                document.getElementById("container-register").style.display = "none";
-                                            }
+                                                function closeForm() {
+                                                    document.getElementById("container-register").style.display = "none";
+                                                }
+                                                window.onload = function() {
+                                                    document.getElementById("triggerProductModal").click();
+                                                }
             </script>
             <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 

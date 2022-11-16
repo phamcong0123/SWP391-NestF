@@ -348,7 +348,7 @@
                                                 <div class="col-md-6 d-flex align-items-center">
                                                     <div class="form-outline datepicker w-100">
                                                         <label for="quantity" class="form-label">Quantity</label>
-                                                        <input type="number" min="0" max="100" value="${productDetail.quantity}" class="form-control form-control-lg" id="quantity" name="quantity" />
+                                                        <input type="number" min="0" max="1000" value="${productDetail.quantity}" class="form-control form-control-lg" id="quantity" name="quantity" />
                                                     </div>
                                                 </div>
 
@@ -459,7 +459,11 @@
                                                 </c:forEach>
                                                 <c:forEach var = "num" begin = "${index}" end = "4">
                                                     <div class="form-outline mb-4 blocker">
-                                                        <input type="file" id="image" name="image${num+1}" value="" class="form-control form-control-lg" />
+                                                        <div class="row">
+                                                            <div class="col-lg-8">
+                                                                <input type="file" id="image" name="image${num+1}" value="" class="form-control form-control-lg" />
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </c:forEach>
                                             </div>

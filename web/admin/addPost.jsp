@@ -43,7 +43,7 @@
                 <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
                     <!-- Sidebar - Brand -->
-                    <a href="dashboard" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
+                    <a href="home" class="text-center my-xl-2"><img src="img/logo.png" id="logo" width="55px"
                                                                          height="38px"></a>
                     <!-- Divider -->
                     <hr class="sidebar-divider my-0">
@@ -110,7 +110,7 @@
                     <hr class="sidebar-divider">
 
                     <!-- Nav Item - Pages Collapse Menu -->
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
                            aria-expanded="true" aria-controls="collapsePages">
                             <i class="fas fa-fw fa-folder"></i>
@@ -131,9 +131,18 @@
 
                     <!-- Nav Item - Charts -->
                     <li class="nav-item">
-                        <a class="nav-link" href="manageVoucherPage">
-                            <i class="fa fa-gift" aria-hidden="true"></i>
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVouchers"
+                           aria-expanded="true" aria-controls="collapseVouchers">
+                            <i class="fa fa-gift"></i>
                             <span>Voucher</span></a>
+                        <div id="collapseVouchers" class="collapse" aria-labelledby="headingProducts"
+                             data-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                <h6 class="collapse-header">Manage:</h6>
+                                <a class="collapse-item fw-bold" href="voucher">All voucher types</a>
+                                <a class="collapse-item" href="updateVoucher?act=add">Add/Update voucher type</a>
+                            </div>
+                        </div>
                     </li>
 
                     <!-- Divider -->
@@ -247,7 +256,7 @@
                             <!-- Content Row -->
 
                             <div class="card-body ">
-                                <c:set var="post" value="${requestScope['POST_DETAIL']}" scope="page"/>
+                                
                                 <c:set var="errors" value="${requestScope.POST_ERROR}"/>
                                 <c:if test="${requestScope.PREVIEW_POST != null}">
                                     <c:if test="${empty errors}">
@@ -260,9 +269,9 @@
                                     </c:if>
                                 </c:if>
                                 <jsp:useBean id="postFunc" class="com.nestf.post.PostDTO"/>
-
+                                <c:set var="post" value="${requestScope['POST_DETAIL']}" scope="page"/>
                                 <br/>
-                                <form action="addNewPostAction" method="Post">
+                                <form action="addNewPostAction" method="Post" enctype="multipart/form-data" >
 
                                     <div class="row">
 
@@ -283,7 +292,7 @@
                                             <div class="form-outline">
                                                 <label class="form-label" for="txtName">Thumbnail</label>
 
-                                                <input type="text" id="txtName" name="thumbnail" value="${post.thumbnail}" class="form-control form-control-lg" />
+                                                <input type="file" id="txtName" name="thumbnail" value="${post.thumbnail}" class="form-control form-control-lg" />
                                                 <c:if test="${not empty errors.thumbnail}">
                                                     <font color="red">
                                                     ${errors.thumbnail}
@@ -316,9 +325,6 @@
 
 
                                     <div class="mt-4 pt-2 text-center mb-4">
-                                        <c:if test="${not empty post.postID}">
-                                            <a href="loadArticle?postID=${post.postID}" class="btn btn-primary btn-lg" >Preview</a>
-                                        </c:if>
                                         <input class="btn btn-danger btn-lg" type="submit" name="action" value="Submit" />
                                     </div>
                                 </form>

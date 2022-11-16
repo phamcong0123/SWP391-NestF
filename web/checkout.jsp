@@ -52,7 +52,7 @@
                         <div id="dropDownMenu" class="d-inline-block position-relative">
                             <i class="fas fa-user me-2"></i>${sessionScope.USER.name}
                             <div id="dropDownContent" class="d-none bg-white text-start position-absolute shadow">
-                                     <c:if test="${not empty sessionScope.USER}">                              
+                                <c:if test="${not empty sessionScope.USER}">                              
                                     <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>     
                                 </c:if>                           
                                 <c:if test="${sessionScope.USER.role eq 'SE'}">               
@@ -175,38 +175,40 @@
         <c:import url="footer.html" charEncoding="UTF-8"/>               
         <script src="js/util.js"></script>   
         <script src="https://www.paypal.com/sdk/js?client-id=AeJ5oAA7OGoD8dlZNG6MWDNJqDoV2MQaaldDD1xNoq0upDs938zsUah_a2tjlplqHCutIojCuLwYJK__&currency=USD"></script>
-        <script>
-            paypal.Buttons({
-                // Sets up the transaction when a payment button is clicked
-                createOrder: (data, actions) => {
-                    return actions.order.create({
-                        purchase_units: [{
-                                amount: {
-                                    value: '${totalInUSD}' // Can also reference a variable or function
-                                }
-                            }]
-                    });
-                },
-                // Finalize the transaction after payer approval
-                onApprove: (data, actions) => {
-                    return actions.order.capture().then(function (orderData) {
-                        // Successful capture! For dev/demo purposes:
-                        const transaction = orderData.purchase_units[0].payments.captures[0];
-                        // When ready to go live, remove the alert and show a success message within this page. For example:
-                        // const element = document.getElementById('paypal-button-container');
-                        // element.innerHTML = '<h3>Thank you for your payment!</h3>';
-                        // Or go to another URL:  actions.redirect('thank_you.html');
-                        var url = 'confirmCheckOut?transactionID=' + transaction.id + '&address=';
-                        url += document.getElementById("address").value;
-                        url += "&total=${requestScope.TOTAL}";
-            <c:if test = "${not empty requestScope.VOUCHER_USE}">
-                        url += "&voucherID=${requestScope.VOUCHER_USE.voucherID}";
-            </c:if>
-                        window.location.replace(url);
-                    });
-                }
-            }).render('#paypalButtonContainer');
-        </script>
+        <c:if test="${empty sessionScope.ADMIN}">
+            <script>
+                paypal.Buttons({
+                    // Sets up the transaction when a payment button is clicked
+                    createOrder: (data, actions) => {
+                        return actions.order.create({
+                            purchase_units: [{
+                                    amount: {
+                                        value: '${totalInUSD}' // Can also reference a variable or function
+                                    }
+                                }]
+                        });
+                    },
+                    // Finalize the transaction after payer approval
+                    onApprove: (data, actions) => {
+                        return actions.order.capture().then(function (orderData) {
+                            // Successful capture! For dev/demo purposes:
+                            const transaction = orderData.purchase_units[0].payments.captures[0];
+                            // When ready to go live, remove the alert and show a success message within this page. For example:
+                            // const element = document.getElementById('paypal-button-container');
+                            // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+                            // Or go to another URL:  actions.redirect('thank_you.html');
+                            var url = 'confirmCheckOut?transactionID=' + transaction.id + '&address=';
+                            url += document.getElementById("address").value;
+                            url += "&total=${requestScope.TOTAL}";
+                <c:if test = "${not empty requestScope.VOUCHER_USE}">
+                            url += "&voucherID=${requestScope.VOUCHER_USE.voucherID}";
+                </c:if>
+                            window.location.replace(url);
+                        });
+                    }
+                }).render('#paypalButtonContainer');
+            </script>
+        </c:if>
     </body>
 
 </html>
