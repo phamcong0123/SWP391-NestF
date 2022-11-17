@@ -36,4 +36,8 @@ public class FormatPrinter {
     public static String noFraction(double num){
         return String.valueOf(num).split("\\.")[0];
     }
+    public static String paypalUSD(double vnd){
+        String usd = toUSD(vnd);
+        return usd.replaceAll(",", "");
+    }
 }
