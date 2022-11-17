@@ -55,8 +55,7 @@
                                 <a class="collapse-item order-manager-header" id="process-order" href="#"
                                    onclick="processOrder()">Xử lý đơn hàng</a>
                                 <a class="collapse-item order-manager-header" id="order-status" href="#"
-                                   onclick="orderStatus()">Tình trạng đơn
-                                    hàng</a>
+                                   onclick="orderStatus()">Chi tiết vận chuyển</a>
                             </div>
                         </div>
                     </li>
