@@ -203,7 +203,7 @@ function removeLabel(reason, labelInput) {
     }
 }
 
-function checkEmptyReason(textbox) {
+function checkEmptyReason(textbox, submitForm) {
     if (textbox.value === '') {
         window.createNotification({
             showDuration: 1500,
@@ -213,6 +213,8 @@ function checkEmptyReason(textbox) {
             message: 'Lý do hủy đơn không được để trống!'
         });
         textbox.setCustomValidity(' ');
+    } else {
+        document.getElementById(submitForm).submit();
     }
 }
 

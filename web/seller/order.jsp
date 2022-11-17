@@ -438,10 +438,10 @@
                                                                         <br>
                                                                         <br>
                                                                         Lí do:
-                                                                        <form action="processOrder" class="d-inline-block ml-5">
+                                                                        <form action="processOrder" class="d-inline-block ml-5" id="allorder-cancel-form">
                                                                             <input type="text" name="cancelReason" id="reasonInput1"
                                                                                    placeholder="Lí do hủy đơn..." onkeyup="removeLabel('reasonInput1', 'labelRequired1')"
-                                                                                   oninvalid="checkEmptyReason(this)" required/>
+                                                                                   oninvalid="checkEmptyReason(this, 'allorder-cancel-form')" required/>
                                                                             <label id="labelRequired1" style="color: #f00;">*</label>
                                                                             <input type="hidden" name="orderID" value="${order.billID}"/>
                                                                             <input type="hidden" name="statusID" value="5"/>
@@ -781,10 +781,10 @@
                                                                         <br>
                                                                         <br>
                                                                         Lí do:
-                                                                        <form action="processOrder" class="d-inline-block ml-5">
+                                                                        <form action="processOrder" class="d-inline-block ml-5" id="waitconfirm-cancel-form">
                                                                             <input type="text" name="cancelReason" id="reasonInput2"
                                                                                    placeholder="Lí do hủy đơn..." onkeyup="removeLabel('reasonInput2', 'labelRequired2')"
-                                                                                   oninvalid="checkEmptyReason(this)" required/>
+                                                                                   oninvalid="checkEmptyReason(this, 'waitconfirm-cancel-form')" required/>
                                                                             <label id="labelRequired2" style="color: #f00;">*</label>
                                                                             <input type="hidden" name="orderID" value="${order.billID}"/>
                                                                             <input type="hidden" name="statusID" value="5"/>
