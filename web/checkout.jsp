@@ -56,7 +56,7 @@
                                     <a href="account" class="nav-link mb-2 text-decoration-none p-2" id="item">Cài đặt tài khoản</a>     
                                 </c:if>                           
                                 <c:if test="${sessionScope.USER.role eq 'SE'}">               
-                                    <a href="dashboard" class="nav-link mb-2 text-decoration-none p-2" id="item">Quản lý đơn hàng</a>        
+                                    <a href="sellerPage" class="nav-link mb-2 text-decoration-none p-2" id="item">Quản lý đơn hàng</a>        
                                 </c:if>                            
                                 <c:if test="${sessionScope.USER.role eq 'AD'}">             
                                     <a href="dashboard" class="nav-link mb-2 text-decoration-none p-2" id="item">Quản lý cửa hàng</a>  
@@ -172,10 +172,17 @@
                 </button>
             </a>
         </c:if>
+        <c:if test="${sessionScope.USER.role eq 'SE'}">
+            <a href="sellerPage">
+                <button type="button" id="dashboardRedirect" class="btn btn-floating btn-lg rounded-circle text-light position-fixed d-block"  data-bs-toggle="tooltip" data-bs-placement="right" title="DASHBOARD">
+                    <i class="fa-solid fa-shop"></i>
+                </button>
+            </a>
+        </c:if>
         <c:import url="footer.html" charEncoding="UTF-8"/>               
         <script src="js/util.js"></script>   
         <script src="https://www.paypal.com/sdk/js?client-id=AeJ5oAA7OGoD8dlZNG6MWDNJqDoV2MQaaldDD1xNoq0upDs938zsUah_a2tjlplqHCutIojCuLwYJK__&currency=USD"></script>
-        <c:if test="${empty sessionScope.ADMIN}">
+        <c:if test="${empty sessionScope.ADMIN && sessionScope.USER.role ne 'SE'}">
             <script>
                 paypal.Buttons({
                     // Sets up the transaction when a payment button is clicked
