@@ -157,6 +157,7 @@
                     </p>                  
                     <jsp:useBean id="formatter" class="com.nestf.util.FormatPrinter"/>
                     <c:set var = "totalInUSD" value="${formatter.toUSD(requestScope.TOTAL)}"/>
+                    <c:set var = "paypalTotal" value="${formatter.paypalUSD(requestScope.TOTAL)}"/>
                     <span>Thành tiền : <b>${formatter.printMoney(requestScope.TOTAL)}</b> (quy đổi sang USD : <b>$${totalInUSD}</b>)</span><br>
                     <span>Quý khách sẽ được cộng <b>${formatPrinter.noFraction(requestScope.TOTAL/1000)}</b> điểm tích luỹ khi quá trình giao hàng bắt đầu</span>
                 </div>
@@ -191,7 +192,7 @@
                         return actions.order.create({
                             purchase_units: [{
                                     amount: {
-                                        value: '${totalInUSD}' // Can also reference a variable or function
+                                        value: '${paypalTotal}' // Can also reference a variable or function
                                     }
                                 }]
                         });
