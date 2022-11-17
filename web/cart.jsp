@@ -106,6 +106,7 @@
                                                             <div id="item" class="d-inline-block col p-3 text-center">                                           
                                                                 <img src="img/voucher.png">
                                                                 <h6 class="text-center">${voucher.voucherType.voucherName}</h6>
+                                                                <span>Trị giá: <span class="fw-bold">${formatPrinter.printMoney(voucher.voucherType.saleValue)}</span></span><br>
                                                                 <p>Hết hạn vào ${voucher.expiredDate}</p>
                                                                 <button type="button" id="buy-button" class="col-6" data-bs-dismiss="modal" onclick="pickVoucher(this)" value="${voucher.voucherType.voucherName}">
                                                                     Sử dụng <input type="hidden" value="${voucher.voucherID}">

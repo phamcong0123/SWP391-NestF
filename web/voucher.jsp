@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<jsp:useBean id="formatter" class="com.nestf.util.FormatPrinter"/>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -130,6 +131,7 @@
                                             <div id="item" class="d-inline-block col p-3 text-center">                                           
                                                 <img src="img/voucher.png">
                                                 <h6 class="text-center">${voucher.voucherType.voucherName}</h6>
+                                                <span>Trị giá: <span class="fw-bold">${formatter.printMoney(voucher.voucherType.saleValue)}</span></span><br>
                                                 <p>Hết hạn vào ${voucher.expiredDate}</p>                                               
                                             </div>
                                         </c:forEach>
@@ -156,8 +158,9 @@
                             <div id="item" class="d-inline-block col mb-3 p-2">
                                 <img src="img/voucher.png">
                                 <h6 class="mt-4">${fn:toUpperCase(voucher.voucherName)}</h6>
-                                <span>Số lượng còn : <span class="fw-bold">${voucher.quantity}</span></span><br>
-                                <span>Điểm yêu cầu : <span class="fw-bold">${voucher.point}</span></span><br>
+                                <span>Trị giá: <span class="fw-bold">${formatter.printMoney(voucher.saleValue)}</span></span><br>
+                                <span>Số lượng còn: <span class="fw-bold">${voucher.quantity}</span></span><br>
+                                <span>Điểm yêu cầu: <span class="fw-bold">${voucher.point}</span></span><br>
                                     <c:url var="buyLink" value="buyVoucher">
                                         <c:param name="typeID" value="${voucher.typeID}"/>
                                     </c:url>

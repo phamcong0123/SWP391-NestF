@@ -102,6 +102,7 @@
                                 <h5 class="modal-title m-3" id="choose1Voucher">Danh sách các sản phẩm quý khách đã chọn mua</h5>
                                 <c:if test="${not empty requestScope.VOUCHER_USE}">
                                     <span>Voucher sử dụng : <b>${requestScope.VOUCHER_USE.voucherType.voucherName}</b></span>
+                                    <br><span>Trị giá : <b>${formatPrinter.printMoney(requestScope.VOUCHER_USE.voucherType.saleValue)}</b></span>
                                 </c:if>
                                 <button type="button" class="btn-close m-3" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>

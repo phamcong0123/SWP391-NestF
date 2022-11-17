@@ -6,6 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<jsp:useBean id="formatter" class="com.nestf.util.FormatPrinter"/>
 <!DOCTYPE html>
 <html lang="vi">
     <head>
@@ -158,6 +159,7 @@
                                     <div id="item" class="d-inline-block col mb-2">
                                         <img src="img/voucher.png"><br>
                                         <h5>${voucher.voucherType.voucherName}</h5>
+                                        <span>Trị giá: <b>${formatter.printMoney(voucher.voucherType.saleValue)}</b></span>
                                         <p>Hết hạn vào <strong>${voucher.expiredDate}</strong></p>
                                     </div>
                                 </c:forEach>
